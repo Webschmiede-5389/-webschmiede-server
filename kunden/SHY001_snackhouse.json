@@ -1,0 +1,56 @@
+{
+  "id": "SHY001",
+  "name": "Snack House Yassine",
+  "inhaber": "Hassan Yassine",
+  "slug": "snackhouse-mechernich",
+  "branche": "restaurant",
+  "erstellt": "2026-07-14",
+  "status": "test",
+  "kontakt": {
+    "telefon": "02443-3088966",
+    "email": "yassinehassan910@gmail.com",
+    "adresse": "Dr.-Felix-Gerhardus-Str. 7, 53894 Mechernich"
+  },
+  "urls": {
+    "test_hauptseite": "http://167.233.211.170/",
+    "test_bestellen": "http://167.233.211.170/bestellen",
+    "domain": "",
+    "live_hauptseite": "",
+    "live_bestellen": ""
+  },
+  "server": {
+    "ip": "167.233.211.170",
+    "ordner": "/var/www/snackhouse-mechernich",
+    "service": "snack-api",
+    "port": "8000"
+  },
+  "ghl": {
+    "enabled": false,
+    "location_id": "8oVdR3t5otHWtnpT3eK8",
+    "pipeline_id": "car4PPqwg8kIIr20Hbdt",
+    "stage_neu": "5cb90e54-da95-41d8-b1d7-7e141364aabf"
+  },
+  "crm": {
+    "provider": "webschmiede",
+    "sms_provider": "seven.io",
+    "sms_enabled": false
+  },
+  "stripe": {
+    "status": "ausstehend",
+    "payment_link": ""
+  },
+  "offene_punkte": [
+    "Hassan-Handynummer für SMS (OWNER_PHONE) eintragen",
+    "seven.io Account + SMS_API_KEY",
+    "Google Review Link",
+    "Domain registrieren",
+    "Stripe-Account erstellen",
+    "Eigene Speisefotos"
+  ],
+  "whatsapp": {
+    "enabled": true,
+    "allowed_phones": ["+4924433088966"],
+    "permissions": ["menu_price", "menu_text", "menu_image", "menu_available"],
+    "blocked": ["code", "domain", "admin_password", "delete_items"]
+  }
+}

@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/favicon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <title>Jetzt bestellen – Snack House Yassine | Mechernich</title>
+  <meta name="description" content="Einfach online bestellen bei Snack House Yassine. Drehspieß, Burger, Schnitzel, Pizza – frisch zubereitet in Mechernich.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.bunny.net/css?family=playfair-display:700,800|inter:300,400,500,600,700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { gold: '#C9A84C', dark: '#111111', card: '#1a1a1a', border: '#2a2a2a', muted: '#888' },
+          fontFamily: { serif: ['Playfair Display','serif'], sans: ['Inter','sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #0e0b08; color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+
+    /* ── Tabs ── */
+    .tab-strip { scrollbar-width: none; -ms-overflow-style: none; }
+    .tab-strip::-webkit-scrollbar { display: none; }
+    .cat-tab {
+      flex-shrink: 0; padding: 7px 16px; border-radius: 99px; font-size: 13px;
+      font-weight: 500; white-space: nowrap; cursor: pointer; border: 1.5px solid #2a2a2a;
+      background: transparent; color: #888; transition: all 0.2s;
+    }
+    .cat-tab:hover { border-color: #C9A84C; color: #C9A84C; }
+    .cat-tab.active { background: #C9A84C; border-color: #C9A84C; color: #000; font-weight: 700; }
+
+    /* ── Menu items ── */
+    .menu-row { border-bottom: 1px solid #1c1810; transition: background 0.15s; }
+    .menu-row:hover { background: #15120d; }
+
+    /* ── Quantity controls ── */
+    .qty-btn {
+      width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #C9A84C;
+      background: transparent; color: #C9A84C; font-size: 18px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; flex-shrink: 0; font-weight: 300;
+    }
+    .qty-btn:hover { background: #C9A84C; color: #000; }
+    .qty-btn.zero { border-color: #2a2a2a; color: #444; }
+    .qty-btn.zero:hover { background: transparent; color: #444; cursor: default; }
+
+    /* ── Tab strip scrollbar hidden ── */
+    .tab-strip::-webkit-scrollbar { display: none; }
+    .tab-strip { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ── Tab fade hints ── */
+    .tab-fade-right {
+      position: absolute; top: 0; right: 0; bottom: 0; width: 48px; pointer-events: none;
+      background: linear-gradient(to right, transparent, #0e0b08);
+      z-index: 2;
+    }
+    .tab-fade-left {
+      position: absolute; top: 0; left: 0; bottom: 0; width: 24px; pointer-events: none;
+      background: linear-gradient(to left, transparent, #0e0b08);
+      z-index: 2; opacity: 0; transition: opacity .2s;
+    }
+
+    /* ── Cart bar ── */
+    .cart-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+      background: linear-gradient(135deg, #C9A84C, #e8c76a);
+      padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;
+      transform: translateY(110%); transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.6);
+    }
+    .cart-bar.show { transform: translateY(0); }
+
+    /* ── Modal ── */
+    .modal-bg {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: flex-end; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .modal-bg.open { opacity: 1; pointer-events: all; }
+    .modal-sheet {
+      background: #111; border-radius: 24px 24px 0 0;
+      width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+      transform: translateY(30px); transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    .modal-bg.open .modal-sheet { transform: translateY(0); }
+
+    /* ── Form inputs ── */
+    .inp {
+      width: 100%; background: #1a1a1a; border: 1.5px solid #2a2a2a;
+      border-radius: 10px; padding: 13px 14px; color: #fff; font-size: 15px;
+      outline: none; transition: border-color 0.2s; font-family: 'Inter', sans-serif;
+    }
+    .inp:focus { border-color: #C9A84C; }
+    .inp::placeholder { color: #444; }
+
+    /* ── Payment selector ── */
+    .pay-opt {
+      flex: 1; padding: 14px 10px; border: 2px solid #2a2a2a; border-radius: 14px;
+      cursor: pointer; text-align: center; background: #1a1a1a; transition: all 0.2s;
+    }
+    .pay-opt.sel { border-color: #C9A84C; background: rgba(201,168,76,0.07); }
+
+    /* ── Toggle Liefern/Abholen ── */
+    .toggle-pill {
+      display: flex; background: #1a1a1a; border: 1.5px solid #2a2a2a;
+      border-radius: 99px; padding: 4px; gap: 4px;
+    }
+    .toggle-opt {
+      flex: 1; padding: 9px 0; border-radius: 99px; border: none;
+      font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+      background: transparent; color: #555;
+    }
+    .toggle-opt.active { background: #C9A84C; color: #000; }
+
+    /* ── Scrollbar ── */
+    .modal-sheet::-webkit-scrollbar { width: 4px; }
+    .modal-sheet::-webkit-scrollbar-track { background: #111; }
+    .modal-sheet::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+    /* ── Category anchor offsets ── */
+    .cat-section { scroll-margin-top: 120px; }
+
+    /* ── Spinner ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 20px; height: 20px; padding: 0 5px;
+      background: #C9A84C; color: #000; font-size: 11px; font-weight: 800;
+      border-radius: 99px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════ -->
+<header style="position:sticky;top:0;z-index:40;background:#0e0b08;border-bottom:1px solid #1e1a14;box-shadow:0 2px 12px rgba(0,0,0,.5);">
+  <div style="max-width:680px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px;">
+    <a href="/" style="display:flex;align-items:center;gap:6px;color:#666;font-size:13px;text-decoration:none;flex-shrink:0;" title="Zurück zur Startseite">
+      <i class="fas fa-arrow-left" style="font-size:12px;"></i> Zurück
+    </a>
+
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:12px;">
+      <img src="https://files.catbox.moe/3uyamu.png" alt="Snack House Yassine Logo" width="112" height="112"
+           style="width:112px;height:112px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(201,168,76,.5));">
+      <span style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:44px;font-weight:700;white-space:nowrap;">Snack House Yassine</span>
+    </div>
+
+    <button id="hdr-cart-btn" onclick="openCart()" title="Warenkorb" style="position:relative;background:none;border:none;color:#666;font-size:21px;cursor:pointer;flex-shrink:0;display:none;">
+      <i class="fas fa-shopping-bag"></i>
+      <span id="hdr-badge" class="badge" style="position:absolute;top:-4px;right:-7px;font-size:10px;min-width:18px;height:18px;display:none;">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- Status pill hidden, logic runs in background for cart open/closed state -->
+<div style="display:none;">
+  <span id="status-dot"></span>
+  <span id="status-text"></span>
+  <span id="status-hours"></span>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     TIMING STRIP – Abholung & Lieferzeit
+══════════════════════════════════════════════════ -->
+<div id="timing-strip" style="background:#0c0a07;border-bottom:1px solid #1e1a14;padding:9px 16px;">
+  <div style="max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+    <div id="ts-pickup" style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#C9A84C;transition:opacity .3s;">
+      <i class="fas fa-store" style="font-size:12px;"></i>
+      <span>Abholung</span>
+      <span id="ts-pickup-min" style="background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);border-radius:6px;padding:1px 8px;font-size:12px;">~20 Min.</span>
+    </div>
+    <div style="width:1px;height:16px;background:#2a2318;flex-shrink:0;"></div>
+    <div id="ts-delivery" style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#888;transition:opacity .3s;">
+      <i class="fas fa-motorcycle" style="font-size:12px;"></i>
+      <span>Lieferung</span>
+      <span id="ts-delivery-min" style="background:rgba(136,136,136,0.08);border:1px solid #2a2a2a;border-radius:6px;padding:1px 8px;font-size:12px;">~40 Min.</span>
+    </div>
+    <div style="width:1px;height:16px;background:#2a2318;flex-shrink:0;"></div>
+    <div style="font-size:12px;color:#444;display:flex;align-items:center;gap:5px;">
+      <i class="fas fa-map-marker-alt" style="font-size:11px;"></i> Mechernich
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     AKTIONS-BANNER (dynamisch via API)
+══════════════════════════════════════════════════ -->
+<div id="promo-banner" style="display:none;max-width:680px;margin:12px auto 0;padding:0 16px;">
+  <div style="background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.05));border:1.5px solid rgba(201,168,76,0.4);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
+    <span style="font-size:24px;flex-shrink:0;">🎉</span>
+    <div style="flex:1;">
+      <div id="promo-title" style="font-weight:700;color:#C9A84C;font-size:14px;margin-bottom:2px;"></div>
+      <div id="promo-desc"  style="font-size:12px;color:#a89060;line-height:1.4;"></div>
+    </div>
+    <div id="promo-timer" style="font-size:11px;color:#666;flex-shrink:0;text-align:center;"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     BOSS WELCOME
+══════════════════════════════════════════════════ -->
+<div style="max-width:680px;margin:0 auto;padding:14px 16px 4px;">
+  <div style="background:#13110d;border:1px solid #2a2318;border-radius:16px;overflow:hidden;display:flex;flex-wrap:wrap;min-height:320px;">
+
+    <!-- LINKE SEITE: Portrait -->
+    <div style="flex:0 0 42%;min-width:160px;position:relative;overflow:hidden;min-height:280px;">
+      <img src="https://files.catbox.moe/6t9u96.jpg"
+           alt="Hassan – Inhaber Snack House"
+           style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;position:absolute;inset:0;">
+      <!-- goldene Linie als Trenner -->
+      <div style="position:absolute;top:0;right:0;width:1px;height:100%;background:linear-gradient(to bottom,transparent,#C9A84C55,transparent);"></div>
+    </div>
+
+    <!-- RECHTE SEITE: Text -->
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 22px;">
+      <!-- Kleines goldenes Ornament -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <div style="height:1px;width:24px;background:#C9A84C;opacity:.5;"></div>
+        <span style="font-size:10px;color:#C9A84C;letter-spacing:.15em;font-weight:600;text-transform:uppercase;opacity:.7;">Der Chef</span>
+      </div>
+
+      <p style="font-family:'Playfair Display',serif;font-size:20px;color:#e8dcc8;font-weight:700;margin:0 0 14px;line-height:1.25;">
+        Frisch. Ehrlich.<br>Mit Herz.
+      </p>
+
+      <p style="font-size:13px;line-height:1.7;color:#a8967e;margin:0 0 18px;">
+        Hey ihr Lieben, ich bin Hassan und ich koche seit Jahren mit vollem Herz für euch.
+        Jedes Gericht — so wie ich es für meine eigene Familie machen würde.
+      </p>
+
+      <p style="font-size:12px;line-height:1.6;color:#C9A84C;font-weight:600;margin:0 0 20px;">
+        Viel Spaß beim Bestellen, und danke für euer Vertrauen!
+      </p>
+
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:32px;height:1px;background:#C9A84C;opacity:.4;"></div>
+        <span style="font-size:11px;color:#6a5a40;font-style:italic;">Hassan Yassine · Inhaber &amp; Koch</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ GOLDENE TRENNLINIE ══════════════════════════════════════════════════ -->
+<div style="max-width:680px;margin:20px auto 0;padding:0 16px;">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,#C9A84C,transparent);"></div>
+    <span style="font-size:10px;color:#C9A84C;letter-spacing:.18em;font-weight:600;text-transform:uppercase;opacity:.6;">Unsere Speisekarte</span>
+    <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,#C9A84C,transparent);"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     CATEGORY TABS – alle sichtbar, 2 Reihen
+══════════════════════════════════════════════════ -->
+<div id="tab-bar" style="position:sticky;top:57px;z-index:30;background:#0e0b08;border-bottom:1px solid #2a2318;padding:10px 16px 12px;">
+  <div style="max-width:680px;margin:0 auto;">
+    <div id="tab-strip" style="display:flex;flex-wrap:wrap;gap:7px;">
+      <button class="cat-tab active" data-cat="drehspiess"  onclick="jumpTo('drehspiess',this)">Drehspieß</button>
+      <button class="cat-tab"        data-cat="ueberbacken" onclick="jumpTo('ueberbacken',this)">Überbacken</button>
+      <button class="cat-tab"        data-cat="burger"      onclick="jumpTo('burger',this)">Burger</button>
+      <button class="cat-tab"        data-cat="schnitzel"   onclick="jumpTo('schnitzel',this)">Schnitzel</button>
+      <button class="cat-tab"        data-cat="nudeln"      onclick="jumpTo('nudeln',this)">Nudeln</button>
+      <button class="cat-tab"        data-cat="pizza"       onclick="jumpTo('pizza',this)">Pizza</button>
+      <button class="cat-tab"        data-cat="salate"      onclick="jumpTo('salate',this)">Salate</button>
+      <button class="cat-tab"        data-cat="vegetarisch" onclick="jumpTo('vegetarisch',this)">Vegetarisch</button>
+      <button class="cat-tab"        data-cat="fingerfood"  onclick="jumpTo('fingerfood',this)">Fingerfood</button>
+      <button class="cat-tab"        data-cat="getraenke"   onclick="jumpTo('getraenke',this)">Getränke</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     MENU
+══════════════════════════════════════════════════ -->
+<div id="menu-root" style="max-width:680px;margin:0 auto 120px;padding-top:24px;padding-bottom:32px;"></div>
+
+<!-- ══════════════════════════════════════════════════
+     CART BAR (sticky bottom)
+══════════════════════════════════════════════════ -->
+<div class="cart-bar" id="cart-bar">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="bar-count" style="background:rgba(0,0,0,0.2);border-radius:99px;padding:2px 10px;font-size:13px;font-weight:700;color:#000;">0</span>
+    <span style="font-size:14px;font-weight:600;color:#000;">Artikel im Warenkorb</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="bar-total" style="font-size:18px;font-weight:800;color:#000;">0,00 €</span>
+    <button onclick="openCart()" style="background:#000;color:#C9A84C;border:none;border-radius:99px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">Zur Kasse →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     CART MODAL
+══════════════════════════════════════════════════ -->
+<div class="modal-bg" id="cart-modal" onclick="bgClose(event)">
+  <div class="modal-sheet">
+    <!-- Handle bar -->
+    <div style="display:flex;justify-content:center;padding:14px 0 4px;">
+      <div style="width:40px;height:4px;border-radius:2px;background:#2a2a2a;"></div>
+    </div>
+
+    <!-- Cart view -->
+    <div id="view-cart">
+      <div style="padding:0 20px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <h2 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;">Warenkorb</h2>
+        <button onclick="closeCart()" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="cart-items" style="padding:0 20px;"></div>
+      <div id="cart-footer" style="padding:20px;border-top:1px solid #1e1e1e;margin-top:8px;"></div>
+    </div>
+
+    <!-- Checkout view -->
+    <div id="view-checkout" style="display:none;padding:0 20px 24px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <button onclick="showView('cart')" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;"><i class="fas fa-arrow-left"></i></button>
+        <h2 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;">Deine Angaben</h2>
+      </div>
+
+      <!-- Liefern / Abholen -->
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Bestellart</label>
+        <div class="toggle-pill">
+          <button class="toggle-opt active" id="opt-pickup" onclick="setOrderType('pickup')"><i class="fas fa-store" style="margin-right:6px;"></i>Abholung</button>
+          <button class="toggle-opt" id="opt-delivery" onclick="setOrderType('delivery')"><i class="fas fa-motorcycle" style="margin-right:6px;"></i>Lieferung</button>
+        </div>
+      </div>
+
+      <!-- Name & Tel -->
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px;">
+        <div>
+          <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Dein Name *</label>
+          <input class="inp" id="f-name" type="text" placeholder="Max Mustermann" autocomplete="name">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Telefonnummer *</label>
+          <input class="inp" id="f-phone" type="tel" placeholder="+49 170 000 0000" autocomplete="tel">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">E-Mail <span style="color:#444">(für Bestellbestätigung)</span></label>
+          <input class="inp" id="f-email" type="email" placeholder="max@beispiel.de" autocomplete="email">
+        </div>
+        <div id="addr-field" style="display:none;">
+          <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Lieferadresse *</label>
+          <input class="inp" id="f-addr" type="text" placeholder="Straße, Hausnr., Mechernich">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Anmerkungen (optional)</label>
+          <textarea class="inp" id="f-note" rows="2" placeholder="z.B. kein Zwiebel, klingeln an Nr. 3…" style="resize:none;"></textarea>
+        </div>
+      </div>
+
+      <!-- Wunschzeit -->
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Gewünschte Zeit</label>
+        <select class="inp" id="f-time">
+          <option value="asap">So schnell wie möglich (~25 Min.)</option>
+          <option value="30">In ca. 30 Minuten</option>
+          <option value="45">In ca. 45 Minuten</option>
+          <option value="60">In ca. 60 Minuten</option>
+        </select>
+      </div>
+
+      <!-- Zahlung -->
+      <div style="margin-bottom:24px;">
+        <label style="display:block;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Zahlungsart</label>
+        <div style="display:flex;gap:10px;">
+          <div class="pay-opt sel" id="pay-cash" onclick="setPayment('cash')">
+            <i class="fas fa-money-bill-wave" style="font-size:20px;color:#C9A84C;margin-bottom:6px;display:block;"></i>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Bar</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">bei Abholung</div>
+          </div>
+          <div class="pay-opt" id="pay-card" onclick="setPayment('card')">
+            <i class="fas fa-credit-card" style="font-size:20px;color:#C9A84C;margin-bottom:6px;display:block;"></i>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Karte</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">EC / Kreditkarte</div>
+          </div>
+          <div class="pay-opt" id="pay-stripe" onclick="setPayment('stripe')">
+            <i class="fas fa-lock" style="font-size:20px;color:#C9A84C;margin-bottom:6px;display:block;"></i>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Online</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Stripe · sicher</div>
+          </div>
+        </div>
+        <p id="stripe-hint" style="display:none;font-size:12px;color:#888;margin-top:8px;padding:10px;background:#1a1a1a;border-radius:8px;border:1px solid #2a2a2a;">
+          <i class="fas fa-info-circle" style="color:#C9A84C;margin-right:6px;"></i>
+          Du wirst zur sicheren Stripe-Zahlungsseite weitergeleitet. Kein Account erforderlich.
+        </p>
+      </div>
+
+      <!-- Order summary mini -->
+      <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:16px;margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:13px;color:#888;">Bestellübersicht</span>
+          <button onclick="showView('cart')" style="background:none;border:none;color:#C9A84C;font-size:12px;cursor:pointer;text-decoration:underline;">Ändern</button>
+        </div>
+        <div id="co-summary" style="font-size:13px;color:#ccc;line-height:1.8;"></div>
+        <div style="border-top:1px solid #2a2a2a;margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;">
+          <span style="font-weight:600;">Gesamt</span>
+          <span id="co-total" style="font-weight:800;color:#C9A84C;font-size:16px;"></span>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button id="submit-btn" onclick="submitOrder()" style="width:100%;padding:16px;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
+        <span id="submit-icon"><i class="fas fa-paper-plane"></i></span>
+        <span id="submit-label">Bestellung absenden</span>
+      </button>
+      <p style="text-align:center;font-size:11px;color:#444;margin-top:10px;">
+        Mit Absenden akzeptierst du unsere
+        <button type="button" onclick="openLegal('datenschutz')" style="background:none;border:none;color:#888;cursor:pointer;font-size:11px;padding:0;text-decoration:underline;">Datenschutzerklärung</button>
+        und
+        <button type="button" onclick="openLegal('agb')" style="background:none;border:none;color:#888;cursor:pointer;font-size:11px;padding:0;text-decoration:underline;">AGB</button>.
+      </p>
+    </div>
+
+    <!-- Success view -->
+    <div id="view-success" style="display:none;padding:40px 24px;text-align:center;">
+      <div style="width:72px;height:72px;border-radius:50%;background:rgba(34,197,94,0.12);border:2px solid #22c55e;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+        <i class="fas fa-check" style="font-size:28px;color:#22c55e;"></i>
+      </div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:10px;">Bestellung eingegangen!</h2>
+      <p style="color:#888;font-size:14px;line-height:1.7;margin-bottom:24px;">
+        Wir haben deine Bestellung erhalten und melden uns kurz per SMS oder WhatsApp zur Bestätigung.
+      </p>
+      <div id="success-info" style="background:#1a1a1a;border-radius:14px;padding:16px;text-align:left;font-size:13px;line-height:2;color:#ccc;margin-bottom:24px;"></div>
+      <button onclick="resetOrder()" style="background:#C9A84C;color:#000;border:none;border-radius:99px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;">
+        Neue Bestellung aufgeben
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     SCRIPT
+══════════════════════════════════════════════════ -->
+<script>
+// ── MENU DATA ─────────────────────────────────────────────────────────────
+const MENU = [
+  // DREHSPIESS
+  { id:'d1', cat:'drehspiess', nr:'1', name:'Drehspieß Rolle Traditionell', desc:'Knoblauchpaste, Pommes, eingelegte Gurken – im arabischen Brot', price:7.00, variants:[{l:'Hähnchen',p:7.00},{l:'Kalb',p:8.00}] },
+  { id:'d2', cat:'drehspiess', nr:'2', name:'Drehspieß Rolle Orientalisch', desc:'Arab. Brot mit Knoblauchpaste, Coleslaw, Pommes, Granatapfelsirup', price:8.00, variants:[{l:'Hähnchen',p:8.00},{l:'Kalb',p:9.00}] },
+  { id:'d3', cat:'drehspiess', nr:'3', name:'Drehspieß Rolle Döner-Style', desc:'Arab. Brot mit gemischtem Salat und Zaziki', price:8.00, variants:[{l:'Hähnchen',p:8.00},{l:'Kalb',p:9.00}] },
+  { id:'d4', cat:'drehspiess', nr:'4', name:'Lahmacun-Rolle', desc:'Fladenbrot mit Hackfleischmischung, gemischtem Salat und Zaziki', price:7.50 },
+  { id:'d5', cat:'drehspiess', nr:'5', name:'Lahmacun-Rolle Drehspieß', desc:'Fladenbrot mit Hackfleisch und Drehspießfleisch, Salat, Zaziki', price:9.00, variants:[{l:'Hähnchen',p:9.00},{l:'Kalb',p:10.00}] },
+  { id:'d6', cat:'drehspiess', nr:'6', name:'Drehspieß Tasche Döner-Style', desc:'Gefüllte Tasche mit Drehspießfleisch, gemischtem Salat, Zaziki', price:8.00, variants:[{l:'Hähnchen',p:8.00},{l:'Kalb',p:9.00}] },
+  { id:'d7', cat:'drehspiess', nr:'7', name:'Drehspieß Box', desc:'Mit Pommes, Knoblauchpaste oder Zaziki', price:7.00, variants:[{l:'Hähnchen',p:7.00},{l:'Kalb',p:8.00}] },
+  { id:'d8', cat:'drehspiess', nr:'8', name:'Drehspieß Teller', desc:'Orientalisch: Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste — oder Döner-Style', price:12.00, variants:[{l:'Hähnchen',p:12.00},{l:'Kalb',p:13.50}] },
+  { id:'d9', cat:'drehspiess', nr:'9 ★', name:'Arabischer Teller', desc:'Hähnchen-Shawarma-Rolle, Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste', price:14.00, badge:'Hausspezialität' },
+
+  // ÜBERBACKEN
+  { id:'u10', cat:'ueberbacken', nr:'10', name:'Drehspieß mit Hollandaise', desc:'Sauce Hollandaise und Käse überbacken. Mit Pommes/Reis und Salat/Coleslaw', price:13.00, variants:[{l:'Hähnchen',p:13.00},{l:'Kalb',p:14.00}] },
+  { id:'u11', cat:'ueberbacken', nr:'11', name:'Drehspieß Hawaii', desc:'Mit Ananas, Sahnesoße und Käse überbacken', price:12.50, variants:[{l:'Hähnchen',p:12.50},{l:'Kalb',p:13.50}] },
+  { id:'u12', cat:'ueberbacken', nr:'12', name:'Drehspieß Barbecue', desc:'Mit Barbecuesoße, Zwiebeln und Käse überbacken', price:12.50, variants:[{l:'Hähnchen',p:12.50},{l:'Kalb',p:13.50}] },
+  { id:'u13', cat:'ueberbacken', nr:'13', name:'Drehspieß Tomaten-/Sahnesoße', desc:'Mit Tomaten- oder Sahnesoße und Käse überbacken', price:11.50, variants:[{l:'Hähnchen',p:11.50},{l:'Kalb',p:12.50}] },
+
+  // BURGER
+  { id:'b14', cat:'burger', nr:'14', name:'Crispy Chicken Burger', desc:'Crispy Chicken, Blattsalat, Käse, Tomate, Coleslaw, Süß-Sauer- und Hamburgersoße', price:6.00 },
+  { id:'b15', cat:'burger', nr:'15', name:'Hamburger', desc:'Rindfleisch-Patty, Salat, Tomaten, Gurken, Röstzwiebeln, Soßen', price:5.00 },
+  { id:'b16', cat:'burger', nr:'16', name:'Cheeseburger', desc:'Rindfleisch-Patty, Käse, Salat, Tomaten, Gurken, Röstzwiebeln, Soßen', price:5.50 },
+  { id:'b17', cat:'burger', nr:'17', name:'Chicken Burger', desc:'Chicken-Patty, Salat, Tomaten, Gurken, Soßen', price:5.50 },
+  { id:'b18', cat:'burger', nr:'18', name:'Chicken Burger Spezial', desc:'Chicken-Patty, Coleslaw, Salat, Tomaten, Gurken, Soßen', price:6.00 },
+  { id:'b19', cat:'burger', nr:'19 🌿', name:'Veggie Burger', desc:'Vegetarische Burgerboulette, Salat, Tomaten, Gurken, Soßen', price:5.00, badge:'Vegetarisch' },
+
+  // SCHNITZEL
+  { id:'s20', cat:'schnitzel', nr:'20', name:'Schnitzel Wiener Art', desc:'Hähnchenbrust. Mit Pommes/Reis und Salat/Coleslaw', price:12.00 },
+  { id:'s21', cat:'schnitzel', nr:'21', name:'Jägerschnitzel', desc:'Hähnchenbrust mit Jägersoße', price:14.00 },
+  { id:'s22', cat:'schnitzel', nr:'22', name:'Schnitzel Paprika Art', desc:'Hähnchenbrust mit Paprikasoße', price:14.00 },
+  { id:'s23', cat:'schnitzel', nr:'23', name:'Champignon-Rahmschnitzel', desc:'Hähnchenbrust mit Champignon-Rahmsauce', price:14.00 },
+  { id:'s24', cat:'schnitzel', nr:'24 ★', name:'Schnitzel Yassine', desc:'Hähnchenbrust mit gebratenen Zwiebeln und Champignons. Tipp: +2 € Hollandaise!', price:14.00, badge:'Empfehlung' },
+  { id:'s25', cat:'schnitzel', nr:'25', name:'Hawaii Schnitzel', desc:'Hähnchenbrust mit Ananas und Käse', price:14.00 },
+
+  // NUDELN
+  { id:'n26', cat:'nudeln', nr:'26 🌿', name:'Classic Pasta', desc:'Spaghetti oder Tortiglioni mit Tomatensoße. +2 € mit Käse überbacken', price:9.00, badge:'Vegetarisch' },
+  { id:'n27', cat:'nudeln', nr:'27', name:'Carbonara', desc:'Mit Geflügelschinken, Sahne und Ei', price:12.00 },
+  { id:'n28', cat:'nudeln', nr:'28', name:'Bolognese', desc:'Mit Tomatenfleischsoße', price:12.00 },
+  { id:'n29', cat:'nudeln', nr:'29', name:'Drehspieß Pasta', desc:'Mit Hähnchen-Drehspieß, Champignon in Tomaten- oder Sahnesoße', price:12.50 },
+  { id:'n30', cat:'nudeln', nr:'30', name:'Quattro Formaggi', desc:'Vier Käsesorten mit cremiger Sahnesoße', price:12.50 },
+  { id:'n31', cat:'nudeln', nr:'31', name:'Scampi Pasta', desc:'Scampi mit Spinat und Knoblauch in Tomaten-Sahnesoße — oder mit Sahnesoße und Parmesan', price:13.00 },
+  { id:'n32', cat:'nudeln', nr:'32 🌿', name:'Vegetarische Pasta', desc:'Mit Brokkoli, Spinat, Champignon, Knoblauch in Tomaten- oder Sahnesoße', price:12.50, badge:'Vegetarisch' },
+
+  // PIZZA
+  { id:'p33', cat:'pizza', nr:'33', name:'Margherita', desc:'Tomatensoße, Käse, Oregano — Ø 30 cm', price:8.00, badge:'Vegetarisch' },
+  { id:'p34', cat:'pizza', nr:'34–37', name:'Thunfisch / Salami / Schinken / Champignon', desc:'Je eine Zutat auf Tomatensoße und Käse — Ø 30 cm', price:10.00 },
+  { id:'p38', cat:'pizza', nr:'38–41', name:'Spinat / Hawaii / Diavolo / Sucuk', desc:'Spinat 10 € | Hawaii: Schinken + Ananas | Diavolo: scharf/mild | Sucuk: Knoblauchwurst — Ø 30 cm', price:10.00 },
+  { id:'p43', cat:'pizza', nr:'43', name:'Pizza Roma', desc:'Thunfisch und Zwiebeln auf Tomatensoße und Käse — Ø 30 cm', price:11.00 },
+  { id:'p48', cat:'pizza', nr:'48', name:'Calzone', desc:'Gefüllt mit Tomatensoße, Käse, Geflügelschinken, Champignon und Thunfisch — Ø 26 cm', price:11.00 },
+  { id:'p49', cat:'pizza', nr:'49', name:'Drehspieß Pizza', desc:'Fleisch vom Drehspieß mit Zwiebeln auf Tomatensoße und Käse — Ø 30 cm', price:11.00, variants:[{l:'Hähnchen',p:11.00},{l:'Kalb',p:12.00}] },
+  { id:'p53', cat:'pizza', nr:'53 ★', name:'Snack House Pizza', desc:'Selbst marinierte Putenbruststücke, Brokkoli, Mais, Paprika, Oliven, Hollandaise oder Knoblauchpaste — Ø 30 cm', price:12.50, badge:'Hausspezialität' },
+  { id:'p54', cat:'pizza', nr:'54', name:'Eifelpizza', desc:'Scampi, Thunfisch, Salami, Schinken, Champignon, Spinat, Paprika, Artischocke, Ei — Ø 30 cm', price:12.50 },
+  { id:'p57', cat:'pizza', nr:'57', name:'Pizzablech 40×60 cm', desc:'Margherita (33 €) oder 3 Zutaten nach Wahl (40 €) — ideal fürs Catering', price:33.00, badge:'Catering' },
+
+  // SALATE
+  { id:'sa68', cat:'salate', nr:'68', name:'Tabouleh', desc:'Tomaten, Gurken, Petersilie, Minze, Lauchzwiebel, Burghul, Granatapfelsirup — hausgemacht', price:8.00, badge:'Vegetarisch' },
+  { id:'sa69', cat:'salate', nr:'69 ★', name:'Snack House Salat', desc:'Grünsalat, Tomaten, Gurken, Thunfisch, Geflügelschinken, Käse, Bohnen, Ei', price:11.00, badge:'Empfehlung' },
+  { id:'sa71', cat:'salate', nr:'71–73', name:'Bauernsalat / Gemischter / Coleslaw', desc:'Bauernsalat 6 € | Gemischter 7 € | Coleslaw hausgemacht 8 €', price:6.00 },
+  { id:'sa74', cat:'salate', nr:'74', name:'Fitness Salat', desc:'Grünsalat, Tomaten, Gurken, Hähnchenstreifen, Mais und Käse', price:11.00 },
+
+  // VEGETARISCH
+  { id:'v75', cat:'vegetarisch', nr:'75', name:'Falafel Rolle', desc:'Frittierte Falafel im arabischen Brot mit Hummus, Petersilie, Tomaten, Salat, Sesamsoße', price:7.00, badge:'Vegan' },
+  { id:'v76', cat:'vegetarisch', nr:'76', name:'Falafel Teller', desc:'5 Falafel mit Brot, Hummus, Petersilie, Tomaten, Salat, Peperoni, eingelegten Gurken, Sesamsoße', price:12.00, badge:'Vegan' },
+
+  // FINGERFOOD
+  { id:'f77', cat:'fingerfood', nr:'77–78', name:'Chicken Nuggets', desc:'Knusprige Hähnchenstreifen, mit Soße nach Wahl',  price:5.50,
+    variants:[{l:'6 Stück + 1 Soße',p:5.50},{l:'9 Stück + 2 Soßen',p:7.50}] },
+  { id:'f79', cat:'fingerfood', nr:'79–80', name:'Crispy Chicken', desc:'Marinierte Hähnchenteile, knusprig frittiert', price:8.50,
+    variants:[{l:'5 Stück + Knoblauch',p:8.50},{l:'Teller mit Pommes & Coleslaw',p:14.00}] },
+  { id:'f81', cat:'fingerfood', nr:'81–84', name:'Geflügelwurst mit Pommes', desc:'Alle Würste aus 100 % Geflügelfleisch, mit Pommes', price:7.00,
+    variants:[{l:'Bratwurst',p:7.00},{l:'Currywurst',p:8.00},{l:'Jägerwurst',p:8.00},{l:'Paprikawurst',p:8.00}] },
+  { id:'f85', cat:'fingerfood', nr:'Beilagen', name:'Beilage nach Wahl', desc:'Pommes kl. · Pommes gr. · Reis · Hummus · Fladenbrot', price:3.00,
+    variants:[{l:'Pommes klein',p:3.00},{l:'Pommes groß',p:3.50},{l:'Reis',p:3.50},{l:'Hummus',p:6.00},{l:'Fladenbrot',p:1.00}] },
+  { id:'f86', cat:'fingerfood', nr:'Soßen', name:'Soße nach Wahl', desc:'Alle Dips einzeln wählbar – einfach mehrfach hinzufügen', price:1.00,
+    variants:[{l:'Mayo',p:1.00},{l:'Ketchup',p:1.00},{l:'Süß-Sauer',p:1.00},{l:'Paprika-Dip',p:2.00},{l:'Jäger-Dip',p:2.00},{l:'Curry-Dip',p:2.00},{l:'Knoblauch',p:3.00},{l:'Zaziki',p:3.00},{l:'Hollandaise',p:3.00}] },
+
+  // GETRÄNKE
+  { id:'g1', cat:'getraenke', nr:'Softdrinks', name:'Cola / Fanta / Sprite / Mezzo-Mix', desc:'Einfach Sorte und Größe wählen', price:2.50,
+    variants:[{l:'Cola 0,33 L',p:2.50},{l:'Cola 1,0 L',p:4.50},{l:'Fanta 0,33 L',p:2.50},{l:'Fanta 1,0 L',p:4.50},{l:'Sprite 0,33 L',p:2.50},{l:'Sprite 1,0 L',p:4.50},{l:'Mezzo-Mix 0,33 L',p:2.50},{l:'Mezzo-Mix 1,0 L',p:4.50}] },
+  { id:'g2', cat:'getraenke', nr:'Wasser', name:'Wasser', desc:'Still oder Sprudelnd, 0,5 L', price:2.00,
+    variants:[{l:'Still',p:2.00},{l:'Sprudelnd',p:2.00}] },
+  { id:'g3', cat:'getraenke', nr:'Getränke', name:'Ayran', desc:'Hausgemacht, 0,4 L', price:2.00 },
+  { id:'g4', cat:'getraenke', nr:'Getränke', name:'Red Bull', desc:'0,25 L', price:2.50 },
+];
+
+const CATS = [
+  { id:'drehspiess',  label:'Drehspieß & Shawarma',    photo:'https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=800&h=220&q=85', icon:'🥙' },
+  { id:'ueberbacken', label:'Überbacken',               photo:'https://images.unsplash.com/photo-1759409117421-1a64af35f118?auto=format&fit=crop&w=800&h=220&q=85', icon:'🫕' },
+  { id:'burger',      label:'Burger',                   photo:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&h=220&q=85', icon:'🍔' },
+  { id:'schnitzel',   label:'Schnitzel',                photo:'https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=800&h=220&q=85', icon:'🥩' },
+  { id:'nudeln',      label:'Nudeln & Pasta',           photo:'https://images.unsplash.com/photo-1622973536968-3ead9e780960?auto=format&fit=crop&w=800&h=220&q=85', icon:'🍝' },
+  { id:'pizza',       label:'Pizza',                    photo:'https://images.unsplash.com/photo-1750127060930-ea1cdc1e59a5?auto=format&fit=crop&w=800&h=220&q=85', icon:'🍕' },
+  { id:'salate',      label:'Salate',                   photo:'https://images.unsplash.com/photo-1716034353309-c6066ae24c67?auto=format&fit=crop&w=800&h=220&q=85', icon:'🥗' },
+  { id:'vegetarisch', label:'Vegetarisch & Vegan',      photo:'https://images.unsplash.com/photo-1768812910769-d037b90aee77?auto=format&fit=crop&w=800&h=220&q=85', icon:'🧆' },
+  { id:'fingerfood',  label:'Fingerfood & Beilagen',    photo:'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?auto=format&fit=crop&w=800&h=220&q=85', icon:'🍟' },
+  { id:'getraenke',   label:'Getränke',                 photo:'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&h=220&q=85', icon:'🥤' },
+];
+
+// ── KONFIGURATION ─────────────────────────────────────────────────────────
+const DELIVERY_FEE         = 2.50;
+const MIN_ORDER_DELIVERY   = 15.00;
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+const cart = {};
+let orderType   = 'pickup';
+let payMethod   = 'cash';
+let activePromo = null;
+let siteOnline  = true;
+let waitPickup  = 20;
+let waitDelivery = 40;
+let menuOverrides = {};  // { itemId: { available, note } }
+
+// ── SETTINGS vom Server laden ──────────────────────────────────────────────
+async function loadSiteSettings() {
+  try {
+    const r = await fetch('/api/settings');
+    if (!r.ok) return;
+    const s = await r.json();
+    siteOnline    = s.online;
+    waitPickup    = s.wait_pickup   || 20;
+    waitDelivery  = s.wait_delivery || 40;
+    menuOverrides = s.overrides     || {};
+
+    if (!siteOnline) {
+      showOfflineBanner(s.offline_msg || 'Wir sind gleich zurück!');
+    } else {
+      hideOfflineBanner();
+    }
+    renderWaitBadge();
+    renderMenu();  // Speisekarte neu zeichnen mit Overrides
+  } catch(e) {}
+}
+
+function showOfflineBanner(msg) {
+  let el = document.getElementById('offline-banner');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'offline-banner';
+    el.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#080604;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;text-align:center;';
+    el.innerHTML = `
+      <img src="https://files.catbox.moe/3uyamu.png" style="width:80px;opacity:.6;filter:grayscale(1);">
+      <div style="font-family:\'Playfair Display\',serif;color:#C9A84C;font-size:22px;">Snack House Yassine</div>
+      <div style="color:#555;font-size:14px;max-width:280px;" id="offline-msg-txt">${msg}</div>
+      <div style="background:#1a1a1a;border:1px solid #2a2318;border-radius:10px;padding:12px 20px;color:#444;font-size:12px;">Wir sind gerade nicht verfügbar.<br>Bitte versuche es später erneut.</div>
+    `;
+    document.body.appendChild(el);
+  } else {
+    document.getElementById('offline-msg-txt').textContent = msg;
+  }
+}
+function hideOfflineBanner() {
+  const el = document.getElementById('offline-banner');
+  if (el) el.remove();
+}
+
+function renderWaitBadge() {
+  // Timing Strip aktualisieren
+  const pEl = document.getElementById('ts-pickup-min');
+  const dEl = document.getElementById('ts-delivery-min');
+  const pRow = document.getElementById('ts-pickup');
+  const dRow = document.getElementById('ts-delivery');
+  if (pEl) pEl.textContent = `~${waitPickup} Min.`;
+  if (dEl) dEl.textContent = `~${waitDelivery} Min.`;
+  // Aktive Auswahl hervorheben
+  if (pRow && dRow) {
+    const isD = orderType === 'delivery';
+    pRow.style.color  = isD ? '#555' : '#C9A84C';
+    pRow.style.opacity = isD ? '0.5' : '1';
+    if (pEl) { pEl.style.background = isD ? 'rgba(136,136,136,0.06)' : 'rgba(201,168,76,0.12)'; pEl.style.borderColor = isD ? '#2a2a2a' : 'rgba(201,168,76,0.3)'; }
+    dRow.style.color  = isD ? '#C9A84C' : '#555';
+    dRow.style.opacity = isD ? '1' : '0.5';
+    if (dEl) { dEl.style.background = isD ? 'rgba(201,168,76,0.12)' : 'rgba(136,136,136,0.06)'; dEl.style.borderColor = isD ? 'rgba(201,168,76,0.3)' : '#2a2a2a'; }
+  }
+  // ASAP-Option im Checkout-Dropdown dynamisch anpassen
+  const asapOpt = document.querySelector('#f-time option[value="asap"]');
+  if (asapOpt) {
+    const w = orderType === 'delivery' ? waitDelivery : waitPickup;
+    const label = orderType === 'delivery' ? 'Lieferzeit' : 'Wartezeit';
+    asapOpt.textContent = `So schnell wie möglich (~${w} Min. ${label})`;
+  }
+}
+
+function itemDisplay(item) {
+  const ov = menuOverrides[item.id] || {};
+  if (ov.available === false) return null;
+  return {
+    ...item,
+    name: ov.name || item.name,
+    desc: ov.desc || item.desc,
+    price: ov.price != null ? ov.price : item.price,
+    image_url: ov.image_url || null,
+    variants: item.variants ? item.variants.map(v => ({
+      ...v,
+      p: ov.price != null && item.variants.length === 1 ? ov.price : v.p,
+    })) : item.variants,
+  };
+}
+
+// ── RENDER MENU ────────────────────────────────────────────────────────────
+function renderMenu() {
+  const root = document.getElementById('menu-root');
+  let html = '';
+
+  CATS.forEach(cat => {
+    const items = MENU.map(itemDisplay).filter(Boolean).filter(m => m.cat === cat.id);
+    if (!items.length) return;
+
+    html += `<div class="cat-section" id="sec-${cat.id}">
+      <!-- Kategorie-Foto-Banner -->
+      <div style="position:relative;height:110px;overflow:hidden;margin-top:8px;">
+        <img src="${cat.photo}" alt="${cat.label}" loading="lazy" width="800" height="110"
+             style="width:100%;height:100%;object-fit:cover;object-position:center;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(14,11,8,0.92) 0%,rgba(14,11,8,0.45) 55%,rgba(14,11,8,0.15) 100%);"></div>
+        <div style="position:absolute;bottom:10px;left:16px;right:16px;">
+          <span style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#D4AF37;text-shadow:0 1px 4px rgba(0,0,0,.8);">${cat.label}</span>
+        </div>
+      </div>`;
+
+    items.forEach(item => {
+      const cartEntry = cart[item.id];
+      const qty = cartEntry ? cartEntry.qty : 0;
+      const hasVar = item.variants && item.variants.length > 1;
+      const thumb = item.image_url
+        ? `<img src="${item.image_url}" alt="" loading="lazy" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;">`
+        : '';
+
+      html += `<div class="menu-row" id="row-${item.id}" style="padding:14px 16px;display:flex;align-items:center;gap:12px;">
+        ${thumb}
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px;">
+            <span style="font-size:10px;color:#555;font-weight:600;">${item.nr}</span>
+            <span style="font-size:15px;font-weight:600;color:#fff;">${item.name}</span>
+            ${item.badge ? `<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);color:#C9A84C;">${item.badge}</span>` : ''}
+          </div>
+          <p style="font-size:12px;color:#666;line-height:1.5;margin-bottom:6px;">${item.desc}</p>
+          ${hasVar ? `<div style="display:flex;gap:6px;flex-wrap:wrap;" id="var-${item.id}">
+            ${item.variants.map((v,i) => `<button onclick="selectVariant('${item.id}',${i})" id="vbtn-${item.id}-${i}"
+              style="padding:3px 10px;border-radius:99px;border:1px solid #2a2a2a;font-size:11px;font-weight:500;cursor:pointer;background:${i===0?'#C9A84C':'transparent'};color:${i===0?'#000':'#666'};transition:all .15s;">${v.l} ${fmtPrice(v.p)}</button>`).join('')}
+          </div>` : ''}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <span style="font-size:16px;font-weight:700;color:#C9A84C;" id="price-${item.id}">${hasVar ? 'ab ' : ''}${fmtPrice(item.price)}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="qty-btn ${qty===0?'zero':''}" onclick="changeQty('${item.id}',-1)" id="minus-${item.id}" ${qty===0?'disabled':''}>−</button>
+            <span id="qty-${item.id}" style="min-width:20px;text-align:center;font-size:15px;font-weight:700;color:${qty>0?'#C9A84C':'#333'};">${qty||'+'}</span>
+            <button class="qty-btn" onclick="changeQty('${item.id}',1)" id="plus-${item.id}">+</button>
+          </div>
+        </div>
+      </div>`;
+    });
+
+    html += `</div>`;
+  });
+
+  root.innerHTML = html;
+}
+
+// ── VARIANT SELECTION ──────────────────────────────────────────────────────
+function selectVariant(itemId, idx) {
+  const item = MENU.find(m => m.id === itemId);
+  if (!item || !item.variants) return;
+
+  item.variants.forEach((_,i) => {
+    const btn = document.getElementById(`vbtn-${itemId}-${i}`);
+    if (!btn) return;
+    const sel = i === idx;
+    btn.style.background = sel ? '#C9A84C' : 'transparent';
+    btn.style.color = sel ? '#000' : '#666';
+    btn.style.borderColor = sel ? '#C9A84C' : '#2a2a2a';
+  });
+
+  const variant = item.variants[idx];
+  const priceEl = document.getElementById(`price-${itemId}`);
+  if (priceEl) priceEl.textContent = fmtPrice(variant.p);
+
+  if (cart[itemId]) {
+    cart[itemId].variant = variant;
+    cart[itemId].price   = variant.p;
+    updateCartUI();
+  }
+
+  item._selectedVariant = idx;
+}
+
+// ── QTY ────────────────────────────────────────────────────────────────────
+function changeQty(itemId, delta) {
+  if (cart[itemId] && cart[itemId].isFree) return; // Gratis-Artikel nicht manuell änderbar
+  const base = MENU.find(m => m.id === itemId);
+  const item = base ? itemDisplay(base) : null;
+  if (!item) return;
+
+  const current = cart[itemId] ? cart[itemId].qty : 0;
+  const next    = Math.max(0, current + delta);
+
+  if (next === 0) {
+    delete cart[itemId];
+  } else {
+    const varIdx = item._selectedVariant !== undefined ? item._selectedVariant : 0;
+    const variant = item.variants ? item.variants[varIdx] : null;
+    cart[itemId] = {
+      item,
+      qty:     next,
+      variant: variant,
+      price:   variant ? variant.p : item.price,
+    };
+  }
+
+  // Update row controls
+  const qtyEl   = document.getElementById(`qty-${itemId}`);
+  const minusEl = document.getElementById(`minus-${itemId}`);
+  if (qtyEl) {
+    qtyEl.textContent = next > 0 ? next : '+';
+    qtyEl.style.color = next > 0 ? '#C9A84C' : '#333';
+  }
+  if (minusEl) {
+    minusEl.disabled = next === 0;
+    minusEl.className = `qty-btn ${next===0?'zero':''}`;
+  }
+
+  applyPromoToCart();
+  updateCartUI();
+}
+
+// ── CART UI ────────────────────────────────────────────────────────────────
+function totalItems()    { return Object.values(cart).reduce((s,e)=>s+e.qty,0); }
+function subtotalPrice() { return Object.values(cart).reduce((s,e)=>s+(e.price*e.qty),0); }
+function isDelivery()    { return orderType === 'delivery'; }
+function deliveryFee()   { return isDelivery() ? DELIVERY_FEE : 0; }
+function totalPrice()    { return subtotalPrice() + deliveryFee(); }
+
+function fmtPrice(p) { return p.toFixed(2).replace('.',',') + ' €'; }
+
+function updateCartUI() {
+  const count = totalItems();
+  const total = totalPrice();
+
+  // Cart bar
+  const bar = document.getElementById('cart-bar');
+  if (count > 0) {
+    bar.classList.add('show');
+    document.getElementById('bar-count').textContent = count;
+    document.getElementById('bar-total').textContent = fmtPrice(total);
+  } else {
+    bar.classList.remove('show');
+  }
+
+  // Header badge
+  const hdrBtn   = document.getElementById('hdr-cart-btn');
+  const hdrBadge = document.getElementById('hdr-badge');
+  if (hdrBtn) hdrBtn.style.display = count > 0 ? 'block' : 'none';
+  if (hdrBadge) {
+    hdrBadge.textContent  = count;
+    hdrBadge.style.display = count > 0 ? 'flex' : 'none';
+  }
+
+  // Cart modal items
+  renderCartItems();
+}
+
+function renderCartItems() {
+  const container = document.getElementById('cart-items');
+  const footer    = document.getElementById('cart-footer');
+  if (!container || !footer) return;
+
+  const entries = Object.values(cart);
+
+  if (entries.length === 0) {
+    container.innerHTML = `<div style="padding:40px 0;text-align:center;color:#555;">
+      <i class="fas fa-shopping-bag" style="font-size:36px;margin-bottom:12px;display:block;opacity:.4;"></i>
+      Noch keine Artikel im Warenkorb
+    </div>`;
+    footer.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = entries.map(e => e.isFree ? `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #1c1c1c;background:rgba(201,168,76,0.04);border-radius:8px;padding-left:8px;">
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <p style="font-size:14px;font-weight:600;color:#fff;margin:0;">${e.item.name}${e.freeLabel ? ` <span style="font-size:11px;color:#888;">(${e.freeLabel})</span>` : ''}</p>
+          <span style="font-size:10px;font-weight:800;background:#C9A84C;color:#000;padding:2px 7px;border-radius:99px;">GRATIS 🎁</span>
+        </div>
+        <p style="font-size:12px;color:#C9A84C;margin:2px 0 0;">Aktion: ${activePromo ? (activePromo.title||'Sonderaktion') : ''}</p>
+      </div>
+      <span style="font-size:14px;font-weight:700;min-width:60px;text-align:right;text-decoration:line-through;color:#555;">${fmtPrice(e.item.price || 2.50)}</span>
+    </div>
+  ` : `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #1c1c1c;">
+      <div style="flex:1;min-width:0;">
+        <p style="font-size:14px;font-weight:600;color:#fff;">${e.item.name}${e.variant ? ` <span style="font-size:11px;color:#888;">(${e.variant.l})</span>` : ''}</p>
+        <p style="font-size:13px;color:#C9A84C;margin-top:2px;">${fmtPrice(e.price)}</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="qty-btn ${e.qty===0?'zero':''}" onclick="changeQty('${e.item.id}',-1)" style="width:28px;height:28px;font-size:16px;">−</button>
+        <span style="font-size:15px;font-weight:700;color:#C9A84C;min-width:20px;text-align:center;">${e.qty}</span>
+        <button class="qty-btn" onclick="changeQty('${e.item.id}',1)" style="width:28px;height:28px;font-size:16px;">+</button>
+      </div>
+      <span style="font-size:14px;font-weight:700;min-width:60px;text-align:right;">${fmtPrice(e.price * e.qty)}</span>
+    </div>
+  `).join('');
+
+  const sub  = subtotalPrice();
+  const fee  = deliveryFee();
+  const belowMin = isDelivery() && sub < MIN_ORDER_DELIVERY;
+
+  footer.innerHTML = `
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:#888;margin-bottom:6px;">
+        <span>Zwischensumme</span>
+        <span>${fmtPrice(sub)}</span>
+      </div>
+      ${isDelivery() ? `
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:#888;margin-bottom:6px;">
+        <span>Liefergebühr</span>
+        <span>${fmtPrice(DELIVERY_FEE)}</span>
+      </div>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #2a2a2a;padding-top:10px;">
+        <span style="font-size:15px;font-weight:700;">Gesamt</span>
+        <span style="font-size:20px;font-weight:800;color:#C9A84C;">${fmtPrice(sub + fee)}</span>
+      </div>
+    </div>
+
+    ${belowMin ? `
+    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:10px 14px;font-size:12px;color:#f87171;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+      <i class="fas fa-exclamation-triangle" style="flex-shrink:0;"></i>
+      Mindestbestellwert für Lieferung: <strong>${fmtPrice(MIN_ORDER_DELIVERY)}</strong>. Noch <strong>${fmtPrice(MIN_ORDER_DELIVERY - sub)}</strong> fehlen.
+    </div>` : `
+    <div style="background:#1a1a1a;border-radius:10px;padding:10px 14px;font-size:12px;color:#666;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+      <i class="fas fa-info-circle" style="color:#C9A84C;flex-shrink:0;"></i>
+      ${isDelivery()
+        ? `Lieferung ab ${fmtPrice(MIN_ORDER_DELIVERY)} Bestellwert · Liefergebühr ${fmtPrice(DELIVERY_FEE)}`
+        : `Mindestbestellwert Lieferung ${fmtPrice(MIN_ORDER_DELIVERY)} · Liefergebühr ${fmtPrice(DELIVERY_FEE)}`}
+    </div>`}
+
+    <button onclick="showView('checkout')" ${belowMin ? 'disabled' : ''}
+      style="width:100%;padding:15px;background:${belowMin ? '#2a2a2a' : 'linear-gradient(135deg,#C9A84C,#e8c76a)'};color:${belowMin ? '#555' : '#000'};border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:${belowMin ? 'not-allowed' : 'pointer'};">
+      Weiter zur Kasse →
+    </button>
+  `;
+}
+
+// ── MODAL OPEN/CLOSE ───────────────────────────────────────────────────────
+function openCart() {
+  showView('cart');
+  document.getElementById('cart-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  document.getElementById('cart-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function bgClose(e) { if (e.target === document.getElementById('cart-modal')) closeCart(); }
+
+function showView(name) {
+  document.getElementById('view-cart').style.display     = name==='cart'     ? 'block' : 'none';
+  document.getElementById('view-checkout').style.display = name==='checkout' ? 'block' : 'none';
+  document.getElementById('view-success').style.display  = name==='success'  ? 'block' : 'none';
+
+  if (name === 'checkout') buildCheckoutSummary();
+}
+
+// ── CHECKOUT HELPERS ───────────────────────────────────────────────────────
+function setOrderType(t) {
+  orderType = t;
+  document.getElementById('opt-pickup').classList.toggle('active',   t==='pickup');
+  document.getElementById('opt-delivery').classList.toggle('active', t==='delivery');
+  document.getElementById('addr-field').style.display = t==='delivery' ? 'block' : 'none';
+  renderWaitBadge();
+  buildCheckoutSummary();
+  // Cart-Bar-Total aktualisieren
+  const total = totalPrice();
+  const count = totalItems();
+  if (count > 0) document.getElementById('bar-total').textContent = fmtPrice(total);
+}
+
+function setPayment(p) {
+  payMethod = p;
+  ['cash','card','stripe'].forEach(k => {
+    document.getElementById('pay-'+k).classList.toggle('sel', k===p);
+  });
+  document.getElementById('stripe-hint').style.display = p==='stripe' ? 'block' : 'none';
+}
+
+function buildCheckoutSummary() {
+  const entries = Object.values(cart);
+  const sub = subtotalPrice();
+  const fee = deliveryFee();
+
+  document.getElementById('co-summary').innerHTML = entries.map(e =>
+    `<div style="display:flex;justify-content:space-between;">
+      <span>${e.qty}× ${e.item.name}${e.variant ? ` (${e.variant.l})` : ''}</span>
+      <span style="color:#C9A84C;margin-left:12px;">${fmtPrice(e.price * e.qty)}</span>
+    </div>`
+  ).join('') + (fee > 0 ? `
+    <div style="display:flex;justify-content:space-between;color:#888;margin-top:4px;padding-top:6px;border-top:1px solid #2a2a2a;">
+      <span>Liefergebühr</span>
+      <span style="color:#C9A84C;">${fmtPrice(fee)}</span>
+    </div>` : '');
+
+  document.getElementById('co-total').textContent = fmtPrice(sub + fee);
+}
+
+// ── API CONFIG (Backend – kein Token im Browser) ────────────────────────────
+const API_BASE    = '/api';
+const STRIPE_LINK = 'DEIN_STRIPE_PAYMENT_LINK_HIER';
+
+function generateOrderNumber() {
+  const now = new Date();
+  const d = now.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'}).replace(/\./g,'');
+  const t = now.toTimeString().slice(0,5).replace(':','');
+  const r = Math.random().toString(36).slice(2,5).toUpperCase();
+  return `SH-${d}-${t}-${r}`;
+}
+
+async function submitToBackend(orderPayload) {
+  const r = await fetch(`${API_BASE}/order`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderPayload),
+  });
+  if (!r.ok) throw new Error('Backend-Fehler ' + r.status);
+  return await r.json();
+}
+
+// ── SUBMIT ORDER ───────────────────────────────────────────────────────────
+async function submitOrder() {
+  const name  = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const addr  = document.getElementById('f-addr').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const note  = document.getElementById('f-note').value.trim();
+  const time  = document.getElementById('f-time').value;
+
+  if (!name || !phone) {
+    alert('Bitte Name und Telefonnummer ausfüllen.');
+    return;
+  }
+  if (orderType === 'delivery' && !addr) {
+    alert('Bitte Lieferadresse angeben.');
+    return;
+  }
+  if (totalItems() === 0) {
+    alert('Dein Warenkorb ist leer.');
+    return;
+  }
+  if (orderType === 'delivery' && subtotalPrice() < MIN_ORDER_DELIVERY) {
+    alert(`Mindestbestellwert für Lieferung: ${fmtPrice(MIN_ORDER_DELIVERY)}. Bitte noch Artikel hinzufügen.`);
+    return;
+  }
+
+  // Disable button & show spinner
+  const btn   = document.getElementById('submit-btn');
+  const icon  = document.getElementById('submit-icon');
+  const label = document.getElementById('submit-label');
+  btn.disabled = true;
+  icon.innerHTML  = '<i class="fas fa-circle-notch spinner"></i>';
+  label.textContent = 'Wird gesendet…';
+
+  const orderNumber   = generateOrderNumber();
+  const orderTypeLabel = orderType === 'pickup' ? 'Abholung' : 'Lieferung';
+  const paymentLabel   = { cash:'Barzahlung', card:'EC-/Kreditkarte', stripe:'Online (Stripe)' }[payMethod];
+  const timeLabel      = { asap:'So schnell wie möglich', '30':'ca. 30 Min.', '45':'ca. 45 Min.', '60':'ca. 60 Min.' }[time];
+
+  const items = Object.values(cart).map(e =>
+    `${e.qty}\u00d7 ${e.item.name}${e.variant ? ` (${e.variant.l})` : ''} = ${fmtPrice(e.price * e.qty)}`
+  ).join('\n');
+
+  const sub   = subtotalPrice();
+  const fee   = deliveryFee();
+  const grand = sub + fee;
+
+  const payload = {
+    name, phone, orderNumber,
+    orderType:    orderTypeLabel,
+    address:      addr || '\u2013',
+    time:         timeLabel,
+    payment:      paymentLabel,
+    items,
+    subtotal:     fmtPrice(sub),
+    deliveryFee:  fee > 0 ? fmtPrice(fee) : null,
+    total:        fmtPrice(grand),
+    note:         note || '\u2013',
+    timestamp:    new Date().toLocaleString('de-DE'),
+    isDelivery:   orderType === 'delivery',
+  };
+
+  // ─── Backend API (GHL-Sync sicher serverseitig) ────────────────────────────
+  try {
+    const nameParts = name.trim().split(/\s+/);
+    await submitToBackend({
+      firstName:    nameParts[0],
+      lastName:     nameParts.slice(1).join(' ') || '',
+      phone,
+      email:        email || '',
+      address:      addr || '',
+      deliveryType: orderType === 'pickup' ? 'abholung' : 'lieferung',
+      payMethod,
+      items: Object.values(cart).map(e => ({
+        name:  e.item.name + (e.isFree ? ' [GRATIS 🎁]' : (e.variant ? ` (${e.variant.l})` : '')),
+        price: e.isFree ? 0 : e.price,
+        qty:   e.qty,
+        free:  e.isFree || false,
+      })),
+      promoApplied: activePromo ? (activePromo.title || activePromo.description || '') : '',
+      total:       parseFloat(grand.toFixed(2)),
+      wunschzeit:  timeLabel,
+      notes:       note || '',
+      orderNumber,
+    });
+  } catch(e) {
+    console.warn('API sync error (non-blocking):', e);
+  }
+
+  // ─── Stripe Payment Redirect ────────────────────────────────────────────────
+  if (payMethod === 'stripe' && STRIPE_LINK !== 'DEIN_STRIPE_PAYMENT_LINK_HIER') {
+    sessionStorage.setItem('sh_pending_order', JSON.stringify(payload));
+    window.location.href = STRIPE_LINK
+      + '?client_reference_id=' + encodeURIComponent(orderNumber)
+      + '&prefilled_custom_fields[order]=' + encodeURIComponent(orderNumber);
+    return;
+  }
+
+  // ─── Erfolgsanzeige ────────────────────────────────────────────────────────
+  showSuccess(payload);
+}
+
+function showSuccess(p) {
+  const row = (label, val, gold) => `
+    <div style="display:flex;justify-content:space-between;border-bottom:1px solid #222;padding-bottom:8px;margin-bottom:8px;">
+      <span style="color:#666;">${label}</span>
+      <span${gold?' style="color:#C9A84C;font-weight:700;"':''}>${val}</span>
+    </div>`;
+  const waitMin  = p.isDelivery ? waitDelivery : waitPickup;
+  const waitLine = `<div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px 16px;margin:12px 0;display:flex;align-items:center;gap:10px;font-size:13px;">
+    <i class="fas fa-clock" style="color:#C9A84C;font-size:18px;flex-shrink:0;"></i>
+    <div>
+      <div style="color:#C9A84C;font-weight:700;font-size:15px;">Ca. ${waitMin} Minuten</div>
+      <div style="color:#666;font-size:12px;">${p.isDelivery ? 'Lieferzeit' : 'Wartezeit bis zur Abholung'}</div>
+    </div>
+  </div>`;
+
+  document.getElementById('success-info').innerHTML =
+    row('Bestellnummer', p.orderNumber || '–', true) +
+    row('Name', p.name) +
+    row('Telefon', p.phone) +
+    row('Bestellart', p.orderType) +
+    row('Zeit', p.time) +
+    row('Zahlung', p.payment) +
+    (p.deliveryFee ? row('Zwischensumme', p.subtotal) + row('Liefergebühr', p.deliveryFee) : '') +
+    `<div style="display:flex;justify-content:space-between;border-top:1px solid #222;padding-top:8px;margin-top:4px;">
+      <span style="color:#666;font-weight:700;">Gesamt</span>
+      <span style="color:#C9A84C;font-weight:700;">${p.total}</span>
+    </div>` +
+    waitLine;
+  showView('success');
+  document.getElementById('cart-bar').classList.remove('show');
+}
+
+function resetOrder() {
+  Object.keys(cart).forEach(k => delete cart[k]);
+  renderMenu();
+  closeCart();
+  document.getElementById('f-name').value  = '';
+  document.getElementById('f-phone').value = '';
+  document.getElementById('f-email').value = '';
+  document.getElementById('f-addr').value  = '';
+  document.getElementById('f-note').value  = '';
+  setOrderType('pickup');
+  setPayment('cash');
+  updateCartUI();
+}
+
+// ── AKTIONS-SYSTEM ────────────────────────────────────────────────────────
+async function loadPromo() {
+  try {
+    const r = await fetch('/api/promo/active');
+    const data = await r.json();
+    if (data.active && data.promo) {
+      activePromo = data.promo;
+      showPromoBanner(data.promo);
+    } else {
+      activePromo = null;
+      document.getElementById('promo-banner').style.display = 'none';
+    }
+  } catch(e) { /* Promo nicht verfügbar – kein Problem */ }
+}
+
+function showPromoBanner(promo) {
+  const banner = document.getElementById('promo-banner');
+  document.getElementById('promo-title').textContent = promo.title || '🎁 Sonderaktion aktiv!';
+  document.getElementById('promo-desc').textContent  = promo.description || '';
+  banner.style.display = 'block';
+
+  if (promo.valid_until) {
+    updatePromoTimer(promo.valid_until);
+    setInterval(() => updatePromoTimer(promo.valid_until), 30000);
+  }
+}
+
+function updatePromoTimer(validUntil) {
+  const end  = new Date(validUntil);
+  const now  = new Date();
+  const diff = Math.max(0, end - now);
+  if (diff <= 0) {
+    document.getElementById('promo-banner').style.display = 'none';
+    activePromo = null;
+    removeFreeItems();
+    return;
+  }
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const el = document.getElementById('promo-timer');
+  if (el) el.innerHTML = h > 0
+    ? `Noch<br><strong style="color:#C9A84C;">${h}h ${m}m</strong>`
+    : `Noch<br><strong style="color:#ef4444;">${m} Min.</strong>`;
+}
+
+function removeFreeItems() {
+  Object.keys(cart).forEach(k => { if (cart[k].isFree) delete cart[k]; });
+  renderMenu();
+  updateCartUI();
+}
+
+// Prüft nach jeder Warenkorb-Änderung, ob Gratis-Artikel hinzugefügt/entfernt werden soll
+function applyPromoToCart() {
+  if (!activePromo) { removeFreeItems(); return; }
+  const p = activePromo;
+
+  // Trigger-Artikel im Warenkorb?
+  const hasTrigger = Object.values(cart).some(e => {
+    if (e.isFree) return false;
+    if (p.trigger_type === 'category') return e.item.cat === p.trigger_value;
+    if (p.trigger_type === 'name')     return e.item.name.toLowerCase().includes(p.trigger_value.toLowerCase());
+    return false;
+  });
+
+  const freeKey = '__promo_free__';
+
+  if (hasTrigger) {
+    if (!cart[freeKey]) {
+      // Gratis-Artikel suchen
+      let freeItem = null;
+      let freeVariant = null;
+      if (p.free_item_id) {
+        freeItem = MENU.find(m => m.id === p.free_item_id);
+      }
+      if (!freeItem) {
+        freeItem = MENU.find(m => m.name.toLowerCase().includes((p.free_item_name||'').toLowerCase()));
+      }
+      if (freeItem) {
+        if (p.free_item_variant && freeItem.variants) {
+          freeVariant = freeItem.variants.find(v => v.l.includes(p.free_item_variant)) || freeItem.variants[0];
+        }
+        cart[freeKey] = {
+          item:    freeItem,
+          qty:     1,
+          variant: freeVariant,
+          price:   0,
+          isFree:  true,
+          freeLabel: p.free_item_variant || freeItem.name,
+        };
+        updateCartUI();
+      }
+    }
+  } else {
+    if (cart[freeKey]) {
+      delete cart[freeKey];
+      updateCartUI();
+    }
+  }
+}
+
+// ── CATEGORY NAVIGATION ────────────────────────────────────────────────────
+// ── Tab fade helper ─────────────────────────────────────────────────────────
+function updateTabFades() {
+  const strip = document.getElementById('tab-strip');
+  const fadeL = document.getElementById('tab-fade-l');
+  const fadeR = document.getElementById('tab-fade-r');
+  if (!strip) return;
+  const atStart = strip.scrollLeft < 8;
+  const atEnd   = strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 8;
+  if (fadeL) fadeL.style.opacity = atStart ? '0' : '1';
+  if (fadeR) fadeR.style.opacity = atEnd   ? '0' : '1';
+}
+
+function jumpTo(catId, tabEl) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  if (tabEl) {
+    tabEl.classList.add('active');
+    // Scroll aktiven Tab in die Mitte der Leiste
+    const strip = document.getElementById('tab-strip');
+    if (strip) {
+      const tabLeft = tabEl.offsetLeft;
+      const tabW    = tabEl.offsetWidth;
+      strip.scrollTo({ left: tabLeft - strip.clientWidth / 2 + tabW / 2, behavior: 'smooth' });
+    }
+  }
+  const sec = document.getElementById('sec-' + catId);
+  if (sec) sec.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// Highlight active category on scroll
+function observeCategories() {
+  const opts = { rootMargin:'-120px 0px -60% 0px', threshold: 0 };
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const catId = e.target.id.replace('sec-','');
+        document.querySelectorAll('.cat-tab').forEach(t => {
+          t.classList.toggle('active', t.dataset.cat === catId);
+        });
+        // Aktiven Tab in die Mitte der Leiste scrollen
+        const activeTab = document.querySelector(`.cat-tab[data-cat="${catId}"]`);
+        if (activeTab) {
+          const strip = document.getElementById('tab-strip');
+          if (strip) strip.scrollTo({ left: activeTab.offsetLeft - strip.clientWidth / 2 + activeTab.offsetWidth / 2, behavior: 'smooth' });
+        }
+        updateTabFades();
+      }
+    });
+  }, opts);
+  CATS.forEach(c => {
+    const el = document.getElementById('sec-' + c.id);
+    if (el) obs.observe(el);
+  });
+}
+
+// ── OPEN/CLOSED STATUS ────────────────────────────────────────────────────
+function checkStatus() {
+  const now  = new Date();
+  const day  = now.getDay();   // 0=Sun, 3=Wed, 6=Sat
+  const h    = now.getHours();
+  const m    = now.getMinutes();
+  const mins = h * 60 + m;
+  const open = day !== 3 && mins >= 11*60 && mins < 21*60;
+
+  const dot   = document.getElementById('status-dot');
+  const text  = document.getElementById('status-text');
+  const hours = document.getElementById('status-hours');
+  const pill  = document.getElementById('status-pill');
+
+  if (open) {
+    dot.style.background   = '#22c55e';
+    text.style.color       = '#22c55e';
+    text.textContent       = 'Geöffnet';
+    hours.textContent      = '· Heute bis 21:00 Uhr';
+    pill.style.borderColor = '#22c55e44';
+  } else {
+    dot.style.background   = '#ef4444';
+    text.style.color       = '#ef4444';
+    text.textContent       = day === 3 ? 'Heute Ruhetag (Mittwoch)' : 'Aktuell geschlossen';
+    hours.textContent      = '· Öffnungszeiten: Mo–Di, Do–So 11–21 Uhr';
+    pill.style.borderColor = '#ef444444';
+  }
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+loadSiteSettings();   // Online/Offline + Wartezeit + Menu-Overrides
+renderMenu();
+checkStatus();
+loadPromo();
+setInterval(checkStatus, 60000);
+setInterval(loadPromo, 60000);
+setInterval(loadSiteSettings, 90000);  // Settings alle 90s prüfen
+setTimeout(observeCategories, 100);
+setTimeout(updateTabFades, 150);
+</script>
+
+<!-- ══ SEITEN-FOOTER ══════════════════════════════════════════════════════════ -->
+<footer style="margin-top:40px;padding:20px 16px;border-top:1px solid #1e1a14;text-align:center;">
+  <p style="font-size:11px;color:#4a4030;margin-bottom:8px;">&copy; 2026 Snack House Yassine &middot; Dr.-Felix-Gerhardus-Straße 7 &middot; 53894 Mechernich</p>
+  <div style="display:flex;justify-content:center;gap:20px;">
+    <button onclick="openLegal('impressum')" style="background:none;border:none;color:#7a6a4f;font-size:11px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">Impressum</button>
+    <button onclick="openLegal('datenschutz')" style="background:none;border:none;color:#7a6a4f;font-size:11px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">Datenschutz</button>
+    <button onclick="openLegal('agb')" style="background:none;border:none;color:#7a6a4f;font-size:11px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">AGB</button>
+  </div>
+</footer>
+
+<!-- ══ LEGAL MODALS ══════════════════════════════════════════════════════════ -->
+<div id="legal-overlay" onclick="closeLegal()" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.9);backdrop-filter:blur(4px);overflow-y:auto;padding:40px 16px;">
+  <div onclick="event.stopPropagation()" style="max-width:680px;margin:0 auto;background:#13110d;border:1px solid #2a2318;border-radius:16px;padding:28px;position:relative;">
+    <button onclick="closeLegal()" style="position:absolute;top:14px;right:18px;background:none;border:none;color:#666;font-size:24px;cursor:pointer;line-height:1;">&times;</button>
+
+    <div id="modal-impressum" style="display:none;">
+      <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:16px;">Impressum</h2>
+      <p style="color:#888;font-size:11px;margin-bottom:16px;">Angaben gemäß § 5 TMG</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">Betreiber</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Snack House Yassine · Hassan Yassine<br>Dr.-Felix-Gerhardus-Straße 7 · 53894 Mechernich</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">Kontakt</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Tel.: 02443 – 3088966 · E-Mail: <a href="mailto:info@snackhouse-mechernich.de" style="color:#C9A84C;">info@snackhouse-mechernich.de</a></p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">Umsatzsteuer</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen (Kleinunternehmerregelung).</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">EU-Streitschlichtung</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;">Die EU-Kommission stellt eine OS-Plattform bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener" style="color:#C9A84C;">ec.europa.eu/consumers/odr</a>. Wir nehmen nicht an Schlichtungsverfahren teil.</p>
+    </div>
+
+    <div id="modal-datenschutz" style="display:none;">
+      <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:16px;">Datenschutzerklärung</h2>
+      <p style="color:#888;font-size:12px;margin-bottom:16px;">Kurzfassung · gemäß DSGVO &amp; TTDSG</p>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">
+        <strong style="color:#fff;">Verantwortlicher:</strong> Hassan Yassine · Snack House Yassine · Dr.-Felix-Gerhardus-Str. 7 · 53894 Mechernich<br>
+        E-Mail: <a href="mailto:info@snackhouse-mechernich.de" style="color:#C9A84C;">info@snackhouse-mechernich.de</a>
+      </p>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">
+        Bei einer Bestellung verarbeiten wir Name, Telefon, E-Mail (optional), Lieferadresse und Bestellinhalt zur Auftragsabwicklung.
+        Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO. Speicherdauer: 10 Jahre (steuerrechtlich).
+      </p>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">
+        <strong style="color:#22c55e;">Kein Tracking:</strong> Keine Tracking-Cookies, kein Google Analytics.
+        Schriften via Bunny Fonts (EU). Icons via Cloudflare CDN.
+      </p>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:16px;">
+        Du hast Rechte auf Auskunft, Berichtigung, Löschung und Widerspruch (Art. 15–21 DSGVO).
+        Beschwerde bei: LDI NRW · <a href="https://www.ldi.nrw.de" target="_blank" rel="noopener" style="color:#C9A84C;">ldi.nrw.de</a>
+      </p>
+      <a href="/datenschutz" target="_blank" rel="noopener" style="display:inline-block;background:#C9A84C;color:#000;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
+        Vollständige Datenschutzerklärung lesen →
+      </a>
+      <p style="color:#555;font-size:11px;margin-top:14px;">Stand: Juli 2026</p>
+    </div>
+
+    <div id="modal-agb" style="display:none;">
+      <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:16px;">AGB – Online-Bestelldienst</h2>
+      <p style="color:#888;font-size:11px;margin-bottom:16px;">Snack House Yassine · Hassan Yassine</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 1 Vertragsschluss</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Mit dem Absenden einer Bestellung geben Sie ein verbindliches Angebot ab. Der Vertrag kommt durch unsere Bestätigung (Telefon, SMS oder App) zustande.</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 2 Preise &amp; Zahlung</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Alle Preise sind Endpreise. Als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen. Zahlungsarten: Barzahlung, EC/Kreditkarte ab 15,00 €, Online via Stripe.</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 3 Lieferung</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Lieferzeiten sind Richtwerte. Bei hohem Aufkommen kann es zu Verzögerungen kommen. Kein Rechtsanspruch auf bestimmte Lieferzeit.</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 4 Kein Widerrufsrecht</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Für schnell verderbliche Lebensmittel besteht gemäß § 312g Abs. 2 Nr. 9 BGB kein Widerrufsrecht.</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 5 Allergene</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Informationen zu Allergenen auf Anfrage unter 02443 – 3088966. Bei Unverträglichkeiten bitte vor Bestellung anrufen.</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 6 Geltendes Recht</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;">Deutsches Recht. Gerichtsstand für Kaufleute: Mechernich.</p>
+      <p style="color:#555;font-size:11px;margin-top:14px;">Stand: Juli 2026</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ COOKIE BANNER ══════════════════════════════════════════════════════════ -->
+<div id="cookie-banner-order" style="position:fixed;top:0;left:0;right:0;z-index:200;background:#0e0b08;border-bottom:1px solid #2a2318;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.5);">
+  <p style="font-size:11px;color:#7a6a4f;margin:0;flex:1;min-width:180px;">
+    Schriften von Bunny Fonts (EU-Server), Icons via CDN. <strong style="color:#a89060;">Keine Tracking-Cookies.</strong>
+    <button onclick="openLegal('datenschutz')" style="background:none;border:none;color:#C9A84C;cursor:pointer;font-size:11px;padding:0;text-decoration:underline;">Datenschutz</button>
+  </p>
+  <button onclick="document.getElementById('cookie-banner-order').style.display='none';localStorage.setItem('cookie-ok-order','1')"
+          style="background:#C9A84C;color:#000;border:none;padding:7px 16px;border-radius:99px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">
+    OK
+  </button>
+</div>
+
+<script>
+if (localStorage.getItem('cookie-ok-order')) document.getElementById('cookie-banner-order').style.display = 'none';
+function openLegal(section) {
+  ['impressum','datenschutz','agb'].forEach(id => {
+    document.getElementById('modal-' + id).style.display = id === section ? 'block' : 'none';
+  });
+  document.getElementById('legal-overlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function closeLegal() {
+  document.getElementById('legal-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
+</script>
+
+<!-- DSGVO-Footer -->
+<footer style="text-align:center;padding:18px 16px 28px;font-size:11px;color:#444;border-top:1px solid #1c1c1c;margin-top:40px;">
+  Snack House Yassine · Dr.-Felix-Gerhardus-Str. 7 · 53894 Mechernich ·
+  <a href="/impressum" style="color:#555;text-decoration:underline;">Impressum</a> ·
+  <a href="/datenschutz" style="color:#555;text-decoration:underline;">Datenschutz</a>
+  <br>Deine Daten werden ausschließlich zur Bestellabwicklung verwendet und nicht an Dritte weitergegeben.
+</footer>
+
+</body>
+</html>

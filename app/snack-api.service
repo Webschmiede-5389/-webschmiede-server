@@ -1,0 +1,17 @@
+[Unit]
+Description=Snack House Yassine – Order API
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/app/backend
+EnvironmentFile=/root/app/backend/.env
+ExecStart=/root/app/venv/bin/gunicorn -w 2 -b 127.0.0.1:8000 main:app
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

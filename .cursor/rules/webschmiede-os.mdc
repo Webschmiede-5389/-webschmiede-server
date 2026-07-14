@@ -1,0 +1,15 @@
+---
+description: Webschmiede OS – Agentur-Stack, CRM, Deploy, DSGVO. Bei Arbeit an diesem Server-Repo oder neuen Kundenportalen anwenden.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Webschmiede OS (dieses Repo)
+
+- **Referenz:** `AGENTS.md` und Skill `webschmiede-os` (~/.cursor/skills/webschmiede-os/)
+- **Sprache:** Antworten auf Deutsch
+- **Kein GHL** – eigenes CRM (`contacts`), SMS via seven.io
+- **Deploy nach Änderungen:** `python deploy.py`
+- **Design:** Dunkel + Gold (#C9A84C), Bunny Fonts, kein Generic-AI-Look
+- **Neuer Kunde:** `jarvis.py neu` → kunden.json → deploy

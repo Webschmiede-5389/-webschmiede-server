@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/favicon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <title>Admin – Snack House Yassine</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.bunny.net/css?family=playfair-display:700,800|inter:300,400,500,600,700,800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #080604; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,.08) 0%, transparent 70%); }
+    .login-box { background: #111; border: 1px solid #2a2318; border-radius: 20px; padding: 40px 36px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,.6); }
+    .login-logo { width: 72px; height: 72px; margin: 0 auto 16px; filter: drop-shadow(0 2px 12px rgba(201,168,76,.4)); }
+    .login-box h1 { font-family: 'Playfair Display', serif; color: #C9A84C; font-size: 24px; margin-bottom: 4px; }
+    .login-box .sub { color: #555; font-size: 13px; margin-bottom: 28px; }
+    .login-inp { width: 100%; padding: 13px 16px; background: #1a1a1a; border: 1.5px solid #2a2318; border-radius: 12px; color: #fff; font-size: 15px; margin-bottom: 12px; outline: none; font-family: inherit; transition: border-color .2s; }
+    .login-inp:focus { border-color: #C9A84C; }
+    .btn-gold { width: 100%; padding: 13px; background: linear-gradient(135deg, #C9A84C, #e8c76a); color: #000; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; letter-spacing: .02em; }
+    .btn-gold:hover { filter: brightness(1.05); }
+    .login-error { color: #ef4444; font-size: 12px; margin-top: 10px; display: none; }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #0f0d0a 0%, #13110d 100%);
+      border-bottom: 1px solid #2a2318;
+      padding: 0 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+      height: 100px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.5);
+    }
+    .header-brand { display: flex; align-items: center; gap: 12px; }
+    .header-logo { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 2px 10px rgba(201,168,76,.5)); }
+    .header-name { display: flex; flex-direction: column; }
+    .header-name-main { font-family: 'Playfair Display', serif; color: #C9A84C; font-size: 32px; font-weight: 700; line-height: 1.1; }
+    .header-name-sub  { font-size: 11px; color: #555; font-weight: 500; letter-spacing: .04em; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .hdr-btn { background: none; border: 1px solid #2a2318; color: #666; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-family: inherit; transition: all .2s; white-space: nowrap; }
+    .hdr-btn:hover { border-color: #C9A84C; color: #C9A84C; }
+    .hdr-btn.on { color: #C9A84C; border-color: #C9A84C; }
+    .new-badge { background: #ef4444; color: #fff; border-radius: 99px; padding: 3px 10px; font-size: 11px; font-weight: 800; animation: pulse-red 1.2s infinite; display: none; }
+    @keyframes pulse-red { 0%,100% { opacity:1; } 50% { opacity:.6; } }
+
+    /* ── Online/Offline Toggle ── */
+    .online-toggle { display:flex; align-items:center; gap:8px; background:#111; border:1px solid #2a2318; border-radius:10px; padding:6px 12px; cursor:pointer; transition:all .2s; }
+    .online-toggle.online  { border-color:#22c55e44; background:#0d1f0d; }
+    .online-toggle.offline { border-color:#ef444444; background:#1f0d0d; }
+    .toggle-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+    .online-toggle.online  .toggle-dot { background:#22c55e; box-shadow:0 0 6px #22c55e; }
+    .online-toggle.offline .toggle-dot { background:#ef4444; box-shadow:0 0 6px #ef4444; }
+    .toggle-label { font-size:12px; font-weight:700; }
+    .online-toggle.online  .toggle-label { color:#22c55e; }
+    .online-toggle.offline .toggle-label { color:#ef4444; }
+
+    /* ── Wartezeit-Bar ── */
+    .wait-bar { background:#0e0b08; border-bottom:1px solid #1a1a1a; padding:10px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+    .wait-item { display:flex; align-items:center; gap:8px; }
+    .wait-label { font-size:11px; color:#555; white-space:nowrap; }
+    .wait-input { background:#111; border:1px solid #2a2318; border-radius:6px; padding:4px 10px; color:#C9A84C; font-size:13px; font-weight:700; width:60px; text-align:center; outline:none; font-family:inherit; }
+    .wait-input:focus { border-color:#C9A84C; }
+    .wait-save { background:#C9A84C; color:#000; border:none; border-radius:6px; padding:5px 12px; font-size:11px; font-weight:800; cursor:pointer; font-family:inherit; }
+
+    /* ── Report Modal ── */
+    .modal-overlay { position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.88); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; padding:20px; }
+    .modal-overlay.open { display:flex; }
+    .modal-box { background:#111; border:1px solid #2a2318; border-radius:16px; padding:28px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; }
+    .modal-title { font-family:'Playfair Display',serif; color:#C9A84C; font-size:20px; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+    .report-stat { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #1a1a1a; font-size:14px; }
+    .report-stat-val { font-weight:800; color:#C9A84C; }
+    .report-item-row { display:flex; justify-content:space-between; padding:6px 0; font-size:13px; color:#888; }
+    .btn-close-modal { background:none; border:1px solid #333; color:#666; border-radius:8px; padding:8px 16px; font-size:12px; cursor:pointer; font-family:inherit; margin-top:16px; }
+
+    /* ── Push Notification ── */
+    .push-banner { background:rgba(59,130,246,.08); border:1px solid rgba(59,130,246,.25); border-radius:10px; padding:12px 16px; display:flex; align-items:center; gap:12px; margin:0 20px 12px; }
+    .btn-push { background:#3b82f6; color:#fff; border:none; border-radius:8px; padding:8px 16px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; white-space:nowrap; }
+
+    /* ── Direktkontakt ── */
+    .btn-call    { background:#0d1f0d; border:1px solid #22c55e44; color:#4ade80; border-radius:7px; padding:7px 12px; font-size:11px; font-weight:700; cursor:pointer; font-family:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:5px; }
+    .btn-wa      { background:#0d1a0d; border:1px solid #25d36644; color:#25d366; border-radius:7px; padding:7px 12px; font-size:11px; font-weight:700; cursor:pointer; font-family:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:5px; }
+
+    /* ── Artikel-Manager ── */
+    .article-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #1a1a1a; }
+    .bot-log-row { padding:14px 0; border-bottom:1px solid #1a1610; }
+    .bot-log-row:last-child { border-bottom:none; }
+    .bot-badge { font-size:10px; padding:2px 8px; border-radius:99px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+    .bot-badge.ok { background:rgba(34,197,94,.12); color:#22c55e; border:1px solid rgba(34,197,94,.25); }
+    .bot-badge.err { background:rgba(239,68,68,.12); color:#ef4444; border:1px solid rgba(239,68,68,.25); }
+    .bot-badge.info { background:rgba(59,130,246,.12); color:#3b82f6; border:1px solid rgba(59,130,246,.25); }
+    .bot-badge.neutral { background:rgba(201,168,76,.1); color:#C9A84C; border:1px solid rgba(201,168,76,.2); }
+    .article-name { flex:1; font-size:13px; }
+    .article-nr   { font-size:11px; color:#555; width:32px; flex-shrink:0; }
+    .toggle-switch { position:relative; width:40px; height:22px; flex-shrink:0; }
+    .toggle-switch input { opacity:0; width:0; height:0; }
+    .toggle-slider { position:absolute; inset:0; background:#2a2318; border-radius:22px; cursor:pointer; transition:.3s; }
+    .toggle-slider:before { content:''; position:absolute; width:16px; height:16px; left:3px; bottom:3px; background:#555; border-radius:50%; transition:.3s; }
+    input:checked + .toggle-slider { background:#22c55e22; border:1px solid #22c55e66; }
+    input:checked + .toggle-slider:before { transform:translateX(18px); background:#22c55e; }
+    .sold-out-badge { font-size:10px; color:#ef4444; font-weight:700; }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: #0e0b08; border-bottom: 1px solid #1e1a14;
+      padding: 12px 20px; display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none;
+    }
+    .stats-bar::-webkit-scrollbar { display: none; }
+    .stat-card { background: #141210; border: 1px solid #2a2318; border-radius: 10px; padding: 10px 16px; flex-shrink: 0; min-width: 120px; }
+    .stat-val  { font-size: 20px; font-weight: 800; color: #C9A84C; line-height: 1; }
+    .stat-lbl  { font-size: 11px; color: #555; margin-top: 2px; }
+
+    /* ── NAV TABS ── */
+    .nav-tabs { display: flex; gap: 0; background: #0e0b08; border-bottom: 1px solid #1e1a14; padding: 0 20px; overflow-x: auto; scrollbar-width: none; }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .nav-tab { padding: 14px 18px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: transparent; color: #555; border-bottom: 2px solid transparent; white-space: nowrap; font-family: inherit; transition: all .2s; display: flex; align-items: center; gap: 6px; }
+    .nav-tab:hover { color: #888; }
+    .nav-tab.active { color: #C9A84C; border-bottom-color: #C9A84C; }
+
+    /* ── STATUS FILTER PILLS ── */
+    .filter-bar { display: flex; gap: 6px; padding: 14px 20px; border-bottom: 1px solid #1a1a1a; overflow-x: auto; scrollbar-width: none; background: #0a0804; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .f-pill { padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1.5px solid #2a2a2a; background: transparent; color: #666; white-space: nowrap; transition: all .2s; font-family: inherit; }
+    .f-pill.active { background: #C9A84C; border-color: #C9A84C; color: #000; }
+
+    /* ── VIEWS ── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── ORDERS ── */
+    .orders-wrap { padding: 16px 20px; max-width: 860px; margin: 0 auto; }
+    .order-card { background: #111; border: 1px solid #2a2318; border-radius: 14px; padding: 18px; margin-bottom: 12px; transition: all .2s; position: relative; overflow: hidden; }
+    .order-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; border-radius:4px 0 0 4px; }
+    .order-card.neu::before { background:#C9A84C; animation: pulse-gold 2s infinite; }
+    .order-card.zubereitung::before { background:#f59e0b; }
+    .order-card.unterwegs::before, .order-card.abholbereit::before { background:#3b82f6; }
+    .order-card.fertig::before { background:#22c55e; }
+    .order-card.storniert::before { background:#ef4444; }
+    .order-card.fertig { opacity:.65; }
+    .order-card.storniert { opacity:.4; }
+    @keyframes pulse-gold { 0%,100%{background:#C9A84C}50%{background:#8b6b2a} }
+    .order-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+    .order-nr { font-size:11px; color:#C9A84C; font-weight:700; font-family:'Courier New',monospace; margin-bottom:3px; }
+    .order-name { font-size:17px; font-weight:700; margin-bottom:2px; }
+    .order-phone { font-size:13px; color:#666; }
+    .status-label { display:inline-block; padding:4px 12px; border-radius:99px; font-size:11px; font-weight:700; }
+    .sl-neu { background:rgba(201,168,76,.12); color:#C9A84C; border:1px solid rgba(201,168,76,.25); }
+    .sl-zubereitung { background:rgba(245,158,11,.12); color:#f59e0b; border:1px solid rgba(245,158,11,.25); }
+    .sl-unterwegs, .sl-abholbereit { background:rgba(59,130,246,.12); color:#3b82f6; border:1px solid rgba(59,130,246,.25); }
+    .sl-fertig { background:rgba(34,197,94,.12); color:#22c55e; border:1px solid rgba(34,197,94,.25); }
+    .sl-storniert { background:rgba(239,68,68,.12); color:#ef4444; border:1px solid rgba(239,68,68,.25); }
+    .order-time { font-size:11px; color:#444; margin-top:5px; }
+    .meta-row { display:flex; gap:6px; margin:10px 0; flex-wrap:wrap; align-items:center; }
+    .pill { padding:3px 10px; border-radius:99px; font-size:11px; font-weight:600; }
+    .pill-lieferung { background:#0d1f0d; color:#4ade80; border:1px solid #22c55e30; }
+    .pill-abholung  { background:#0d0d1f; color:#818cf8; border:1px solid #6366f130; }
+    .pill-bar  { background:#1a1a1a; color:#666; border:1px solid #333; }
+    .pill-ec   { background:#1a1a1a; color:#666; border:1px solid #333; }
+    .pill-online { background:#0d1f0d; color:#4ade80; border:1px solid #22c55e30; }
+    .pill-promo { background:rgba(201,168,76,.1); color:#C9A84C; border:1px solid rgba(201,168,76,.25); font-size:10px; font-weight:800; }
+    .order-addr { font-size:12px; color:#555; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+    .order-note { font-size:12px; color:#777; background:#0e0b08; padding:7px 12px; border-radius:8px; margin-bottom:8px; border-left:2px solid #333; }
+    .order-items { background:#0a0804; border-radius:10px; padding:12px 14px; margin:10px 0; font-size:13px; color:#bba87a; line-height:1.9; border:1px solid #1a1a1a; }
+    .free-item-row { color:#C9A84C; font-weight:600; }
+    .order-total { font-size:18px; font-weight:800; color:#C9A84C; text-align:right; margin:8px 0 12px; }
+    .promo-alert { background:rgba(201,168,76,.07); border:1px solid rgba(201,168,76,.2); border-radius:8px; padding:8px 12px; font-size:12px; color:#C9A84C; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+    .action-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .btn-action { padding:9px 16px; border-radius:9px; border:none; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; transition:all .15s; }
+    .btn-action:hover { filter:brightness(1.1); }
+    .btn-cook  { background:#f59e0b; color:#000; }
+    .btn-road  { background:#3b82f6; color:#fff; }
+    .btn-ready { background:#6366f1; color:#fff; }
+    .btn-done  { background:#22c55e; color:#000; }
+    .btn-cancel{ background:#1a1a1a; border:1px solid #ef4444; color:#ef4444; }
+    .btn-print-card { background:#1a1a2a; border:1px solid #3b82f6; color:#3b82f6; padding:9px 14px; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; }
+    .btn-print-card:hover { background:#3b82f6; color:#fff; }
+    .empty { text-align:center; padding:60px 20px; color:#333; }
+    .empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:70px 20px; gap:16px; }
+    .empty-state .es-logo { width:240px; height:240px; object-fit:contain; opacity:0.12; filter:grayscale(1); pointer-events:none; }
+    .empty-state .es-icon { font-size:22px; color:#2a9d2a; }
+    .empty-state .es-text { font-size:15px; font-weight:700; color:#2a2a2a; letter-spacing:0.04em; text-transform:uppercase; }
+    .empty-state .es-sub  { font-size:12px; color:#444; }
+    .spinner { animation:spin 1s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ── AKTIONS-PANEL ── */
+    .section-box { background:#111; border:1px solid #2a2318; border-radius:14px; padding:20px; margin-bottom:14px; }
+    .section-title { font-size:14px; font-weight:700; color:#C9A84C; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .promo-active-bar { background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05)); border:1.5px solid rgba(201,168,76,.5); border-radius:12px; padding:14px 16px; display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .promo-form-box { display:none; }
+    .promo-form-box.open { display:block; }
+    .form-inp { width:100%; background:#0e0b08; border:1.5px solid #2a2318; border-radius:9px; padding:10px 13px; color:#fff; font-size:13px; margin-bottom:8px; outline:none; font-family:inherit; transition:border-color .2s; }
+    .form-inp:focus { border-color:#C9A84C; }
+    .form-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .form-grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+    @media(max-width:600px) { .form-grid2,.form-grid3 { grid-template-columns:1fr; } }
+    .form-label { font-size:11px; color:#555; display:block; margin-bottom:4px; }
+    .btn-promo-start { background:linear-gradient(135deg,#C9A84C,#e8c76a); color:#000; border:none; border-radius:9px; padding:11px 20px; font-size:13px; font-weight:800; cursor:pointer; width:100%; margin-top:10px; font-family:inherit; }
+    .btn-promo-stop  { background:#1a1a1a; border:1px solid #ef4444; color:#ef4444; border-radius:8px; padding:7px 14px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; }
+    .btn-outline-gold { background:#1a1a1a; border:1.5px solid #C9A84C; color:#C9A84C; border-radius:9px; padding:9px 16px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; transition:all .2s; }
+    .btn-outline-gold:hover { background:#C9A84C; color:#000; }
+
+    /* ── DRUCKER-SETUP ── */
+    .printer-option { background:#0e0b08; border:1px solid #2a2318; border-radius:12px; padding:16px; margin-bottom:10px; display:flex; gap:14px; align-items:flex-start; }
+    .printer-icon { width:44px; height:44px; background:#1a1a1a; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+    .printer-title { font-size:14px; font-weight:700; margin-bottom:4px; }
+    .printer-desc { font-size:12px; color:#666; line-height:1.6; }
+    .printer-badge { display:inline-block; padding:2px 8px; border-radius:99px; font-size:10px; font-weight:700; margin-bottom:6px; }
+    .badge-green { background:rgba(34,197,94,.12); color:#22c55e; border:1px solid rgba(34,197,94,.25); }
+    .badge-blue  { background:rgba(59,130,246,.12); color:#3b82f6; border:1px solid rgba(59,130,246,.25); }
+    .badge-gold  { background:rgba(201,168,76,.12); color:#C9A84C; border:1px solid rgba(201,168,76,.25); }
+    .code-block { background:#0a0804; border:1px solid #1e1a14; border-radius:8px; padding:10px 14px; font-family:'Courier New',monospace; font-size:12px; color:#bba87a; margin:8px 0; overflow-x:auto; }
+    .btn-test-print { background:#1a2a1a; border:1px solid #22c55e; color:#22c55e; border-radius:8px; padding:8px 16px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; margin-top:8px; }
+    .btn-test-print:hover { background:#22c55e; color:#000; }
+    .setup-step { display:flex; gap:10px; margin:8px 0; align-items:flex-start; }
+    .step-nr { width:22px; height:22px; background:#C9A84C; color:#000; border-radius:50%; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .step-txt { font-size:12px; color:#888; line-height:1.6; flex:1; }
+
+    /* ── DRUCK-LAYOUT ── */
+    @media print {
+      body * { visibility: hidden !important; }
+      #print-area, #print-area * { visibility: visible !important; }
+      #print-area { position:fixed; top:0; left:0; width:80mm; font-family:'Courier New',monospace; font-size:12px; color:#000; background:#fff; padding:8px; }
+    }
+    #print-area { display:none; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width:4px; height:4px; }
+    ::-webkit-scrollbar-track { background:#0a0804; }
+    ::-webkit-scrollbar-thumb { background:#2a2318; border-radius:2px; }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══════════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <img class="login-logo" src="https://files.catbox.moe/3uyamu.png" alt="Snack House Logo">
+    <h1>Snack House Yassine</h1>
+    <p class="sub">Bestellverwaltung · Mechernich</p>
+    <input class="login-inp" type="password" id="pw-input" placeholder="Passwort eingeben" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-gold" onclick="doLogin()">Anmelden</button>
+    <p class="login-error" id="login-error">Falsches Passwort</p>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══════════════════════════════════════════════════════════ -->
+<div id="dashboard">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-brand">
+      <img class="header-logo" src="https://files.catbox.moe/3uyamu.png" alt="Logo">
+      <div class="header-name">
+        <span class="header-name-main">Snack House Yassine</span>
+        <span class="header-name-sub">Admin-Dashboard · Mechernich</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="new-badge" id="new-badge">NEU</span>
+      <!-- Online/Offline Toggle -->
+      <div class="online-toggle online" id="online-toggle" onclick="toggleOnline()" title="Bestellungen an/aus">
+        <div class="toggle-dot"></div>
+        <span class="toggle-label" id="online-label">Online</span>
+      </div>
+      <button class="hdr-btn on" id="sound-btn" onclick="toggleSound()"><i class="fas fa-bell"></i> Ton</button>
+      <button class="hdr-btn" onclick="openReport()"><i class="fas fa-chart-bar"></i> Tagesbericht</button>
+      <button class="hdr-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </div>
+
+  <!-- Wartezeit-Bar -->
+  <div class="wait-bar" id="wait-bar">
+    <span style="font-size:12px;color:#666;font-weight:600;"><i class="fas fa-clock" style="margin-right:5px;color:#C9A84C;"></i>Wartezeit:</span>
+    <div class="wait-item">
+      <span class="wait-label"><i class="fas fa-store" style="margin-right:3px;"></i>Abholung</span>
+      <input class="wait-input" type="number" id="wait-pickup" value="20" min="5" max="120">
+      <span style="font-size:11px;color:#444;">Min.</span>
+    </div>
+    <div class="wait-item">
+      <span class="wait-label"><i class="fas fa-motorcycle" style="margin-right:3px;"></i>Lieferung</span>
+      <input class="wait-input" type="number" id="wait-delivery" value="40" min="10" max="180">
+      <span style="font-size:11px;color:#444;">Min.</span>
+    </div>
+    <button class="wait-save" onclick="saveWaitTime()"><i class="fas fa-check"></i> Speichern</button>
+    <span id="wait-saved" style="font-size:11px;color:#22c55e;display:none;">Gespeichert!</span>
+    <div style="flex:1;text-align:right;font-size:11px;color:#444;">Kunden sehen diese Zeit live beim Bestellen</div>
+  </div>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-val" id="stat-heute">–</div>
+      <div class="stat-lbl">Heute Bestellungen</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="stat-umsatz">–</div>
+      <div class="stat-lbl">Heute Umsatz</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="stat-aktiv">–</div>
+      <div class="stat-lbl">Aktive Bestellungen</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="stat-lieferung">–</div>
+      <div class="stat-lbl">Davon Lieferung</div>
+    </div>
+  </div>
+
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tab-orders"   onclick="switchView('orders',this)"><i class="fas fa-receipt"></i> Bestellungen</button>
+    <button class="nav-tab"        id="tab-kunden"   onclick="switchView('kunden',this)"><i class="fas fa-users"></i> Kunden</button>
+    <button class="nav-tab"        id="tab-botlog"   onclick="switchView('botlog',this)"><i class="fas fa-robot"></i> Bot-Log</button>
+    <button class="nav-tab"        id="tab-aktionen" onclick="switchView('aktionen',this)"><i class="fas fa-gift"></i> Aktionen</button>
+    <button class="nav-tab"        id="tab-artikel"  onclick="switchView('artikel',this)"><i class="fas fa-utensils"></i> Speisekarte</button>
+    <button class="nav-tab"        id="tab-drucker"  onclick="switchView('drucker',this)" style="color:#3b82f6;border-bottom:2px solid #3b82f6;"><i class="fas fa-print"></i> Drucker einrichten</button>
+  </div>
+
+  <!-- Push-Benachrichtigungs-Banner -->
+  <div class="push-banner" id="push-banner" style="display:none;">
+    <i class="fas fa-bell" style="color:#3b82f6;font-size:16px;flex-shrink:0;"></i>
+    <div style="flex:1;font-size:12px;color:#888;">Aktiviere Browser-Benachrichtigungen damit du neue Bestellungen hörst auch wenn dieser Tab im Hintergrund ist.</div>
+    <button class="btn-push" onclick="requestPush()">Aktivieren</button>
+    <button onclick="document.getElementById('push-banner').style.display='none'" style="background:none;border:none;color:#444;cursor:pointer;font-size:16px;padding:0 4px;">×</button>
+  </div>
+
+  <!-- ══ VIEW: BESTELLUNGEN ══════════════════════════════════════════════ -->
+  <div id="view-orders" class="view active">
+    <div class="filter-bar">
+      <button class="f-pill active" onclick="filterOrders('alle',this)">Alle</button>
+      <button class="f-pill" onclick="filterOrders('neu',this)"><i class="fas fa-bell"></i> Neue</button>
+      <button class="f-pill" onclick="filterOrders('zubereitung',this)"><i class="fas fa-fire"></i> Zubereitung</button>
+      <button class="f-pill" onclick="filterOrders('unterwegs',this)"><i class="fas fa-motorcycle"></i> Unterwegs</button>
+      <button class="f-pill" onclick="filterOrders('abholbereit',this)"><i class="fas fa-check-circle"></i> Abholbereit</button>
+      <button class="f-pill" onclick="filterOrders('fertig',this)">Fertig</button>
+    </div>
+    <div class="orders-wrap" id="orders-list">
+      <div class="empty-state">
+        <img class="es-logo" src="https://files.catbox.moe/3uyamu.png" alt="Logo">
+        <i class="fas fa-circle-notch spinner es-icon" style="color:#444;"></i>
+        <span class="es-text" style="color:#333;">Lade Bestellungen…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: KUNDEN (CRM) ════════════════════════════════════════════ -->
+  <div id="view-kunden" class="view">
+    <div class="orders-wrap">
+      <div class="section-box" style="margin-bottom:14px;">
+        <div class="section-title"><i class="fas fa-robot"></i> Follow-up Automation</div>
+        <p style="color:#555;font-size:12px;margin-bottom:12px;">Review-SMS nach 3 Tagen (Status „Fertig“) · Win-back nach 30 Tagen Inaktivität</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:8px;">
+          <div style="flex:1;min-width:200px;">
+            <label class="form-label">Google-Bewertungs-Link</label>
+            <input class="form-inp" id="set-review-url" placeholder="https://g.page/r/…/review" style="margin:0;">
+          </div>
+          <button class="btn-gold" style="width:auto;padding:10px 18px;font-size:13px;" onclick="saveReviewUrl()">Speichern</button>
+          <button class="btn-print-card" style="padding:10px 16px;" onclick="runFollowups()"><i class="fas fa-play"></i> Follow-ups prüfen</button>
+        </div>
+        <p id="followup-result" style="font-size:12px;color:#666;margin:0;"></p>
+      </div>
+      <div class="section-box" style="margin-bottom:14px;">
+        <div class="section-title"><i class="fas fa-database"></i> Kunden-Datenbank <span id="crm-count" style="color:#555;font-size:12px;font-weight:400;margin-left:8px;"></span></div>
+        <p style="color:#555;font-size:12px;margin-bottom:12px;">Automatisch aus Bestellungen · Telefon = eindeutige ID · Klick auf „Historie“ für Bestellungen</p>
+        <input class="form-inp" id="crm-search" placeholder="Suchen: Name, Telefon, E-Mail…" oninput="renderContacts()" style="margin:0;">
+      </div>
+      <div id="crm-list"></div>
+    </div>
+  </div>
+
+  <!-- Kunden-Detail Modal -->
+  <div id="crm-modal" onclick="closeCrmModal()" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.85);overflow-y:auto;padding:24px 16px;">
+    <div onclick="event.stopPropagation()" style="max-width:560px;margin:0 auto;background:#13110d;border:1px solid #2a2318;border-radius:16px;padding:24px;position:relative;">
+      <button onclick="closeCrmModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:#666;font-size:24px;cursor:pointer;">&times;</button>
+      <div id="crm-modal-head"></div>
+      <div id="crm-modal-orders" style="margin:16px 0;"></div>
+      <label class="form-label">Interne Notiz</label>
+      <textarea class="form-inp" id="crm-modal-notes" rows="2" placeholder="z.B. Stammgast, keine Zwiebeln…" style="resize:none;margin-bottom:10px;"></textarea>
+      <button class="btn-gold" style="width:auto;padding:10px 20px;font-size:13px;" onclick="saveCrmNotes()">Notiz speichern</button>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: BOT-LOG (WhatsApp / Jarvis) ═══════════════════════════════ -->
+  <div id="view-botlog" class="view">
+    <div class="orders-wrap">
+      <div class="section-box" style="margin-bottom:14px;">
+        <div class="section-title"><i class="fas fa-robot"></i> Jarvis Bot-Log</div>
+        <p style="color:#555;font-size:12px;margin-bottom:12px;">Änderungen per WhatsApp oder Test-Webhook · läuft 24/7 auf dem Server</p>
+        <div class="filter-bar" style="margin-bottom:12px;">
+          <button class="f-pill active" id="bot-filter-alle" onclick="filterBotLog('alle',this)">Alle</button>
+          <button class="f-pill" onclick="filterBotLog('whatsapp',this)">WhatsApp</button>
+          <button class="f-pill" onclick="filterBotLog('test',this)">Test</button>
+          <button class="f-pill" onclick="filterBotLog('ok',this)">Erfolg</button>
+          <button class="f-pill" onclick="filterBotLog('fehler',this)">Fehler</button>
+          <button class="btn-print-card" style="margin-left:auto;padding:8px 14px;" onclick="loadBotLog()"><i class="fas fa-sync-alt"></i> Aktualisieren</button>
+        </div>
+        <div id="bot-log-list">
+          <div style="text-align:center;color:#333;padding:40px;font-size:13px;">Tab öffnen zum Laden…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: AKTIONEN ══════════════════════════════════════════════════ -->
+  <div id="view-aktionen" class="view">
+    <div class="orders-wrap">
+
+      <!-- Aktive Aktion -->
+      <div class="section-box">
+        <div class="section-title"><i class="fas fa-bolt"></i> Aktive Aktion</div>
+        <div id="promo-active-bar" class="promo-active-bar" style="display:none;">
+          <span style="font-size:22px;">🎉</span>
+          <div style="flex:1">
+            <div id="promo-bar-title" style="font-weight:700;color:#C9A84C;font-size:14px;"></div>
+            <div id="promo-bar-desc"  style="font-size:12px;color:#a89060;margin-top:3px;"></div>
+          </div>
+          <div id="promo-bar-timer" style="font-size:12px;color:#666;text-align:center;min-width:55px;"></div>
+          <button class="btn-promo-stop" onclick="stopPromo()">✕ Stoppen</button>
+        </div>
+        <div id="promo-none" style="color:#444;font-size:13px;padding:8px 0;">Keine aktive Aktion. Starte eine Aktion unten.</div>
+      </div>
+
+      <!-- Neue Aktion erstellen -->
+      <div class="section-box">
+        <div class="section-title"><i class="fas fa-plus-circle"></i> Neue Aktion erstellen</div>
+        <div class="form-grid2" style="margin-bottom:8px;">
+          <div>
+            <label class="form-label">Titel (wird auf der Website angezeigt)</label>
+            <input class="form-inp" id="p-title" placeholder='z.B. "Heute Abend Pizza-Aktion!"'>
+          </div>
+          <div>
+            <label class="form-label">Gültig bis (Uhrzeit heute)</label>
+            <input class="form-inp" id="p-until" type="time" value="21:00">
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Beschreibung für Kunden</label>
+          <input class="form-inp" id="p-desc" placeholder="Pizza bestellen und Cola gratis bekommen! Nur heute bis 18 Uhr.">
+        </div>
+        <div class="form-grid3" style="margin-top:10px;">
+          <div>
+            <label class="form-label">Wenn Kunde bestellt...</label>
+            <select class="form-inp" id="p-trigger-val" style="margin-bottom:0">
+              <option value="pizza">Pizza</option>
+              <option value="burger">Burger</option>
+              <option value="schnitzel">Schnitzel</option>
+              <option value="drehspiess">Drehspieß</option>
+              <option value="nudeln">Pasta / Nudeln</option>
+              <option value="salate">Salate</option>
+              <option value="fingerfood">Fingerfood</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">...bekommt er gratis:</label>
+            <select class="form-inp" id="p-free-item" style="margin-bottom:0">
+              <option value='{"id":"g1","name":"Cola 0,33 L","variant":"Cola 0,33 L"}'>Cola 0,33 L</option>
+              <option value='{"id":"g1","name":"Fanta 0,33 L","variant":"Fanta 0,33 L"}'>Fanta 0,33 L</option>
+              <option value='{"id":"g1","name":"Sprite 0,33 L","variant":"Sprite 0,33 L"}'>Sprite 0,33 L</option>
+              <option value='{"id":"g2","name":"Wasser Still","variant":"Still"}'>Wasser Still</option>
+              <option value='{"id":"g3","name":"Ayran","variant":""}'>Ayran</option>
+              <option value='{"id":"f85","name":"Pommes klein","variant":"Pommes klein"}'>Pommes klein</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:flex-end;">
+            <button class="btn-promo-start" onclick="startPromo()">
+              <i class="fas fa-rocket"></i> Aktion aktivieren
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ VIEW: ARTIKEL-MANAGER ══════════════════════════════════════════ -->
+  <div id="view-artikel" class="view">
+    <div class="orders-wrap">
+      <div class="section-box">
+        <div style="margin-bottom:20px;">
+          <div style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:6px;">Speisekarte verwalten</div>
+          <div style="font-size:12px;color:#555;">Schalte Artikel aus wenn sie heute nicht verfügbar sind. Kunden sehen sie dann als "Heute nicht verfügbar".</div>
+        </div>
+        <div id="article-list">
+          <div style="text-align:center;color:#333;padding:40px;font-size:13px;">Lade…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: DRUCKER-SETUP ═════════════════════════════════════════════ -->
+  <div id="view-drucker" class="view">
+    <div class="orders-wrap">
+
+      <!-- DRUCKER KONFIGURIEREN -->
+      <div class="section-box" style="border-color:#3b82f680;">
+        <div class="section-title" style="color:#3b82f6;"><i class="fas fa-cogs"></i> Drucker konfigurieren</div>
+
+        <!-- Status-Anzeige -->
+        <div id="printer-status-bar" style="background:#0a0804;border:1px solid #2a2318;border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;">
+          <div id="printer-status-icon" style="width:12px;height:12px;border-radius:50%;background:#333;flex-shrink:0;"></div>
+          <div>
+            <div id="printer-status-name" style="font-size:14px;font-weight:700;color:#fff;">Kein Drucker gespeichert</div>
+            <div id="printer-status-sub"  style="font-size:12px;color:#555;margin-top:2px;">Drucker unten auswählen und speichern</div>
+          </div>
+        </div>
+
+        <!-- Drucker-Typ auswählen -->
+        <div style="margin-bottom:14px;">
+          <label class="form-label" style="font-size:12px;color:#888;margin-bottom:8px;display:block;font-weight:600;">Welchen Drucker verwendest du?</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <div class="printer-type-card" id="pt-browser" onclick="selectPrinterType('browser')"
+              style="background:#0e0b08;border:2px solid #C9A84C;border-radius:10px;padding:14px;text-align:center;cursor:pointer;">
+              <div style="font-size:24px;margin-bottom:6px;">🖥️</div>
+              <div style="font-size:12px;font-weight:700;color:#C9A84C;">Browser-Druck</div>
+              <div style="font-size:10px;color:#555;margin-top:3px;">Jeder PC-Drucker</div>
+              <div style="font-size:10px;color:#22c55e;margin-top:4px;font-weight:600;">Empfohlen</div>
+            </div>
+            <div class="printer-type-card" id="pt-autoprint" onclick="selectPrinterType('autoprint')"
+              style="background:#0e0b08;border:2px solid #2a2318;border-radius:10px;padding:14px;text-align:center;cursor:pointer;">
+              <div style="font-size:24px;margin-bottom:6px;">⚙️</div>
+              <div style="font-size:12px;font-weight:700;color:#fff;">Auto-Druck</div>
+              <div style="font-size:10px;color:#555;margin-top:3px;">Hintergrund-Skript</div>
+            </div>
+            <div class="printer-type-card" id="pt-netzwerk" onclick="selectPrinterType('netzwerk')"
+              style="background:#0e0b08;border:2px solid #2a2318;border-radius:10px;padding:14px;text-align:center;cursor:pointer;">
+              <div style="font-size:24px;margin-bottom:6px;">📡</div>
+              <div style="font-size:12px;font-weight:700;color:#fff;">Netzwerk-Drucker</div>
+              <div style="font-size:10px;color:#555;margin-top:3px;">Küchen-Bondrucker</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drucker-Name / Details -->
+        <div id="printer-detail-browser" style="display:block;">
+          <label class="form-label">Druckername (genau so wie unter Windows → Drucker &amp; Scanner)</label>
+          <div style="display:flex;gap:8px;">
+            <input class="form-inp" id="printer-name-input" placeholder='z.B. "EPSON TM-T20" oder leer = Standard-Drucker' style="flex:1;margin:0;">
+            <button onclick="savePrinterConfig()" style="background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;border:none;border-radius:9px;padding:0 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;"><i class="fas fa-save"></i> Speichern</button>
+          </div>
+          <div style="font-size:11px;color:#444;margin-top:6px;"><i class="fas fa-info-circle" style="color:#555;margin-right:4px;"></i>Leer lassen = dein Standard-Drucker wird verwendet. Wenn du einen Namen eingibst, wird dieser Drucker bevorzugt.</div>
+        </div>
+        <div id="printer-detail-autoprint" style="display:none;">
+          <div style="background:#0a0804;border:1px solid #2a2318;border-radius:8px;padding:12px;font-size:12px;color:#888;">Lies die Anleitung unter "Option B" weiter unten. Das Skript muss einmalig auf diesem PC eingerichtet werden.</div>
+        </div>
+        <div id="printer-detail-netzwerk" style="display:none;">
+          <label class="form-label">IP-Adresse des Netzwerkdruckers</label>
+          <div style="display:flex;gap:8px;">
+            <input class="form-inp" id="printer-ip-input" placeholder="z.B. 192.168.1.100" style="flex:1;margin:0;">
+            <button onclick="savePrinterConfig()" style="background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;border:none;border-radius:9px;padding:0 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;"><i class="fas fa-save"></i> Speichern</button>
+          </div>
+        </div>
+
+        <!-- Test-Druck -->
+        <div style="display:flex;gap:10px;margin-top:16px;align-items:center;border-top:1px solid #1a1a1a;padding-top:16px;">
+          <button class="btn-test-print" onclick="testPrint()" style="flex:1;justify-content:center;display:flex;align-items:center;gap:8px;padding:12px;">
+            <i class="fas fa-print"></i> Test-Bon jetzt drucken
+          </button>
+          <div style="font-size:11px;color:#444;flex:1;line-height:1.6;">Druckt einen Beispiel-Bon damit du siehst wie es auf deinem Drucker aussieht.</div>
+        </div>
+      </div>
+
+      <!-- Option A -->
+      <div class="section-box">
+        <div class="section-title"><i class="fas fa-mouse-pointer"></i> Option A – Drucken-Button (sofort nutzbar)</div>
+        <div class="printer-option">
+          <div class="printer-icon">🖨️</div>
+          <div style="flex:1">
+            <div class="printer-badge badge-green">Sofort aktiv – kein Setup</div>
+            <div class="printer-title">Browser-Druck</div>
+            <div class="printer-desc">Jede Bestellkarte hat einen blauen "Drucken"-Button. Klick darauf öffnet den Windows-Druckdialog. Funktioniert mit jedem Drucker der am PC angeschlossen ist.</div>
+            <button class="btn-test-print" onclick="testPrint()"><i class="fas fa-print"></i> Test-Bon jetzt drucken</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Option B -->
+      <div class="section-box">
+        <div class="section-title"><i class="fas fa-robot"></i> Option B – Auto-Druck (PC-Hintergrunddienst)</div>
+        <div class="printer-option">
+          <div class="printer-icon">💻</div>
+          <div style="flex:1">
+            <div class="printer-badge badge-blue">Automatisch – druckt ohne Klick</div>
+            <div class="printer-title">autoprint.py – läuft im Hintergrund</div>
+            <div class="printer-desc">Skript läuft auf Hassans PC. Neue Bestellungen werden automatisch gedruckt sobald sie eingehen. Kein Klick nötig.</div>
+            <div style="margin-top:12px;">
+              <div class="setup-step"><div class="step-nr">1</div><div class="step-txt">Python installieren: <a href="https://python.org/downloads" target="_blank" style="color:#C9A84C;">python.org/downloads</a> → "Install Now"</div></div>
+              <div class="setup-step"><div class="step-nr">2</div><div class="step-txt">Terminal öffnen (Win + R → <code style="background:#1a1a1a;padding:1px 6px;border-radius:4px;">cmd</code>) und eingeben:</div></div>
+              <div class="code-block">pip install requests pywin32</div>
+              <div class="setup-step"><div class="step-nr">3</div><div class="step-txt">Datei <code style="background:#1a1a1a;padding:1px 6px;border-radius:4px;">autoprint.py</code> herunterladen und auf Hassans Desktop legen.</div></div>
+              <div class="setup-step"><div class="step-nr">4</div><div class="step-txt">Drucker-Name in der Datei eintragen (Zeile <code style="background:#1a1a1a;padding:1px 6px;border-radius:4px;">PRINTER_NAME</code>). Den Namen findest du unter Windows → Drucker & Scanner.</div></div>
+              <div class="setup-step"><div class="step-nr">5</div><div class="step-txt">Skript starten:</div></div>
+              <div class="code-block">python autoprint.py</div>
+              <div class="setup-step"><div class="step-nr">6</div><div class="step-txt">Autostart: Win + R → <code style="background:#1a1a1a;padding:1px 6px;border-radius:4px;">shell:startup</code> → Verknüpfung zur Datei dort ablegen. Startet dann automatisch mit Windows.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Option C -->
+      <div class="section-box">
+        <div class="section-title"><i class="fas fa-wifi"></i> Option C – Netzwerk-Bondrucker (Profi-Lösung)</div>
+        <div class="printer-option">
+          <div class="printer-icon">🏪</div>
+          <div style="flex:1">
+            <div class="printer-badge badge-gold">Empfohlen für Küche</div>
+            <div class="printer-title">ESC/POS Bondrucker via WLAN/LAN</div>
+            <div class="printer-desc">Drucker steht in der Küche, verbunden per WLAN/LAN. Druckt vollautomatisch ohne PC-Eingriff. Ideal für professionellen Betrieb.</div>
+            <div style="margin-top:14px;">
+              <div style="font-size:12px;color:#666;margin-bottom:8px;font-weight:600;">Empfohlene Drucker:</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:12px;">
+                <div style="background:#0a0804;border:1px solid #2a2318;border-radius:8px;padding:10px 12px;">
+                  <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;">Epson TM-T20III</div>
+                  <div style="font-size:11px;color:#C9A84C;margin-bottom:4px;">ca. 150 €</div>
+                  <div style="font-size:11px;color:#555;">USB + Ethernet · Einstieg</div>
+                </div>
+                <div style="background:#0a0804;border:1px solid #2a2318;border-radius:8px;padding:10px 12px;">
+                  <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;">Star TSP143IIILAN</div>
+                  <div style="font-size:11px;color:#C9A84C;margin-bottom:4px;">ca. 180 €</div>
+                  <div style="font-size:11px;color:#555;">Ethernet + WLAN · Profi</div>
+                </div>
+                <div style="background:#0a0804;border:1px solid #2a2318;border-radius:8px;padding:10px 12px;">
+                  <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;">Epson TM-T88VII</div>
+                  <div style="font-size:11px;color:#C9A84C;margin-bottom:4px;">ca. 250 €</div>
+                  <div style="font-size:11px;color:#555;">USB + WLAN + BT · Premium</div>
+                </div>
+              </div>
+              <div class="setup-step"><div class="step-nr">1</div><div class="step-txt">Drucker per LAN-Kabel oder WLAN mit dem Router verbinden</div></div>
+              <div class="setup-step"><div class="step-nr">2</div><div class="step-txt">IP-Adresse des Druckers herausfinden (meist 192.168.1.xxx – steht im Router oder im Drucker-Menü)</div></div>
+              <div class="setup-step"><div class="step-nr">3</div><div class="step-txt">In <code style="background:#1a1a1a;padding:1px 6px;border-radius:4px;">autoprint.py</code> eintragen:</div></div>
+              <div class="code-block">PRINT_MODE  = "escpos"<br>PRINTER_IP  = "192.168.1.100"<br>PRINTER_PORT= 9100</div>
+              <div class="setup-step"><div class="step-nr">4</div><div class="step-txt">Fertig – ab sofort druckt die Küche automatisch bei jeder neuen Bestellung</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Druckbereich -->
+  <div id="print-area"></div>
+</div>
+
+<script>
+const API = '/api';
+let adminPw = '';
+let allOrders = [];
+let currentFilter = 'alle';
+let soundOn = true;
+let knownIds = new Set();
+
+// ── Audio ──────────────────────────────────────────────────────────────────
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playBeep() {
+  if (!soundOn) return;
+  [[880, 0], [1100, 200]].forEach(([freq, delay]) => {
+    setTimeout(() => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.frequency.value = freq; o.type = 'sine';
+      g.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+      o.start(); o.stop(audioCtx.currentTime + 0.6);
+    }, delay);
+  });
+}
+function toggleSound() {
+  soundOn = !soundOn;
+  const btn = document.getElementById('sound-btn');
+  btn.innerHTML = soundOn ? '<i class="fas fa-bell"></i> Ton' : '<i class="fas fa-bell-slash"></i> Ton';
+  btn.classList.toggle('on', soundOn);
+}
+
+// ── LOGIN ──────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const pw = document.getElementById('pw-input').value;
+  const r  = await fetch(`${API}/admin/login`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({password: pw})
+  });
+  if (r.ok) {
+    adminPw = pw;
+    sessionStorage.setItem('admin_pw', pw);
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display    = 'block';
+    startPolling();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+function logout() { sessionStorage.removeItem('admin_pw'); location.reload(); }
+
+// ── VIEW SWITCHING ─────────────────────────────────────────────────────────
+function switchView(name, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (tabEl) tabEl.classList.add('active');
+  if (name === 'artikel') loadArticleManager();
+  if (name === 'kunden')  { loadContacts(); loadFollowupSettings(); }
+  if (name === 'botlog')  loadBotLog();
+}
+
+// ── BOT-LOG ───────────────────────────────────────────────────────────────
+let allBotLogs = [];
+let botLogFilter = 'alle';
+
+function botResultBadge(result) {
+  const r = (result || '').toLowerCase();
+  if (r === 'ok') return '<span class="bot-badge ok">Erfolg</span>';
+  if (r.startsWith('denied') || r === 'unknown_client') return '<span class="bot-badge err">Abgelehnt</span>';
+  if (r === 'no_item' || r === 'unknown') return '<span class="bot-badge err">Unklar</span>';
+  if (r === 'help') return '<span class="bot-badge info">Hilfe</span>';
+  return `<span class="bot-badge neutral">${escHtml(result || '—')}</span>`;
+}
+
+function botChannelBadge(ch) {
+  const c = (ch || 'test').toLowerCase();
+  if (c === 'whatsapp') return '<span class="bot-badge info">WhatsApp</span>';
+  return '<span class="bot-badge neutral">Test</span>';
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatBotTime(iso) {
+  if (!iso) return '—';
+  try {
+    const d = new Date(iso.replace(' ', 'T'));
+    if (isNaN(d)) return iso;
+    return d.toLocaleString('de-DE', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+  } catch(e) { return iso; }
+}
+
+async function loadBotLog() {
+  const el = document.getElementById('bot-log-list');
+  el.innerHTML = '<div style="text-align:center;color:#333;padding:40px;font-size:13px;"><i class="fas fa-circle-notch spinner"></i> Lade…</div>';
+  try {
+    const r = await fetch(`${API}/admin/bot-log`, { headers: { 'X-Admin-Password': adminPw } });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    allBotLogs = await r.json();
+    renderBotLog();
+  } catch(e) {
+    el.innerHTML = '<div style="text-align:center;color:#ef4444;padding:40px;font-size:13px;">Bot-Log konnte nicht geladen werden.</div>';
+  }
+}
+
+function filterBotLog(mode, btn) {
+  botLogFilter = mode;
+  document.querySelectorAll('#view-botlog .f-pill').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderBotLog();
+}
+
+function renderBotLog() {
+  const el = document.getElementById('bot-log-list');
+  let rows = allBotLogs.slice();
+  if (botLogFilter === 'whatsapp') rows = rows.filter(x => (x.channel || '').toLowerCase() === 'whatsapp');
+  else if (botLogFilter === 'test') rows = rows.filter(x => (x.channel || '').toLowerCase() !== 'whatsapp');
+  else if (botLogFilter === 'ok') rows = rows.filter(x => (x.result || '').toLowerCase() === 'ok');
+  else if (botLogFilter === 'fehler') rows = rows.filter(x => {
+    const r = (x.result || '').toLowerCase();
+    return r !== 'ok' && r !== 'help';
+  });
+
+  if (!rows.length) {
+    el.innerHTML = '<div style="text-align:center;color:#444;padding:48px 20px;font-size:13px;">Noch keine Bot-Einträge.</div>';
+    return;
+  }
+
+  el.innerHTML = rows.map(entry => {
+    const meta = entry.meta || {};
+    const actions = (meta.actions || []).join(', ');
+    const itemId = meta.item_id ? ` · ${escHtml(meta.item_id)}` : '';
+    return `<div class="bot-log-row">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:6px;">
+        ${botResultBadge(entry.result)}
+        ${botChannelBadge(entry.channel)}
+        <span style="font-size:11px;color:#555;">${formatBotTime(entry.created_at)}</span>
+        ${entry.client_id ? `<span style="font-size:11px;color:#C9A84C;font-weight:600;">${escHtml(entry.client_id)}</span>` : ''}
+      </div>
+      <div style="font-size:13px;color:#ccc;margin-bottom:4px;">${escHtml(entry.body || '—')}</div>
+      <div style="font-size:11px;color:#555;">
+        ${entry.phone ? `<i class="fas fa-phone" style="margin-right:4px;"></i>${escHtml(entry.phone)}` : ''}
+        ${actions ? ` · ${escHtml(actions)}` : ''}${itemId}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── CRM / KUNDEN ──────────────────────────────────────────────────────────
+let allContacts = [];
+let crmModalPhone = '';
+
+async function loadFollowupSettings() {
+  try {
+    const r = await fetch(`${API}/admin/settings`, {headers: {'X-Admin-Password': adminPw}});
+    if (r.ok) {
+      const s = await r.json();
+      if (s.google_review_url != null) document.getElementById('set-review-url').value = s.google_review_url;
+    }
+  } catch(e) {}
+}
+
+async function saveReviewUrl() {
+  const url = document.getElementById('set-review-url').value.trim();
+  await fetch(`${API}/admin/settings`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    body: JSON.stringify({google_review_url: url}),
+  });
+  showToast('Bewertungs-Link gespeichert', '#22c55e');
+}
+
+async function runFollowups() {
+  const el = document.getElementById('followup-result');
+  el.textContent = 'Prüfe Follow-ups…';
+  try {
+    const r = await fetch(`${API}/admin/followups/run`, {method:'POST', headers:{'X-Admin-Password':adminPw}});
+    const d = await r.json();
+    if (r.ok) {
+      el.textContent = `Fertig: ${d.reviews_sent||0} Review-SMS · ${d.winbacks_sent||0} Win-back-SMS${d.errors?` · ${d.errors} übersprungen/Fehler`:''}`;
+      el.style.color = '#22c55e';
+    } else {
+      el.textContent = 'Fehler beim Ausführen';
+      el.style.color = '#ef4444';
+    }
+  } catch(e) {
+    el.textContent = 'Verbindungsfehler';
+    el.style.color = '#ef4444';
+  }
+}
+
+async function openCrmModal(phone) {
+  crmModalPhone = phone;
+  const c = allContacts.find(x => x.phone === phone);
+  if (!c) return;
+  const name = `${c.first_name||''} ${c.last_name||''}`.trim() || 'Unbekannt';
+  const tel = (c.phone||'').replace(/\s/g,'');
+  document.getElementById('crm-modal-head').innerHTML = `
+    <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:8px;">${name}</h2>
+    <div style="font-size:13px;color:#888;line-height:1.8;">
+      <i class="fas fa-phone"></i> ${c.phone||'–'}<br>
+      ${c.email ? `<i class="fas fa-envelope"></i> ${c.email}<br>` : ''}
+      <span style="color:#C9A84C;font-weight:700;">${c.total_orders||0} Bestellungen</span> · ${parseFloat(c.total_spent||0).toFixed(2).replace('.',',')} €
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+      ${tel ? `<a href="tel:${tel}" class="btn-print-card" style="text-decoration:none;"><i class="fas fa-phone"></i> Anrufen</a>` : ''}
+      ${tel ? `<a href="https://wa.me/${tel.replace('+','')}" target="_blank" class="btn-print-card" style="text-decoration:none;border-color:#25d366;color:#25d366;"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
+    </div>`;
+  document.getElementById('crm-modal-notes').value = c.notes || '';
+  document.getElementById('crm-modal-orders').innerHTML = '<div style="color:#555;padding:12px 0;"><i class="fas fa-circle-notch spinner"></i> Lade Bestellhistorie…</div>';
+  document.getElementById('crm-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+
+  try {
+    const r = await fetch(`${API}/admin/contacts/${encodeURIComponent(phone)}/orders`, {headers:{'X-Admin-Password':adminPw}});
+    const orders = r.ok ? await r.json() : [];
+    if (!orders.length) {
+      document.getElementById('crm-modal-orders').innerHTML = '<p style="color:#555;font-size:13px;">Noch keine Bestellhistorie.</p>';
+      return;
+    }
+    document.getElementById('crm-modal-orders').innerHTML = `
+      <div class="section-title" style="margin-bottom:10px;"><i class="fas fa-history"></i> Bestellhistorie</div>
+      ${orders.map(o => {
+        const dt = o.created_at ? new Date(o.created_at + (o.created_at.includes('Z')?'':'Z')).toLocaleString('de-DE') : '–';
+        const items = (o.items||[]).map(i => `${i.qty}× ${i.name}`).join(', ') || '–';
+        const st = STATUS_LABELS[o.status] || o.status;
+        return `<div style="background:#1a1a1a;border:1px solid #222;border-radius:10px;padding:12px;margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px;">
+            <span style="font-weight:700;color:#fff;font-size:13px;">#${o.order_number}</span>
+            <span style="font-size:12px;color:#C9A84C;">${parseFloat(o.total).toFixed(2).replace('.',',')} €</span>
+          </div>
+          <div style="font-size:12px;color:#888;">${dt} · ${st} · ${o.delivery_type==='lieferung'?'Lieferung':'Abholung'}</div>
+          <div style="font-size:12px;color:#666;margin-top:6px;line-height:1.5;">${items}</div>
+          ${o.promo_applied ? `<div style="font-size:11px;color:#C9A84C;margin-top:4px;">🎉 ${o.promo_applied}</div>` : ''}
+        </div>`;
+      }).join('')}`;
+  } catch(e) {
+    document.getElementById('crm-modal-orders').innerHTML = '<p style="color:#ef4444;">Fehler beim Laden.</p>';
+  }
+}
+
+function closeCrmModal() {
+  document.getElementById('crm-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function saveCrmNotes() {
+  const notes = document.getElementById('crm-modal-notes').value;
+  await fetch(`${API}/admin/contacts/${encodeURIComponent(crmModalPhone)}/notes`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Admin-Password':adminPw},
+    body: JSON.stringify({notes}),
+  });
+  const c = allContacts.find(x => x.phone === crmModalPhone);
+  if (c) c.notes = notes;
+  showToast('Notiz gespeichert', '#22c55e');
+}
+
+async function loadContacts() {
+  try {
+    const r = await fetch(`${API}/admin/contacts`, {headers: {'X-Admin-Password': adminPw}});
+    if (!r.ok) return;
+    allContacts = await r.json();
+    renderContacts();
+  } catch(e) { console.warn(e); }
+}
+
+function renderContacts() {
+  const q = (document.getElementById('crm-search')?.value || '').toLowerCase();
+  const list = allContacts.filter(c =>
+    !q || [c.first_name, c.last_name, c.phone, c.email].join(' ').toLowerCase().includes(q)
+  );
+  document.getElementById('crm-count').textContent = `(${allContacts.length} gesamt)`;
+  const el = document.getElementById('crm-list');
+  if (!list.length) {
+    el.innerHTML = '<div style="color:#444;text-align:center;padding:40px;">Noch keine Kunden – kommen automatisch mit der ersten Bestellung.</div>';
+    return;
+  }
+  el.innerHTML = list.map(c => {
+    const name = `${c.first_name||''} ${c.last_name||''}`.trim() || 'Unbekannt';
+    const tags = (c.tags||[]).map(t => `<span style="font-size:10px;background:#1a1a1a;border:1px solid #333;border-radius:4px;padding:1px 6px;color:#888;margin-right:4px;">${t}</span>`).join('');
+    const last = c.last_order_at ? new Date(c.last_order_at + (c.last_order_at.includes('Z')?'':'Z')).toLocaleString('de-DE') : '–';
+    const tel = (c.phone||'').replace(/\s/g,'');
+    return `<div class="order-card" style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+        <div>
+          <div style="font-weight:700;font-size:15px;color:#fff;">${name}</div>
+          <div style="font-size:13px;color:#888;margin-top:4px;"><i class="fas fa-phone" style="width:14px;color:#555;"></i> ${c.phone||'–'}</div>
+          ${c.email ? `<div style="font-size:12px;color:#666;margin-top:2px;"><i class="fas fa-envelope" style="width:14px;color:#555;"></i> ${c.email}</div>` : ''}
+          <div style="margin-top:8px;">${tags}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:22px;font-weight:800;color:#C9A84C;">${c.total_orders||0}×</div>
+          <div style="font-size:12px;color:#666;">${parseFloat(c.total_spent||0).toFixed(2).replace('.',',')} € gesamt</div>
+          <div style="font-size:11px;color:#444;margin-top:4px;">Zuletzt: ${last}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <button type="button" class="btn-print-card" style="border-color:#C9A84C;color:#C9A84C;" onclick='openCrmModal(${JSON.stringify(c.phone||"")})'><i class="fas fa-history"></i> Historie</button>
+        ${tel ? `<a href="tel:${tel}" class="btn-print-card" style="text-decoration:none;"><i class="fas fa-phone"></i> Anrufen</a>` : ''}
+        ${tel ? `<a href="https://wa.me/${tel.replace('+','')}" target="_blank" rel="noopener" class="btn-print-card" style="text-decoration:none;border-color:#25d366;color:#25d366;"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── ORDERS ────────────────────────────────────────────────────────────────
+async function loadOrders() {
+  try {
+    const r = await fetch(`${API}/admin/orders`, {headers: {'X-Admin-Password': adminPw}});
+    if (!r.ok) return;
+    const orders = await r.json();
+    const newOnes = orders.filter(o => o.status === 'neu' && !knownIds.has(o.order_number));
+    if (newOnes.length > 0 && knownIds.size > 0) {
+      playBeep();
+      document.getElementById('new-badge').style.display = 'inline';
+      setTimeout(() => document.getElementById('new-badge').style.display = 'none', 5000);
+      newOnes.forEach(o => sendPushNotif(o));
+    }
+    orders.forEach(o => knownIds.add(o.order_number));
+    allOrders = orders;
+    updateStats();
+    renderOrders();
+  } catch(e) { console.warn(e); }
+}
+
+function updateStats() {
+  const today = new Date().toLocaleDateString('de-DE');
+  const todayOrders = allOrders.filter(o => {
+    const d = new Date(o.created_at + 'Z').toLocaleDateString('de-DE');
+    return d === today && o.status !== 'storniert';
+  });
+  const active = allOrders.filter(o => ['neu','zubereitung','unterwegs','abholbereit'].includes(o.status));
+  const revenue = todayOrders.reduce((s,o) => s + o.total, 0);
+  const liefCount = todayOrders.filter(o => o.delivery_type === 'lieferung').length;
+
+  document.getElementById('stat-heute').textContent   = todayOrders.length;
+  document.getElementById('stat-umsatz').textContent  = revenue.toFixed(0) + ' €';
+  document.getElementById('stat-aktiv').textContent   = active.length;
+  document.getElementById('stat-lieferung').textContent = liefCount;
+}
+
+function filterOrders(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.f-pill').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderOrders();
+}
+
+function renderOrders() {
+  const filtered = currentFilter === 'alle'
+    ? allOrders.filter(o => o.status !== 'storniert')
+    : allOrders.filter(o => o.status === currentFilter);
+  const el = document.getElementById('orders-list');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty-state">
+      <img class="es-logo" src="https://files.catbox.moe/3uyamu.png" alt="Logo">
+      <i class="fas fa-check-circle es-icon"></i>
+      <span class="es-text">Alles erledigt</span>
+      <span class="es-sub">Keine offenen Bestellungen</span>
+    </div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(renderCard).join('');
+}
+
+const STATUS_LABELS   = { neu:'Neue Bestellung', zubereitung:'In Zubereitung', unterwegs:'Unterwegs', abholbereit:'Abholbereit', fertig:'Fertig', storniert:'Storniert' };
+const DELIVERY_LABELS = { lieferung:'Lieferung', abholung:'Abholung' };
+const PAY_LABELS      = { cash:'Bar', card:'EC-Karte', stripe:'Online' };
+
+function renderCard(o) {
+  const dt = new Date(o.created_at + 'Z').toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+  const items = (o.items||[]).map(i => {
+    const isFree = i.free || i.name.includes('[GRATIS');
+    return isFree
+      ? `<span class="free-item-row">🎁 ${i.name} – GRATIS</span>`
+      : `${i.qty}x ${i.name} – ${(i.price*i.qty).toFixed(2)} €`;
+  }).join('<br>');
+
+  const delCl = o.delivery_type === 'lieferung' ? 'pill-lieferung' : 'pill-abholung';
+  const payCl = o.pay_method === 'stripe' ? 'pill-online' : o.pay_method === 'card' ? 'pill-ec' : 'pill-bar';
+
+  let btns = '';
+  if (o.status === 'neu') {
+    btns = `<button class="btn-action btn-cook"   onclick="setStatus('${o.order_number}','zubereitung')"><i class="fas fa-fire"></i> Zubereitung</button>
+            <button class="btn-action btn-cancel"  onclick="setStatus('${o.order_number}','storniert')">Stornieren</button>`;
+  } else if (o.status === 'zubereitung') {
+    btns = o.delivery_type === 'lieferung'
+      ? `<button class="btn-action btn-road"  onclick="setStatus('${o.order_number}','unterwegs')"><i class="fas fa-motorcycle"></i> Unterwegs</button>`
+      : `<button class="btn-action btn-ready" onclick="setStatus('${o.order_number}','abholbereit')"><i class="fas fa-check"></i> Abholbereit</button>`;
+    btns += `<button class="btn-action btn-done" onclick="setStatus('${o.order_number}','fertig')"><i class="fas fa-check-double"></i> Fertig</button>`;
+  } else if (o.status === 'unterwegs' || o.status === 'abholbereit') {
+    btns = `<button class="btn-action btn-done" onclick="setStatus('${o.order_number}','fertig')"><i class="fas fa-check-double"></i> Fertig</button>`;
+  }
+  btns += `<button class="btn-print-card" onclick="printOrder('${o.order_number}')"><i class="fas fa-print"></i> Drucken</button>`;
+
+  // Direktkontakt
+  const phoneClean = (o.phone||'').replace(/\s/g,'');
+  const waMsg = encodeURIComponent(`Hallo ${o.first_name}, deine Bestellung ${o.order_number} bei Snack House Yassine!`);
+  btns += `<a class="btn-call" href="tel:${phoneClean}"><i class="fas fa-phone"></i> Anrufen</a>`;
+  btns += `<a class="btn-wa"   href="https://wa.me/${phoneClean.replace('+','')}?text=${waMsg}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>`;
+
+  const addr  = o.delivery_type === 'lieferung' && o.address
+    ? `<div class="order-addr"><i class="fas fa-map-marker-alt" style="color:#C9A84C;"></i>${o.address}</div>` : '';
+  const note  = o.notes && o.notes !== '-'
+    ? `<div class="order-note"><i class="fas fa-comment-alt" style="margin-right:6px;color:#444;"></i>${o.notes}</div>` : '';
+  const zeit  = o.wunschzeit
+    ? `<span class="pill pill-bar"><i class="fas fa-clock" style="margin-right:4px;"></i>${o.wunschzeit}</span>` : '';
+  const promo = o.promo_applied
+    ? `<span class="pill pill-promo"><i class="fas fa-gift" style="margin-right:4px;"></i>${o.promo_applied}</span>` : '';
+  const promoAlert = o.promo_applied
+    ? `<div class="promo-alert"><i class="fas fa-gift"></i><span><strong>Aktion:</strong> ${o.promo_applied} — Gratis-Artikel beilegen!</span></div>` : '';
+
+  return `
+  <div class="order-card ${o.status}" id="card-${o.order_number}">
+    <div class="order-top">
+      <div>
+        <div class="order-nr">${o.order_number}</div>
+        <div class="order-name">${o.first_name} ${o.last_name}</div>
+        <div class="order-phone"><i class="fas fa-phone" style="margin-right:5px;color:#444;font-size:11px;"></i>${o.phone}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-left:10px;">
+        <span class="status-label sl-${o.status}">${STATUS_LABELS[o.status]||o.status}</span>
+        <div class="order-time">${dt} Uhr</div>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="pill ${delCl}">${DELIVERY_LABELS[o.delivery_type]||o.delivery_type}</span>
+      <span class="pill ${payCl}">${PAY_LABELS[o.pay_method]||o.pay_method}</span>
+      ${zeit}${promo}
+    </div>
+    ${promoAlert}${addr}${note}
+    <div class="order-items">${items}</div>
+    <div class="order-total">${o.total.toFixed(2)} €</div>
+    <div class="action-row">${btns}</div>
+  </div>`;
+}
+
+async function setStatus(orderNumber, newStatus) {
+  const r = await fetch(`${API}/admin/orders/${orderNumber}/status`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    body: JSON.stringify({status: newStatus})
+  });
+  if (r.ok) {
+    const o = allOrders.find(x => x.order_number === orderNumber);
+    if (o) o.status = newStatus;
+    updateStats();
+    renderOrders();
+  }
+}
+
+// ── DRUCKEN ───────────────────────────────────────────────────────────────
+function printOrder(orderNumber) {
+  const o = allOrders.find(x => x.order_number === orderNumber);
+  if (!o) return;
+  buildAndPrint(o);
+}
+
+function testPrint() {
+  const fake = {
+    order_number: 'TEST-001', first_name: 'Test', last_name: 'Druck',
+    phone: '0000 000000', delivery_type: 'abholung', address: '',
+    wunschzeit: 'So schnell wie möglich', pay_method: 'cash',
+    items: [{qty:1, name:'Drehspiess Rolle', price:7.00},{qty:2, name:'Cola 0,33 L', price:2.50}],
+    total: 12.00, notes: 'Das ist ein Test-Bon.', promo_applied: null
+  };
+  buildAndPrint(fake);
+}
+
+function buildAndPrint(o) {
+  const now = new Date().toLocaleString('de-DE');
+  const delLabel = o.delivery_type === 'lieferung' ? 'LIEFERUNG' : 'ABHOLUNG';
+  const payLabel = {cash:'Barzahlung',card:'EC-Karte',stripe:'Online'}[o.pay_method] || o.pay_method;
+  const items = (o.items||[]).map(i => {
+    const price = i.free || i.name.includes('[GRATIS') ? 'GRATIS' : (i.price*i.qty).toFixed(2) + ' EUR';
+    return `${String(i.qty).padEnd(3)} ${i.name.replace('[GRATIS 🎁]','').substring(0,22).padEnd(22)} ${price}`;
+  }).join('\n');
+  const line = '================================';
+
+  document.getElementById('print-area').innerHTML = `
+    <div style="text-align:center;font-weight:bold;font-size:15px;margin-bottom:2px;">SNACK HOUSE YASSINE</div>
+    <div style="text-align:center;font-size:11px;">Dr.-Felix-Gerhardus-Str. 7</div>
+    <div style="text-align:center;font-size:11px;">53894 Mechernich</div>
+    <div style="text-align:center;font-size:11px;">Tel: 02443-3088966</div>
+    <pre style="margin:8px 0;">${line}</pre>
+    <div style="font-weight:bold;font-size:13px;">${delLabel}</div>
+    <div style="font-size:12px;">Nr: ${o.order_number}</div>
+    <div style="font-size:12px;">Zeit: ${now}</div>
+    <pre style="margin:6px 0;">${line}</pre>
+    <div style="font-weight:bold;">${o.first_name} ${o.last_name}</div>
+    <div style="font-size:12px;">${o.phone}</div>
+    ${o.delivery_type==='lieferung'&&o.address?`<div style="font-size:12px;">${o.address}</div>`:''}
+    ${o.wunschzeit?`<div style="font-size:12px;">Wunschzeit: ${o.wunschzeit}</div>`:''}
+    <pre style="margin:6px 0;">${line}
+${items}
+${line}</pre>
+    <div style="font-weight:bold;font-size:14px;">GESAMT: ${o.total.toFixed(2)} EUR</div>
+    <div style="font-size:12px;">Zahlung: ${payLabel}</div>
+    ${o.notes&&o.notes!=='-'?`<pre style="margin:4px 0;">${line}\nHinweis: ${o.notes}</pre>`:''}
+    ${o.promo_applied?`<pre style="margin:4px 0;">${line}\nAKTION: ${o.promo_applied}</pre>`:''}
+    <pre style="margin:8px 0;">${line}</pre>
+    <div style="text-align:center;font-size:12px;font-weight:bold;">Danke fuer Ihren Besuch!</div>
+    <div style="text-align:center;font-size:11px;">Mittwoch Ruhetag</div>
+    <br><br>
+  `;
+  window.print();
+}
+
+// ── AKTIONS-SYSTEM ────────────────────────────────────────────────────────
+let currentAdminPromo = null;
+
+async function loadAdminPromo() {
+  try {
+    const r    = await fetch(`${API}/promo/active`);
+    const data = await r.json();
+    if (data.active && data.promo) {
+      currentAdminPromo = data.promo;
+      showAdminPromoBanner(data.promo);
+    } else {
+      currentAdminPromo = null;
+      document.getElementById('promo-active-bar').style.display = 'none';
+      document.getElementById('promo-none').style.display = 'block';
+    }
+  } catch(e) {}
+}
+
+function showAdminPromoBanner(promo) {
+  document.getElementById('promo-active-bar').style.display = 'flex';
+  document.getElementById('promo-none').style.display = 'none';
+  document.getElementById('promo-bar-title').textContent = promo.title || 'Aktion aktiv';
+  document.getElementById('promo-bar-desc').textContent  = promo.description || '';
+  if (promo.valid_until) {
+    updateAdminPromoTimer(promo.valid_until);
+    setInterval(() => updateAdminPromoTimer(promo.valid_until), 30000);
+  }
+}
+
+function updateAdminPromoTimer(validUntil) {
+  const diff = Math.max(0, new Date(validUntil) - new Date());
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const el = document.getElementById('promo-bar-timer');
+  if (el) el.textContent = diff <= 0 ? 'Abgelaufen' : (h > 0 ? `${h}h ${m}m` : `${m} Min.`);
+}
+
+async function startPromo() {
+  const title   = document.getElementById('p-title').value.trim();
+  const desc    = document.getElementById('p-desc').value.trim();
+  const trigVal = document.getElementById('p-trigger-val').value;
+  const timeVal = document.getElementById('p-until').value;
+  const freeRaw = document.getElementById('p-free-item').value;
+  const free    = JSON.parse(freeRaw);
+
+  if (!desc && !title) { alert('Bitte Beschreibung eingeben.'); return; }
+
+  const today = new Date();
+  const [hh, mm] = timeVal.split(':');
+  today.setHours(parseInt(hh), parseInt(mm), 0, 0);
+
+  const r = await fetch(`${API}/admin/promo`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    body: JSON.stringify({
+      title: title || desc,
+      description: desc,
+      triggerType: 'category',
+      triggerValue: trigVal,
+      freeItemName: free.name,
+      freeItemId: free.id,
+      freeItemVariant: free.variant,
+      validUntil: today.toISOString().slice(0,16),
+    })
+  });
+  if (r.ok) {
+    await loadAdminPromo();
+    alert('Aktion ist jetzt live auf der Website!');
+  }
+}
+
+async function stopPromo() {
+  if (!confirm('Aktion wirklich beenden?')) return;
+  await fetch(`${API}/admin/promo`, { method:'DELETE', headers:{'X-Admin-Password':adminPw} });
+  currentAdminPromo = null;
+  document.getElementById('promo-active-bar').style.display = 'none';
+  document.getElementById('promo-none').style.display = 'block';
+}
+
+// ── DRUCKER-KONFIGURATION ────────────────────────────────────────────────
+let selectedPrinterType = 'browser';
+
+function selectPrinterType(type) {
+  selectedPrinterType = type;
+  ['browser','autoprint','netzwerk'].forEach(t => {
+    const card = document.getElementById('pt-' + t);
+    const det  = document.getElementById('printer-detail-' + t);
+    if (card) card.style.borderColor  = t === type ? '#3b82f6' : '#2a2318';
+    if (det)  det.style.display = t === type ? 'block' : 'none';
+  });
+}
+
+function savePrinterConfig() {
+  const name = document.getElementById('printer-name-input') ? document.getElementById('printer-name-input').value.trim() : '';
+  const ip   = document.getElementById('printer-ip-input')   ? document.getElementById('printer-ip-input').value.trim()   : '';
+  const cfg  = { type: selectedPrinterType, name, ip };
+  localStorage.setItem('sh_printer_cfg', JSON.stringify(cfg));
+  updatePrinterStatusBar(cfg);
+  alert('Drucker-Einstellung gespeichert!');
+}
+
+function loadPrinterConfig() {
+  const raw = localStorage.getItem('sh_printer_cfg');
+  if (!raw) return;
+  try {
+    const cfg = JSON.parse(raw);
+    selectedPrinterType = cfg.type || 'browser';
+    selectPrinterType(selectedPrinterType);
+    if (cfg.name && document.getElementById('printer-name-input')) document.getElementById('printer-name-input').value = cfg.name;
+    if (cfg.ip   && document.getElementById('printer-ip-input'))   document.getElementById('printer-ip-input').value   = cfg.ip;
+    updatePrinterStatusBar(cfg);
+  } catch(e) {}
+}
+
+function updatePrinterStatusBar(cfg) {
+  const icon = document.getElementById('printer-status-icon');
+  const name = document.getElementById('printer-status-name');
+  const sub  = document.getElementById('printer-status-sub');
+  if (!icon) return;
+  const labels = { browser:'Browser-Druck (PC-Drucker)', autoprint:'Auto-Druck (Hintergrund-Skript)', netzwerk:'Netzwerk-Bondrucker' };
+  icon.style.background = '#22c55e';
+  name.textContent = labels[cfg.type] || 'Browser-Druck';
+  sub.textContent  = cfg.type === 'netzwerk'
+    ? (cfg.ip ? 'IP: ' + cfg.ip : 'IP noch nicht eingetragen')
+    : (cfg.name || 'Standard-Drucker (kein Name angegeben)');
+}
+
+// ── POLLING ───────────────────────────────────────────────────────────────
+function startPolling() {
+  loadOrders();
+  loadAdminPromo();
+  setInterval(loadOrders, 8000);
+  setInterval(loadAdminPromo, 30000);
+}
+
+// ── ONLINE / OFFLINE ───────────────────────────────────────────────────────
+let isOnline = true;
+
+async function loadSettings() {
+  try {
+    const r = await fetch('/api/settings');
+    const s = await r.json();
+    isOnline = s.online;
+    applyOnlineUI();
+    document.getElementById('wait-pickup').value   = s.wait_pickup   || 20;
+    document.getElementById('wait-delivery').value = s.wait_delivery || 40;
+  } catch(e) {}
+}
+
+function applyOnlineUI() {
+  const btn = document.getElementById('online-toggle');
+  const lbl = document.getElementById('online-label');
+  if (isOnline) {
+    btn.className = 'online-toggle online';
+    lbl.textContent = 'Online';
+  } else {
+    btn.className = 'online-toggle offline';
+    lbl.textContent = 'Offline';
+  }
+}
+
+async function toggleOnline() {
+  isOnline = !isOnline;
+  applyOnlineUI();
+  await fetch('/api/admin/settings', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    body: JSON.stringify({online: isOnline ? '1' : '0'})
+  });
+  showToast(isOnline ? '✓ Bestellportal ist jetzt ONLINE' : '⚑ Bestellportal ist OFFLINE – Kunden können nicht bestellen', isOnline ? '#22c55e' : '#ef4444');
+}
+
+// ── WARTEZEIT ──────────────────────────────────────────────────────────────
+async function saveWaitTime() {
+  const pu = parseInt(document.getElementById('wait-pickup').value)   || 20;
+  const de = parseInt(document.getElementById('wait-delivery').value) || 40;
+  await fetch('/api/admin/settings', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    body: JSON.stringify({wait_pickup: pu, wait_delivery: de})
+  });
+  const el = document.getElementById('wait-saved');
+  el.style.display = 'inline';
+  setTimeout(() => { el.style.display = 'none'; }, 2500);
+}
+
+// ── TOAST ──────────────────────────────────────────────────────────────────
+function showToast(msg, color='#C9A84C') {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:999;background:#111;border:1px solid ${color};color:${color};padding:12px 18px;border-radius:10px;font-size:13px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.5);animation:fadein .3s;max-width:320px;`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+// ── TAGESBERICHT ───────────────────────────────────────────────────────────
+async function openReport() {
+  const r = await fetch('/api/admin/report/today', {headers:{'X-Admin-Password':adminPw}});
+  if (!r.ok) return;
+  const d = await r.json();
+  const el = document.getElementById('report-modal');
+  document.getElementById('report-content').innerHTML = `
+    <div class="report-stat"><span>Bestellungen gesamt</span><span class="report-stat-val">${d.order_count}</span></div>
+    <div class="report-stat"><span>Tagesumsatz</span><span class="report-stat-val">${(d.total_revenue).toFixed(2).replace('.',',')} €</span></div>
+    <div class="report-stat"><span>Davon Lieferung</span><span class="report-stat-val">${d.delivery_count}</span></div>
+    <div class="report-stat"><span>Davon Abholung</span><span class="report-stat-val">${d.pickup_count}</span></div>
+    <div style="margin-top:16px;font-size:12px;color:#555;font-weight:600;letter-spacing:.05em;">TOP 5 GERICHTE HEUTE</div>
+    ${d.top_items.length ? d.top_items.map((i,idx)=>`
+      <div class="report-item-row">
+        <span style="color:${idx===0?'#C9A84C':'#666'};font-weight:${idx===0?'700':'400'}">${idx+1}. ${i.name}</span>
+        <span style="color:${idx===0?'#C9A84C':'#555'}">${i.qty}×</span>
+      </div>`).join('') : '<div style="color:#333;font-size:13px;padding:12px 0;">Noch keine Bestellungen heute.</div>'}
+    <button class="btn-close-modal" onclick="closeReport()">Schließen</button>
+  `;
+  el.classList.add('open');
+}
+function closeReport() { document.getElementById('report-modal').classList.remove('open'); }
+
+// ── PUSH-BENACHRICHTIGUNGEN ────────────────────────────────────────────────
+function initPush() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    document.getElementById('push-banner').style.display = 'flex';
+  }
+}
+async function requestPush() {
+  const perm = await Notification.requestPermission();
+  document.getElementById('push-banner').style.display = 'none';
+  if (perm === 'granted') showToast('Benachrichtigungen aktiviert!', '#22c55e');
+}
+function sendPushNotif(order) {
+  if (Notification.permission !== 'granted') return;
+  new Notification('Neue Bestellung!', {
+    body: `${order.first_name} ${order.last_name} · ${order.delivery_type === 'lieferung' ? 'Lieferung' : 'Abholung'} · ${parseFloat(order.total).toFixed(2).replace('.',',')} €`,
+    icon: location.origin + '/favicon-192.png',
+    tag:  order.order_number,
+  });
+}
+
+// ── ARTIKEL-MANAGER ────────────────────────────────────────────────────────
+// Speisekarte direkt aus order.html Menu-Daten (fest codiert für Snack House)
+const MENU_ITEMS = [
+  {id:'p1',   nr:'1',  cat:'Pizza',    name:'Pizza Margherita'},
+  {id:'p2',   nr:'2',  cat:'Pizza',    name:'Pizza Salami'},
+  {id:'p3',   nr:'3',  cat:'Pizza',    name:'Pizza Hawaii'},
+  {id:'p4',   nr:'4',  cat:'Pizza',    name:'Pizza Tonno'},
+  {id:'p5',   nr:'5',  cat:'Pizza',    name:'Pizza Vegetariana'},
+  {id:'p6',   nr:'6',  cat:'Pizza',    name:'Pizza 4-Jahreszeiten'},
+  {id:'p7',   nr:'7',  cat:'Pizza',    name:'Pizza Americana'},
+  {id:'p8',   nr:'8',  cat:'Pizza',    name:'Pizza Diavola'},
+  {id:'s1',   nr:'10', cat:'Shawarma', name:'Shawarma Sandwich'},
+  {id:'s2',   nr:'11', cat:'Shawarma', name:'Shawarma Teller'},
+  {id:'s3',   nr:'12', cat:'Shawarma', name:'Shawarma Box'},
+  {id:'b1',   nr:'20', cat:'Burger',   name:'Classic Burger'},
+  {id:'b2',   nr:'21', cat:'Burger',   name:'Cheese Burger'},
+  {id:'b3',   nr:'22', cat:'Burger',   name:'BBQ Burger'},
+  {id:'d1',   nr:'30', cat:'Döner',    name:'Döner Sandwich'},
+  {id:'d2',   nr:'31', cat:'Döner',    name:'Döner Teller'},
+  {id:'d3',   nr:'32', cat:'Döner',    name:'Lahmacun'},
+  {id:'g1',   nr:'40', cat:'Getränke', name:'Cola 0,5L'},
+  {id:'g2',   nr:'41', cat:'Getränke', name:'Fanta 0,5L'},
+  {id:'g3',   nr:'42', cat:'Getränke', name:'Wasser 0,5L'},
+  {id:'g4',   nr:'43', cat:'Getränke', name:'Ayran'},
+];
+
+let articleOverrides = {};
+
+async function loadArticleManager() {
+  try {
+    const r = await fetch('/api/settings');
+    const s = await r.json();
+    articleOverrides = s.overrides || {};
+  } catch(e) {}
+  renderArticleManager();
+}
+
+function renderArticleManager() {
+  const cats = [...new Set(MENU_ITEMS.map(i=>i.cat))];
+  let html = '';
+  cats.forEach(cat => {
+    html += `<div style="margin-bottom:4px;margin-top:16px;font-size:10px;color:#444;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">${cat}</div>`;
+    MENU_ITEMS.filter(i=>i.cat===cat).forEach(item => {
+      const ov = articleOverrides[item.id];
+      const avail = ov ? ov.available : true;
+      html += `
+        <div class="article-row">
+          <span class="article-nr">${item.nr}</span>
+          <span class="article-name">${item.name}${!avail?'<span class="sold-out-badge"> · NICHT VERFÜGBAR</span>':''}</span>
+          <label class="toggle-switch">
+            <input type="checkbox" ${avail?'checked':''} onchange="toggleArticle('${item.id}',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>`;
+    });
+  });
+  document.getElementById('article-list').innerHTML = html;
+}
+
+async function toggleArticle(itemId, available) {
+  articleOverrides[itemId] = {available, note:''};
+  await fetch('/api/admin/menu-override', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    body: JSON.stringify({itemId, available})
+  });
+  const item = MENU_ITEMS.find(i=>i.id===itemId);
+  showToast((available ? '✓ ' : '✗ ') + (item?.name||itemId) + (available ? ' wieder verfügbar' : ' deaktiviert'), available ? '#22c55e' : '#ef4444');
+  renderArticleManager();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = sessionStorage.getItem('admin_pw');
+  if (saved) {
+    adminPw = saved;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display    = 'block';
+    startPolling();
+    loadSettings();
+    initPush();
+  }
+  document.getElementById('pw-input').focus();
+  loadPrinterConfig();
+});
+</script>
+
+<!-- ══ TAGESBERICHT MODAL ═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="report-modal" onclick="if(event.target===this)closeReport()">
+  <div class="modal-box">
+    <div class="modal-title"><i class="fas fa-chart-bar"></i> Tagesbericht</div>
+    <div id="report-content"></div>
+  </div>
+</div>
+
+</body>
+</html>

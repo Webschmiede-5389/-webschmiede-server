@@ -1,0 +1,15 @@
+# Local secrets — never commit
+deploy.secrets.local
+n8n-credentials.local.txt
+.env
+*.local.txt
+app/backend/.env
+app/backend/orders.db
+__pycache__/
+*.py[cod]
+.Python
+.venv/
+venv/
+*.log
+.DS_Store
+Thumbs.db

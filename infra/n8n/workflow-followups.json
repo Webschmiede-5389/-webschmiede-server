@@ -1,0 +1,42 @@
+{
+  "name": "Webschmiede – Follow-ups täglich",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 10 * * *" }]
+        }
+      },
+      "id": "cron-followups",
+      "name": "Täglich 10:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/cron/followups",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-Cron-Secret", "value": "={{ $env.CRON_SECRET }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-followups",
+      "name": "Follow-ups ausführen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 300]
+    }
+  ],
+  "connections": {
+    "Täglich 10:00": {
+      "main": [[{ "node": "Follow-ups ausführen", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": { "templateCredsSetupCompleted": false }
+}

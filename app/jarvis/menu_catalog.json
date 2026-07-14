@@ -1,0 +1,450 @@
+[
+  {
+    "id": "d1",
+    "cat": "drehspiess",
+    "nr": "1",
+    "name": "Drehspieß Rolle Traditionell",
+    "desc": "Knoblauchpaste, Pommes, eingelegte Gurken – im arabischen Brot",
+    "price": 7.0
+  },
+  {
+    "id": "d2",
+    "cat": "drehspiess",
+    "nr": "2",
+    "name": "Drehspieß Rolle Orientalisch",
+    "desc": "Arab. Brot mit Knoblauchpaste, Coleslaw, Pommes, Granatapfelsirup",
+    "price": 8.0
+  },
+  {
+    "id": "d3",
+    "cat": "drehspiess",
+    "nr": "3",
+    "name": "Drehspieß Rolle Döner-Style",
+    "desc": "Arab. Brot mit gemischtem Salat und Zaziki",
+    "price": 8.0
+  },
+  {
+    "id": "d4",
+    "cat": "drehspiess",
+    "nr": "4",
+    "name": "Lahmacun-Rolle",
+    "desc": "Fladenbrot mit Hackfleischmischung, gemischtem Salat und Zaziki",
+    "price": 7.5
+  },
+  {
+    "id": "d5",
+    "cat": "drehspiess",
+    "nr": "5",
+    "name": "Lahmacun-Rolle Drehspieß",
+    "desc": "Fladenbrot mit Hackfleisch und Drehspießfleisch, Salat, Zaziki",
+    "price": 9.0
+  },
+  {
+    "id": "d6",
+    "cat": "drehspiess",
+    "nr": "6",
+    "name": "Drehspieß Tasche Döner-Style",
+    "desc": "Gefüllte Tasche mit Drehspießfleisch, gemischtem Salat, Zaziki",
+    "price": 8.0
+  },
+  {
+    "id": "d7",
+    "cat": "drehspiess",
+    "nr": "7",
+    "name": "Drehspieß Box",
+    "desc": "Mit Pommes, Knoblauchpaste oder Zaziki",
+    "price": 7.0
+  },
+  {
+    "id": "d8",
+    "cat": "drehspiess",
+    "nr": "8",
+    "name": "Drehspieß Teller",
+    "desc": "Orientalisch: Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste — oder Döner-Style",
+    "price": 12.0
+  },
+  {
+    "id": "d9",
+    "cat": "drehspiess",
+    "nr": "9 ★",
+    "name": "Arabischer Teller",
+    "desc": "Hähnchen-Shawarma-Rolle, Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste",
+    "price": 14.0
+  },
+  {
+    "id": "u10",
+    "cat": "ueberbacken",
+    "nr": "10",
+    "name": "Drehspieß mit Hollandaise",
+    "desc": "Sauce Hollandaise und Käse überbacken. Mit Pommes/Reis und Salat/Coleslaw",
+    "price": 13.0
+  },
+  {
+    "id": "u11",
+    "cat": "ueberbacken",
+    "nr": "11",
+    "name": "Drehspieß Hawaii",
+    "desc": "Mit Ananas, Sahnesoße und Käse überbacken",
+    "price": 12.5
+  },
+  {
+    "id": "u12",
+    "cat": "ueberbacken",
+    "nr": "12",
+    "name": "Drehspieß Barbecue",
+    "desc": "Mit Barbecuesoße, Zwiebeln und Käse überbacken",
+    "price": 12.5
+  },
+  {
+    "id": "u13",
+    "cat": "ueberbacken",
+    "nr": "13",
+    "name": "Drehspieß Tomaten-/Sahnesoße",
+    "desc": "Mit Tomaten- oder Sahnesoße und Käse überbacken",
+    "price": 11.5
+  },
+  {
+    "id": "b14",
+    "cat": "burger",
+    "nr": "14",
+    "name": "Crispy Chicken Burger",
+    "desc": "Crispy Chicken, Blattsalat, Käse, Tomate, Coleslaw, Süß-Sauer- und Hamburgersoße",
+    "price": 6.0
+  },
+  {
+    "id": "b15",
+    "cat": "burger",
+    "nr": "15",
+    "name": "Hamburger",
+    "desc": "Rindfleisch-Patty, Salat, Tomaten, Gurken, Röstzwiebeln, Soßen",
+    "price": 5.0
+  },
+  {
+    "id": "b16",
+    "cat": "burger",
+    "nr": "16",
+    "name": "Cheeseburger",
+    "desc": "Rindfleisch-Patty, Käse, Salat, Tomaten, Gurken, Röstzwiebeln, Soßen",
+    "price": 5.5
+  },
+  {
+    "id": "b17",
+    "cat": "burger",
+    "nr": "17",
+    "name": "Chicken Burger",
+    "desc": "Chicken-Patty, Salat, Tomaten, Gurken, Soßen",
+    "price": 5.5
+  },
+  {
+    "id": "b18",
+    "cat": "burger",
+    "nr": "18",
+    "name": "Chicken Burger Spezial",
+    "desc": "Chicken-Patty, Coleslaw, Salat, Tomaten, Gurken, Soßen",
+    "price": 6.0
+  },
+  {
+    "id": "b19",
+    "cat": "burger",
+    "nr": "19 🌿",
+    "name": "Veggie Burger",
+    "desc": "Vegetarische Burgerboulette, Salat, Tomaten, Gurken, Soßen",
+    "price": 5.0
+  },
+  {
+    "id": "s20",
+    "cat": "schnitzel",
+    "nr": "20",
+    "name": "Schnitzel Wiener Art",
+    "desc": "Hähnchenbrust. Mit Pommes/Reis und Salat/Coleslaw",
+    "price": 12.0
+  },
+  {
+    "id": "s21",
+    "cat": "schnitzel",
+    "nr": "21",
+    "name": "Jägerschnitzel",
+    "desc": "Hähnchenbrust mit Jägersoße",
+    "price": 14.0
+  },
+  {
+    "id": "s22",
+    "cat": "schnitzel",
+    "nr": "22",
+    "name": "Schnitzel Paprika Art",
+    "desc": "Hähnchenbrust mit Paprikasoße",
+    "price": 14.0
+  },
+  {
+    "id": "s23",
+    "cat": "schnitzel",
+    "nr": "23",
+    "name": "Champignon-Rahmschnitzel",
+    "desc": "Hähnchenbrust mit Champignon-Rahmsauce",
+    "price": 14.0
+  },
+  {
+    "id": "s24",
+    "cat": "schnitzel",
+    "nr": "24 ★",
+    "name": "Schnitzel Yassine",
+    "desc": "Hähnchenbrust mit gebratenen Zwiebeln und Champignons. Tipp: +2 € Hollandaise!",
+    "price": 14.0
+  },
+  {
+    "id": "s25",
+    "cat": "schnitzel",
+    "nr": "25",
+    "name": "Hawaii Schnitzel",
+    "desc": "Hähnchenbrust mit Ananas und Käse",
+    "price": 14.0
+  },
+  {
+    "id": "n26",
+    "cat": "nudeln",
+    "nr": "26 🌿",
+    "name": "Classic Pasta",
+    "desc": "Spaghetti oder Tortiglioni mit Tomatensoße. +2 € mit Käse überbacken",
+    "price": 9.0
+  },
+  {
+    "id": "n27",
+    "cat": "nudeln",
+    "nr": "27",
+    "name": "Carbonara",
+    "desc": "Mit Geflügelschinken, Sahne und Ei",
+    "price": 12.0
+  },
+  {
+    "id": "n28",
+    "cat": "nudeln",
+    "nr": "28",
+    "name": "Bolognese",
+    "desc": "Mit Tomatenfleischsoße",
+    "price": 12.0
+  },
+  {
+    "id": "n29",
+    "cat": "nudeln",
+    "nr": "29",
+    "name": "Drehspieß Pasta",
+    "desc": "Mit Hähnchen-Drehspieß, Champignon in Tomaten- oder Sahnesoße",
+    "price": 12.5
+  },
+  {
+    "id": "n30",
+    "cat": "nudeln",
+    "nr": "30",
+    "name": "Quattro Formaggi",
+    "desc": "Vier Käsesorten mit cremiger Sahnesoße",
+    "price": 12.5
+  },
+  {
+    "id": "n31",
+    "cat": "nudeln",
+    "nr": "31",
+    "name": "Scampi Pasta",
+    "desc": "Scampi mit Spinat und Knoblauch in Tomaten-Sahnesoße — oder mit Sahnesoße und Parmesan",
+    "price": 13.0
+  },
+  {
+    "id": "n32",
+    "cat": "nudeln",
+    "nr": "32 🌿",
+    "name": "Vegetarische Pasta",
+    "desc": "Mit Brokkoli, Spinat, Champignon, Knoblauch in Tomaten- oder Sahnesoße",
+    "price": 12.5
+  },
+  {
+    "id": "p33",
+    "cat": "pizza",
+    "nr": "33",
+    "name": "Margherita",
+    "desc": "Tomatensoße, Käse, Oregano — Ø 30 cm",
+    "price": 8.0
+  },
+  {
+    "id": "p34",
+    "cat": "pizza",
+    "nr": "34–37",
+    "name": "Thunfisch / Salami / Schinken / Champignon",
+    "desc": "Je eine Zutat auf Tomatensoße und Käse — Ø 30 cm",
+    "price": 10.0
+  },
+  {
+    "id": "p38",
+    "cat": "pizza",
+    "nr": "38–41",
+    "name": "Spinat / Hawaii / Diavolo / Sucuk",
+    "desc": "Spinat 10 € | Hawaii: Schinken + Ananas | Diavolo: scharf/mild | Sucuk: Knoblauchwurst — Ø 30 cm",
+    "price": 10.0
+  },
+  {
+    "id": "p43",
+    "cat": "pizza",
+    "nr": "43",
+    "name": "Pizza Roma",
+    "desc": "Thunfisch und Zwiebeln auf Tomatensoße und Käse — Ø 30 cm",
+    "price": 11.0
+  },
+  {
+    "id": "p48",
+    "cat": "pizza",
+    "nr": "48",
+    "name": "Calzone",
+    "desc": "Gefüllt mit Tomatensoße, Käse, Geflügelschinken, Champignon und Thunfisch — Ø 26 cm",
+    "price": 11.0
+  },
+  {
+    "id": "p49",
+    "cat": "pizza",
+    "nr": "49",
+    "name": "Drehspieß Pizza",
+    "desc": "Fleisch vom Drehspieß mit Zwiebeln auf Tomatensoße und Käse — Ø 30 cm",
+    "price": 11.0
+  },
+  {
+    "id": "p53",
+    "cat": "pizza",
+    "nr": "53 ★",
+    "name": "Snack House Pizza",
+    "desc": "Selbst marinierte Putenbruststücke, Brokkoli, Mais, Paprika, Oliven, Hollandaise oder Knoblauchpaste — Ø 30 cm",
+    "price": 12.5
+  },
+  {
+    "id": "p54",
+    "cat": "pizza",
+    "nr": "54",
+    "name": "Eifelpizza",
+    "desc": "Scampi, Thunfisch, Salami, Schinken, Champignon, Spinat, Paprika, Artischocke, Ei — Ø 30 cm",
+    "price": 12.5
+  },
+  {
+    "id": "p57",
+    "cat": "pizza",
+    "nr": "57",
+    "name": "Pizzablech 40×60 cm",
+    "desc": "Margherita (33 €) oder 3 Zutaten nach Wahl (40 €) — ideal fürs Catering",
+    "price": 33.0
+  },
+  {
+    "id": "sa68",
+    "cat": "salate",
+    "nr": "68",
+    "name": "Tabouleh",
+    "desc": "Tomaten, Gurken, Petersilie, Minze, Lauchzwiebel, Burghul, Granatapfelsirup — hausgemacht",
+    "price": 8.0
+  },
+  {
+    "id": "sa69",
+    "cat": "salate",
+    "nr": "69 ★",
+    "name": "Snack House Salat",
+    "desc": "Grünsalat, Tomaten, Gurken, Thunfisch, Geflügelschinken, Käse, Bohnen, Ei",
+    "price": 11.0
+  },
+  {
+    "id": "sa71",
+    "cat": "salate",
+    "nr": "71–73",
+    "name": "Bauernsalat / Gemischter / Coleslaw",
+    "desc": "Bauernsalat 6 € | Gemischter 7 € | Coleslaw hausgemacht 8 €",
+    "price": 6.0
+  },
+  {
+    "id": "sa74",
+    "cat": "salate",
+    "nr": "74",
+    "name": "Fitness Salat",
+    "desc": "Grünsalat, Tomaten, Gurken, Hähnchenstreifen, Mais und Käse",
+    "price": 11.0
+  },
+  {
+    "id": "v75",
+    "cat": "vegetarisch",
+    "nr": "75",
+    "name": "Falafel Rolle",
+    "desc": "Frittierte Falafel im arabischen Brot mit Hummus, Petersilie, Tomaten, Salat, Sesamsoße",
+    "price": 7.0
+  },
+  {
+    "id": "v76",
+    "cat": "vegetarisch",
+    "nr": "76",
+    "name": "Falafel Teller",
+    "desc": "5 Falafel mit Brot, Hummus, Petersilie, Tomaten, Salat, Peperoni, eingelegten Gurken, Sesamsoße",
+    "price": 12.0
+  },
+  {
+    "id": "f77",
+    "cat": "fingerfood",
+    "nr": "77–78",
+    "name": "Chicken Nuggets",
+    "desc": "Knusprige Hähnchenstreifen, mit Soße nach Wahl",
+    "price": null
+  },
+  {
+    "id": "f79",
+    "cat": "fingerfood",
+    "nr": "79–80",
+    "name": "Crispy Chicken",
+    "desc": "Marinierte Hähnchenteile, knusprig frittiert",
+    "price": 8.5
+  },
+  {
+    "id": "f81",
+    "cat": "fingerfood",
+    "nr": "81–84",
+    "name": "Geflügelwurst mit Pommes",
+    "desc": "Alle Würste aus 100 % Geflügelfleisch, mit Pommes",
+    "price": 7.0
+  },
+  {
+    "id": "f85",
+    "cat": "fingerfood",
+    "nr": "Beilagen",
+    "name": "Beilage nach Wahl",
+    "desc": "Pommes kl. · Pommes gr. · Reis · Hummus · Fladenbrot",
+    "price": 3.0
+  },
+  {
+    "id": "f86",
+    "cat": "fingerfood",
+    "nr": "Soßen",
+    "name": "Soße nach Wahl",
+    "desc": "Alle Dips einzeln wählbar – einfach mehrfach hinzufügen",
+    "price": 1.0
+  },
+  {
+    "id": "g1",
+    "cat": "getraenke",
+    "nr": "Softdrinks",
+    "name": "Cola / Fanta / Sprite / Mezzo-Mix",
+    "desc": "Einfach Sorte und Größe wählen",
+    "price": 2.5
+  },
+  {
+    "id": "g2",
+    "cat": "getraenke",
+    "nr": "Wasser",
+    "name": "Wasser",
+    "desc": "Still oder Sprudelnd, 0,5 L",
+    "price": 2.0
+  },
+  {
+    "id": "g3",
+    "cat": "getraenke",
+    "nr": "Getränke",
+    "name": "Ayran",
+    "desc": "Hausgemacht, 0,4 L",
+    "price": 2.0
+  },
+  {
+    "id": "g4",
+    "cat": "getraenke",
+    "nr": "Getränke",
+    "name": "Red Bull",
+    "desc": "0,25 L",
+    "price": 2.5
+  }
+]

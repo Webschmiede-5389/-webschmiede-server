@@ -14,7 +14,7 @@ import requests, json, time, os, sys
 from datetime import datetime
 
 # ── KONFIGURATION ─────────────────────────────────────────────────────────────
-API_BASE       = "http://167.233.211.170/api"
+API_BASE       = "https://yassine.digitalehandwerkskunst.de/api"
 ADMIN_PASSWORD = "snackhouse2026"
 POLL_INTERVAL  = 10   # Sekunden
 

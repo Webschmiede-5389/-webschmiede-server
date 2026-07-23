@@ -21,7 +21,7 @@ import kunden_ids as kid_svc
 
 KUNDEN_DIR = Path(os.getenv("KUNDEN_DIR", Path(__file__).resolve().parents[1] / "kunden"))
 DOMAIN = "digitalehandwerkskunst.de"
-SERVER_IP = os.getenv("SERVER_IP", "167.233.211.170")
+SERVER_IP = os.getenv("SERVER_IP", "167.233.150.230")
 
 DEFAULT_CLIENT_AUTOMATIONS = {
     "sms": {"label": "SMS Bestellbenachrichtigung", "requested": True},

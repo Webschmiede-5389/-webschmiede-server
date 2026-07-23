@@ -26,7 +26,7 @@ Verwandt (Wholesale/Multichannel): [`../b2b-euro-trading/README.md`](../b2b-euro
 - `docs/akquise/reports/DATUM-gastro.html` — Filter HIGH/MEDIUM
 - `docs/akquise/reports/DATUM-gastro.json` — CRM-Import später
 - `app/static/akquise-report.html` — für Deploy
-- Live: http://167.233.211.170/akquise (nach setup_akquise.py)
+- Live: https://digitalehandwerkskunst.de/akquise (nach setup_akquise.py)
 
 ## Google Places (optional)
 

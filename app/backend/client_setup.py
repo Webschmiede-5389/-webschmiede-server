@@ -58,8 +58,10 @@ def _set_env_var(key: str, val: str) -> None:
 
 def _merge_cors(*hosts: str) -> None:
     bases = {
-        "http://167.233.211.170",
-        "https://167.233.211.170",
+        "http://167.233.150.230",
+        "https://167.233.150.230",
+        "https://digitalehandwerkskunst.de",
+        "https://yassine.digitalehandwerkskunst.de",
         f"http://{DEMO_SUBDOMAIN}.{AGENCY_DOMAIN}",
         f"https://{DEMO_SUBDOMAIN}.{AGENCY_DOMAIN}",
     }
@@ -234,7 +236,7 @@ def setup_subdomain(kid: str, *, ssl: bool = False) -> dict:
             "dry_run": True,
             "host": host,
             "webroot": webroot,
-            "dns_hint": f"A-Record: {sub} → 167.233.211.170 (oder Wildcard *)",
+            "dns_hint": f"A-Record: {sub} → 167.233.150.230 (oder Wildcard *)",
             "message": "Subdomain-Setup nur auf dem Server. Lokal: python scripts/setup_client_subdomain.py",
         }
 

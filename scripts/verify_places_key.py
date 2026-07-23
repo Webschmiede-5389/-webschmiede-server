@@ -7,7 +7,7 @@ from agency_config import ssh_connect
 import paramiko
 
 c = paramiko.SSHClient()
-ssh_connect(c, timeout=25)
+ssh_connect(c, timeout=25, role="web")
 
 
 def run(cmd, timeout=60):
@@ -15,16 +15,14 @@ def run(cmd, timeout=60):
     return (o.read() + e.read()).decode("utf-8", "replace")
 
 
-# Masked status via API
 print("=== API status ===")
 print(
     run(
-        "curl -s -H 'X-Agency-Password: LjACgh5K5rmrKEufk3_nBlMk' "
-        "http://127.0.0.1:8000/api/agency/secrets "
-        "| python3 -c \"import sys,json; d=json.load(sys.stdin); "
-        "items={i['key']:i for i in d.get('items',[])}; "
-        "g=items.get('GOOGLE_PLACES_API_KEY',{}); "
-        "print('set=', g.get('set'), 'masked=', g.get('masked'), 'display=', g.get('display'))\""
+        r"""
+PW=$(grep -E '^AGENCY_ADMIN_PASSWORD=' /root/app/backend/.env | cut -d= -f2- | tr -d '\r')
+curl -s -H "X-Agency-Password: $PW" http://127.0.0.1:8000/api/agency/secrets \
+| python3 -c "import sys,json; d=json.load(sys.stdin); items={i['key']:i for i in d.get('items',[])}; g=items.get('GOOGLE_PLACES_API_KEY',{}); print('set=', g.get('set'), 'masked=', g.get('masked'), 'display=', g.get('display'))"
+"""
     )
 )
 
@@ -40,9 +38,11 @@ print(
 print("=== test endpoint ===")
 print(
     run(
-        "curl -s -X POST -H 'Content-Type: application/json' "
-        "-H 'X-Agency-Password: LjACgh5K5rmrKEufk3_nBlMk' "
-        "http://127.0.0.1:8000/api/agency/secrets/test/google_places"
+        r"""
+PW=$(grep -E '^AGENCY_ADMIN_PASSWORD=' /root/app/backend/.env | cut -d= -f2- | tr -d '\r')
+curl -s -X POST -H 'Content-Type: application/json' -H "X-Agency-Password: $PW" \
+  http://127.0.0.1:8000/api/agency/secrets/test/google_places
+"""
     )
 )
 c.close()

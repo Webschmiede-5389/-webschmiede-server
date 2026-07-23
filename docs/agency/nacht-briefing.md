@@ -80,15 +80,11 @@
 
 |-----|-----|
 
-| Seminare (öffentlich) | http://167.233.211.170/seminare |
-
-| Agency Admin | http://167.233.211.170/agency |
-
-| Cal.com (1:1) | http://167.233.211.170/cal |
-
-| Snack House Admin | http://167.233.211.170/admin |
-
-| n8n | http://167.233.211.170/n8n/ |
+| Seminare (öffentlich) | https://digitalehandwerkskunst.de/seminare |
+| Agency Admin | https://digitalehandwerkskunst.de/agency |
+| Cal.com (1:1) | https://cal.digitalehandwerkskunst.de |
+| Snack House Admin | https://yassine.digitalehandwerkskunst.de/admin |
+| n8n | https://digitalehandwerkskunst.de/n8n/ |
 
 
 

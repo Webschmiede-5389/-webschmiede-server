@@ -7,7 +7,7 @@ from agency_config import ssh_connect
 import paramiko
 
 c = paramiko.SSHClient()
-ssh_connect(c, timeout=25)
+ssh_connect(c, timeout=25, role="web")
 cmd = r"""
 python3 - <<'PY'
 from pathlib import Path
@@ -37,7 +37,8 @@ PY
 systemctl restart snack-api
 sleep 3
 systemctl is-active snack-api
-curl -s -X POST -H 'Content-Type: application/json' -H 'X-Agency-Password: LjACgh5K5rmrKEufk3_nBlMk' http://127.0.0.1:8000/api/agency/secrets/test/google_places
+PW=$(grep -E '^AGENCY_ADMIN_PASSWORD=' /root/app/backend/.env | cut -d= -f2- | tr -d '\r')
+curl -s -X POST -H 'Content-Type: application/json' -H "X-Agency-Password: $PW" http://127.0.0.1:8000/api/agency/secrets/test/google_places
 """
 _, o, e = c.exec_command(cmd, timeout=60)
 print((o.read() + e.read()).decode("utf-8", "replace").encode("ascii", "replace").decode())

@@ -6,8 +6,8 @@ Kunden-Subdomain unter digitalehandwerkskunst.de einrichten.
   python scripts/setup_client_subdomain.py --demo muster --ssl      # Demo (1× für alle)
 
 IONOS DNS (vor --ssl):
-  A  muster   →  167.233.211.170
-  A  yassine  →  167.233.211.170
+  A  muster   →  167.233.150.230
+  A  yassine  →  167.233.150.230
 """
 from __future__ import annotations
 
@@ -28,6 +28,7 @@ DEMO_WEBROOT = "/var/www/snackhouse-mechernich"
 KUNDEN_DIR = os.path.join(ROOT, "kunden")
 SSL_EMAIL = "info@digitalehandwerkskunst.de"
 ENV_PATH = "/root/app/backend/.env"
+WEB_IP = "167.233.150.230"
 
 
 def load_kunde(kid: str) -> tuple[dict, str]:
@@ -117,8 +118,9 @@ def set_env_var(client, key: str, val: str):
 def merge_cors(client, *hosts: str):
     """CORS um http(s)://host erweitern, PUBLIC_BASE_URL unverändert lassen."""
     bases = {
-        "http://167.233.211.170",
-        "https://167.233.211.170",
+        "http://167.233.150.230",
+        "https://167.233.150.230",
+        "https://digitalehandwerkskunst.de",
         f"http://{DEMO_SUBDOMAIN}.{AGENCY_DOMAIN}",
         f"https://{DEMO_SUBDOMAIN}.{AGENCY_DOMAIN}",
     }
@@ -197,15 +199,15 @@ def main():
     print(f"Bestellen: {base_https}/bestellen")
     print()
     print("IONOS DNS:")
-    print(f"  Typ A  | Hostname: {sub}  | Wert: {load_secrets()['SERVER_HOST']}")
-    print("  (oder Wildcard * -> 167.233.211.170 - dann kein IONOS-Schritt pro Kunde)")
+    print(f"  Typ A  | Hostname: {sub}  | Wert: {WEB_IP}")
+    print(f"  (oder Wildcard * -> {WEB_IP} - dann kein IONOS-Schritt pro Kunde)")
     print()
 
     if args.dry_run:
         return
 
     client = paramiko.SSHClient()
-    ssh_connect(client)
+    ssh_connect(client, role="web")
 
     deploy_nginx(client, sub, host, webroot, args.ssl)
 

@@ -9,9 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 src = ROOT / "app" / "static" / "agency-setup.html"
 
 c = paramiko.SSHClient()
-ssh_connect(c, timeout=25)
+ssh_connect(c, timeout=25, role="web")
 sftp = c.open_sftp()
-# Agency site uses agency-keys.html
 for remote in (
     "/var/www/digitalehandwerkskunst/agency-keys.html",
     "/var/www/snackhouse-mechernich/agency-keys.html",
@@ -23,8 +22,10 @@ for remote in (
     print("put", remote)
 sftp.close()
 _, o, _ = c.exec_command(
-    "curl -s -o /dev/null -w '%{http_code}' -H 'X-Agency-Password: LjACgh5K5rmrKEufk3_nBlMk' "
-    "http://127.0.0.1:8000/api/agency/secrets"
+    r"""
+PW=$(grep -E '^AGENCY_ADMIN_PASSWORD=' /root/app/backend/.env | cut -d= -f2- | tr -d '\r')
+curl -s -o /dev/null -w '%{http_code}' -H "X-Agency-Password: $PW" http://127.0.0.1:8000/api/agency/secrets
+"""
 )
 print("api", o.read().decode())
 c.close()

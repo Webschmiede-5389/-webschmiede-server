@@ -114,14 +114,15 @@ Go-Live Call: [kunden/SHY001-go-live.md](kunden/SHY001-go-live.md)
 
 | Was | URL |
 |-----|-----|
-| Website | http://167.233.211.170/ |
-| Bestellen | http://167.233.211.170/bestellen |
-| Admin | http://167.233.211.170/admin |
-| **Seminare** | http://167.233.211.170/seminare |
-| **Agency Admin** | http://167.233.211.170/agency |
-| **Cal.com (1:1)** | http://167.233.211.170/cal |
-| n8n | http://167.233.211.170/n8n/ |
-| Handbuch (nach `--upload-handout`) | http://167.233.211.170/uebergabe-handbuch.html |
+| Website | https://yassine.digitalehandwerkskunst.de/ |
+| Bestellen | https://yassine.digitalehandwerkskunst.de/bestellen |
+| Admin | https://yassine.digitalehandwerkskunst.de/admin |
+| **Seminare** | https://digitalehandwerkskunst.de/seminare |
+| **Agency Admin** | https://digitalehandwerkskunst.de/agency |
+| **Agency Hub** | https://digitalehandwerkskunst.de/agency-hub |
+| **Cal.com (1:1)** | https://cal.digitalehandwerkskunst.de |
+| n8n | https://digitalehandwerkskunst.de/n8n/ |
+| Handbuch (nach `--upload-handout`) | https://yassine.digitalehandwerkskunst.de/uebergabe-handbuch.html |
 
 ---
 

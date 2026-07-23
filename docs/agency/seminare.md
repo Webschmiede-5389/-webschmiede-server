@@ -10,7 +10,7 @@
 
 ## Öffentliche Seite
 
-- `http://167.233.211.170/seminare` — Liste + Anmeldung
+- `https://digitalehandwerkskunst.de/seminare` — Liste + Anmeldung
 - Demo-Seminar wird beim ersten Start automatisch angelegt
 
 ## API

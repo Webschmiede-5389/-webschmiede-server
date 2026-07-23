@@ -17,7 +17,7 @@ python setup_n8n.py              # n8n automation hub on server
 
 ## n8n (Automation Hub)
 
-- **URL:** http://167.233.211.170/n8n/
+- **URL:** https://digitalehandwerkskunst.de/n8n/
 - **Login:** see `n8n-credentials.local.txt` (local only, gitignored)
 - **Workflow templates:** `infra/n8n/*.json` — import in n8n UI
 - **Docs:** `infra/n8n/README.md`

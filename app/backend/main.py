@@ -64,8 +64,12 @@ app = Flask(__name__)
 # ── CORS: nur eigene Domain erlaubt ──────────────────────────────────────────
 def _cors_origins():
     origins = [
-        "http://167.233.211.170",
-        "https://167.233.211.170",
+        "https://digitalehandwerkskunst.de",
+        "https://www.digitalehandwerkskunst.de",
+        "https://yassine.digitalehandwerkskunst.de",
+        "https://muster.digitalehandwerkskunst.de",
+        "http://167.233.150.230",
+        "https://167.233.150.230",
         "https://snackhouse-mechernich.de",
         "https://www.snackhouse-mechernich.de",
     ]
@@ -122,7 +126,7 @@ SMS_SENDER      = os.getenv("SMS_SENDER", "SnackHouse")
 OWNER_PHONE     = os.getenv("OWNER_PHONE", "")
 SHOP_NAME       = os.getenv("SHOP_NAME", "Snack House Yassine")
 SHOP_PHONE      = os.getenv("SHOP_PHONE", "024433088966")
-PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "http://167.233.211.170").rstrip("/")
+PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "https://yassine.digitalehandwerkskunst.de").rstrip("/")
 ORDER_PORTAL_URL = os.getenv("ORDER_PORTAL_URL", f"{PUBLIC_BASE_URL}/bestellen").rstrip("/")
 CALCOM_URL = os.getenv("CALCOM_URL", f"{PUBLIC_BASE_URL}/cal").rstrip("/")
 CALCOM_API_KEY = os.getenv("CALCOM_API_KEY", "")

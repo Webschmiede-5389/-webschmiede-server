@@ -1,3 +1,4 @@
+"""Vergleicht lokales vs. Server Agency-Passwort (ohne Klartext-Ausgabe)."""
 import sys
 from pathlib import Path
 
@@ -10,7 +11,7 @@ local_agency = local.get("AGENCY_ADMIN_PASSWORD", "")
 local_admin = local.get("ADMIN_PASSWORD", "")
 
 c = paramiko.SSHClient()
-ssh_connect(c, timeout=25)
+ssh_connect(c, timeout=25, role="web")
 _, o, _ = c.exec_command(
     "grep -E '^AGENCY_ADMIN_PASSWORD=|^ADMIN_PASSWORD=' /root/app/backend/.env 2>/dev/null"
 )
@@ -27,19 +28,16 @@ print("server keys:", list(server.keys()))
 print("server AGENCY len:", len(server.get("AGENCY_ADMIN_PASSWORD", "") or ""))
 print("server ADMIN len:", len(server.get("ADMIN_PASSWORD", "") or ""))
 print("agency match local file:", server.get("AGENCY_ADMIN_PASSWORD") == local_agency)
-print("agency match creds file LjAC...:", server.get("AGENCY_ADMIN_PASSWORD") == "LjACgh5K5rmrKEufk3_nBlMk")
-print("admin match LjAC...:", server.get("ADMIN_PASSWORD") == "LjACgh5K5rmrKEufk3_nBlMk")
 print("agency==admin on server:", server.get("AGENCY_ADMIN_PASSWORD") == server.get("ADMIN_PASSWORD"))
-
-# What does Flask actually use? AGENCY falls back to ADMIN
 effective = server.get("AGENCY_ADMIN_PASSWORD") or server.get("ADMIN_PASSWORD") or ""
 print("effective len:", len(effective))
-print("effective is LjAC:", effective == "LjACgh5K5rmrKEufk3_nBlMk")
 
-# Test API login path if exists
 _, o, _ = c.exec_command(
-    "curl -s -o /dev/null -w '%{http_code}' -H 'X-Agency-Password: LjACgh5K5rmrKEufk3_nBlMk' http://127.0.0.1:8000/api/agency/secrets/schema 2>/dev/null; echo; "
-    "curl -s -o /dev/null -w '%{http_code}' -H 'X-Agency-Password: wrong' http://127.0.0.1:8000/api/agency/secrets/schema 2>/dev/null; echo"
+    r"""
+PW=$(grep -E '^AGENCY_ADMIN_PASSWORD=' /root/app/backend/.env | cut -d= -f2- | tr -d '\r')
+curl -s -o /dev/null -w '%{http_code}' -H "X-Agency-Password: $PW" http://127.0.0.1:8000/api/agency/secrets/schema; echo
+curl -s -o /dev/null -w '%{http_code}' -H 'X-Agency-Password: wrong' http://127.0.0.1:8000/api/agency/secrets/schema; echo
+"""
 )
 print("api probe:", o.read().decode())
 c.close()

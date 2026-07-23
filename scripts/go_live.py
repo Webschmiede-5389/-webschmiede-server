@@ -38,11 +38,11 @@ def load_kunde(kid: str) -> dict:
 
 
 def api_base(k: dict) -> str:
-    u = k.get("urls", {}).get("test_hauptseite", "").rstrip("/")
-    if not u:
-        ip = k.get("server", {}).get("ip", "167.233.211.170")
-        u = f"http://{ip}"
-    return u
+    u = (k.get("urls") or {}).get("test_hauptseite", "").rstrip("/")
+    if u:
+        return u
+    # Fallback Live-Subdomain (nicht toter Alt-IP)
+    return "https://yassine.digitalehandwerkskunst.de"
 
 
 def ssh_run(cmd: str) -> str:
@@ -50,7 +50,7 @@ def ssh_run(cmd: str) -> str:
     from agency_config import ssh_connect
 
     c = paramiko.SSHClient()
-    ssh_connect(c)
+    ssh_connect(c, role="web")
     _, o, e = c.exec_command(cmd, timeout=30)
     out = o.read().decode("utf-8", errors="replace").strip()
     err = e.read().decode("utf-8", errors="replace").strip()
@@ -210,7 +210,7 @@ def _resolve_test_unit_price(base: str) -> float:
         from agency_config import ssh_connect
 
         c = paramiko.SSHClient()
-        ssh_connect(c)
+        ssh_connect(c, role="web")
         _, o, _ = c.exec_command(
             "/root/app/venv/bin/python3 -c "
             "\"import sqlite3; db=sqlite3.connect('/root/app/backend/orders.db'); "

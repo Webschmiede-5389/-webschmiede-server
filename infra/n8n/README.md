@@ -2,7 +2,7 @@
 
 ## URL
 
-http://167.233.211.170/n8n/
+https://digitalehandwerkskunst.de/n8n/
 
 Login: siehe `n8n-credentials.local.txt` (lokal, nicht in Git).
 

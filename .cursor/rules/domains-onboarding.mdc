@@ -1,0 +1,34 @@
+---
+description: Domain-Kauf und Onboarding-Auswahl – nie ohne Freigabe kaufen; Kunde wählt im Onboarding.
+alwaysApply: true
+---
+
+# Domains (Kauf & Onboarding)
+
+## Kauf-Sperre
+
+- **Nie** Domains, Registrar-Buchungen oder andere kostenpflichtige Käufe auslösen, außer Christian sagt es **ausdrücklich** („kauf das“, „jetzt registrieren“, …).
+- Prüfen, Vorschläge, DNS vorbereiten, Links bauen: erlaubt.
+- API `registrar/registrations` und ähnliche Kauf-Endpunkte: nur nach klarer Freigabe.
+- Produkt-Schalter `DOMAIN_AUTO_PURCHASE` bleibt **aus**, bis Christian ihn bewusst setzt.
+
+## Ziel-Ablauf (Produkt)
+
+Alles andere (Portal, Onboarding, Setup) zuerst fertig. Domain kommt **im Onboarding**, nicht vorher blind kaufen.
+
+1. Onboarding enthält **Domain-Auswahl** mit vorgeschlagenen Domains (`domain.options` in `kunden/*.json`).
+2. Feld **Wunschdomain**: System prüft Verfügbarkeit.
+   - Frei → wählbar.
+   - Belegt → **automatische E-Mail** an den Kunden mit Alternativen.
+3. Kunde klickt eine Domain → Speichern + Mail an Kunde und Christian.
+4. Auto-Kauf nur wenn `DOMAIN_AUTO_PURCHASE=1` und **INWX** konfiguriert (inkl. `.de`). Sonst Auswahl speichern + Mail an Christian.
+5. **Soll:** DNS + SSL/WAF über **Cloudflare** (Default `via_cloudflare=True`). INWX nur Registrar + NS-Umstellung. Legacy-Fallback INWX-DNS nur bei CF-Fehler.
+
+## Technik
+
+- Kauf/NS: `app/backend/integrations/inwx.py` (+ `cloudflare_protect.py`)
+- Onboarding: `app/backend/domain_onboarding.py`
+- CLI: `scripts/provision_domain_inwx.py`
+- UI: `app/static/onboarding.html`
+- Doku: `docs/agency/inwx-domains.md`, Hub: `../../infrastructure/STANDARDS.md`
+- Secrets: `INWX_USER`, `INWX_PASSWORD`, `INWX_CONTACT_ID`, `CLOUDFLARE_API_TOKEN`

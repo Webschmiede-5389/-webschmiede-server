@@ -1,0 +1,81 @@
+---
+description: Alles was wir bauen muss 24/7 zuverlässig laufen, Fehler früh erkennen, auto-reparieren, Inhaber informieren. Kunde ist nie First-Line-Support.
+alwaysApply: true
+---
+
+# Betriebssicherheit (Webschmiede)
+
+**Grundsatz:** Der Kunde arbeitet unter Stress. Wenn eine API, ein Button oder ein Nacht-Job kaputt ist, darf er uns nicht fünfmal am Tag schreiben müssen. Wir erkennen, reparieren und melden **selbst**.
+
+Gilt für **alles** in diesem Repo: Agency Keys, Dashboards, Kunden-Portale, Cron, n8n, Integrationen, Deploy-Scripts.
+
+---
+
+## Vor dem Fertigstellen (Pflicht)
+
+Jedes Feature, jede Änderung an UI/API/Automation:
+
+1. **Smoke-Test nach Deploy** — nicht „sollte klappen“, sondern auf dem Server prüfen (curl, Browser, `bash -n` bei `.sh`).
+2. **Fehler sichtbar machen** — keine stillen Fehler. UI zeigt konkrete Meldung (kein generisches „Fehler“). Backend loggt Exception + Kontext.
+3. **Secrets nie öffentlich** — Keys nur in `deploy.secrets.local` / Server-`.env`. Upload mit LF bei Shell-Scripts (`deploy_shell.py`).
+4. **Happy Path + kaputter Path testen** — z. B. Agency Keys: Speichern, Weiter-Button, Test-Buttons (SMTP, Places, Stripe) einmal durchklicken/loggen.
+
+---
+
+## Nach dem Deploy (Pflicht)
+
+1. `python deploy.py` und Verifikation im Output lesen.
+2. Betroffene Route/API manuell oder per Script anstoßen.
+3. Bei Cron/Integration: Erfolgs-Marker ins Log, Watchdog einplanen wenn noch nicht da.
+
+Referenz: `app/backend/nightly_watchdog.py`, `setup_nightly_watchdog.py`, `deploy_shell.py`.
+
+---
+
+## Dauerhaft laufende Systeme
+
+| Was | Minimum |
+|-----|---------|
+| Nacht-Cron / Batch | Log mit Datums+Erfolgs-Marker, Cron stderr → Log, Watchdog danach |
+| Externe API (Places, Stripe, SMTP, Lexware, …) | Test-Endpoint oder Test-Button, Fehler an Inhaber |
+| Kunden-Portal / Admin | `/api/health`, sinnvolle HTTP-Fehler, kein weißer Bildschirm |
+| n8n-Workflows | Healthcheck-Workflow (`infra/n8n/workflow-healthcheck.json`) |
+
+**Watchdog-Ablauf:** prüfen → auto-reparieren wenn möglich → nochmal prüfen → E-Mail an `AGENCY_OWNER_EMAIL` nur wenn was schiefging oder repariert wurde.
+
+---
+
+## Auto-Reparatur (wo sinnvoll)
+
+- CRLF in Shell-Scripts entfernen
+- Fehlgeschlagene Jobs einmal nachholen
+- Service neu starten wenn Healthcheck rot (mit Vorsicht, Rate-Limit)
+- **Nicht** blind retry bei Zahlungs-/Auth-Fehlern ohne Limit
+
+Was nicht auto-fixbar ist: klare Mail mit Job, Log-Pfad, nächstem Schritt.
+
+---
+
+## Agent-Verhalten
+
+- Fehler **selbst** auf dem Server/ in Logs suchen, nicht den Nutzer bitten „schau mal ob …“.
+- Nach Fix: Ursache kurz erklären + Prävention einbauen (Test, Watchdog, Rule).
+- Mehrere Kunden later: pro Kunde Integration-Health in Cockpit/Jobs vorsehen, nicht nur global.
+
+---
+
+## Anti-Patterns (verboten)
+
+- Cron ohne Log und ohne Watchdog
+- `sftp.put()` für `.sh` ohne LF-Normalisierung
+- UI-Button ohne `try/catch` und ohne Anzeige der Server-Antwort
+- „Passwort falsch“ bei jedem API-Fehler (echte Ursache zeigen)
+- Feature shippen ohne einmaligen End-to-End-Test auf Live/Staging
+
+---
+
+## Alerts
+
+- **Primär:** E-Mail an `AGENCY_OWNER_EMAIL` (SMTP aus `deploy.secrets.local`)
+- **Optional später:** n8n → SMS, Cursor Automation via Webhook
+- Kunden-E-Mail nur für **ihre** sichtbaren Ausfälle (Bestellportal down), nicht für interne Ops

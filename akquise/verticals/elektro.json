@@ -1,0 +1,144 @@
+{
+  "id": "elektro",
+  "name": "Elektro & Elektronikbetriebe",
+  "discovery": {
+    "type": "overpass",
+    "amenities": [],
+    "crafts": [
+      "electrician"
+    ],
+    "shops": [
+      "electrical",
+      "electronics",
+      "hifi",
+      "computer"
+    ],
+    "office_tags": [
+      "company",
+      "telecommunication"
+    ],
+    "name_hints": [
+      "elektro",
+      "elektriker",
+      "elektrotechnik",
+      "photovoltaik"
+    ],
+    "noisy_crafts": [],
+    "name_regex": "Elektro|Elektriker|Elektrotechnik|Photovoltaik|PV-Anlagen"
+  },
+  "google_places_type": "electrician",
+  "delivery_platforms": [],
+  "order_keywords": [
+    "angebot anfordern",
+    "kostenvoranschlag",
+    "notdienst",
+    "termin",
+    "anfrage",
+    "kontaktformular",
+    "störung"
+  ],
+  "job_keywords": [
+    "elektriker",
+    "geselle",
+    "azubi",
+    "stellenangebot",
+    "jobs",
+    "verstärkung",
+    "meister"
+  ],
+  "subpages": [
+    "/leistungen",
+    "/notdienst",
+    "/referenzen",
+    "/karriere",
+    "/jobs",
+    "/kontakt"
+  ],
+  "priority_amenities": [],
+  "reference_client": {
+    "id": "WS-AGENCY",
+    "name": "Webschmiede Digitale Handwerkskunst",
+    "pitch": "Website, Notdienst sichtbar, Anfragen automatisch, wie digitalehandwerkskunst.de"
+  },
+  "local_wins": [
+    "Notdienst-Nummer prominent auf Google und Website",
+    "WhatsApp-Störungsmeldung",
+    "Leistungsseiten PV / Smart Home / Klassik getrennt"
+  ],
+  "offers": {
+    "standard": {
+      "name": "Elektro Digital",
+      "setup": "1980–7200 € einmalig",
+      "monthly": "98 €/Mo",
+      "includes": [
+        "Website mit Leistungsseiten",
+        "Notdienst klar sichtbar",
+        "Anfrageformular → CRM",
+        "Google Maps in der Region"
+      ]
+    },
+    "starter": {
+      "name": "Website + Anfrage",
+      "setup": "998–3160 € einmalig",
+      "monthly": "58 €/Mo",
+      "includes": [
+        "One-Page + Kontakt",
+        "Logo in 24h",
+        "Maps-Eintrag prüfen"
+      ]
+    },
+    "local": {
+      "name": "Quick-Wins (0 €)",
+      "setup": "0 €",
+      "monthly": "0 €",
+      "includes": [
+        "Google-Check",
+        "WhatsApp-Link für Störungen",
+        "Später Website"
+      ]
+    },
+    "premium": {
+      "name": "Elektro + Automation",
+      "setup": "3600 €+",
+      "monthly": "158 €/Mo",
+      "includes": [
+        "Anfrage/Notdienst-Workflow n8n",
+        "SMS-Bestätigung",
+        "Bewertungs-Funnel",
+        "Monatsreport"
+      ]
+    }
+  },
+  "intents": {
+    "digital_neu": {
+      "label": "Digital starten",
+      "want": "Keine oder schwache Website",
+      "approach": "Notdienst + Leistungen online, sonst nimmt der Nächste den Anruf",
+      "when": "no_website_or_social"
+    },
+    "leads": {
+      "label": "Anfragen verlieren",
+      "want": "Kein Formular, nur Telefon",
+      "approach": "Formular + WhatsApp Störung, 24/7 erreichbar wirken",
+      "when": "no_order_signals"
+    },
+    "entlastung": {
+      "label": "Personalengpass",
+      "want": "Sucht Gesellen, Chef am Telefon",
+      "approach": "Anfragen vorqualifizieren, Büro entlasten",
+      "when": "job_signals"
+    },
+    "vertrauen": {
+      "label": "Google schwach",
+      "want": "Wenig Bewertungen, Konkurrenz oben",
+      "approach": "Review-Funnel nach Auftrag",
+      "when": "trust_issue"
+    },
+    "standard": {
+      "label": "Elektro Digital",
+      "want": "Nachholbedarf",
+      "approach": "Kostenloses Erstgespräch",
+      "when": "default"
+    }
+  }
+}

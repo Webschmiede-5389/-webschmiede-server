@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Tischaufsteller QR</title>
+  <link id="font-link" href="https://fonts.bunny.net/css?family=playfair-display:700,800|inter:400,500,600,700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-soft: #F0D878;
+      --dark: #0e0b08;
+      --ink: #f5f0e8;
+      --muted: #a39888;
+      --border: #3a3228;
+      --font-display: "Playfair Display", Georgia, serif;
+      --font-body: Inter, system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background: #2a2420;
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 20px 12px 100px;
+    }
+    .toolbar {
+      max-width: 920px; margin: 0 auto 18px;
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start;
+      justify-content: space-between;
+    }
+    .toolbar p { font-size: 0.85rem; color: #cbbba8; line-height: 1.4; max-width: 560px; }
+    .spec-box {
+      max-width: 920px; margin: 0 auto 20px;
+      background: #1a150f;
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #e8dfd2;
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+    .spec-box strong { color: var(--gold-soft); }
+    .spec-box ul { margin: 8px 0 0 1.1rem; }
+    .spec-box li { margin: 4px 0; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold); color: #111; border: none;
+      padding: 12px 18px; border-radius: 10px; font-weight: 700;
+      font-family: inherit; cursor: pointer; font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .btn:hover { filter: brightness(1.05); }
+    .btn-ghost {
+      background: transparent; color: var(--gold);
+      border: 1px solid var(--gold);
+    }
+    .sheet {
+      width: 148mm;
+      height: 210mm;
+      margin: 0 auto 18px;
+      background: var(--dark);
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      padding: 7mm 8mm 6mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,.35);
+    }
+    .tag {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 4px;
+      flex-shrink: 0;
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: 1.55rem; line-height: 1.1; font-weight: 800;
+      color: #fff; margin-bottom: 4px; flex-shrink: 0;
+    }
+    .sub {
+      font-size: 0.78rem; color: var(--muted); line-height: 1.35;
+      margin-bottom: 8px; max-width: 128mm; flex-shrink: 0;
+    }
+    .deal {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 18%, #1a150f), #1a150f);
+      border: 1px solid var(--gold);
+      color: var(--gold-soft);
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 7px 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    .deal.muted {
+      border-color: var(--border);
+      color: #e8dfd2;
+      background: #1a150f;
+    }
+    .deal-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+    }
+    .g-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.15);
+    }
+    .g-badge svg { width: 16px; height: 16px; display: block; }
+    .stars {
+      display: inline-flex;
+      gap: 2px;
+      color: #FBBC04;
+      font-size: 1.05rem;
+      line-height: 1;
+      letter-spacing: 0;
+      flex-shrink: 0;
+    }
+    .deal-google-label {
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+    .qr-wrap {
+      background: #fff;
+      padding: 8px;
+      border-radius: 12px;
+      margin: 0 0 4px;
+      flex-shrink: 0;
+    }
+    .qr-wrap div { line-height: 0; }
+    .url {
+      font-size: 0.55rem; color: var(--muted); word-break: break-all;
+      margin-bottom: 6px; max-width: 128mm; flex-shrink: 0;
+      line-height: 1.25;
+    }
+    .logo-block {
+      flex: 1 1 auto;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      padding: 2mm 0;
+    }
+    .logo-block img {
+      width: 100%;
+      max-width: 118mm;
+      max-height: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 18px color-mix(in srgb, var(--gold) 40%, transparent));
+    }
+    .hint {
+      font-size: 0.72rem; color: #d8cfc2; line-height: 1.35;
+      border-top: 1px solid var(--border); padding-top: 7px; width: 100%;
+      flex-shrink: 0;
+    }
+    .err {
+      max-width: 520px; margin: 40px auto; background: #1a150f;
+      border: 1px solid var(--gold); border-radius: 12px; padding: 20px;
+      text-align: center;
+    }
+    .hidden { display: none !important; }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .no-print { display: none !important; }
+      .sheet {
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: always;
+        margin: 0;
+        width: 148mm;
+        height: 210mm;
+      }
+      .sheet:last-of-type { page-break-after: auto; }
+    }
+    @page { size: A5; margin: 0; }
+  </style>
+</head>
+<body>
+  <div id="loading" class="err no-print">Aufsteller werden geladen …</div>
+  <div id="err" class="err hidden no-print">
+    <p>Link ungültig. Im Onboarding öffnen oder <code>?k=KUNDENID</code> anhängen.</p>
+  </div>
+
+  <div id="app" class="hidden">
+    <div class="toolbar no-print">
+      <p id="toolbar-text">
+        Zwei A5-Aufsteller im Kunden-CI: Tisch = bestellen, Theke = Google.
+      </p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button type="button" class="btn" onclick="window.print()">Als PDF speichern / drucken</button>
+        <a class="btn btn-ghost" id="back-onboarding" href="#">Zurück zum Onboarding</a>
+      </div>
+    </div>
+
+    <div class="spec-box no-print" id="spec-box">
+      <strong>Format zum Bestellen / Drucken</strong>
+      <ul>
+        <li><strong>Papiermaß:</strong> DIN A5 Hochformat · <strong>148 × 210 mm</strong></li>
+        <li><strong>Tisch:</strong> Acryl-Tischaufsteller A5 Hochformat, <strong>beidseitig</strong> (T-Aufsteller / Menükartenhalter). Vorne und hinten dieselbe Bestellen-Seite.</li>
+        <li><strong>Theke:</strong> gleicher Druck A5, einseitiger Aufsteller reicht (Google-Seite).</li>
+        <li><strong>Suche im Shop:</strong> „Tischaufsteller A5 Acryl beidseitig“ oder „Menükartenhalter A5 Hochformat“.</li>
+        <li><strong>Tipp:</strong> Farbig drucken, 170–250 g Papier, idealerweise laminieren oder in die Acryl-Hülle schieben.</li>
+      </ul>
+    </div>
+
+    <section class="sheet" id="sheet-order">
+      <p class="tag" id="order-tag">Am Tisch</p>
+      <h1 id="order-headline">Hier bestellen</h1>
+      <p class="sub" id="order-sub">Code scannen, am Handy bestellen.</p>
+      <div class="deal" id="order-promo">Erste Online-Bestellung: 5&nbsp;% Rabatt</div>
+      <div class="qr-wrap"><div id="qr-order"></div></div>
+      <p class="url" id="url-order">–</p>
+      <div class="logo-block">
+        <img id="logo-order" src="" alt="">
+      </div>
+      <p class="hint" id="order-hint">Keine Lust aufs Handy? Einfach an der Theke bestellen.</p>
+    </section>
+
+    <section class="sheet" id="sheet-google">
+      <p class="tag" id="google-tag">An der Theke</p>
+      <h1 id="google-headline">Hat’s geschmeckt?</h1>
+      <p class="sub" id="google-sub">Kurz bewerten.</p>
+      <div class="deal muted deal-google" id="google-promo-wrap">
+        <span class="g-badge" aria-hidden="true" title="Google">
+          <!-- Offizielles Google „G“ (Vierfarben), unverändert -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC04" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+        </span>
+        <span class="stars" aria-label="5 Sterne">★★★★★</span>
+        <span class="deal-google-label" id="google-promo">Google-Bewertung</span>
+      </div>
+      <div class="qr-wrap"><div id="qr-google"></div></div>
+      <p class="url" id="url-google">–</p>
+      <div class="logo-block">
+        <img id="logo-google" src="" alt="">
+      </div>
+      <p class="hint" id="google-hint">Für Gäste an der Theke oder nach dem Essen.</p>
+    </section>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const kid = (params.get('k') || params.get('id') || '').toUpperCase().trim();
+
+    function makeQr(el, text) {
+      el.innerHTML = '';
+      new QRCode(el, {
+        text: text,
+        width: 168,
+        height: 168,
+        colorDark: '#0e0b08',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+
+    function applyBrand(brand, shopName) {
+      const c = brand.colors || {};
+      const root = document.documentElement;
+      if (c.gold) root.style.setProperty('--gold', c.gold);
+      if (c.gold_soft) root.style.setProperty('--gold-soft', c.gold_soft);
+      if (c.dark) root.style.setProperty('--dark', c.dark);
+      if (c.ink) root.style.setProperty('--ink', c.ink);
+      if (c.muted) root.style.setProperty('--muted', c.muted);
+      if (c.border) root.style.setProperty('--border', c.border);
+      if (brand.font_display) {
+        root.style.setProperty('--font-display', '"' + brand.font_display + '", Georgia, serif');
+      }
+      if (brand.font_body) {
+        root.style.setProperty('--font-body', '"' + brand.font_body + '", system-ui, sans-serif');
+      }
+
+      const table = brand.table || {};
+      const google = brand.google || {};
+      const set = (id, val) => { if (val) document.getElementById(id).textContent = val; };
+      set('order-tag', table.tag);
+      set('order-headline', table.headline);
+      set('order-sub', table.sub);
+      set('order-promo', table.promo);
+      set('order-hint', table.hint);
+      set('google-tag', google.tag);
+      set('google-headline', google.headline);
+      set('google-sub', google.sub);
+      set('google-promo', google.promo);
+      set('google-hint', google.hint);
+
+      const logo = brand.logo || '';
+      ['logo-order', 'logo-google'].forEach((id) => {
+        const img = document.getElementById(id);
+        img.src = logo;
+        img.alt = shopName || 'Logo';
+        img.onerror = () => { img.style.display = 'none'; };
+      });
+
+      document.getElementById('toolbar-text').innerHTML =
+        'Zwei A5-Aufsteller im CI von <strong>' + (shopName || 'Kunde') + '</strong>: Tisch = bestellen, Theke = Google. Logo groß unter dem QR.';
+    }
+
+    async function load() {
+      if (!kid) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('err').classList.remove('hidden');
+        return;
+      }
+      try {
+        const r = await fetch('/api/onboarding/' + encodeURIComponent(kid));
+        if (!r.ok) throw new Error('404');
+        const d = await r.json();
+        if (d.is_gastro === false) {
+          document.getElementById('loading').classList.add('hidden');
+          document.getElementById('err').classList.remove('hidden');
+          document.getElementById('err').innerHTML = '<p>Tischaufsteller sind der Gastro-Standard. Für diese Branche nicht vorgesehen.</p>';
+          return;
+        }
+        const orderUrl = (d.urls && (d.urls.bestellen || d.urls.base)) || '';
+        const homeUrl = (d.urls && d.urls.base) || orderUrl;
+        const orderTarget = orderUrl || homeUrl;
+        const googleUrl = (d.google_review_url || '').trim()
+          || ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((d.name || 'Restaurant') + ' Mechernich'));
+
+        if (!orderTarget) throw new Error('no url');
+
+        applyBrand(d.brand || {}, d.name || '');
+
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        document.title = 'Tischaufsteller · ' + (d.name || kid);
+
+        document.getElementById('url-order').textContent = orderTarget;
+        document.getElementById('url-google').textContent = googleUrl;
+
+        makeQr(document.getElementById('qr-order'), orderTarget);
+        makeQr(document.getElementById('qr-google'), googleUrl);
+
+        const back = document.getElementById('back-onboarding');
+        const onb = (d.urls && d.urls.onboarding) || ('/onboarding?k=' + encodeURIComponent(kid));
+        back.href = onb;
+
+        if (!d.google_review_url) {
+          document.getElementById('google-sub').textContent =
+            'Google-Review-Link noch nicht hinterlegt. QR zeigt vorerst die Maps-Suche.';
+        }
+      } catch (e) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('err').classList.remove('hidden');
+      }
+    }
+    load();
+  </script>
+</body>
+</html>

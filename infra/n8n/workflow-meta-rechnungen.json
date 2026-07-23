@@ -1,0 +1,96 @@
+{
+  "name": "Webschmiede – â€“ Meta-Rechnungen an Buchhaltung",
+  "nodes": [
+    {
+      "parameters": {
+        "mailbox": "INBOX",
+        "format": "resolved",
+        "downloadAttachments": true,
+        "options": {}
+      },
+      "id": "imap-meta",
+      "name": "IMAP Postfach",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "credentials": {
+        "imap": {
+          "id": "CONFIGURE_IMAP",
+          "name": "Kunde IMAP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst from = String(item.from?.text || item.from || '').toLowerCase();\nconst sub = String(item.subject || '').toLowerCase();\nconst metaSenders = ['facebookmail.com', 'meta.com', 'fb.com', 'facebook.com'];\nconst isMeta = metaSenders.some(s => from.includes(s));\nconst isInvoice = /rechnung|invoice|receipt|beleg|billing|abrechnung/.test(sub);\nif (!isMeta || !isInvoice) return [];\nreturn [{ json: item }];"
+      },
+      "id": "filter-meta",
+      "name": "Meta + Rechnung?",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.AGENCY_FROM_EMAIL }}",
+        "toEmail": "={{ $env.BOOKKEEPER_EMAIL }}",
+        "subject": "=[Meta Werbung] {{ $json.subject }}",
+        "emailFormat": "text",
+        "text": "=Meta-Werberechnung weitergeleitet.\n\nBetreff: {{ $json.subject }}\nVon: {{ $json.from?.text || $json.from }}\nDatum: {{ $json.date }}\n\nAnhang siehe Original-Mail im Postfach / n8n.\n\nâ€” Webschmiede Automation",
+        "options": {}
+      },
+      "id": "forward-buchhaltung",
+      "name": "An Buchhaltung",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        300
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "CONFIGURE_SMTP",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "IMAP Postfach": {
+      "main": [
+        [
+          {
+            "node": "Meta + Rechnung?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Meta + Rechnung?": {
+      "main": [
+        [
+          {
+            "node": "An Buchhaltung",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Meta/Facebook Rechnungs-Mails â†’ BOOKKEEPER_EMAIL. n8n Variables: BOOKKEEPER_EMAIL, AGENCY_FROM_EMAIL. IMAP = Kundenpostfach (rechnungen@â€¦)."
+  },
+  "active": false
+}

@@ -1,0 +1,56 @@
+{
+  "name": "Agency – Commander Tagesbriefing",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "hours", "hoursInterval": 24 }]
+        }
+      },
+      "id": "cmd-cron",
+      "name": "Taeglich",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://digitalehandwerkskunst.de/api/agency/commander/briefing?limit=5&ticket=5000",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-Cron-Secret", "value": "={{$env.CRON_SECRET}}" },
+            { "name": "X-Agency-Password", "value": "={{$env.AGENCY_ADMIN_PASSWORD}}" }
+          ]
+        },
+        "options": { "timeout": 60000 }
+      },
+      "id": "cmd-http",
+      "name": "Commander Briefing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; return [{ json: { ok: !!j.ok, workflow: 'commander-briefing', auto_send: false, note: 'Nur intern. Kein Kunden-Mail. Christian liest Markdown/Todos.', markdown: j.markdown, todos: j.todos_christian, count_leads: (j.campaign_preview&&j.campaign_preview.count)||0 } }];"
+      },
+      "id": "cmd-pack",
+      "name": "Pack",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 0]
+    }
+  ],
+  "connections": {
+    "Taeglich": { "main": [[{ "node": "Commander Briefing", "type": "main", "index": 0 }]] },
+    "Commander Briefing": { "main": [[{ "node": "Pack", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "notes": "Inactive. Optional spaeter Mail an AGENCY_OWNER_EMAIL – nur nach OK."
+  },
+  "tags": [{ "name": "agency" }, { "name": "commander" }]
+}

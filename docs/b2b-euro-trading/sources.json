@@ -1,0 +1,363 @@
+{
+  "title": "B2B Euro Trading – Quellenkatalog Händler-Radar",
+  "updated": "2026-07-17",
+  "note": "Für Wholesale-Leads: Multichannel-Seller finden und anreichern. Kein Auto-Kontakt ohne Freigabe.",
+  "pilot_priority": ["idealo", "geizhals", "kaufland", "mediamarkt_saturn", "conrad", "otto", "hood"],
+  "emerging_watch": [
+    "temu_local",
+    "kaufland_es_nl",
+    "bild_marktplatz",
+    "check24",
+    "tiktok_shop",
+    "shein",
+    "kasuwa"
+  ],
+  "categories": {
+    "price_comparison": [
+      {
+        "id": "idealo",
+        "name": "Idealo",
+        "url": "https://www.idealo.de/",
+        "role": "seller_find",
+        "scan": "html_light",
+        "fit": "high",
+        "hint": "EAN-Suche → viele Shop-URLs + Preise"
+      },
+      {
+        "id": "geizhals",
+        "name": "Geizhals",
+        "url": "https://geizhals.de/",
+        "role": "seller_find",
+        "scan": "html_light",
+        "fit": "high",
+        "hint": "Stark bei Elektronik"
+      },
+      {
+        "id": "billiger",
+        "name": "billiger.de",
+        "url": "https://www.billiger.de/",
+        "role": "seller_find",
+        "scan": "html_light",
+        "fit": "medium"
+      }
+    ],
+    "marketplaces_de": [
+      {
+        "id": "kaufland",
+        "name": "Kaufland Marketplace",
+        "url": "https://www.kaufland.de/",
+        "seller_api": "https://sellerapi.kaufland.com/",
+        "role": "seller_find",
+        "scan": "api_auth_or_html",
+        "fit": "high"
+      },
+      {
+        "id": "otto",
+        "name": "OTTO Market",
+        "url": "https://www.otto.de/",
+        "role": "seller_find",
+        "scan": "html_light",
+        "fit": "high",
+        "hint": "Mode/Wohnen/Lifestyle stärker als CE"
+      },
+      {
+        "id": "mediamarkt_saturn",
+        "name": "MediaMarkt / Saturn Marketplace",
+        "url": "https://www.mediamarkt.de/de/about-us/marketplace",
+        "role": "seller_find",
+        "scan": "html_light",
+        "fit": "high",
+        "hint": "Consumer Electronics, Mirakl-Ökosystem"
+      },
+      {
+        "id": "conrad",
+        "name": "Conrad Marketplace",
+        "url": "https://platform.conrad.de/",
+        "role": "seller_find",
+        "scan": "html_or_mirakl",
+        "fit": "high",
+        "hint": "B2B-Kunden + Technik, Mirakl"
+      },
+      {
+        "id": "galaxus",
+        "name": "Galaxus Marketplace",
+        "url": "https://www.galaxus.de/",
+        "role": "seller_find",
+        "scan": "html_light",
+        "fit": "medium"
+      },
+      {
+        "id": "hood",
+        "name": "Hood.de",
+        "url": "https://www.hood.de/",
+        "role": "seller_find",
+        "scan": "html_light",
+        "fit": "medium"
+      },
+      {
+        "id": "manomano",
+        "name": "ManoMano",
+        "url": "https://www.manomano.de/",
+        "role": "seller_find",
+        "scan": "partner",
+        "fit": "medium",
+        "hint": "DIY/Garten"
+      },
+      {
+        "id": "voelkner",
+        "name": "Völkner",
+        "url": "https://www.voelkner.de/",
+        "role": "assortment_signal",
+        "scan": "watch",
+        "fit": "low",
+        "hint": "Eigenversand, wenig Multi-Seller"
+      },
+      {
+        "id": "amazon",
+        "name": "Amazon.de",
+        "url": "https://www.amazon.de/",
+        "role": "enrichment",
+        "scan": "hard",
+        "fit": "enrich_only"
+      },
+      {
+        "id": "ebay",
+        "name": "eBay.de",
+        "url": "https://www.ebay.de/",
+        "role": "enrichment",
+        "scan": "hard",
+        "fit": "enrich_only"
+      },
+      {
+        "id": "shein",
+        "name": "SHEIN Marketplace DE",
+        "url": "https://seller-eu.shein.com/",
+        "role": "seller_find",
+        "scan": "watch",
+        "fit": "medium",
+        "hint": "Mode/Lifestyle, lokale DE-Seller"
+      },
+      {
+        "id": "tiktok_shop",
+        "name": "TikTok Shop DE",
+        "url": "https://seller-de.tiktok.com/",
+        "role": "seller_find",
+        "scan": "watch",
+        "fit": "medium"
+      },
+      {
+        "id": "yatego",
+        "name": "Yatego",
+        "url": "https://www.yatego.com/",
+        "role": "seller_find",
+        "scan": "html_light",
+        "fit": "low"
+      },
+      {
+        "id": "metro",
+        "name": "METRO Marktplatz",
+        "url": "https://www.metro.de/",
+        "role": "b2b",
+        "scan": "watch",
+        "fit": "low",
+        "hint": "HoReCa/B2B, nicht CE-Consumer"
+      },
+      {
+        "id": "temu_local",
+        "name": "Temu Local-to-Local",
+        "url": "https://seller-eu.temu.com/",
+        "role": "seller_find",
+        "scan": "watch_then_html",
+        "fit": "high",
+        "status": "emerging",
+        "hint": "Viele neue EU/DE-Seller, lokaler Versand, CS/Account Manager"
+      },
+      {
+        "id": "bild_marktplatz",
+        "name": "BILD Marktplatz",
+        "url": "https://marktplatz.bild.de/",
+        "seller_url": "https://marktplatz.bild.de/pages/handler-werden",
+        "role": "seller_find",
+        "scan": "mirakl",
+        "fit": "medium",
+        "status": "emerging",
+        "hint": "Media-Traffic, DE-CS Pflicht, Elektronik-Kommission ca. 6%"
+      },
+      {
+        "id": "check24",
+        "name": "CHECK24 Marketplace",
+        "url": "https://www.check24.de/",
+        "seller_url": "https://merchantcenter.check24.de/registration/",
+        "role": "seller_find",
+        "scan": "feed",
+        "fit": "medium",
+        "status": "growing",
+        "hint": "Kaufintention, oft Wohnen/Elektronik"
+      },
+      {
+        "id": "kaufland_es_nl",
+        "name": "Kaufland ES + NL (Launch)",
+        "url": "https://unternehmen.kaufland.de/presse/newsroom/",
+        "role": "seller_find",
+        "scan": "watch",
+        "fit": "high",
+        "status": "emerging",
+        "hint": "Consumer-Launch Spätsommer 2026, Seller schon vorab onboard"
+      },
+      {
+        "id": "kasuwa",
+        "name": "Kasuwa",
+        "url": "https://www.kasuwa.de/",
+        "role": "seller_find",
+        "scan": "html_light",
+        "fit": "low",
+        "status": "niche",
+        "hint": "Handmade DE, Etsy-Ausweichkanal"
+      }
+    ],
+    "marketplaces_eu": [
+      {
+        "id": "bol",
+        "name": "bol.com",
+        "url": "https://www.bol.com/",
+        "role": "seller_find",
+        "scan": "partner",
+        "fit": "high",
+        "hint": "NL/BE Multichannel"
+      },
+      {
+        "id": "allegro",
+        "name": "Allegro",
+        "url": "https://allegro.pl/",
+        "role": "seller_find",
+        "scan": "partner",
+        "fit": "high",
+        "hint": "PL + CZ/SK/HU"
+      },
+      {
+        "id": "cdiscount",
+        "name": "Cdiscount",
+        "url": "https://www.cdiscount.com/",
+        "role": "seller_find",
+        "scan": "partner",
+        "fit": "medium"
+      },
+      {
+        "id": "fnac_darty",
+        "name": "Fnac / Darty",
+        "url": "https://www.fnac.com/",
+        "role": "seller_find",
+        "scan": "mirakl",
+        "fit": "medium",
+        "hint": "Elektronik FR"
+      },
+      {
+        "id": "decathlon",
+        "name": "Decathlon Marketplace",
+        "url": "https://www.decathlon.de/",
+        "role": "seller_find",
+        "scan": "mirakl",
+        "fit": "medium"
+      }
+    ],
+    "wholesale_b2b": [
+      {
+        "id": "ankorstore",
+        "name": "Ankorstore",
+        "url": "https://www.ankorstore.com/",
+        "role": "wholesale_platform",
+        "fit": "high",
+        "hint": "EU Retailer kaufen Marken"
+      },
+      {
+        "id": "orderchamp",
+        "name": "Orderchamp",
+        "url": "https://www.orderchamp.com/",
+        "role": "wholesale_platform",
+        "fit": "high"
+      },
+      {
+        "id": "faire",
+        "name": "Faire",
+        "url": "https://www.faire.com/",
+        "role": "wholesale_platform",
+        "fit": "high"
+      },
+      {
+        "id": "europages",
+        "name": "Europages",
+        "url": "https://www.europages.de/",
+        "role": "b2b_directory",
+        "fit": "medium"
+      },
+      {
+        "id": "wlw",
+        "name": "Wer liefert was",
+        "url": "https://www.wlw.de/",
+        "role": "b2b_directory",
+        "fit": "medium"
+      }
+    ],
+    "forums": [
+      {
+        "id": "sellerforum",
+        "name": "sellerforum.de",
+        "url": "https://www.sellerforum.de/forum/",
+        "role": "intelligence",
+        "hint": "Hauptforum Multichannel DE"
+      },
+      {
+        "id": "haendlerbund",
+        "name": "Händlerbund Forum",
+        "url": "https://forum.haendlerbund.de/",
+        "role": "intelligence"
+      },
+      {
+        "id": "amazon_seller_forums",
+        "name": "Amazon Seller Forums DE",
+        "url": "https://sellercentral.amazon.de/seller-forums",
+        "role": "intelligence"
+      },
+      {
+        "id": "jtl_forum",
+        "name": "JTL Forum",
+        "url": "https://forum.jtl-software.com/",
+        "role": "intelligence"
+      }
+    ],
+    "multichannel_tools": [
+      {
+        "id": "afterbuy",
+        "name": "Afterbuy",
+        "url": "https://afterbuy.de/",
+        "role": "signal_pro_seller"
+      },
+      {
+        "id": "billbee",
+        "name": "Billbee",
+        "url": "https://www.billbee.io/",
+        "role": "signal_pro_seller",
+        "hint": "Kanal-Liste = was Händler wirklich nutzen"
+      },
+      {
+        "id": "channelengine",
+        "name": "ChannelEngine",
+        "url": "https://www.channelengine.com/",
+        "role": "signal_pro_seller"
+      },
+      {
+        "id": "mirakl",
+        "name": "Mirakl / Mirakl Connect",
+        "url": "https://www.mirakl.com/",
+        "role": "tech_stack",
+        "hint": "Viele Retail-Marktplätze darunter"
+      },
+      {
+        "id": "jtl",
+        "name": "JTL",
+        "url": "https://www.jtl-software.de/",
+        "role": "signal_pro_seller"
+      }
+    ]
+  }
+}

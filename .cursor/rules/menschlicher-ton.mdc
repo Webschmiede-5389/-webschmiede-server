@@ -1,0 +1,63 @@
+---
+description: Kein KI-Ton — Website, Mails, Ads wie Christian (Klartext Mechernich)
+alwaysApply: true
+---
+
+# Menschlicher Ton (Webschmiede)
+
+Kunden-Mails, Website, Meta-Ads, Angebote und Erklärungen klingen wie **Christian Kummetat**: Trockenbau-Hintergrund, Mechernich, Klartext. Nicht wie Agentur, nicht wie ChatGPT.
+
+## Sofort-Check vor jedem Text
+
+Laut vorlesen. Klingt es wie eine WhatsApp an einen Betriebskunden? Dann ok. Klingt es wie LinkedIn oder Pitch-Deck? Umschreiben.
+
+## Verbotene KI-/Agentur-Muster
+
+- Em-Dash (—). Stattdessen Punkt oder Komma.
+- Parallel-Triplets: drei gleich gebaute Sätze / drei Substantive hintereinander („Systeme, Portale und Automationen“)
+- Buzzwords: Sweetspot, nahtlos, effizient, robust, smart, skalierbar, datengetrieben, US-SaaS-Stacks, Datensouveränität, Enterprise, Mitlaufen, Orientierung (als CTA-Wort)
+- Juristen-Marketing: „Datenhaltung“, „betrieben in Deutschland“ als Slogan (lieber: „Server stehen in Deutschland“)
+- Meta-Sätze über das Schreiben: „Klartext statt Agentur-Gelaber“, „kein Verkaufsmarathon“ (max. einmal, nicht in jeder Sektion)
+- Feature-Salat ohne Szene: „Posteingang, Reports, Treueprogramm“
+- „Wir liefern beides“, „das eigentliche Produkt“, „eine Story“
+- Aufgezählte Nutzen-Chips die wie Labels wirken: „Gastro · Handwerk · Dienstleistung“ ok sparsam; „AVV · klare Datenhaltung“ eher nicht
+
+## Stattdessen
+
+- Kurze Sätze. Ein Gedanke. Wie am Tresen oder auf der Baustelle.
+- Konkrete Bilder: Zettel neben der Kasse, Sonntag Excel, Anruf um 22 Uhr, Steuerberater fragt nach Beleg.
+- Ich-Form bei „Über mich“. Bei Leistungen eher „Sie“ / „Ihr Betrieb“, locker.
+- Echte Orte und Namen, wenn möglich (Mechernich, Snack House).
+- Weniger Adjektive. Mehr Verben: landet, sortiert, vergisst, anruft.
+- Unregelmäßiger Rhythmus: mal 4 Wörter, mal 14. Nicht jede Zeile gleich lang.
+
+## Gute Anker (dürfen bleiben / nachbauen)
+
+- „Keine Webseite zum Anschauen. Ein System, das mitarbeitet.“
+- „Schön reicht nicht. Es muss laufen.“
+- „Früher Wände. Heute Systeme. Gleiche Regel: ordentlich machen, damit es hält.“
+- „Ich war Trockenbau.“
+
+## Schlechte Beispiele → besser
+
+❌ „Systeme & Automatisierung – betrieben in Deutschland“  
+✅ „Läuft auf Servern in Deutschland. Fertig.“
+
+❌ „Sie suchen Ruhe: Prozesse, die laufen, und Kundendaten…“  
+✅ „Sie wollen, dass es läuft. Und dass Kundendaten nicht irgendwo in der US-Cloud rumliegen.“
+
+❌ „15 Minuten Orientierung – was hängt, was sinnvoll ist…“  
+✅ „Kurz telefonieren oder Termin. Wir gucken, was bei Ihnen klemmt.“
+
+## Langfristig
+
+1. Diese Rule gilt immer (`alwaysApply`).
+2. Website-Texte nur in `agency-web/src/pages/` und Copy-Docs ändern, nie „schnell noch einen KI-Pitch“ einfügen.
+3. Nach größeren Text-Änderungen: Christian liest 1× laut. Was er so nicht sagen würde, fliegt raus.
+4. Meta-Ads: gleiche Stimme wie Homepage-Hero, keine zweite Markenstimme.
+
+## Gilt für
+
+- `agency-web/**/*.tsx`, `angebote.*`, CI-Vorlagen
+- Meta-/Ad-Copy unter `docs/agency/copy-*.md`
+- Kundenmails und Erklärungen an den Nutzer (Deutsch)

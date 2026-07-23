@@ -1,0 +1,32 @@
+{
+  "submission_id": 3,
+  "submission_slug": "bnWTk4nViLy2Bz",
+  "template": "WS Kundenpaket Auftrag AGB AVV",
+  "external_id": "ws-kundenpaket",
+  "kunde_email": "info@digitalehandwerkskunst.de",
+  "kunde_link": "https://sign.digitalehandwerkskunst.de/s/qsFGHgt92SPQX7",
+  "webschmiede_completed": true,
+  "ws_value_count": 15,
+  "kunde_value_count": 9,
+  "ws_value_keys": [
+    "Auftrag Auftragsnummer",
+    "Auftrag Auftragsdatum",
+    "Auftrag Paket",
+    "Auftrag Setup Preis",
+    "Auftrag Monat Preis",
+    "Auftrag Zahlungsziel",
+    "Auftrag Laufzeit",
+    "Auftrag Kuendigungsfrist",
+    "Datum Webschmiede",
+    "AVV AVV Nummer",
+    "Unterschrift Webschmiede"
+  ],
+  "kunde_value_keys": [
+    "Firma",
+    "Adresse",
+    "Vertreter",
+    "Funktion",
+    "Email"
+  ],
+  "email_sent": false
+}

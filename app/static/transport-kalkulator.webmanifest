@@ -1,0 +1,18 @@
+{
+  "name": "TourMeter",
+  "short_name": "TourMeter",
+  "description": "Lkw-Transportkosten kalkulieren: Diesel, Maut, Standzeit, Marge.",
+  "start_url": "/transport-kalkulator.html",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FF6600",
+  "lang": "de",
+  "icons": [
+    {
+      "src": "/tourmeter-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

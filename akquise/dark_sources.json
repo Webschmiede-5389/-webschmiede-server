@@ -1,0 +1,367 @@
+{
+  "title": "Dark Plurality Radar",
+  "note": "Quellen die kaum ein Lead-Tool scannt. Watch + leichter Scan wo öffentlich.",
+  "updated": "2026-07-17",
+  "verticals": {
+    "gastro": {
+      "sources": [
+        {
+          "id": "quoka-gastro",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Gastro Nachfolge / Website",
+          "url": "https://www.quoka.de/anzeigen/?q=restaurant+nachfolger",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "hwk-koeln-gastro",
+          "type": "watch",
+          "portal": "HWK Köln",
+          "label": "Betriebsbörse / Nachfolge",
+          "url": "https://www.hwk-koeln.de/",
+          "hint": "Nachfolger + Betriebsübernahmen im Kammerbezirk"
+        },
+        {
+          "id": "nexxt-change-gastro",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Unternehmensbörse Gastro",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "kalaydo-jobs-eu",
+          "type": "watch",
+          "portal": "Kalaydo",
+          "label": "Jobs Euskirchen (Wachstumssignal)",
+          "url": "https://www.kalaydo.de/stellenangebote/euskirchen/",
+          "hint": "Neue Stellen = oft digitaler Nachholbedarf"
+        },
+        {
+          "id": "auftragsbank-gastro",
+          "type": "scan",
+          "portal": "Auftragsbank",
+          "label": "Aufträge Euskirchen",
+          "url": "https://www.auftragsbank.de/suche-in/euskirchen/122340",
+          "hint": "Über forums.py"
+        },
+        {
+          "id": "dehoga-nrw",
+          "type": "watch",
+          "portal": "DEHOGA NRW",
+          "label": "News / Mitglieder",
+          "url": "https://www.dehoga-nrw.de/",
+          "hint": "Branchensignale, selten gesucht-Texte"
+        }
+      ]
+    },
+    "handwerk": {
+      "sources": [
+        {
+          "id": "quoka-handwerk",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Handwerker gesucht / Betrieb abgeben",
+          "url": "https://www.quoka.de/anzeigen/?q=handwerker+gesucht",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "hwk-koeln",
+          "type": "watch",
+          "portal": "HWK Köln",
+          "label": "Betriebsbörse Handwerk",
+          "url": "https://www.hwk-koeln.de/artikel/betriebsboerse-betriebe-suchen-nachfolger-32,0,208.html",
+          "hint": "Gold: Nachfolge = neuer Auftritt"
+        },
+        {
+          "id": "nexxt-change-hw",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Unternehmensbörse Handwerk",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "shk-forum",
+          "type": "watch",
+          "portal": "HaustechnikDialog",
+          "label": "SHK Forum gesucht",
+          "url": "https://www.haustechnikdialog.de/Forum/",
+          "hint": "Fachforum, Threads gesucht + Region"
+        },
+        {
+          "id": "dachdecker-forum",
+          "type": "watch",
+          "portal": "Dachdecker Forum",
+          "label": "Dach / Fachgespräche",
+          "url": "https://www.dachdeckerforum.de/",
+          "hint": "Selten, aber null Konkurrenz-Scanner"
+        },
+        {
+          "id": "auftragsbank-hw",
+          "type": "scan",
+          "portal": "Auftragsbank",
+          "label": "Aufträge Region",
+          "url": "https://www.auftragsbank.de/suche-in/euskirchen/122340",
+          "hint": "Über forums.py"
+        },
+        {
+          "id": "innung-lokal",
+          "type": "watch",
+          "portal": "Innung / Gewerbeverein",
+          "label": "Lokale Innungsseiten Euskirchen",
+          "url": "https://www.euskirchen.de/",
+          "hint": "Mitglieder-News, Auftragsvermittlung manuell"
+        }
+      ]
+    },
+    "friseur": {
+      "sources": [
+        {
+          "id": "quoka-friseur",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Salon Nachfolge / Website",
+          "url": "https://www.quoka.de/anzeigen/?q=friseur+nachfolge",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "nexxt-friseur",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Salon / Beauty Übernahme",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "friseur-com",
+          "type": "watch",
+          "portal": "Friseur.com",
+          "label": "Branchennews / Jobs",
+          "url": "https://www.friseur.com/",
+          "hint": "Salon-Verkäufe und Stellen als Signal"
+        },
+        {
+          "id": "kalaydo-friseur",
+          "type": "watch",
+          "portal": "Kalaydo",
+          "label": "Friseur-Jobs Region",
+          "url": "https://www.kalaydo.de/stellenangebote/euskirchen/",
+          "hint": "Stelle ausgeschrieben = oft schwache Website"
+        }
+      ]
+    },
+    "dach": {
+      "sources": [
+        {
+          "id": "quoka-dach",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Dachdecker gesucht / Nachfolge",
+          "url": "https://www.quoka.de/anzeigen/?q=dachdecker+nachfolge",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "nexxt-dach",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Dachdeckerei Nachfolge",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "dachdecker-forum-d",
+          "type": "watch",
+          "portal": "Dachdecker Forum",
+          "label": "Fachforum Dach",
+          "url": "https://www.dachdeckerforum.de/",
+          "hint": "gesucht + Region manuell"
+        },
+        {
+          "id": "hwk-dach",
+          "type": "watch",
+          "portal": "HWK Köln",
+          "label": "Betriebsbörse",
+          "url": "https://www.hwk-koeln.de/",
+          "hint": "Nachfolge Dach/Zimmerer"
+        }
+      ]
+    },
+    "elektro": {
+      "sources": [
+        {
+          "id": "quoka-elektro",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Elektro gesucht / Nachfolge",
+          "url": "https://www.quoka.de/anzeigen/?q=elektro+nachfolge",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "nexxt-elektro",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Elektro-Betrieb Nachfolge",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "shk-elektro",
+          "type": "watch",
+          "portal": "HaustechnikDialog",
+          "label": "Elektro / SHK Forum",
+          "url": "https://www.haustechnikdialog.de/Forum/",
+          "hint": "Fachthreads gesucht"
+        },
+        {
+          "id": "hwk-elektro",
+          "type": "watch",
+          "portal": "HWK Köln",
+          "label": "Betriebsbörse",
+          "url": "https://www.hwk-koeln.de/",
+          "hint": "Nachfolge Elektro"
+        }
+      ]
+    },
+    "trockenbau": {
+      "sources": [
+        {
+          "id": "quoka-trockenbau",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Trockenbau / Gipser",
+          "url": "https://www.quoka.de/anzeigen/?q=trockenbau+nachfolge",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "nexxt-trockenbau",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Gipserei / Stuckatur Nachfolge",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "hwk-trockenbau",
+          "type": "watch",
+          "portal": "HWK Köln",
+          "label": "Betriebsbörse Ausbau",
+          "url": "https://www.hwk-koeln.de/",
+          "hint": "Nachfolge Trockenbau/Stuck"
+        }
+      ]
+    },
+    "fliesenleger": {
+      "sources": [
+        {
+          "id": "quoka-fliesen",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Fliesenleger gesucht / Nachfolge",
+          "url": "https://www.quoka.de/anzeigen/?q=fliesenleger+nachfolge",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "nexxt-fliesen",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Fliesenleger Nachfolge",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "hwk-fliesen",
+          "type": "watch",
+          "portal": "HWK Köln",
+          "label": "Betriebsbörse",
+          "url": "https://www.hwk-koeln.de/",
+          "hint": "Nachfolge Fliesen"
+        }
+      ]
+    },
+    "gartenbau": {
+      "sources": [
+        {
+          "id": "quoka-gartenbau",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Gartenbauer / Galabau",
+          "url": "https://www.quoka.de/anzeigen/?q=gartenbau+nachfolge",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "nexxt-gartenbau",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Garten- und Landschaftsbau Nachfolge",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "hwk-gartenbau",
+          "type": "watch",
+          "portal": "HWK Köln",
+          "label": "Betriebsbörse Galabau",
+          "url": "https://www.hwk-koeln.de/",
+          "hint": "Nachfolge Gartenbau"
+        }
+      ]
+    },
+    "hochbau": {
+      "sources": [
+        {
+          "id": "quoka-hochbau",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Maurer / Hochbau",
+          "url": "https://www.quoka.de/anzeigen/?q=hochbau+nachfolge",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "nexxt-hochbau",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Maurer und Betonbauer Nachfolge",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "hwk-hochbau",
+          "type": "watch",
+          "portal": "HWK Köln",
+          "label": "Betriebsbörse Bauhauptgewerbe",
+          "url": "https://www.hwk-koeln.de/",
+          "hint": "Nachfolge Hochbau"
+        }
+      ]
+    },
+    "tiefbau": {
+      "sources": [
+        {
+          "id": "quoka-tiefbau",
+          "type": "scan",
+          "portal": "Quoka",
+          "label": "Tiefbau / Straßenbau",
+          "url": "https://www.quoka.de/anzeigen/?q=tiefbau+nachfolge",
+          "hint": "Automatisch via quoka.py"
+        },
+        {
+          "id": "nexxt-tiefbau",
+          "type": "scan",
+          "portal": "nexxt-change",
+          "label": "Straßenbauer / Tiefbau Nachfolge",
+          "url": "https://www.nexxt-change.org/DE/Verkaufsangebot/inhalt",
+          "hint": "Automatisch via nexxt_change.py"
+        },
+        {
+          "id": "hwk-tiefbau",
+          "type": "watch",
+          "portal": "HWK Köln",
+          "label": "Betriebsbörse Tiefbau",
+          "url": "https://www.hwk-koeln.de/",
+          "hint": "Nachfolge Tiefbau"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "name": "Agency 10 – Anwalt",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-10-anwalt",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "10-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "agency-10-anwalt"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/anwalt/pipeline",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.CRON_SECRET}}"
+            },
+            {
+              "name": "X-Agency-Password",
+              "value": "={{$env.AGENCY_ADMIN_PASSWORD}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ firma: ($json.body && ($json.body.firma || $json.body.company)) || $json.firma || 'Kunde', kontakt: ($json.body && $json.body.kontakt) || '', leistungen: ($json.body && $json.body.leistungen) || '', budget: ($json.body && ($json.body.budget || $json.body.preis)) || '', zero_retention: ($json.body && $json.body.zero_retention) !== false, brief: ($json.body && ($json.body.message || $json.body.brief || $json.body.text)) || $json.message || '' }) }}"
+      },
+      "id": "10-http",
+      "name": "Anwalt Enterprise API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json;\nreturn [{ json: { ok: true, workflow: 'anwalt', note: 'Enterprise-Pack + Skill. Keine Rechtsberatung.', result: j } }];"
+      },
+      "id": "10-pack",
+      "name": "Ergebnis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "10-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        660,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Agency API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agency API": {
+      "main": [
+        [
+          {
+            "node": "Ergebnis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ergebnis": {
+      "main": [
+        [
+          {
+            "node": "Antwort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "notes": "Cursor Skill anwalt + Checkliste. Vorprüfung, kein Ersatz Anwalt."
+  },
+  "tags": [
+    {
+      "name": "agency"
+    },
+    {
+      "name": "system-13"
+    },
+    {
+      "name": "anwalt"
+    }
+  ]
+}

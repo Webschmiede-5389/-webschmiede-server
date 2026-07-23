@@ -1,0 +1,85 @@
+{
+  "name": "__KUNDE_ID__ - Neue Bestellung Alert",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "new-order-__KUNDE_SLUG__",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-order",
+      "name": "Webhook Neue Bestellung",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "__KUNDE_SLUG__-new-order"
+    },
+    {
+      "parameters": {
+        "jsCode": "const o = $input.first().json.body || $input.first().json;\nconst lines = (o.items || []).map(i => `${i.qty}x ${i.name}`).join('\\n');\nconst text = [\n  'NEUE BESTELLUNG (__KUNDE_ID__)',\n  `Nr: ${o.order_number}`,\n  `${o.first_name} ${o.last_name}`,\n  `Tel: ${o.phone}`,\n  `${o.delivery_type === 'lieferung' ? 'Lieferung' : 'Abholung'} · ${o.pay_method}`,\n  o.address ? `Adresse: ${o.address}` : '',\n  '---',\n  lines,\n  '---',\n  `GESAMT: ${o.total} EUR`,\n  `Admin: ${o.admin_url || ''}`\n].filter(Boolean).join('\\n');\nreturn [{ json: { ...o, sms_text: text, email_subject: `[__KUNDE_ID__] Neue Bestellung ${o.order_number}`, email_body: text.replace(/\\n/g, '<br>') } }];"
+      },
+      "id": "code-format",
+      "name": "Nachricht formatieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gateway.seven.io/api/sms",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-Api-Key", "value": "={{ $env.__KUNDE_ID___SEVEN_API_KEY || $env.SEVEN_API_KEY }}" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "to", "value": "__OWNER_PHONE__" },
+            { "name": "text", "value": "={{ $json.sms_text }}" },
+            { "name": "from", "value": "__SMS_SENDER__" }
+          ]
+        },
+        "options": { "timeout": 15000 }
+      },
+      "id": "http-sms",
+      "name": "SMS an Inhaber (seven.io)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 200],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.AGENCY_FROM_EMAIL }}",
+        "toEmail": "__ALERT_EMAIL__",
+        "subject": "={{ $json.email_subject }}",
+        "emailFormat": "html",
+        "html": "=<p style=\"font-family:Arial,sans-serif\">{{ $json.email_body }}</p>",
+        "options": {}
+      },
+      "id": "email-alert",
+      "name": "E-Mail Backup an Inhaber",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [720, 400],
+      "continueOnFail": true,
+      "credentials": { "smtp": { "id": "CONFIGURE_SMTP", "name": "SMTP account" } }
+    }
+  ],
+  "connections": {
+    "Webhook Neue Bestellung": { "main": [[{ "node": "Nachricht formatieren", "type": "main", "index": 0 }]] },
+    "Nachricht formatieren": {
+      "main": [[
+        { "node": "SMS an Inhaber (seven.io)", "type": "main", "index": 0 },
+        { "node": "E-Mail Backup an Inhaber", "type": "main", "index": 0 }
+      ]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}

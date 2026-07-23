@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Angebot / Kalkulation · Webschmiede Vorlage</title>
+  <style>
+    @import url('https://fonts.bunny.net/css?family=inter:400;600;700');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Inter, Arial, sans-serif; font-size: 11pt; color: #222; background: #f5f5f5; }
+    .page { max-width: 210mm; margin: 20px auto; background: #fff; padding: 18mm 20mm; box-shadow: 0 2px 20px rgba(0,0,0,.08); }
+    @media print { body { background: #fff; } .page { margin: 0; box-shadow: none; } .no-print { display: none; } }
+
+    .header { display: flex; justify-content: space-between; border-bottom: 3px solid #C9A84C; padding-bottom: 14px; margin-bottom: 20px; }
+    .header h1 { font-size: 18pt; }
+    .header .meta { text-align: right; font-size: 10pt; color: #555; line-height: 1.7; }
+
+    .box { background: #faf9f7; border: 1px solid #eee; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+    .box h3 { font-size: 9pt; text-transform: uppercase; color: #999; margin-bottom: 8px; letter-spacing: .06em; }
+
+    h2 { font-size: 14pt; margin: 18px 0 10px; color: #111; }
+
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 10pt; }
+    th { background: #1a1712; color: #e8c76a; text-align: left; padding: 9px 11px; }
+    td { padding: 9px 11px; border-bottom: 1px solid #eee; vertical-align: top; }
+    td.num { text-align: right; }
+    tr:nth-child(even) td { background: #fdfcfa; }
+
+    .total { text-align: right; font-size: 14pt; font-weight: 700; color: #C9A84C; margin: 16px 0; }
+    .valid { font-size: 10pt; color: #666; margin-top: 12px; }
+    .scope { font-size: 10pt; color: #444; line-height: 1.65; }
+    .scope li { margin-bottom: 4px; }
+
+    [contenteditable="true"]:focus { outline: 2px solid #C9A84C; outline-offset: 2px; border-radius: 2px; }
+    .print-btn { position: fixed; bottom: 16px; right: 16px; background: #C9A84C; color: #000; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+  </style>
+</head>
+<body>
+<button class="print-btn no-print" onclick="window.print()">Als PDF speichern</button>
+
+<div class="page">
+
+  <div class="header">
+    <div>
+      <h1 contenteditable="true">Webschmiede</h1>
+      <div style="font-size:9pt;color:#888;" contenteditable="true">Digitale Handwerkskunft · [deine@email.de]</div>
+    </div>
+    <div class="meta" contenteditable="true">
+      <strong>Angebot / Kalkulation</strong><br>
+      Nr. AN-2026-001<br>
+      Datum: 14.07.2026<br>
+      Gültig bis: 14.08.2026
+    </div>
+  </div>
+
+  <div class="box" contenteditable="true">
+    <h3>Angebot für</h3>
+    Hassan Yassine · Snack House Yassine<br>
+    Dr.-Felix-Gerhardus-Str. 7 · 53894 Mechernich
+  </div>
+
+  <div class="box">
+    <h3>Leistungsumfang (Paket Gastro Digital)</h3>
+    <ul class="scope" contenteditable="true">
+      <li>Marketing-Website &amp; Online-Bestellportal (Abholung / Lieferung)</li>
+      <li>Admin-Dashboard (Bestellungen, Speisekarte, Aktionen, Tagesbericht)</li>
+      <li>Kunden-CRM &amp; digitale Bonuskarte (10 Bestellungen = Gratis-Getränk)</li>
+      <li>SMS Bestelllink bei Anruf · Review-Automation (nach Freischaltung SMS)</li>
+      <li>Hosting auf deutschem Server, DSGVO-Seiten, Einrichtung &amp; Testphase</li>
+      <li>Onboarding (Handbuch, Einweisung ca. 30 Min.)</li>
+    </ul>
+  </div>
+
+  <h2>Investition</h2>
+  <table contenteditable="true">
+    <tr><th>Position</th><th class="num">Einmalig</th><th class="num">Monatlich (opt.)</th></tr>
+    <tr><td>Setup &amp; Go-Live</td><td class="num">[1.500,00] €</td><td class="num">–</td></tr>
+    <tr><td>Wartung, Updates, Support (2 h/Monat)</td><td class="num">–</td><td class="num">[49,00] €</td></tr>
+    <tr><td>Domain + SSL (Einrichtung)</td><td class="num">[inkl. / 99,00 €]</td><td class="num">–</td></tr>
+    <tr><td>SMS-Guthaben (seven.io, Nutzung Kunde)</td><td class="num">nach Verbrauch</td><td class="num">~[5–20] €</td></tr>
+  </table>
+
+  <p class="total" contenteditable="true">Einmalig: [1.500,00] € · optional [49,00] €/Monat</p>
+
+  <div class="box" contenteditable="true">
+    <h3>Was der Kunde liefert</h3>
+    Handynummer (SMS), ggf. Google-Review-Link, Speisefotos (optional), Freigabe nach Testphase.
+  </div>
+
+  <div class="box" contenteditable="true">
+    <h3>ROI in einem Satz</h3>
+    Bei 20 Eigenbestellungen/Monat à 22 € sparen Sie ca. <strong>88 € Provision</strong> gegenüber Lieferportalen. Wartung oft schon gedeckt.
+  </div>
+
+  <p class="valid" contenteditable="true">
+    Alle Preise verstehen sich als Festpreis für den beschriebenen Umfang. Änderungswünsche nach Beauftragung werden gesondert kalkuliert.
+    Bei Kleinunternehmerregelung keine USt. ausgewiesen. Annahme des Angebots per E-Mail oder Unterschrift.
+  </p>
+
+</div>
+</body>
+</html>

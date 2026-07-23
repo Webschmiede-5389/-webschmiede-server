@@ -1,0 +1,15 @@
+---
+description: KI-Anwalt – Vertragsprüfung nur mit Checkliste (iterativ)
+globs: docs/agency/vertraege/**/*
+alwaysApply: false
+---
+
+# Anwalt (Vertragsprüfung)
+
+Wenn Christian Verträge, AGB, AVV, NDAs, Angebote oder Haftung/DSGVO-Klauseln prüfen oder entwerfen lässt:
+
+1. Skill `.cursor/skills/anwalt/SKILL.md` lesen und befolgen
+2. Checkliste `.cursor/skills/anwalt/checkliste.md` vollständig abarbeiten (vier Durchgänge A–D)
+3. Ausgabe nur als **Prüfprotokoll** (Ampel + Findings-Tabelle), kein oberflächliches „sieht gut aus“
+4. Keine „wasserdicht“-Garantie. Großkunde → echter Anwalt empfehlen
+5. Bestehende Vorlagen: `docs/agency/vertraege/` und DocuSeal, nicht ersetzen ohne Auftrag

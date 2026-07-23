@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Buchhaltungs-Onboarding · Webschmiede</title>
+  <link rel="icon" href="/ci/webschmiede-logo-mark.png" />
+  <link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600|libre-baskerville:600" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0e0b08; --panel: #1a1510; --ink: #f3efe6; --muted: #9a9080;
+      --gold: #C9A84C; --line: #2a241c; --ok: #3d9a6a; --bad: #c45c4a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: "DM Sans", system-ui, sans-serif;
+      background: radial-gradient(1100px 520px at 15% -8%, #2a1f12 0%, var(--bg) 55%);
+      color: var(--ink);
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 28px 18px 70px; }
+    header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    header img { height: 36px; width: auto; }
+    h1 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.35rem; margin: 0; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+    .steps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .step-pill {
+      font-size: 0.72rem; padding: 5px 10px; border-radius: 999px;
+      border: 1px solid var(--line); color: var(--muted);
+    }
+    .step-pill.on { border-color: var(--gold); color: var(--gold); }
+    .step-pill.done { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 50%, var(--line)); }
+    .panel {
+      background: color-mix(in srgb, var(--panel) 92%, black);
+      border: 1px solid var(--line); border-radius: 16px; padding: 22px;
+    }
+    label { display: block; font-size: 0.8rem; color: var(--muted); margin: 12px 0 6px; }
+    input[type="text"], input[type="email"], input[type="password"], textarea, select {
+      width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line);
+      background: #120f0c; color: var(--ink); font: inherit;
+    }
+    textarea { min-height: 72px; resize: vertical; }
+    .tools { display: grid; gap: 8px; margin-top: 8px; }
+    .tool {
+      display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px;
+      border: 1px solid var(--line); border-radius: 12px; cursor: pointer; background: #14100c;
+    }
+    .tool:has(input:checked) { border-color: var(--gold); }
+    .tool input { margin-top: 3px; }
+    .btn {
+      display: inline-block; margin-top: 16px; margin-right: 8px; border: 0; border-radius: 10px;
+      background: var(--gold); color: #1a1408; font-weight: 600; padding: 12px 18px;
+      cursor: pointer; font: inherit;
+    }
+    .btn.ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .msg { margin-top: 12px; font-size: 0.9rem; color: var(--muted); white-space: pre-wrap; }
+    .msg.err { color: var(--bad); }
+    .msg.ok { color: var(--ok); }
+    .offer {
+      margin-top: 8px; padding: 16px; border-radius: 14px;
+      border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line));
+      background: #16120e;
+    }
+    .offer h2 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.2rem; margin: 0 0 6px; color: var(--gold); }
+    .price { font-size: 1.05rem; margin: 10px 0; }
+    .price b { color: var(--gold); }
+    ul.reasons { margin: 8px 0 0; padding-left: 1.1rem; color: var(--muted); font-size: 0.9rem; }
+    .avv-box {
+      margin-top: 10px; padding: 14px; border-radius: 12px; border: 1px solid var(--line);
+      background: #120f0c; font-size: 0.88rem; line-height: 1.45; color: var(--muted);
+    }
+    .checkline { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font-size: 0.9rem; }
+    .hint { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+    .hidden { display: none; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="/ci/webschmiede-logo.png" alt="Webschmiede" />
+      <div>
+        <h1>Buchhaltungs-Automation</h1>
+        <div class="sub">Onboarding · Tools · Angebot · Zugänge nach AVV</div>
+      </div>
+    </header>
+
+    <div class="steps" id="stepPills"></div>
+
+    <div class="panel" id="panel">
+      <div id="msg" class="msg"></div>
+      <div id="view"></div>
+    </div>
+  </div>
+
+  <script>
+    const STEPS = ["start", "firma", "tools", "fragen", "angebot", "avv", "zugaenge", "fertig"];
+    const STEP_LABELS = {
+      start: "Start", firma: "Firma", tools: "Tools", fragen: "Fragen",
+      angebot: "Angebot", avv: "AVV", zugaenge: "Zugänge", fertig: "Fertig"
+    };
+
+    let schema = null;
+    let session = null;
+    let step = "start";
+    const qs = new URLSearchParams(location.search);
+    let sessionId = qs.get("id") || "";
+    let token = qs.get("t") || localStorage.getItem("bh_onb_t") || "";
+    let agencyPw = sessionStorage.getItem("bh_agency_pw") || "";
+
+    function hdr() {
+      const h = { "Content-Type": "application/json" };
+      if (agencyPw) h["X-Agency-Password"] = agencyPw;
+      return h;
+    }
+
+    function showMsg(text, cls) {
+      const el = document.getElementById("msg");
+      el.textContent = text || "";
+      el.className = "msg" + (cls ? " " + cls : "");
+    }
+
+    function renderPills() {
+      const box = document.getElementById("stepPills");
+      const idx = STEPS.indexOf(step);
+      box.innerHTML = STEPS.map((s, i) => {
+        let cls = "step-pill";
+        if (s === step) cls += " on";
+        else if (i < idx) cls += " done";
+        return `<span class="${cls}">${STEP_LABELS[s]}</span>`;
+      }).join("");
+    }
+
+    async function api(path, opts = {}) {
+      const url = path.includes("?") ? path : path;
+      const res = await fetch(url, opts);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+      return data;
+    }
+
+    async function loadSchema() {
+      schema = await api("/api/buchhaltung/onboarding/schema");
+    }
+
+    async function loadSession() {
+      if (!sessionId || !token) return;
+      session = await api(`/api/buchhaltung/onboarding/${sessionId}?t=${encodeURIComponent(token)}`);
+      localStorage.setItem("bh_onb_t", token);
+      if (session.status === "done") step = "fertig";
+      else if (session.credentials_set) step = "fertig";
+      else if (session.avv_accepted) step = "zugaenge";
+      else if (session.offer) step = "angebot";
+      else if ((session.tools || []).length) step = "fragen";
+      else if (session.firma) step = "tools";
+    }
+
+    async function createSession() {
+      const body = {
+        firma: document.getElementById("f_firma")?.value || "",
+        kontakt: document.getElementById("f_kontakt")?.value || "",
+        email: document.getElementById("f_email")?.value || "",
+      };
+      const pw = document.getElementById("f_agency")?.value || agencyPw;
+      if (pw) {
+        agencyPw = pw;
+        sessionStorage.setItem("bh_agency_pw", pw);
+      }
+      session = await api("/api/buchhaltung/onboarding/start", {
+        method: "POST",
+        headers: hdr(),
+        body: JSON.stringify(body),
+      });
+      sessionId = session.id;
+      token = session.access_token;
+      localStorage.setItem("bh_onb_t", token);
+      history.replaceState({}, "", `?id=${sessionId}&t=${encodeURIComponent(token)}`);
+      step = "firma";
+      showMsg("Session gestartet.", "ok");
+      render();
+    }
+
+    async function saveFirma() {
+      const body = {
+        firma: document.getElementById("f_firma").value.trim(),
+        kontakt: document.getElementById("f_kontakt").value.trim(),
+        email: document.getElementById("f_email").value.trim(),
+      };
+      if (!body.firma) throw new Error("Firmenname fehlt");
+      session = await api(`/api/buchhaltung/onboarding/${sessionId}/firma?t=${encodeURIComponent(token)}`, {
+        method: "POST", headers: hdr(), body: JSON.stringify(body),
+      });
+      step = "tools";
+      render();
+    }
+
+    async function saveToolsAnswers() {
+      const tools = [...document.querySelectorAll("input[name=tool]:checked")].map(x => x.value);
+      const answers = {};
+      for (const q of schema.questions) {
+        const el = document.getElementById("q_" + q.id);
+        if (!el) continue;
+        answers[q.id] = el.value.trim();
+        if (q.required && !answers[q.id]) throw new Error("Bitte ausfüllen: " + q.text);
+      }
+      session = await api(`/api/buchhaltung/onboarding/${sessionId}/answers?t=${encodeURIComponent(token)}`, {
+        method: "POST", headers: hdr(),
+        body: JSON.stringify({ tools, answers }),
+      });
+      step = "angebot";
+      render();
+    }
+
+    async function acceptAvv() {
+      if (!document.getElementById("avv_check").checked) throw new Error("Bitte AVV bestätigen");
+      const name = document.getElementById("avv_name").value.trim();
+      if (!name) throw new Error("Name zur Bestätigung fehlt");
+      session = await api(`/api/buchhaltung/onboarding/${sessionId}/avv?t=${encodeURIComponent(token)}`, {
+        method: "POST", headers: hdr(), body: JSON.stringify({ name }),
+      });
+      step = "zugaenge";
+      render();
+    }
+
+    async function saveCreds() {
+      const payload = {};
+      for (const f of schema.credential_fields) {
+        const el = document.getElementById("c_" + f.id);
+        if (el && el.value.trim()) payload[f.id] = el.value.trim();
+      }
+      session = await api(`/api/buchhaltung/onboarding/${sessionId}/credentials?t=${encodeURIComponent(token)}`, {
+        method: "POST", headers: hdr(), body: JSON.stringify(payload),
+      });
+      showMsg("Zugänge verschlüsselt gespeichert.", "ok");
+      step = "fertig";
+      await api(`/api/buchhaltung/onboarding/${sessionId}/complete?t=${encodeURIComponent(token)}`, {
+        method: "POST", headers: hdr(), body: "{}",
+      });
+      render();
+    }
+
+    function viewStart() {
+      return `
+        <p class="sub">Christian startet die Session (Agency-Passwort). Danach kann der Kunde Tools und Fragen ausfüllen.</p>
+        <label>Agency-Passwort (nur Start)</label>
+        <input type="password" id="f_agency" autocomplete="current-password" value="${agencyPw.replace(/"/g, "")}" />
+        <label>Firma (optional jetzt)</label>
+        <input type="text" id="f_firma" />
+        <div class="row2">
+          <div><label>Kontakt</label><input type="text" id="f_kontakt" /></div>
+          <div><label>E-Mail</label><input type="email" id="f_email" /></div>
+        </div>
+        <button class="btn" id="btnStart">Session starten</button>
+        <p class="hint">Bestehenden Link öffnen: URL enthält schon id und t.</p>
+      `;
+    }
+
+    function viewFirma() {
+      return `
+        <label>Firma *</label>
+        <input type="text" id="f_firma" value="${esc(session.firma || "")}" />
+        <div class="row2">
+          <div><label>Kontakt</label><input type="text" id="f_kontakt" value="${esc(session.kontakt || "")}" /></div>
+          <div><label>E-Mail</label><input type="email" id="f_email" value="${esc(session.email || "")}" /></div>
+        </div>
+        <button class="btn" id="btnFirma">Weiter zu Tools</button>
+      `;
+    }
+
+    function viewTools() {
+      const selected = new Set(session.tools || []);
+      const tools = (schema.tools || []).map(t => `
+        <label class="tool">
+          <input type="checkbox" name="tool" value="${t.id}" ${selected.has(t.id) ? "checked" : ""} />
+          <span>${esc(t.label)}</span>
+        </label>
+      `).join("");
+      return `
+        <p class="sub">Welche Tools nutzt ihr heute?</p>
+        <div class="tools">${tools}</div>
+        <button class="btn ghost" id="btnToFragen">Weiter zu Fragen</button>
+      `;
+    }
+
+    function viewFragen() {
+      const ans = session.answers || {};
+      const qsHtml = (schema.questions || []).map(q => {
+        if (q.type === "choice") {
+          const opts = (q.choices || []).map(c =>
+            `<option value="${c}" ${ans[q.id] === c ? "selected" : ""}>${c}</option>`
+          ).join("");
+          return `<label>${esc(q.text)}${q.required ? " *" : ""}</label><select id="q_${q.id}"><option value="">–</option>${opts}</select>`;
+        }
+        const tag = q.type === "email" ? "email" : "text";
+        if ((q.text || "").length > 60 || q.id === "zeitfresser" || q.id === "ziel_30" || q.id === "wuensche" || q.id === "nie_allein") {
+          return `<label>${esc(q.text)}${q.required ? " *" : ""}</label>
+            <textarea id="q_${q.id}" placeholder="${esc(q.placeholder || "")}">${esc(ans[q.id] || "")}</textarea>`;
+        }
+        return `<label>${esc(q.text)}${q.required ? " *" : ""}</label>
+          <input type="${tag}" id="q_${q.id}" value="${esc(ans[q.id] || "")}" placeholder="${esc(q.placeholder || "")}" />`;
+      }).join("");
+      return `
+        <p class="sub">Kurz und ehrlich. Daraus kommt die Paket-Empfehlung.</p>
+        ${qsHtml}
+        <button class="btn" id="btnAnswers">Angebot berechnen</button>
+      `;
+    }
+
+    function viewAngebot() {
+      const o = session.offer || {};
+      const reasons = (o.reasons || []).map(r => `<li>${esc(r)}</li>`).join("");
+      return `
+        <div class="offer">
+          <h2>${esc(o.name || "Empfehlung")}</h2>
+          <div class="sub">${esc(o.tagline || "")}</div>
+          <div class="price">Setup ca. <b>${o.setup_eur || "–"} €</b> · Monat ca. <b>${o.monthly_eur || "–"} €</b></div>
+          <ul class="reasons">${reasons}</ul>
+          <p class="hint">${esc(o.note || "")}</p>
+        </div>
+        <button class="btn" id="btnToAvv">Weiter zur AVV</button>
+        <button class="btn ghost" id="btnBackFragen">Angaben ändern</button>
+      `;
+    }
+
+    function viewAvv() {
+      return `
+        <div class="avv-box">${esc(schema.avv_text)}</div>
+        <label>Ihr Name (Bestätigung)</label>
+        <input type="text" id="avv_name" value="${esc(session.kontakt || "")}" />
+        <label class="checkline">
+          <input type="checkbox" id="avv_check" />
+          <span>Ich habe den AVV-Hinweis gelesen und stimme der Verarbeitung der Zugangsdaten zu.</span>
+        </label>
+        <p class="hint">Erst danach dürfen Zugänge gespeichert werden. Keine Klartext-Anzeige hinterher.</p>
+        <button class="btn" id="btnAvv">AVV bestätigen</button>
+      `;
+    }
+
+    function viewZugaenge() {
+      if (!session.avv_accepted) {
+        return `<p class="msg err">AVV fehlt. Bitte einen Schritt zurück.</p>
+          <button class="btn ghost" id="btnToAvv2">Zur AVV</button>`;
+      }
+      const fields = (schema.credential_fields || []).map(f => {
+        const st = (session.credential_fields_status || {})[f.id];
+        return `
+          <label>${esc(f.label)}${st ? " (schon gesetzt, leer = behalten)" : ""}</label>
+          <input type="${f.type === "password" ? "password" : (f.type || "text")}" id="c_${f.id}"
+            autocomplete="off" placeholder="${st ? "•••• gesetzt" : ""}" />
+          ${f.hint ? `<p class="hint">${esc(f.hint)}</p>` : ""}
+        `;
+      }).join("");
+      return `
+        <p class="sub">Nur App-Passwörter und API-Keys. Kein Hauptpasswort von Google/Microsoft.</p>
+        ${fields}
+        <button class="btn" id="btnCreds">Verschlüsselt speichern & abschließen</button>
+        <button class="btn ghost" id="btnSkipCreds">Ohne Zugänge abschließen (später)</button>
+      `;
+    }
+
+    function viewFertig() {
+      const o = session.offer || {};
+      return `
+        <div class="offer">
+          <h2>Danke${session.firma ? ", " + esc(session.firma) : ""}</h2>
+          <p>Empfohlen: <b>${esc(o.name || "")}</b> · Setup ~${o.setup_eur || "–"} € · Monat ~${o.monthly_eur || "–"} €</p>
+          <p class="hint">AVV: ${session.avv_accepted ? "ja" : "nein"} · Zugänge: ${session.credentials_set ? "hinterlegt" : "noch offen"}</p>
+          <p class="hint">Wir richten n8n ein und melden uns mit dem konkreten Ablauf. Keine laufende Buchführung von uns, das bleibt bei Ihrer Kanzlei.</p>
+        </div>
+      `;
+    }
+
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[c]);
+    }
+
+    function bind() {
+      const on = (id, fn) => {
+        const el = document.getElementById(id);
+        if (el) el.onclick = () => fn().catch(e => showMsg(e.message || String(e), "err"));
+      };
+      on("btnStart", createSession);
+      on("btnFirma", saveFirma);
+      on("btnToFragen", async () => { step = "fragen"; render(); });
+      on("btnAnswers", saveToolsAnswers);
+      on("btnToAvv", async () => { step = "avv"; render(); });
+      on("btnToAvv2", async () => { step = "avv"; render(); });
+      on("btnBackFragen", async () => { step = "tools"; render(); });
+      on("btnAvv", acceptAvv);
+      on("btnCreds", saveCreds);
+      on("btnSkipCreds", async () => {
+        await api(`/api/buchhaltung/onboarding/${sessionId}/complete?t=${encodeURIComponent(token)}`, {
+          method: "POST", headers: hdr(), body: "{}",
+        });
+        step = "fertig";
+        session = await api(`/api/buchhaltung/onboarding/${sessionId}?t=${encodeURIComponent(token)}`);
+        render();
+      });
+    }
+
+    function render() {
+      renderPills();
+      const view = document.getElementById("view");
+      if (step === "start") view.innerHTML = viewStart();
+      else if (step === "firma") view.innerHTML = viewFirma();
+      else if (step === "tools") view.innerHTML = viewTools();
+      else if (step === "fragen") view.innerHTML = viewFragen();
+      else if (step === "angebot") view.innerHTML = viewAngebot();
+      else if (step === "avv") view.innerHTML = viewAvv();
+      else if (step === "zugaenge") view.innerHTML = viewZugaenge();
+      else view.innerHTML = viewFertig();
+      bind();
+    }
+
+    (async () => {
+      try {
+        await loadSchema();
+        if (sessionId && token) {
+          await loadSession();
+          if (session && session.ok !== false) {
+            if (step === "start") step = session.firma ? "tools" : "firma";
+          } else step = "start";
+        } else {
+          step = "start";
+        }
+        render();
+      } catch (e) {
+        showMsg(e.message || String(e), "err");
+        step = "start";
+        render();
+      }
+    })();
+  </script>
+</body>
+</html>

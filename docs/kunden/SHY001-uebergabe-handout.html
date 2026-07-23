@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Übergabe — Snack House Yassine · Webschmiede</title>
+  <style>
+    @import url('https://fonts.bunny.net/css?family=inter:400,600,700|playfair-display:700');
+
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #e8c76a;
+      --bg: #0f0e0c;
+      --card: #1a1712;
+      --border: #2a2318;
+      --text: #e8e4dc;
+      --muted: #888;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #fff;
+      color: #222;
+      line-height: 1.55;
+      font-size: 11pt;
+    }
+
+    .page {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 18mm 16mm;
+    }
+
+    @media print {
+      .page { padding: 12mm 14mm; }
+      .no-print { display: none !important; }
+      .page-break { page-break-before: always; }
+      body { font-size: 10pt; }
+    }
+
+    .cover {
+      text-align: center;
+      padding: 24mm 0 16mm;
+      border-bottom: 3px solid var(--gold);
+      margin-bottom: 10mm;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: #000;
+      font-weight: 700;
+      font-size: 10pt;
+      padding: 6px 16px;
+      border-radius: 20px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .cover h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 28pt;
+      color: #111;
+      margin-bottom: 6px;
+    }
+
+    .cover .sub { color: #555; font-size: 13pt; margin-bottom: 20px; }
+
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      max-width: 420px;
+      margin: 20px auto 0;
+      text-align: left;
+      font-size: 10pt;
+    }
+
+    .cover-meta div { padding: 8px 12px; background: #f7f5f0; border-radius: 8px; }
+    .cover-meta strong { display: block; color: #888; font-size: 8pt; text-transform: uppercase; letter-spacing: .05em; }
+
+    h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 16pt;
+      color: #111;
+      margin: 14mm 0 4mm;
+      padding-bottom: 4px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    h3 { font-size: 11pt; margin: 6mm 0 3mm; color: #333; }
+
+    p { margin-bottom: 3mm; color: #444; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 4mm 0 6mm;
+      font-size: 9.5pt;
+    }
+
+    th {
+      background: #1a1712;
+      color: var(--gold-light);
+      text-align: left;
+      padding: 8px 10px;
+      font-weight: 600;
+    }
+
+    th:first-child { border-radius: 6px 0 0 0; }
+    th:last-child { border-radius: 0 6px 0 0; }
+
+    td {
+      padding: 7px 10px;
+      border-bottom: 1px solid #eee;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td { background: #faf9f7; }
+
+    .status-ok { color: #15803d; font-weight: 600; }
+    .status-wait { color: #b45309; font-weight: 600; }
+
+    .roi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 4mm 0;
+    }
+
+    .roi-card {
+      background: #f7f5f0;
+      border: 1px solid #e8e0d0;
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .roi-card .num {
+      font-size: 18pt;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+
+    .roi-card .lbl { font-size: 9pt; color: #666; margin-top: 4px; }
+
+    .steps { counter-reset: step; list-style: none; margin: 4mm 0; }
+    .steps li {
+      counter-increment: step;
+      padding: 6px 0 6px 36px;
+      position: relative;
+      border-bottom: 1px solid #f0ebe3;
+    }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 24px;
+      height: 24px;
+      background: var(--gold);
+      color: #000;
+      font-weight: 700;
+      font-size: 9pt;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upsell {
+      border-left: 3px solid var(--gold);
+      padding: 8px 12px;
+      margin: 3mm 0;
+      background: #fffdf8;
+    }
+
+    .upsell strong { display: block; margin-bottom: 2px; }
+
+    .checklist { list-style: none; }
+    .checklist li { padding: 4px 0 4px 22px; position: relative; }
+    .checklist li::before { content: '☐'; position: absolute; left: 0; color: var(--gold); }
+
+    .footnote {
+      margin-top: 12mm;
+      padding-top: 6mm;
+      border-top: 1px solid #ddd;
+      font-size: 8.5pt;
+      color: #888;
+      text-align: center;
+    }
+
+    .sig-line {
+      margin-top: 16mm;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20mm;
+    }
+
+    .sig-line div { border-top: 1px solid #999; padding-top: 6px; font-size: 9pt; color: #666; }
+
+    .print-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: #000;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+    }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Als PDF speichern / Drucken</button>
+
+<div class="page">
+
+  <!-- DECKBLATT -->
+  <div class="cover">
+    <div class="cover-badge">Übergabe & Handbuch</div>
+    <h1>Snack House Yassine</h1>
+    <p class="sub">Ihr digitales Bestell- & Verwaltungssystem</p>
+    <p style="color:#888;font-size:10pt;">Erstellt von <strong style="color:#555;">Webschmiede</strong> · Digitale Handwerkskunft</p>
+    <div class="cover-meta">
+      <div><strong>Kunde</strong>Hassan Yassine</div>
+      <div><strong>Projekt</strong>SHY001</div>
+      <div><strong>Stand</strong>Juli 2026</div>
+      <div><strong>Phase</strong>Testbetrieb</div>
+    </div>
+  </div>
+
+  <!-- LIEFERUMFANG -->
+  <h2>1. Was Sie erhalten haben</h2>
+  <p>Sie bekommen ein <strong>komplettes System</strong> — nicht nur eine Website. Alles arbeitet zusammen: Gäste bestellen online, Sie verwalten im Admin, Kundendaten bleiben bei Ihnen.</p>
+
+  <h3>Für Ihre Gäste</h3>
+  <table>
+    <tr><th>Komponente</th><th>Nutzen</th><th>Link</th></tr>
+    <tr>
+      <td><strong>Startseite</strong></td>
+      <td>Professioneller Auftritt: Speisekarte, Galerie, Öffnungszeiten, Kontakt</td>
+      <td>https://yassine.digitalehandwerkskunst.de/</td>
+    </tr>
+    <tr>
+      <td><strong>Bestellportal</strong></td>
+      <td>24/7 bestellen — Abholung/Lieferung, 56 Gerichte, Aktionen, Wunschzeit</td>
+      <td>/bestellen</td>
+    </tr>
+    <tr>
+      <td><strong>Rechtliches</strong></td>
+      <td>Datenschutz, Impressum, Cookie-Hinweis (DSGVO-konform, ohne Tracking)</td>
+      <td>/datenschutz</td>
+    </tr>
+  </table>
+
+  <h3>Für Sie — Admin-Dashboard</h3>
+  <table>
+    <tr><th>Bereich</th><th>Was Sie damit machen</th></tr>
+    <tr><td><strong>Bestellungen</strong></td><td>Live-Orders · Status steuern · Bon drucken · Ton-Benachrichtigung</td></tr>
+    <tr><td><strong>Kunden</strong></td><td>Automatische Kundenkartei · Historie · Review- & Win-back-SMS</td></tr>
+    <tr><td><strong>Aktionen</strong></td><td>Zeitlich begrenzte Angebote mit Countdown (z. B. Gratis-Getränk)</td></tr>
+    <tr><td><strong>Speisekarte</strong></td><td>Preis, Text, Bild, Verfügbarkeit — sofort live</td></tr>
+    <tr><td><strong>Drucker</strong></td><td>Küchenbon: Browser, AutoPrint oder Netzwerk</td></tr>
+    <tr><td><strong>Online/Offline</strong></td><td>Bestellungen mit einem Klick pausieren</td></tr>
+    <tr><td><strong>Tagesbericht</strong></td><td>Umsatz, Bestellanzahl, Top-Gerichte, Lieferung vs. Abholung</td></tr>
+  </table>
+
+  <h3>Technik & Sicherheit (Webschmiede)</h3>
+  <table>
+    <tr><th>Feature</th><th>Status</th></tr>
+    <tr><td>Eigener Server in Deutschland (Hetzner)</td><td class="status-ok">✓ Aktiv</td></tr>
+    <tr><td>CRM & Bestelldatenbank (bei Ihnen, nicht extern)</td><td class="status-ok">✓ Aktiv</td></tr>
+    <tr><td>Preis-Schutz gegen Manipulation</td><td class="status-ok">✓ Aktiv</td></tr>
+    <tr><td>Firewall & Bot-Schutz</td><td class="status-ok">✓ Aktiv</td></tr>
+    <tr><td>Automatisierung (Backups, Follow-ups)</td><td class="status-ok">✓ Vorbereitet</td></tr>
+    <tr><td>SMS-Benachrichtigungen</td><td class="status-wait">◷ Wartet auf Freischaltung</td></tr>
+    <tr><td>WhatsApp-Assistent (Speisekarte per Chat)</td><td class="status-wait">◷ Vorbereitet</td></tr>
+    <tr><td>Eigene Domain + HTTPS</td><td class="status-wait">◷ Optional</td></tr>
+    <tr><td>Stripe Online-Zahlung</td><td class="status-wait">◷ Optional</td></tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- ROI -->
+  <h2>2. Was bringt Ihnen das? (Return on Investment)</h2>
+  <p>Beispielrechnungen auf Basis typischer Gastronomie-Werte. Ihre echten Zahlen sehen Sie im Admin unter <strong>Tagesbericht</strong>.</p>
+
+  <div class="roi-grid">
+    <div class="roi-card">
+      <div class="num">0 %</div>
+      <div class="lbl">Provision auf Bestellungen über Ihr eigenes Portal — Lieferportale verlangen oft 13–30 %</div>
+    </div>
+    <div class="roi-card">
+      <div class="num">24/7</div>
+      <div class="lbl">Bestellungen auch wenn die Leitung besetzt ist oder Sie geschlossen haben (Offline-Schalter steuert das)</div>
+    </div>
+    <div class="roi-card">
+      <div class="num">≈ 350 €</div>
+      <div class="lbl">Monatlich gesparte Provision bei 80 Bestellungen à 22 € und 20 % Portal-Gebühr</div>
+    </div>
+    <div class="roi-card">
+      <div class="num">≈ 4 Std.</div>
+      <div class="lbl">Weniger Telefonzeit pro Monat bei 80 Online-Bestellungen (ca. 3 Min. Ersparnis pro Order)</div>
+    </div>
+  </div>
+
+  <h3>Vergleich: Vorher vs. Nachher</h3>
+  <table>
+    <tr><th>Vorher</th><th>Jetzt mit Webschmiede</th></tr>
+    <tr><td>Bestellungen nur telefonisch / über fremde Portale</td><td><strong>Eigener Kanal</strong> — Marke Snack House, volle Kontrolle</td></tr>
+    <tr><td>Hohe Provision pro Bestellung</td><td><strong>0 € Provision</strong> auf Eigenbestellungen</td></tr>
+    <tr><td>Keine Kundendaten</td><td><strong>Eigene Kundenliste</strong> — Stammkunden gezielt ansprechen</td></tr>
+    <tr><td>Google-Bewertungen dem Zufall überlassen</td><td><strong>Automatische Review-Einladung</strong> nach Bestellung</td></tr>
+    <tr><td>Speisekarte ändern = Aufwand</td><td><strong>Sofort im Admin</strong> — Preis, Text, Bild, ausverkauft</td></tr>
+  </table>
+
+  <h3>Kennzahlen, die Sie messen können</h3>
+  <table>
+    <tr><th>KPI</th><th>Wo</th></tr>
+    <tr><td>Bestellungen & Umsatz heute</td><td>Admin → Tagesbericht</td></tr>
+    <tr><td>Beliebteste Gerichte</td><td>Admin → Tagesbericht (Top 5)</td></tr>
+    <tr><td>Lieferung vs. Abholung</td><td>Admin → Tagesbericht</td></tr>
+    <tr><td>Stammkunden & Bestellhistorie</td><td>Admin → Kunden</td></tr>
+  </table>
+
+  <!-- ANLEITUNG -->
+  <h2>3. Kurzanleitung — Admin in 5 Minuten</h2>
+  <p><strong>Admin öffnen:</strong> https://yassine.digitalehandwerkskunst.de/admin · Passwort wurde Ihnen separat übergeben.</p>
+
+  <h3>Bestellung bearbeiten</h3>
+  <ol class="steps">
+    <li>Tab <strong>Bestellungen</strong> — neue Order erscheint oben (mit Glockenton)</li>
+    <li>Status setzen: Neu → <strong>Zubereitung</strong> → <strong>Unterwegs</strong> (Lieferung) oder <strong>Abholbereit</strong></li>
+    <li>Abschluss: <strong>Fertig</strong> — löst ggf. Review-SMS aus (wenn SMS aktiv)</li>
+    <li>Optional: <strong>Drucken</strong> für Küchenbon</li>
+  </ol>
+
+  <h3>Häufige Aufgaben</h3>
+  <table>
+    <tr><th>Aufgabe</th><th>So geht's</th></tr>
+    <tr><td>Bestellungen pausieren</td><td>Schalter <strong>Online/Offline</strong> oben rechts</td></tr>
+    <tr><td>Wartezeit ändern</td><td>Leiste unter Header → Minuten → Speichern</td></tr>
+    <tr><td>Aktion starten</td><td>Tab Aktionen → konfigurieren → Starten</td></tr>
+    <tr><td>Artikel ausverkauft</td><td>Tab Speisekarte → Verfügbarkeit aus</td></tr>
+    <tr><td>Preis ändern</td><td>Tab Speisekarte → Preis anpassen → Speichern</td></tr>
+    <tr><td>Tagesumsatz sehen</td><td>Button <strong>Tagesbericht</strong> im Header</td></tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- OFFEN + UPSELL -->
+  <h2>4. Was wir noch von Ihnen brauchen</h2>
+  <table>
+    <tr><th>Punkt</th><th>Warum</th><th>Aufwand</th></tr>
+    <tr><td>Handynummer für SMS</td><td>Bestätigungen & Review-Anfragen</td><td>2 Min.</td></tr>
+    <tr><td>Google Review Link</td><td>Automatische Bewertungsanfragen</td><td>5 Min.</td></tr>
+    <tr><td>Domain (z. B. snackhouse-mechernich.de)</td><td>Professionelle URL</td><td>Einmalig</td></tr>
+    <tr><td>Eigene Speisefotos</td><td>Mehr Bestellungen im Portal</td><td>1–2 Std.</td></tr>
+    <tr><td>Testbestellung</td><td>Alles einmal durchspielen</td><td>10 Min.</td></tr>
+    <tr><td>Go-Live Freigabe</td><td>Schalter auf Online lassen</td><td>1 Klick</td></tr>
+  </table>
+
+  <h2>5. Optionale Erweiterungen</h2>
+  <p>Erst sinnvoll, wenn das Basis-System stabil läuft. Kein Muss — Sie entscheiden.</p>
+
+  <div class="upsell"><strong>Domain & SSL</strong> Eigene Adresse mit HTTPS — mehr Vertrauen, besseres Google-Ranking.</div>
+  <div class="upsell"><strong>SMS-Paket</strong> seven.io einrichten — Gäste & Sie sofort informiert bei jeder Bestellung.</div>
+  <div class="upsell"><strong>WhatsApp-Assistent</strong> Speisekarte per Chat ändern: „Döner heute +0,50 €“ — ohne Admin-Login.</div>
+  <div class="upsell"><strong>Stripe Online-Zahlung</strong> Vorauskasse — weniger No-Shows bei Lieferungen.</div>
+  <div class="upsell"><strong>Food-Fotoshooting</strong> Professionelle Bilder — typisch +15–30 % höherer Warenkorb online.</div>
+  <div class="upsell"><strong>Google-Optimierung</strong> Business-Profil, Review-Link, Local SEO — mehr Laufkundschaft.</div>
+  <div class="upsell"><strong>Treueprogramm</strong> Digitale Stempelkarte — Stammkunden kommen öfter zurück.</div>
+  <div class="upsell"><strong>Wartung & Support</strong> Monatlich Updates, Backup-Check, Support-Stunden — Sie kümmern sich nur ums Essen.</div>
+
+  <p style="margin-top:6mm;font-size:9pt;color:#666;"><strong>Empfohlene Reihenfolge:</strong> Domain → SMS → 4 Wochen Test → Stripe oder WhatsApp → Fotos → Treueprogramm</p>
+
+  <!-- CHECKLISTE -->
+  <h2>6. Go-Live Checkliste</h2>
+  <ul class="checklist">
+    <li>Testbestellung Abholung durchgeführt</li>
+    <li>Testbestellung Lieferung durchgeführt</li>
+    <li>Admin-Passwort sicher notiert</li>
+    <li>Google Review Link eingetragen (Tab Kunden)</li>
+    <li>Online-Schalter auf AN</li>
+    <li>Link auf Google Business & Instagram gesetzt</li>
+    <li>Freigabe erteilt</li>
+  </ul>
+
+  <div class="sig-line">
+    <div>Datum · Unterschrift Kunde (Freigabe)</div>
+    <div>Datum · Unterschrift Webschmiede (Übergabe)</div>
+  </div>
+
+  <div class="footnote">
+    Webschmiede · Digitale Handwerkskunft · Support: [Telefon/E-Mail eintragen]<br>
+    Snack House Yassine · Dr.-Felix-Gerhardus-Str. 7 · 53894 Mechernich · Tel. 02443-3088966
+  </div>
+
+</div>
+</body>
+</html>

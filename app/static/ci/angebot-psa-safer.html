@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Angebot · PSA Marketing GmbH · Webschmiede</title>
+  <link rel="stylesheet" href="webschmiede-ci.css">
+  <style>
+    .ws-phase {
+      border: 1px solid var(--ws-border);
+      border-radius: var(--ws-radius);
+      padding: 16px 18px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+    }
+    .ws-phase-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .ws-phase-num {
+      display: inline-block;
+      background: var(--ws-orange);
+      color: #fff;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 99px;
+      margin-right: 8px;
+    }
+    .ws-phase-price {
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--ws-orange-dark);
+      white-space: nowrap;
+    }
+    .ws-roi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 14px 0;
+    }
+    @media (max-width: 700px) {
+      .ws-roi-grid { grid-template-columns: 1fr; }
+    }
+    .ws-roi-card {
+      background: var(--ws-orange-soft);
+      border: 1px solid #FFD4B8;
+      border-radius: var(--ws-radius);
+      padding: 14px 16px;
+    }
+    .ws-roi-card .big {
+      font-size: 18pt;
+      font-weight: 700;
+      color: var(--ws-orange-dark);
+      line-height: 1.2;
+      margin: 6px 0;
+    }
+    .ws-roi-card .hint { font-size: 8.5pt; color: #888; line-height: 1.45; }
+    .ws-muted { color: var(--ws-ink-muted); font-size: 9.5pt; line-height: 1.55; }
+    .ws-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 700px) {
+      .ws-two-col { grid-template-columns: 1fr; }
+    }
+    .ws-assumptions {
+      font-size: 9pt;
+      color: #666;
+      background: #FAFAFA;
+      border: 1px dashed var(--ws-border);
+      border-radius: var(--ws-radius);
+      padding: 12px 14px;
+      margin-top: 10px;
+    }
+    .ws-assumptions strong { color: var(--ws-ink); }
+  </style>
+</head>
+<body class="ws-doc">
+<button class="ws-print-btn ws-no-print" onclick="window.print()">Als PDF speichern</button>
+
+<!-- ========== SEITE 1: Cover + Lage ========== -->
+<div class="ws-page">
+
+  <div class="ws-doc-header">
+    <div class="ws-brand-lockup">
+      <img src="webschmiede-logo.png" alt="Webschmiede">
+      <div>
+        <div class="ws-brand-name">Webschmiede</div>
+        <div class="ws-brand-tagline">Digitale Handwerkskunst · Systeme, die entlasten</div>
+      </div>
+    </div>
+    <div class="ws-doc-meta">
+      <strong>Angebot</strong><br>
+      Nr. AN-2026-PSA-001<br>
+      Datum: 19.07.2026<br>
+      Gültig bis: 19.08.2026
+    </div>
+  </div>
+
+  <div class="ws-box">
+    <div class="ws-label">Angebot für</div>
+    <strong>PSA Marketing GmbH</strong><br>
+    Rheinpromenade 13 · 40789 Monheim am Rhein<br>
+    Ansprechpartner: Muamed Safer, Pavel Saper<br>
+    <span class="ws-muted">info@psamarketing.de</span>
+  </div>
+
+  <div class="ws-box-accent" style="margin-bottom:20px;">
+    <div class="ws-label">Kernbotschaft</div>
+    <p style="font-size:11pt;line-height:1.65;color:#333;">
+      Euer Marketing zieht. HubSpot ist da. Der Hebel sitzt danach:
+      damit kein Beratungs-Lead in WhatsApp versandet, Belege über eure GmbHs
+      Ordnung haben, und Coaching-Kunden nach dem Verkauf nicht im Support hängen.
+      Wir ersetzen HubSpot nicht. Wir verdrahten Automation drumherum und halten das dauerhaft am Laufen.
+    </p>
+  </div>
+
+  <h2 class="ws-h2">Was wir von außen sehen</h2>
+  <div class="ws-problem">
+    Starke Sichtbarkeit (YouTube, Google, Social Proof). „Kostenfrei beraten“ bringt Traffic.
+    Wenn Formulare, WhatsApp und Telefon nicht sauber in HubSpot nachgefasst werden,
+    gehen Abschlüsse verloren, obwohl der Funnel laut ist.
+  </div>
+  <div class="ws-problem">
+    Mehrere Firmen parallel (PSA, Horizon Cyber Market, Safer Management).
+    Belege und Monatsübergabe an den Steuerberater werden schnell unübersichtlich.
+  </div>
+  <div class="ws-problem">
+    Nach dem Verkauf: Onboarding und Status der Teilnehmer oft manuell.
+    Das skaliert schlecht, wenn das Programm wächst.
+  </div>
+
+  <h2 class="ws-h2">Was wir bewusst nicht machen</h2>
+  <ul class="ws-checklist">
+    <li>Kein Amazon-Arbitrage-Coaching und kein Ersatz für euer Kernprodukt</li>
+    <li>Keine Steuerberatung und keine laufende Buchführung (das bleibt eure Kanzlei)</li>
+    <li>Kein CRM-Wechsel weg von HubSpot</li>
+    <li>Kein Website-Redesign als Einstieg (die Site verkauft schon)</li>
+  </ul>
+
+  <div class="ws-doc-footer">
+    Christian Kummetat · +49 177 8011350 · info@digitalehandwerkskunst.de · digitalehandwerkskunst.de
+  </div>
+</div>
+
+<!-- ========== SEITE 2: Drei Phasen ========== -->
+<div class="ws-page ws-page-break">
+
+  <div class="ws-doc-header">
+    <div class="ws-brand-lockup">
+      <img src="webschmiede-logo.png" alt="Webschmiede">
+      <div>
+        <div class="ws-brand-name">Langfristige Zusammenarbeit</div>
+        <div class="ws-brand-tagline">Drei Phasen · einzeln buchbar · aufeinander aufbauend</div>
+      </div>
+    </div>
+    <div class="ws-doc-meta">AN-2026-PSA-001 · Seite 2</div>
+  </div>
+
+  <div class="ws-pipeline">
+    <span>1 HubSpot-Ops</span>
+    <span>2 Belege &amp; GmbHs</span>
+    <span>3 Coaching-Onboarding</span>
+  </div>
+
+  <div class="ws-phase">
+    <div class="ws-phase-head">
+      <div>
+        <span class="ws-phase-num">Phase 1 · Einstieg</span>
+        <strong style="font-size:12pt;">HubSpot-Ops (n8n-Klebstoff)</strong>
+      </div>
+      <div class="ws-phase-price">2.490 € Setup · 398 €/Monat</div>
+    </div>
+    <p class="ws-muted" style="margin-bottom:10px;">
+      HubSpot bleibt die Wahrheit für Leads und Deals. Wir sorgen dafür, dass Quellen, Termine und No-Shows dort ankommen und nachgefasst werden.
+    </p>
+    <ul class="ws-checklist">
+      <li>Alle relevanten Lead-Quellen → HubSpot Contact/Deal (Formulare, Webhooks, klare Regel für WhatsApp-Leads)</li>
+      <li>Pipeline-Stufen: Neu → Termin → erschienen → Angebot → gewonnen/verloren</li>
+      <li>Termin-Sync (HubSpot Meetings oder externer Kalender → zurück nach HubSpot)</li>
+      <li>Erinnerung vor dem Termin + No-Show-Nachfass (Texte nur nach eurer Freigabe)</li>
+      <li>n8n als Klebstoff an eure HubSpot-API · Private App legt ihr an, Credentials bei uns sicher</li>
+      <li>Monats-Ops: Flows wachen, kleine Anpassungen, kurzer Status an euch</li>
+    </ul>
+  </div>
+
+  <div class="ws-phase">
+    <div class="ws-phase-head">
+      <div>
+        <span class="ws-phase-num">Phase 2 · Ordnung</span>
+        <strong style="font-size:12pt;">Beleg-Pipeline über eure GmbHs</strong>
+      </div>
+      <div class="ws-phase-price">ab 1.200 € · empfohlen Multi: 5.990 € · 698 €/Monat</div>
+    </div>
+    <p class="ws-muted" style="margin-bottom:10px;">
+      Keine Steuerberatung. Belege landen nicht mehr in WhatsApp und fünf Postfächern. Der Steuerberater bekommt Monatsordnung.
+    </p>
+    <ul class="ws-checklist">
+      <li>Einstieg: Beleg-Postfach + IMAP-Scan + Monatsmappen + CSV/Paket für die Kanzlei (1.200 € / 248 €)</li>
+      <li>Ausbau: Lexware/sevDesk-Anbindung wo sinnvoll + Liste fehlender Belege (3.200 € / 398 €)</li>
+      <li>Multi-GmbH (empfohlen für euch): getrennte Stränge PSA / Horizon / Safer Management, Übersicht „was fehlt“, Kanzlei-Onboarding (5.990 € / 698 €)</li>
+      <li>Meta-Rechnungen aus dem Postfach herausfiltern und ablegen</li>
+      <li>Vor Start: unser Wizard (Tools → AVV → Zugänge). Kein Blindflug mit Passwörtern</li>
+    </ul>
+  </div>
+
+  <div class="ws-phase">
+    <div class="ws-phase-head">
+      <div>
+        <span class="ws-phase-num">Phase 3 · Skalierung</span>
+        <strong style="font-size:12pt;">Coaching-Onboarding nach dem Verkauf</strong>
+      </div>
+      <div class="ws-phase-price">4.890 € Setup · 298 €/Monat</div>
+    </div>
+    <p class="ws-muted" style="margin-bottom:10px;">
+      Nach dem Abschluss sieht der Teilnehmer, was als Nächstes dran ist. Euer Team sieht, wer stecken bleibt. Weniger Support-Chaos.
+    </p>
+    <ul class="ws-checklist">
+      <li>Schlankes Teilnehmer-Portal oder Magic-Link-Zugang</li>
+      <li>Checklisten pro Programm (Woche 1–4 und weiter)</li>
+      <li>Dateien/Links zentral · Status fürs interne Team</li>
+      <li>Optional: automatische Erinnerungsmail, wenn ein Schritt fällig ist</li>
+      <li>Anbindung an HubSpot (gewonnen = Onboarding startet)</li>
+    </ul>
+  </div>
+
+  <div class="ws-doc-footer">
+    Christian Kummetat · +49 177 8011350 · info@digitalehandwerkskunst.de
+  </div>
+</div>
+
+<!-- ========== SEITE 3: Investition + ROI ========== -->
+<div class="ws-page ws-page-break">
+
+  <div class="ws-doc-header">
+    <div class="ws-brand-lockup">
+      <img src="webschmiede-logo.png" alt="Webschmiede">
+      <div>
+        <div class="ws-brand-name">Investition &amp; Return</div>
+        <div class="ws-brand-tagline">Klar rechnen · Annahmen transparent</div>
+      </div>
+    </div>
+    <div class="ws-doc-meta">AN-2026-PSA-001 · Seite 3</div>
+  </div>
+
+  <h2 class="ws-h2">Investition (netto)</h2>
+  <table class="ws-table">
+    <tr>
+      <th>Position</th>
+      <th class="num">Einmalig</th>
+      <th class="num">Monatlich</th>
+    </tr>
+    <tr>
+      <td><strong>Phase 1</strong> · HubSpot-Ops</td>
+      <td class="num">2.490 €</td>
+      <td class="num">398 €</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 2a</strong> · Beleg-Pipeline (eine Firma)</td>
+      <td class="num">1.200 €</td>
+      <td class="num">248 €</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 2b</strong> · System-Brücke Multi-GmbH (empfohlen)</td>
+      <td class="num">5.990 €</td>
+      <td class="num">698 €</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 3</strong> · Coaching-Onboarding</td>
+      <td class="num">4.890 €</td>
+      <td class="num">298 €</td>
+    </tr>
+    <tr>
+      <td><strong>Empfohlenes Jahr-1-Paket</strong><br>
+        <span class="ws-muted">Phase 1 + Phase 2b (Multi-GmbH). Phase 3 optional danach.</span></td>
+      <td class="num"><strong>8.480 €</strong></td>
+      <td class="num"><strong>1.096 €</strong></td>
+    </tr>
+  </table>
+
+  <p class="ws-total-big">Einstieg Phase 1 allein: 2.490 € + 398 €/Monat</p>
+  <p class="ws-muted" style="text-align:right;margin-top:-8px;">
+    Alle Preise zzgl. MwSt., sofern nicht Kleinunternehmerregelung greift. SMS-/API-Nutzung (seven.io, HubSpot-Plan) trägt der Kunde.
+  </p>
+
+  <h2 class="ws-h2">Return of Investment (Beispielrechnung)</h2>
+  <p class="ws-muted" style="margin-bottom:8px;">
+    Keine Garantie. Rechenbeispiel mit konservativen Annahmen, die wir im Call an eure echten Zahlen anpassen.
+  </p>
+
+  <div class="ws-roi-grid">
+    <div class="ws-roi-card">
+      <div class="ws-label">Hebel 1 · weniger verlorene Beratungen</div>
+      <div class="big">≈ 1 Extra-Abschluss / Monat</div>
+      <p class="hint">
+        Schon ein zusätzlicher Coaching-Verkauf pro Monat (durch Reminder + No-Show-Nachfass)
+        deckt oft das komplette Monats-Ops und amortisiert das Setup in wenigen Wochen.
+      </p>
+    </div>
+    <div class="ws-roi-card">
+      <div class="ws-label">Hebel 2 · Zeit &amp; Belege</div>
+      <div class="big">≈ 4–8 Std / Monat</div>
+      <p class="hint">
+        Weniger Suchen über Postfächer und GmbHs. Weniger Nachfragen der Kanzlei.
+        Bei internen 80 €/Std. sind das schnell 320–640 € Zeitwert, bevor Umsatz dazukommt.
+      </p>
+    </div>
+  </div>
+
+  <div class="ws-assumptions">
+    <strong>Annahmen für die Beispielrechnung (Phase 1):</strong><br>
+    · 40 kostenfreie Beratungstermine / Monat (Traffic ist da)<br>
+    · No-Show heute ca. 25&nbsp;% → mit Erinnerung + Nachfass eher ~15&nbsp;% → ca. 4 Termine mehr<br>
+    · Abschlussquote auf erschienene Termine 15&nbsp;% → grob 0,6 Extra-Abschlüsse / Monat<br>
+    · Angenommenes Ticket nur zur Illustration: 4.990 € → grob 3.000 € Extra-Umsatz / Monat<br>
+    · Phase-1-Kosten: 398 €/Monat → Return grob im Bereich <strong>6–8×</strong> auf die laufenden Kosten<br>
+    · Setup 2.490 € wäre dann in unter einem Monat Extra-Umsatz wieder drin<br><br>
+    <strong>Langfristig (12 Monate, Phase 1 + 2b):</strong>
+    Investition ca. 8.480 € Setup + 13.152 € Ops (1.096 × 12) = ca. <strong>21.600 €</strong> Jahr 1.
+    Reicht schon <strong>ein Extra-Abschluss alle 2 Monate</strong> bei 4.990 € Ticket, um das Jahr zu tragen,
+    ohne Zeitersparnis und ohne Phase-3-Nutzen mitzurechnen. Bei eurem Traffic ist das untertrieben, wenn der Funnel heute undicht ist.
+  </div>
+
+  <h2 class="ws-h2">Was ihr langfristig bekommt (über das Setup hinaus)</h2>
+  <div class="ws-two-col">
+    <div class="ws-gain">
+      <strong>Betrieb, nicht Projekt.</strong><br>
+      Monats-Ops heißt: Flows laufen, wir merken wenn etwas kaputt ist, kleine Änderungen ohne jedes Mal neu zu verhandeln.
+    </div>
+    <div class="ws-gain">
+      <strong>Ein Partner für Ops.</strong><br>
+      HubSpot, Belege, später Onboarding. Eine Hand, die den Klebstoff kennt. Kein Tool-Zoo ohne Verantwortung.
+    </div>
+  </div>
+
+  <div class="ws-doc-footer">
+    Christian Kummetat · +49 177 8011350 · info@digitalehandwerkskunst.de
+  </div>
+</div>
+
+<!-- ========== SEITE 4: Ablauf + Annahme ========== -->
+<div class="ws-page ws-page-break">
+
+  <div class="ws-doc-header">
+    <div class="ws-brand-lockup">
+      <img src="webschmiede-logo.png" alt="Webschmiede">
+      <div>
+        <div class="ws-brand-name">Ablauf &amp; nächste Schritte</div>
+        <div class="ws-brand-tagline">Kein Blindflug · erst AVV, dann Zugänge</div>
+      </div>
+    </div>
+    <div class="ws-doc-meta">AN-2026-PSA-001 · Seite 4</div>
+  </div>
+
+  <h2 class="ws-h2">So starten wir</h2>
+  <ol style="padding-left:22px;color:#444;font-size:10.5pt;line-height:1.85;">
+    <li>Kurzes Gespräch (20–30 Min.): wo versanden Leads heute, wo nerven Belege</li>
+    <li>Phase wählen (empfohlen: erst Phase 1, dann 2b)</li>
+    <li>Auftrag + AVV · danach HubSpot Private App und ggf. IMAP App-Passwort</li>
+    <li>Go-Live Phase 1 in ca. 5–10 Werktagen nach Zugängen</li>
+    <li>Erste Auswertung nach 30 Tagen (No-Shows, Deal-Status, was fehlt)</li>
+  </ol>
+
+  <h2 class="ws-h2">Was ihr liefert</h2>
+  <ul class="ws-checklist">
+    <li>HubSpot-Plan-Info und Ansprechpartner, der Deals pflegt</li>
+    <li>Private App / API-Token (wir sagen euch, welche Scopes)</li>
+    <li>Freigabe für Reminder- und No-Show-Texte</li>
+    <li>Bei Phase 2: Postfach-Zugang (App-Passwort), Steuerberater-Mail, Firmenliste</li>
+  </ul>
+
+  <div class="ws-quote">
+    „Ordentlich verdrahten, damit der Funnel hält. HubSpot bleibt. Wir kümmern uns um den Rest drumherum.“
+  </div>
+
+  <div class="ws-box-accent" style="margin-top:18px;">
+    <div class="ws-label">Annahme des Angebots</div>
+    <p style="font-size:10.5pt;line-height:1.65;color:#333;">
+      Per Antwort-Mail an <strong>info@digitalehandwerkskunst.de</strong> mit Bezug
+      <strong>AN-2026-PSA-001</strong> und gewünschter Phase, oder Unterschrift unten.
+      Gültig bis <strong>19.08.2026</strong>.
+    </p>
+  </div>
+
+  <table class="ws-table" style="margin-top:20px;">
+    <tr>
+      <th style="width:50%;">Auftraggeber</th>
+      <th>Webschmiede</th>
+    </tr>
+    <tr>
+      <td style="height:90px;vertical-align:bottom;">
+        Ort, Datum ________________________<br><br>
+        Unterschrift _______________________<br>
+        <span class="ws-muted">Name in Druckbuchstaben</span>
+      </td>
+      <td style="height:90px;vertical-align:bottom;">
+        Mechernich, 19.07.2026<br><br>
+        Christian Kummetat<br>
+        <span class="ws-muted">Webschmiede · Digitale Handwerkskunst</span>
+      </td>
+    </tr>
+  </table>
+
+  <div class="ws-legal">
+    Festpreis für den beschriebenen Umfang der gewählten Phase. Änderungen nach Beauftragung gesondert.
+    Laufende Monatsbeträge sind Ops/Wartung für die aktivierten Flows und können mit 30 Tagen zum Monatsende gekündigt werden,
+    sofern nichts anderes vereinbart. Kein Ersatz für Steuerberatung. HubSpot-, SMS- und Cloud-Kosten Dritter trägt der Auftraggeber.
+    Annahme per E-Mail oder Unterschrift.
+  </div>
+
+  <div class="ws-doc-footer">
+    Christian Kummetat · +49 177 8011350 · info@digitalehandwerkskunst.de · digitalehandwerkskunst.de
+  </div>
+</div>
+
+</body>
+</html>

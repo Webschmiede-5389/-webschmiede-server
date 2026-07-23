@@ -1,0 +1,26 @@
+{
+  "id": "general",
+  "label": "Allgemein (lokale Betriebe)",
+  "locale": "de-DE",
+  "version": 1,
+  "topics": ["kontakt", "öffnungszeiten", "standort"],
+  "faqs": [
+    {
+      "id": "kontakt",
+      "label": "Kontakt",
+      "keywords": ["kontakt", "telefon", "mail", "erreichen"],
+      "answer": "Telefon und E-Mail findest du auf der Website im Impressum und im Footer."
+    },
+    {
+      "id": "standort",
+      "label": "Adresse",
+      "keywords": ["adresse", "wo seid ihr", "standort", "anfahrt"],
+      "answer": "Unsere Adresse steht auf der Website. Navigation über Google Maps funktioniert mit dem Firmennamen."
+    }
+  ],
+  "voice": {
+    "greeting": "Hallo, hier ist {business_name}.",
+    "fallback": "Dazu kann ich gerade nichts Sicheres sagen. Bitte ruf uns an.",
+    "max_turns": 6
+  }
+}

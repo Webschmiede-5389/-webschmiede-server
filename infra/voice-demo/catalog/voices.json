@@ -1,0 +1,96 @@
+{
+  "note": "Microsoft Edge neural TTS (edge-tts). Echte Dialekt-Aussprache (Kölsch/Platt) gibt es hier nicht – Dialekt kommt über den Textstil (LLM). Stimmen brauchen keinen Extra-Download.",
+  "default": "conrad",
+  "voices": [
+    {
+      "id": "conrad",
+      "short_name": "de-DE-ConradNeural",
+      "label": "Conrad",
+      "gender": "male",
+      "region": "Deutschland",
+      "type": "ruhig, klar",
+      "preview": "Guten Tag, hier ist die Webschmiede."
+    },
+    {
+      "id": "killian",
+      "short_name": "de-DE-KillianNeural",
+      "label": "Killian",
+      "gender": "male",
+      "region": "Deutschland",
+      "type": "jung, frisch",
+      "preview": "Hallo, schön dass Sie anrufen."
+    },
+    {
+      "id": "florian",
+      "short_name": "de-DE-FlorianMultilingualNeural",
+      "label": "Florian",
+      "gender": "male",
+      "region": "Deutschland",
+      "type": "multilingual, modern",
+      "preview": "Willkommen bei der digitalen Handwerkskunst."
+    },
+    {
+      "id": "jonas",
+      "short_name": "de-AT-JonasNeural",
+      "label": "Jonas (Österreich)",
+      "gender": "male",
+      "region": "Österreich",
+      "type": "österreichisch",
+      "preview": "Grüß Gott, wie kann ich helfen?"
+    },
+    {
+      "id": "jan",
+      "short_name": "de-CH-JanNeural",
+      "label": "Jan (Schweiz)",
+      "gender": "male",
+      "region": "Schweiz",
+      "type": "schweizerisch",
+      "preview": "Grüezi, was darf ich für Sie tun?"
+    },
+    {
+      "id": "katja",
+      "short_name": "de-DE-KatjaNeural",
+      "label": "Katja",
+      "gender": "female",
+      "region": "Deutschland",
+      "type": "warm, professionell",
+      "preview": "Guten Tag, hier ist die Webschmiede."
+    },
+    {
+      "id": "amala",
+      "short_name": "de-DE-AmalaNeural",
+      "label": "Amala",
+      "gender": "female",
+      "region": "Deutschland",
+      "type": "freundlich, hell",
+      "preview": "Hallo, schön dass Sie da sind."
+    },
+    {
+      "id": "seraphina",
+      "short_name": "de-DE-SeraphinaMultilingualNeural",
+      "label": "Seraphina",
+      "gender": "female",
+      "region": "Deutschland",
+      "type": "multilingual, modern",
+      "preview": "Willkommen, wie kann ich helfen?"
+    },
+    {
+      "id": "ingrid",
+      "short_name": "de-AT-IngridNeural",
+      "label": "Ingrid (Österreich)",
+      "gender": "female",
+      "region": "Österreich",
+      "type": "österreichisch",
+      "preview": "Grüß Gott, was darf ich für Sie tun?"
+    },
+    {
+      "id": "leni",
+      "short_name": "de-CH-LeniNeural",
+      "label": "Leni (Schweiz)",
+      "gender": "female",
+      "region": "Schweiz",
+      "type": "schweizerisch",
+      "preview": "Grüezi miteinand."
+    }
+  ]
+}

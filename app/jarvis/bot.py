@@ -144,6 +144,27 @@ def handle_message(
         item = parser.find_item(text, catalog)
 
     if not item and not is_agency:
+        try:
+            from .knowledge import resolve_knowledge, find_faq_answer
+
+            knowledge = resolve_knowledge(client)
+            faq = find_faq_answer(knowledge, text)
+            if faq and faq.get("answer"):
+                reply = faq["answer"]
+                log_bot(
+                    db, cid, phone, channel, "in", text, "faq",
+                    {"faq_id": faq.get("id"), "pack": knowledge.get("pack_id")},
+                )
+                db.commit()
+                return {
+                    "success": True,
+                    "reply": reply,
+                    "client_id": cid,
+                    "faq_id": faq.get("id"),
+                }
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).warning("knowledge FAQ: %s", exc)
         reply = (
             "Welches Gericht meinst du? Nenne den Namen, z.B. „Lahmacun-Rolle“ "
             "oder „Pizza Margherita“."

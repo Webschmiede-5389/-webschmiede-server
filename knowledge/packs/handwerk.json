@@ -1,0 +1,44 @@
+{
+  "id": "handwerk",
+  "label": "Handwerk & lokale Dienstleister",
+  "locale": "de-DE",
+  "version": 1,
+  "topics": ["termin", "angebot", "notdienst", "einsatzgebiet", "rechnung"],
+  "faqs": [
+    {
+      "id": "termin",
+      "label": "Termin vereinbaren",
+      "keywords": ["termin", "anfrage", "besichtigung", "wann kommt"],
+      "answer": "Am schnellsten per Anruf oder über unser Kontaktformular. Wir melden uns mit einem Vorschlag zurück."
+    },
+    {
+      "id": "angebot",
+      "label": "Kostenvoranschlag",
+      "keywords": ["angebot", "kosten", "preis", "kostenvoranschlag", "was kostet"],
+      "answer": "Nach kurzer Beschreibung oder Fotos erstellen wir ein Angebot. Ohne Besichtigung nur grobe Richtwerte."
+    },
+    {
+      "id": "notdienst",
+      "label": "Notdienst",
+      "keywords": ["notdienst", "dringend", "sofort", "wasser", "heizung aus"],
+      "answer": "Bei echten Notfällen bitte anrufen. Außerhalb der Zeiten nur bei vereinbartem Notdienst."
+    },
+    {
+      "id": "einsatzgebiet",
+      "label": "Einsatzgebiet",
+      "keywords": ["einsatzgebiet", "region", "kommt ihr", "umkreis"],
+      "answer": "Wir arbeiten im Umkreis unseres Standorts. Die genaue Region steht auf der Website."
+    },
+    {
+      "id": "rechnung",
+      "label": "Rechnung & Zahlung",
+      "keywords": ["rechnung", "zahlung", "überweisung", "skonto"],
+      "answer": "Rechnungen gehen per Mail oder Post. Zahlungsziel und Bankverbindung stehen auf der Rechnung."
+    }
+  ],
+  "voice": {
+    "greeting": "Guten Tag, {business_name}. Was können wir für Sie tun?",
+    "fallback": "Dazu hole ich kurz einen Kollegen dazu. Einen Moment bitte.",
+    "max_turns": 10
+  }
+}

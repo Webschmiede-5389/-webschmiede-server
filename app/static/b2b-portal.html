@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>B2B Portal · Webschmiede</title>
+  <link rel="icon" href="/ci/webschmiede-logo-mark.png" />
+  <link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600|libre-baskerville:600" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0e0b08; --panel: #1a1510; --ink: #f3efe6; --muted: #9a9080;
+      --gold: #C9A84C; --line: #2a241c; --ok: #3d9a6a; --bad: #c45c4a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: "DM Sans", system-ui, sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, #2a1f12 0%, var(--bg) 55%);
+      color: var(--ink);
+    }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 28px 18px 60px; }
+    header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+    header img { height: 36px; width: auto; }
+    h1 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.45rem; margin: 0; font-weight: 600; }
+    .sub { color: var(--muted); font-size: 0.92rem; margin-top: 4px; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .tab {
+      border: 1px solid var(--line); background: transparent; color: var(--muted);
+      padding: 8px 14px; border-radius: 999px; cursor: pointer; font: inherit;
+    }
+    .tab.on { color: var(--bg); background: var(--gold); border-color: var(--gold); }
+    .panel {
+      background: color-mix(in srgb, var(--panel) 92%, black);
+      border: 1px solid var(--line); border-radius: 16px; padding: 20px;
+      margin-bottom: 16px;
+    }
+    label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
+    input[type="text"], input[type="password"] {
+      width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line);
+      background: #120f0c; color: var(--ink); font: inherit; margin-bottom: 12px;
+    }
+    .drop {
+      border: 1.5px dashed color-mix(in srgb, var(--gold) 55%, var(--line));
+      border-radius: 14px; padding: 36px 16px; text-align: center; color: var(--muted);
+      background: #14100c; cursor: pointer;
+    }
+    .drop strong { display: block; color: var(--ink); margin-bottom: 6px; font-size: 1.05rem; }
+    .btn {
+      display: inline-block; margin-top: 14px; border: 0; border-radius: 10px;
+      background: var(--gold); color: #1a1408; font-weight: 600; padding: 12px 18px;
+      cursor: pointer; font: inherit;
+    }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn.ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+    .msg { margin-top: 12px; font-size: 0.9rem; color: var(--muted); white-space: pre-wrap; }
+    .msg.err { color: var(--bad); }
+    .msg.ok { color: var(--ok); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+    th { color: var(--gold); font-weight: 600; }
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+    .stat {
+      flex: 1; min-width: 120px; background: #14100c; border: 1px solid var(--line);
+      border-radius: 12px; padding: 12px;
+    }
+    .stat b { display: block; font-size: 1.3rem; color: var(--gold); }
+    .hidden { display: none; }
+    .hint { font-size: 0.8rem; color: var(--muted); margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="/ci/webschmiede-logo.png" alt="Webschmiede" />
+      <div>
+        <h1>B2B Portal</h1>
+        <div class="sub">Upload · Berechnung · Auswertung · auf euren Servern</div>
+      </div>
+    </header>
+
+    <div class="panel">
+      <label>Kunden-ID</label>
+      <input id="kundeId" type="text" value="DEMO" />
+      <label>Firma (optional)</label>
+      <input id="firma" type="text" placeholder="Muster Wholesale GmbH" />
+      <label>Zugang (Agency-Passwort oder B2B-Token)</label>
+      <input id="token" type="password" placeholder="Passwort / Token" autocomplete="current-password" />
+      <label style="display:flex;align-items:center;gap:8px;margin:10px 0 0;color:var(--ink);cursor:pointer">
+        <input id="zeroRetention" type="checkbox" checked style="width:auto;margin:0" />
+        Zero-Retention: Rohdaten nach 24 Stunden unwiderruflich loeschen
+      </label>
+      <p class="hint">Eigenes Portal + n8n/API. Hosting: Hetzner DE (Nuernberg). Wholesale-CSV: ean;name;einkauf;vk · Baustoff-CSV: artnr;name;preis;lieferant</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab on" data-tab="wholesale" type="button">Haendlerlisten</button>
+      <button class="tab" data-tab="compare" type="button">Preisvergleich</button>
+      <button class="tab" data-tab="wa" type="button">WA-Bestellung</button>
+      <button class="tab" data-tab="complaint" type="button">Reklamation</button>
+      <button class="tab" data-tab="buchhaltung" type="button">Buchhaltung</button>
+    </div>
+
+    <section id="tab-wholesale">
+      <div class="panel">
+        <div class="drop" id="drop">
+          <strong>Haendlerliste hier hineinziehen</strong>
+          CSV oder Excel-Export als CSV · Klick zum Auswaehlen
+          <input id="file" type="file" accept=".csv,text/csv" class="hidden" />
+        </div>
+        <button class="btn" id="btnUpload" type="button" disabled>Datei speichern</button>
+        <button class="btn ghost" id="btnRun" type="button" disabled>Berechnung starten</button>
+        <div class="msg" id="msg"></div>
+      </div>
+      <div class="panel">
+        <div class="stats" id="stats"></div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr><th>EAN</th><th>Name</th><th>EK</th><th>VK</th><th>Marge</th><th>%</th></tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-compare" class="hidden">
+      <div class="panel">
+        <label>Liste A (CSV)</label>
+        <input id="fileA" type="file" accept=".csv,text/csv" />
+        <label>Liste B (CSV)</label>
+        <input id="fileB" type="file" accept=".csv,text/csv" />
+        <button class="btn" id="btnCompare" type="button">Vergleichen</button>
+        <div class="msg" id="msgCompare"></div>
+        <div class="stats" id="statsCompare"></div>
+        <ul id="briefCompare" class="hint" style="padding-left:18px"></ul>
+        <div style="overflow-x:auto;margin-top:12px">
+          <table>
+            <thead><tr><th>Art.</th><th>Name</th><th>A</th><th>B</th><th>Δ%</th><th>Flags</th></tr></thead>
+            <tbody id="rowsCompare"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-wa" class="hidden">
+      <div class="panel">
+        <label>WhatsApp-Text vom Handwerker (Demo, Meta-Inbound spaeter)</label>
+        <textarea id="waText" rows="5" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#120f0c;color:var(--ink);font:inherit;margin-bottom:12px">Du, ich brauche fuer heute Nachmittag noch 10 Sack Knauf Rotband und 20 CW Profil nach Mechernich</textarea>
+        <button class="btn" id="btnParseWa" type="button">Entwurf erzeugen</button>
+        <button class="btn ghost" id="btnLoadOrders" type="button">Queue laden</button>
+        <div class="msg" id="msgWa"></div>
+        <pre id="waOut" class="hint" style="white-space:pre-wrap;margin-top:12px"></pre>
+        <div id="orderQueue" class="hint" style="margin-top:14px"></div>
+      </div>
+    </section>
+
+    <section id="tab-complaint" class="hidden">
+      <div class="panel">
+        <label>Betreff</label>
+        <input id="compSubject" type="text" value="Reklamation Transportschaden" />
+        <label>Mail-/WA-Text</label>
+        <textarea id="compText" rows="5" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#120f0c;color:var(--ink);font:inherit;margin-bottom:12px">Auftrag 45892 – Gipskartonplatten gebrochen angekommen, Fotos im Anhang. Bitte Ersatzlieferung.</textarea>
+        <button class="btn" id="btnComplaint" type="button">Vorsortieren</button>
+        <div class="msg" id="msgComp"></div>
+        <pre id="compOut" class="hint" style="white-space:pre-wrap;margin-top:12px"></pre>
+      </div>
+    </section>
+
+    <section id="tab-buchhaltung" class="hidden">
+      <div class="panel">
+        <div class="stats" id="buchStats"></div>
+        <p class="hint">Zaehler aus Portal-Jobs. Lexware-/Beleg-Automation laeuft ueber n8n auf euren Servern.</p>
+        <p style="margin-top:14px">
+          <a class="btn" href="/buchhaltung-onboarding.html">Buchhaltungs-Onboarding öffnen</a>
+        </p>
+        <p class="hint">Tools, Fragen, Paket-Empfehlung, Zugänge erst nach AVV (verschlüsselt).</p>
+      </div>
+    </section>
+  </div>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let file = null;
+    let jobId = null;
+    const TAB_IDS = ["wholesale", "compare", "wa", "complaint", "buchhaltung"];
+
+    function authHeaders() {
+      const t = $("token").value.trim();
+      const h = {};
+      if (t) {
+        h["X-Agency-Password"] = t;
+        h["X-B2B-Token"] = t;
+      }
+      return h;
+    }
+
+    function setMsg(text, cls) {
+      const el = $("msg");
+      el.textContent = text || "";
+      el.className = "msg" + (cls ? " " + cls : "");
+    }
+
+    document.querySelectorAll(".tab").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((b) => b.classList.remove("on"));
+        btn.classList.add("on");
+        const tab = btn.dataset.tab;
+        TAB_IDS.forEach((id) => {
+          const el = $("tab-" + id);
+          if (el) el.classList.toggle("hidden", tab !== id);
+        });
+        if (tab === "buchhaltung") loadStats();
+      });
+    });
+
+    const drop = $("drop");
+    const fileInput = $("file");
+    drop.addEventListener("click", () => fileInput.click());
+    drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.style.borderColor = "#C9A84C"; });
+    drop.addEventListener("dragleave", () => { drop.style.borderColor = ""; });
+    drop.addEventListener("drop", (e) => {
+      e.preventDefault();
+      drop.style.borderColor = "";
+      if (e.dataTransfer.files[0]) pick(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files[0]) pick(fileInput.files[0]);
+    });
+
+    function pick(f) {
+      file = f;
+      jobId = null;
+      $("btnUpload").disabled = false;
+      $("btnRun").disabled = true;
+      setMsg("Gewaehlt: " + f.name);
+    }
+
+    $("btnUpload").addEventListener("click", async () => {
+      if (!file) return;
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("kunde_id", $("kundeId").value.trim() || "DEMO");
+      fd.append("firma", $("firma").value.trim());
+      fd.append("job_type", "wholesale");
+      fd.append("zero_retention", $("zeroRetention").checked ? "1" : "0");
+      setMsg("Upload…");
+      try {
+        const res = await fetch("/api/b2b/jobs/upload", { method: "POST", headers: authHeaders(), body: fd });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Upload fehlgeschlagen");
+        jobId = data.job.id;
+        $("btnRun").disabled = false;
+        const zr = data.job.zero_retention ? " Zero-Retention aktiv bis " + (data.job.purge_after || "24h") + "." : "";
+        setMsg("Gespeichert. Job " + jobId + " – jetzt Berechnung starten." + zr, "ok");
+      } catch (e) {
+        setMsg(String(e.message || e), "err");
+      }
+    });
+
+    $("btnRun").addEventListener("click", async () => {
+      if (!jobId) return;
+      setMsg("Berechnung laeuft…");
+      $("btnRun").disabled = true;
+      try {
+        const res = await fetch("/api/b2b/jobs/" + jobId + "/run", {
+          method: "POST",
+          headers: { ...authHeaders(), "Content-Type": "application/json" },
+          body: "{}",
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Lauf fehlgeschlagen");
+        renderJob(data.job || data);
+        setMsg("Fertig.", "ok");
+        loadStats();
+      } catch (e) {
+        setMsg(String(e.message || e), "err");
+        $("btnRun").disabled = false;
+      }
+    });
+
+    function renderJob(job) {
+      const result = job.result || {};
+      const stats = result.stats || {};
+      $("stats").innerHTML = `
+        <div class="stat"><b>${stats.zeilen ?? job.row_count ?? "–"}</b>Zeilen</div>
+        <div class="stat"><b>${stats.mit_marge ?? "–"}</b>mit Marge</div>
+        <div class="stat"><b>${stats.beste_marge ?? "–"}</b>beste Marge</div>
+        <div class="stat"><b>${job.status || "–"}</b>Status</div>`;
+      const rows = result.top_margen || result.rows || [];
+      $("rows").innerHTML = rows.slice(0, 50).map((r) => `
+        <tr>
+          <td>${esc(r.ean)}</td><td>${esc(r.name)}</td>
+          <td>${fmt(r.einkauf)}</td><td>${fmt(r.vk)}</td>
+          <td>${fmt(r.marge)}</td><td>${r.marge_pct != null ? r.marge_pct + "%" : "–"}</td>
+        </tr>`).join("") || "<tr><td colspan='6'>Keine Zeilen</td></tr>";
+    }
+
+    async function loadStats() {
+      try {
+        const q = new URLSearchParams({ kunde_id: $("kundeId").value.trim() || "DEMO" });
+        const res = await fetch("/api/b2b/jobs?" + q, { headers: authHeaders() });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Stats fehlen");
+        const s = data.stats || {};
+        $("buchStats").innerHTML = `
+          <div class="stat"><b>${s.jobs_gesamt ?? 0}</b>Jobs gesamt</div>
+          <div class="stat"><b>${s.jobs_fertig ?? 0}</b>fertig</div>
+          <div class="stat"><b>${s.buchhaltung_laeufe ?? 0}</b>Buchhaltungs-Laeufe</div>`;
+      } catch (e) {
+        $("buchStats").innerHTML = `<p class="msg err">${esc(String(e.message || e))}</p>`;
+      }
+    }
+
+    function fmt(n) { return n == null || n === "" ? "–" : Number(n).toFixed(2); }
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[c]);
+    }
+
+    $("btnCompare").addEventListener("click", async () => {
+      const a = $("fileA").files[0];
+      const b = $("fileB").files[0];
+      const box = $("msgCompare");
+      if (!a || !b) { box.textContent = "Zwei CSV-Dateien noetig."; box.className = "msg err"; return; }
+      const fd = new FormData();
+      fd.append("file_a", a);
+      fd.append("file_b", b);
+      fd.append("kunde_id", $("kundeId").value.trim() || "DEMO");
+      fd.append("firma", $("firma").value.trim());
+      fd.append("zero_retention", $("zeroRetention").checked ? "1" : "0");
+      box.textContent = "Vergleich…"; box.className = "msg";
+      try {
+        const res = await fetch("/api/b2b/baustoff/compare", { method: "POST", headers: authHeaders(), body: fd });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Vergleich fehlgeschlagen");
+        const r = data.result || {};
+        const st = r.stats || {};
+        $("statsCompare").innerHTML = `
+          <div class="stat"><b>${st.gemeinsam ?? "–"}</b>gemeinsam</div>
+          <div class="stat"><b>${st.ausreisser ?? "–"}</b>Ausreisser</div>
+          <div class="stat"><b>${st.guenstiger_in_b ?? "–"}</b>guenstiger B</div>`;
+        $("briefCompare").innerHTML = (r.morning_briefing || []).map((t) => `<li>${esc(t)}</li>`).join("");
+        $("rowsCompare").innerHTML = (r.top_diffs || []).slice(0, 40).map((row) => `
+          <tr>
+            <td>${esc(row.artnr)}</td><td>${esc(row.name)}</td>
+            <td>${fmt(row.preis_a)}</td><td>${fmt(row.preis_b)}</td>
+            <td>${row.delta_pct != null ? row.delta_pct + "%" : "–"}</td>
+            <td>${esc((row.flags || []).join(", "))}</td>
+          </tr>`).join("") || "<tr><td colspan='6'>Keine Diffs</td></tr>";
+        box.textContent = "Fertig."; box.className = "msg ok";
+      } catch (e) {
+        box.textContent = String(e.message || e); box.className = "msg err";
+      }
+    });
+
+    $("btnParseWa").addEventListener("click", async () => {
+      const box = $("msgWa");
+      box.textContent = "Parse…"; box.className = "msg";
+      try {
+        const res = await fetch("/api/b2b/baustoff/parse-order", {
+          method: "POST",
+          headers: { ...authHeaders(), "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: $("waText").value,
+            kunde_id: $("kundeId").value.trim() || "DEMO",
+            save: true,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Parse fehlgeschlagen");
+        const o = data.order || {};
+        $("waOut").textContent =
+          "Confidence " + (o.confidence ?? "–") + "\n" +
+          (o.reply_draft || "") + "\n\n" +
+          JSON.stringify(o.items || [], null, 2);
+        box.textContent = "Entwurf gespeichert" + (data.saved && data.saved.id ? " (#" + data.saved.id + ")" : "") + ". Freigabe manuell.";
+        box.className = "msg ok";
+        loadOrders();
+      } catch (e) {
+        box.textContent = String(e.message || e); box.className = "msg err";
+      }
+    });
+
+    async function loadOrders() {
+      const box = $("orderQueue");
+      try {
+        const q = new URLSearchParams({ kunde_id: $("kundeId").value.trim() || "DEMO" });
+        const res = await fetch("/api/b2b/baustoff/orders?" + q, { headers: authHeaders() });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Queue fehlt");
+        const orders = data.orders || [];
+        box.innerHTML = orders.length
+          ? orders.map((o) => {
+              const items = ((o.order || {}).items || []).map((i) => i.qty + "x " + i.name).join(", ");
+              const btn = o.status === "draft"
+                ? `<button class="btn ghost" type="button" data-approve="${esc(o.id)}" style="margin-top:6px">Freigeben</button>`
+                : `<span>Status: ${esc(o.status)}</span>`;
+              return `<div class="panel" style="margin-top:8px"><b>${esc(o.id)}</b> · ${esc(o.status)}<br/>${esc(items)}<br/>${btn}</div>`;
+            }).join("")
+          : "<p>Keine Entwuerfe.</p>";
+        box.querySelectorAll("[data-approve]").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const id = btn.getAttribute("data-approve");
+            const r = await fetch("/api/b2b/baustoff/orders/" + id + "/approve", {
+              method: "POST", headers: authHeaders(),
+            });
+            const d = await r.json();
+            if (!r.ok) { $("msgWa").textContent = d.error || "Freigabe fehlgeschlagen"; $("msgWa").className = "msg err"; return; }
+            $("msgWa").textContent = "Freigegeben. Abholcode: " + ((d.order || {}).pickup_code || "–") + ". WhatsApp-Send erst nach Meta.";
+            $("msgWa").className = "msg ok";
+            loadOrders();
+          });
+        });
+      } catch (e) {
+        box.innerHTML = `<p class="msg err">${esc(String(e.message || e))}</p>`;
+      }
+    }
+    $("btnLoadOrders").addEventListener("click", loadOrders);
+
+    $("btnComplaint").addEventListener("click", async () => {
+      const box = $("msgComp");
+      box.textContent = "Analyse…"; box.className = "msg";
+      try {
+        const res = await fetch("/api/b2b/baustoff/complaint", {
+          method: "POST",
+          headers: { ...authHeaders(), "Content-Type": "application/json" },
+          body: JSON.stringify({
+            subject: $("compSubject").value,
+            text: $("compText").value,
+            kunde_id: $("kundeId").value.trim() || "DEMO",
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Analyse fehlgeschlagen");
+        const t = data.ticket || {};
+        $("compOut").textContent = t.staff_summary || JSON.stringify(t, null, 2);
+        box.textContent = "Vorsortiert · Prio " + (t.priority || "–");
+        box.className = "msg ok";
+      } catch (e) {
+        box.textContent = String(e.message || e); box.className = "msg err";
+      }
+    });
+  </script>
+</body>
+</html>

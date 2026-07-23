@@ -1,0 +1,44 @@
+{
+  "id": "gastro",
+  "label": "Gastronomie & Lieferdienst",
+  "locale": "de-DE",
+  "version": 1,
+  "topics": ["öffnungszeiten", "bestellung", "lieferung", "speisekarte", "allergene", "zahlung"],
+  "faqs": [
+    {
+      "id": "oeffnungszeiten",
+      "label": "Öffnungszeiten",
+      "keywords": ["öffnungszeiten", "wann offen", "geöffnet", "uhr", "heute offen"],
+      "answer": "Unsere Öffnungszeiten stehen auf der Website. Bei Feiertagen kann es abweichen, dann schreiben wir das auf die Startseite."
+    },
+    {
+      "id": "bestellung",
+      "label": "Online bestellen",
+      "keywords": ["bestellen", "order", "online", "portal", "link"],
+      "answer": "Über unser Bestellportal auf der Website. Abholung oder Lieferung wählst du beim Checkout."
+    },
+    {
+      "id": "lieferung",
+      "label": "Lieferung & Abholung",
+      "keywords": ["lieferung", "liefert ihr", "abholung", "mitnehmen", "liefergebühr"],
+      "answer": "Lieferung und Abholung gehen beides. Mindestbestellwert und Liefergebühr siehst du im Portal vor dem Absenden."
+    },
+    {
+      "id": "zahlung",
+      "label": "Zahlungsarten",
+      "keywords": ["zahlung", "bar", "karte", "paypal", "ec"],
+      "answer": "Im Portal siehst du die verfügbaren Zahlungsarten. Bei Lieferung oft auch bar möglich."
+    },
+    {
+      "id": "allergene",
+      "label": "Allergene",
+      "keywords": ["allergen", "gluten", "laktose", "vegan", "vegetarisch"],
+      "answer": "Allergene und Zusatzstoffe stehen bei den Gerichten im Menü. Bei Unsicherheit ruf kurz an."
+    }
+  ],
+  "voice": {
+    "greeting": "Hallo, {business_name}. Wie kann ich helfen?",
+    "fallback": "Das weiß ich gerade nicht sicher. Ich verbinde dich mit dem Team.",
+    "max_turns": 8
+  }
+}

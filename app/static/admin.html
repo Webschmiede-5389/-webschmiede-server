@@ -75,6 +75,36 @@
     .wait-input:focus { border-color:#C9A84C; }
     .wait-save { background:#C9A84C; color:#000; border:none; border-radius:6px; padding:5px 12px; font-size:11px; font-weight:800; cursor:pointer; font-family:inherit; }
 
+    /* ── Anruf → Bestelllink SMS ── */
+    .call-bar {
+      background: linear-gradient(90deg, #0d1a12 0%, #0e0b08 100%);
+      border-bottom: 1px solid #1a3d28;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .call-bar-label { font-size: 12px; font-weight: 700; color: #22c55e; white-space: nowrap; }
+    .call-bar-label i { margin-right: 6px; }
+    .call-phone-inp {
+      flex: 1; min-width: 140px; max-width: 200px;
+      background: #111; border: 1.5px solid #2a4a35; border-radius: 10px;
+      padding: 10px 14px; color: #fff; font-size: 15px; outline: none; font-family: inherit;
+    }
+    .call-phone-inp:focus { border-color: #22c55e; }
+    .btn-call-sms {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff; border: none; border-radius: 10px;
+      padding: 10px 18px; font-size: 13px; font-weight: 800; cursor: pointer;
+      font-family: inherit; white-space: nowrap;
+    }
+    .btn-call-sms:hover { filter: brightness(1.08); }
+    .btn-call-sms:disabled { opacity: .5; cursor: not-allowed; }
+    .call-sms-hint { font-size: 11px; color: #555; flex: 1; min-width: 180px; }
+    .call-sms-ok { font-size: 12px; color: #22c55e; font-weight: 600; }
+    .call-sms-err { font-size: 12px; color: #ef4444; }
+
     /* ── Report Modal ── */
     .modal-overlay { position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.88); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; padding:20px; }
     .modal-overlay.open { display:flex; }
@@ -271,7 +301,7 @@
     <div class="header-right">
       <span class="new-badge" id="new-badge">NEU</span>
       <!-- Online/Offline Toggle -->
-      <div class="online-toggle online" id="online-toggle" onclick="toggleOnline()" title="Bestellungen an/aus">
+      <div class="online-toggle online" id="online-toggle" onclick="toggleOnline()" title="Bestellportal an oder aus (mit Nachfrage)">
         <div class="toggle-dot"></div>
         <span class="toggle-label" id="online-label">Online</span>
       </div>
@@ -299,6 +329,17 @@
     <div style="flex:1;text-align:right;font-size:11px;color:#444;">Kunden sehen diese Zeit live beim Bestellen</div>
   </div>
 
+  <!-- Anruf → Bestelllink per SMS -->
+  <div class="call-bar" id="call-bar">
+    <span class="call-bar-label"><i class="fas fa-phone-volume"></i>Kunde am Telefon?</span>
+    <input class="call-phone-inp" id="call-sms-phone" type="tel" placeholder="0170 1234567" autocomplete="tel">
+    <button type="button" class="btn-call-sms" id="call-sms-btn" onclick="sendOrderLinkSms()">
+      <i class="fas fa-paper-plane"></i> Bestelllink per SMS
+    </button>
+    <span class="call-sms-hint">Kunde erhält sofort den Link zum Online-Bestellen. Ideal während des Anrufs.</span>
+    <span id="call-sms-result"></span>
+  </div>
+
   <!-- STATS BAR -->
   <div class="stats-bar">
     <div class="stat-card">
@@ -322,6 +363,7 @@
   <!-- NAV TABS -->
   <div class="nav-tabs">
     <button class="nav-tab active" id="tab-orders"   onclick="switchView('orders',this)"><i class="fas fa-receipt"></i> Bestellungen</button>
+    <button class="nav-tab"        id="tab-anfragen" onclick="switchView('anfragen',this)" style="display:none;"><i class="fas fa-clipboard-list"></i> Anfragen</button>
     <button class="nav-tab"        id="tab-kunden"   onclick="switchView('kunden',this)"><i class="fas fa-users"></i> Kunden</button>
     <button class="nav-tab"        id="tab-botlog"   onclick="switchView('botlog',this)"><i class="fas fa-robot"></i> Bot-Log</button>
     <button class="nav-tab"        id="tab-aktionen" onclick="switchView('aktionen',this)"><i class="fas fa-gift"></i> Aktionen</button>
@@ -356,12 +398,33 @@
     </div>
   </div>
 
+  <!-- ══ VIEW: ANFRAGEN (Handwerk) ═══════════════════════════════════════ -->
+  <div id="view-anfragen" class="view">
+    <div class="filter-bar">
+      <button class="f-pill active" onclick="filterJobs('alle',this)">Alle</button>
+      <button class="f-pill" onclick="filterJobs('neu',this)">Neu</button>
+      <button class="f-pill" onclick="filterJobs('termin',this)">Termin</button>
+      <button class="f-pill" onclick="filterJobs('angebot',this)">Angebot</button>
+      <button class="f-pill" onclick="filterJobs('erledigt',this)">Erledigt</button>
+    </div>
+    <div class="section-box" style="margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+      <button class="btn-gold" style="width:auto;padding:10px 16px;" onclick="openJobModal()"><i class="fas fa-plus"></i> Anfrage manuell</button>
+      <button class="btn-print-card" style="padding:10px 16px;" onclick="downloadJobsCsv()"><i class="fas fa-file-csv"></i> Monats-CSV</button>
+      <span id="jobs-open-hint" style="font-size:12px;color:#666;"></span>
+    </div>
+    <div class="orders-wrap" id="jobs-list"></div>
+  </div>
+
   <!-- ══ VIEW: KUNDEN (CRM) ════════════════════════════════════════════ -->
   <div id="view-kunden" class="view">
     <div class="orders-wrap">
       <div class="section-box" style="margin-bottom:14px;">
         <div class="section-title"><i class="fas fa-robot"></i> Follow-up Automation</div>
         <p style="color:#555;font-size:12px;margin-bottom:12px;">Review-SMS nach 3 Tagen (Status „Fertig“) · Win-back nach 30 Tagen Inaktivität</p>
+        <div class="section-box" style="margin-bottom:14px;background:#0d1a12;border-color:#1a3d28;">
+          <div class="section-title" style="color:#22c55e;"><i class="fas fa-star"></i> Online-Treueprogramm</div>
+          <p style="color:#888;font-size:12px;line-height:1.6;margin:0;">10 Online-Bestellungen = gratis <strong style="color:#e8c76a;">Ayran 0,4 L</strong> · Stempel pro Telefonnummer · Belohnung erscheint automatisch im Warenkorb · Einstellungen in Server-DB (<code style="color:#666;">loyalty_*</code>)</p>
+        </div>
         <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:8px;">
           <div style="flex:1;min-width:200px;">
             <label class="form-label">Google-Bewertungs-Link</label>
@@ -390,6 +453,52 @@
       <label class="form-label">Interne Notiz</label>
       <textarea class="form-inp" id="crm-modal-notes" rows="2" placeholder="z.B. Stammgast, keine Zwiebeln…" style="resize:none;margin-bottom:10px;"></textarea>
       <button class="btn-gold" style="width:auto;padding:10px 20px;font-size:13px;" onclick="saveCrmNotes()">Notiz speichern</button>
+    </div>
+  </div>
+
+  <div id="job-modal" onclick="closeJobModal()" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.85);overflow-y:auto;padding:24px 16px;">
+    <div onclick="event.stopPropagation()" style="max-width:520px;margin:0 auto;background:#13110d;border:1px solid #2a2318;border-radius:16px;padding:24px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="color:#C9A84C;font-size:16px;margin:0;" id="job-modal-title">Anfrage</h3>
+        <button onclick="closeJobModal()" style="background:none;border:none;color:#666;font-size:24px;cursor:pointer;">&times;</button>
+      </div>
+      <input type="hidden" id="job-id">
+      <label class="form-label">Kunde / Name</label>
+      <input class="form-inp" id="job-name">
+      <div class="form-grid2">
+        <div><label class="form-label">Telefon</label><input class="form-inp" id="job-phone"></div>
+        <div><label class="form-label">PLZ</label><input class="form-inp" id="job-plz"></div>
+      </div>
+      <label class="form-label">Betreff</label>
+      <input class="form-inp" id="job-subject">
+      <label class="form-label">Beschreibung</label>
+      <textarea class="form-inp" id="job-desc" rows="3" style="resize:none;"></textarea>
+      <div class="form-grid2">
+        <div>
+          <label class="form-label">Status</label>
+          <select class="form-inp" id="job-status" style="margin:0;">
+            <option value="neu">Neu</option>
+            <option value="termin">Termin</option>
+            <option value="angebot">Angebot</option>
+            <option value="erledigt">Erledigt</option>
+            <option value="storniert">Storniert</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Zahlart</label>
+          <select class="form-inp" id="job-pay" style="margin:0;">
+            <option value="offen">Offen</option>
+            <option value="bar">Bar</option>
+            <option value="ec">EC/Karte</option>
+            <option value="ueberweisung">Überweisung</option>
+          </select>
+        </div>
+      </div>
+      <label class="form-label">Betrag (€) bei erledigt</label>
+      <input class="form-inp" id="job-amount" type="number" step="0.01" min="0" placeholder="z.B. 1850">
+      <label class="form-label">Notizen (intern)</label>
+      <textarea class="form-inp" id="job-notes" rows="2" style="resize:none;"></textarea>
+      <button class="btn-gold" style="margin-top:12px;" onclick="saveJob()">Speichern</button>
     </div>
   </div>
 
@@ -656,7 +765,11 @@
 
 <script>
 const API = '/api';
-let adminPw = '';
+let adminToken = '';
+function adminHeaders(extra) {
+  const h = Object.assign({'X-Admin-Token': adminToken}, extra || {});
+  return h;
+}
 let allOrders = [];
 let currentFilter = 'alle';
 let soundOn = true;
@@ -689,11 +802,14 @@ async function doLogin() {
   const pw = document.getElementById('pw-input').value;
   const r  = await fetch(`${API}/admin/login`, {
     method: 'POST', headers: {'Content-Type':'application/json'},
+    credentials: 'same-origin',
     body: JSON.stringify({password: pw})
   });
   if (r.ok) {
-    adminPw = pw;
-    sessionStorage.setItem('admin_pw', pw);
+    const data = await r.json();
+    adminToken = data.token || '';
+    sessionStorage.setItem('admin_token', adminToken);
+    sessionStorage.removeItem('admin_pw');
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard').style.display    = 'block';
     startPolling();
@@ -701,7 +817,7 @@ async function doLogin() {
     document.getElementById('login-error').style.display = 'block';
   }
 }
-function logout() { sessionStorage.removeItem('admin_pw'); location.reload(); }
+function logout() { sessionStorage.removeItem('admin_token'); sessionStorage.removeItem('admin_pw'); location.reload(); }
 
 // ── VIEW SWITCHING ─────────────────────────────────────────────────────────
 function switchView(name, tabEl) {
@@ -712,6 +828,7 @@ function switchView(name, tabEl) {
   if (name === 'artikel') loadArticleManager();
   if (name === 'kunden')  { loadContacts(); loadFollowupSettings(); }
   if (name === 'botlog')  loadBotLog();
+  if (name === 'anfragen') loadJobs();
 }
 
 // ── BOT-LOG ───────────────────────────────────────────────────────────────
@@ -724,7 +841,7 @@ function botResultBadge(result) {
   if (r.startsWith('denied') || r === 'unknown_client') return '<span class="bot-badge err">Abgelehnt</span>';
   if (r === 'no_item' || r === 'unknown') return '<span class="bot-badge err">Unklar</span>';
   if (r === 'help') return '<span class="bot-badge info">Hilfe</span>';
-  return `<span class="bot-badge neutral">${escHtml(result || '—')}</span>`;
+  return `<span class="bot-badge neutral">${escHtml(result || '–')}</span>`;
 }
 
 function botChannelBadge(ch) {
@@ -738,7 +855,7 @@ function escHtml(s) {
 }
 
 function formatBotTime(iso) {
-  if (!iso) return '—';
+  if (!iso) return '–';
   try {
     const d = new Date(iso.replace(' ', 'T'));
     if (isNaN(d)) return iso;
@@ -750,7 +867,7 @@ async function loadBotLog() {
   const el = document.getElementById('bot-log-list');
   el.innerHTML = '<div style="text-align:center;color:#333;padding:40px;font-size:13px;"><i class="fas fa-circle-notch spinner"></i> Lade…</div>';
   try {
-    const r = await fetch(`${API}/admin/bot-log`, { headers: { 'X-Admin-Password': adminPw } });
+    const r = await fetch(`${API}/admin/bot-log`, { headers: { 'X-Admin-Token': adminToken } });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     allBotLogs = await r.json();
     renderBotLog();
@@ -793,7 +910,7 @@ function renderBotLog() {
         <span style="font-size:11px;color:#555;">${formatBotTime(entry.created_at)}</span>
         ${entry.client_id ? `<span style="font-size:11px;color:#C9A84C;font-weight:600;">${escHtml(entry.client_id)}</span>` : ''}
       </div>
-      <div style="font-size:13px;color:#ccc;margin-bottom:4px;">${escHtml(entry.body || '—')}</div>
+      <div style="font-size:13px;color:#ccc;margin-bottom:4px;">${escHtml(entry.body || '–')}</div>
       <div style="font-size:11px;color:#555;">
         ${entry.phone ? `<i class="fas fa-phone" style="margin-right:4px;"></i>${escHtml(entry.phone)}` : ''}
         ${actions ? ` · ${escHtml(actions)}` : ''}${itemId}
@@ -808,7 +925,7 @@ let crmModalPhone = '';
 
 async function loadFollowupSettings() {
   try {
-    const r = await fetch(`${API}/admin/settings`, {headers: {'X-Admin-Password': adminPw}});
+    const r = await fetch(`${API}/admin/settings`, {headers: {'X-Admin-Token': adminToken}});
     if (r.ok) {
       const s = await r.json();
       if (s.google_review_url != null) document.getElementById('set-review-url').value = s.google_review_url;
@@ -820,7 +937,7 @@ async function saveReviewUrl() {
   const url = document.getElementById('set-review-url').value.trim();
   await fetch(`${API}/admin/settings`, {
     method: 'POST',
-    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
     body: JSON.stringify({google_review_url: url}),
   });
   showToast('Bewertungs-Link gespeichert', '#22c55e');
@@ -830,7 +947,7 @@ async function runFollowups() {
   const el = document.getElementById('followup-result');
   el.textContent = 'Prüfe Follow-ups…';
   try {
-    const r = await fetch(`${API}/admin/followups/run`, {method:'POST', headers:{'X-Admin-Password':adminPw}});
+    const r = await fetch(`${API}/admin/followups/run`, {method:'POST', headers:{'X-Admin-Token':adminToken}});
     const d = await r.json();
     if (r.ok) {
       el.textContent = `Fertig: ${d.reviews_sent||0} Review-SMS · ${d.winbacks_sent||0} Win-back-SMS${d.errors?` · ${d.errors} übersprungen/Fehler`:''}`;
@@ -845,6 +962,47 @@ async function runFollowups() {
   }
 }
 
+async function sendOrderLinkSms(presetPhone) {
+  const inp = document.getElementById('call-sms-phone');
+  const phone = (presetPhone || inp.value || '').trim();
+  const resultEl = document.getElementById('call-sms-result');
+  const btn = document.getElementById('call-sms-btn');
+  if (!phone) {
+    resultEl.className = 'call-sms-err';
+    resultEl.textContent = 'Bitte Telefonnummer eingeben.';
+    inp.focus();
+    return;
+  }
+  if (inp && presetPhone) inp.value = presetPhone;
+  btn.disabled = true;
+  resultEl.className = '';
+  resultEl.textContent = 'Sende SMS…';
+  try {
+    const r = await fetch(`${API}/admin/send-order-link`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-Admin-Token': adminToken},
+      body: JSON.stringify({ phone }),
+    });
+    const d = await r.json();
+    if (r.ok && d.success) {
+      resultEl.className = 'call-sms-ok';
+      resultEl.textContent = 'SMS gesendet! Kunde kann jetzt online bestellen.';
+      showToast('Bestelllink per SMS gesendet', '#22c55e');
+      if (!presetPhone) inp.value = '';
+    } else {
+      resultEl.className = 'call-sms-err';
+      resultEl.textContent = d.error || 'Fehler beim Senden';
+      if (d.portal_url) {
+        resultEl.textContent += ' (Link: ' + d.portal_url + ')';
+      }
+    }
+  } catch (e) {
+    resultEl.className = 'call-sms-err';
+    resultEl.textContent = 'Verbindungsfehler';
+  }
+  btn.disabled = false;
+}
+
 async function openCrmModal(phone) {
   crmModalPhone = phone;
   const c = allContacts.find(x => x.phone === phone);
@@ -857,10 +1015,12 @@ async function openCrmModal(phone) {
       <i class="fas fa-phone"></i> ${c.phone||'–'}<br>
       ${c.email ? `<i class="fas fa-envelope"></i> ${c.email}<br>` : ''}
       <span style="color:#C9A84C;font-weight:700;">${c.total_orders||0} Bestellungen</span> · ${parseFloat(c.total_spent||0).toFixed(2).replace('.',',')} €
+      <br><span style="color:#22c55e;font-weight:600;"><i class="fas fa-star"></i> Treue: ${c.loyalty_stamps||0} / 9 Stempel</span>
     </div>
     <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
       ${tel ? `<a href="tel:${tel}" class="btn-print-card" style="text-decoration:none;"><i class="fas fa-phone"></i> Anrufen</a>` : ''}
       ${tel ? `<a href="https://wa.me/${tel.replace('+','')}" target="_blank" class="btn-print-card" style="text-decoration:none;border-color:#25d366;color:#25d366;"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
+      ${tel ? `<button type="button" class="btn-print-card" style="border-color:#22c55e;color:#22c55e;" onclick='sendOrderLinkSms(${JSON.stringify(tel)})'><i class="fas fa-link"></i> Bestelllink SMS</button>` : ''}
     </div>`;
   document.getElementById('crm-modal-notes').value = c.notes || '';
   document.getElementById('crm-modal-orders').innerHTML = '<div style="color:#555;padding:12px 0;"><i class="fas fa-circle-notch spinner"></i> Lade Bestellhistorie…</div>';
@@ -868,7 +1028,7 @@ async function openCrmModal(phone) {
   document.body.style.overflow = 'hidden';
 
   try {
-    const r = await fetch(`${API}/admin/contacts/${encodeURIComponent(phone)}/orders`, {headers:{'X-Admin-Password':adminPw}});
+    const r = await fetch(`${API}/admin/contacts/${encodeURIComponent(phone)}/orders`, {headers:{'X-Admin-Token':adminToken}});
     const orders = r.ok ? await r.json() : [];
     if (!orders.length) {
       document.getElementById('crm-modal-orders').innerHTML = '<p style="color:#555;font-size:13px;">Noch keine Bestellhistorie.</p>';
@@ -904,7 +1064,7 @@ async function saveCrmNotes() {
   const notes = document.getElementById('crm-modal-notes').value;
   await fetch(`${API}/admin/contacts/${encodeURIComponent(crmModalPhone)}/notes`, {
     method:'POST',
-    headers:{'Content-Type':'application/json','X-Admin-Password':adminPw},
+    headers:{'Content-Type':'application/json','X-Admin-Token':adminToken},
     body: JSON.stringify({notes}),
   });
   const c = allContacts.find(x => x.phone === crmModalPhone);
@@ -914,7 +1074,7 @@ async function saveCrmNotes() {
 
 async function loadContacts() {
   try {
-    const r = await fetch(`${API}/admin/contacts`, {headers: {'X-Admin-Password': adminPw}});
+    const r = await fetch(`${API}/admin/contacts`, {headers: {'X-Admin-Token': adminToken}});
     if (!r.ok) return;
     allContacts = await r.json();
     renderContacts();
@@ -947,6 +1107,7 @@ function renderContacts() {
         </div>
         <div style="text-align:right;flex-shrink:0;">
           <div style="font-size:22px;font-weight:800;color:#C9A84C;">${c.total_orders||0}×</div>
+          <div style="font-size:12px;color:#22c55e;font-weight:700;margin-top:4px;"><i class="fas fa-star"></i> ${c.loyalty_stamps||0}/9 Stempel</div>
           <div style="font-size:12px;color:#666;">${parseFloat(c.total_spent||0).toFixed(2).replace('.',',')} € gesamt</div>
           <div style="font-size:11px;color:#444;margin-top:4px;">Zuletzt: ${last}</div>
         </div>
@@ -963,7 +1124,7 @@ function renderContacts() {
 // ── ORDERS ────────────────────────────────────────────────────────────────
 async function loadOrders() {
   try {
-    const r = await fetch(`${API}/admin/orders`, {headers: {'X-Admin-Password': adminPw}});
+    const r = await fetch(`${API}/admin/orders`, {headers: {'X-Admin-Token': adminToken}});
     if (!r.ok) return;
     const orders = await r.json();
     const newOnes = orders.filter(o => o.status === 'neu' && !knownIds.has(o.order_number));
@@ -1065,7 +1226,7 @@ function renderCard(o) {
   const promo = o.promo_applied
     ? `<span class="pill pill-promo"><i class="fas fa-gift" style="margin-right:4px;"></i>${o.promo_applied}</span>` : '';
   const promoAlert = o.promo_applied
-    ? `<div class="promo-alert"><i class="fas fa-gift"></i><span><strong>Aktion:</strong> ${o.promo_applied} — Gratis-Artikel beilegen!</span></div>` : '';
+    ? `<div class="promo-alert"><i class="fas fa-gift"></i><span><strong>Aktion:</strong> ${o.promo_applied}. Gratis-Artikel beilegen!</span></div>` : '';
 
   return `
   <div class="order-card ${o.status}" id="card-${o.order_number}">
@@ -1095,7 +1256,7 @@ function renderCard(o) {
 async function setStatus(orderNumber, newStatus) {
   const r = await fetch(`${API}/admin/orders/${orderNumber}/status`, {
     method: 'POST',
-    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
     body: JSON.stringify({status: newStatus})
   });
   if (r.ok) {
@@ -1216,7 +1377,7 @@ async function startPromo() {
 
   const r = await fetch(`${API}/admin/promo`, {
     method: 'POST',
-    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
     body: JSON.stringify({
       title: title || desc,
       description: desc,
@@ -1236,7 +1397,7 @@ async function startPromo() {
 
 async function stopPromo() {
   if (!confirm('Aktion wirklich beenden?')) return;
-  await fetch(`${API}/admin/promo`, { method:'DELETE', headers:{'X-Admin-Password':adminPw} });
+  await fetch(`${API}/admin/promo`, { method:'DELETE', headers:{'X-Admin-Token':adminToken} });
   currentAdminPromo = null;
   document.getElementById('promo-active-bar').style.display = 'none';
   document.getElementById('promo-none').style.display = 'block';
@@ -1290,22 +1451,166 @@ function updatePrinterStatusBar(cfg) {
     : (cfg.name || 'Standard-Drucker (kein Name angegeben)');
 }
 
+let portalMode = 'gastro';
+let allJobs = [];
+let jobFilter = 'alle';
+let jobPollTimer = null;
+
+async function applyPortalMode() {
+  try {
+    const r = await fetch(`${API}/admin/meta`, { headers: { 'X-Admin-Token': adminToken } });
+    if (!r.ok) return;
+    const m = await r.json();
+    portalMode = m.portal_mode || 'gastro';
+    if (m.features && m.features.jobs) {
+      document.getElementById('tab-anfragen').style.display = '';
+      document.getElementById('tab-artikel').style.display = 'none';
+      document.getElementById('tab-drucker').style.display = 'none';
+      document.getElementById('tab-orders').style.display = 'none';
+      switchView('anfragen', document.getElementById('tab-anfragen'));
+      loadJobs();
+    }
+  } catch (e) {}
+}
+
+const JOB_STATUS_LABEL = { neu: 'Neu', termin: 'Termin', angebot: 'Angebot', erledigt: 'Erledigt', storniert: 'Storniert' };
+const JOB_PAY_LABEL = { bar: 'Bar', ec: 'EC', ueberweisung: 'Überweisung', offen: 'Offen' };
+
+async function loadJobs() {
+  const r = await fetch(`${API}/admin/jobs?status=${jobFilter === 'alle' ? '' : jobFilter}`, {
+    headers: { 'X-Admin-Token': adminToken }
+  });
+  if (!r.ok) return;
+  const data = await r.json();
+  allJobs = data.jobs || [];
+  renderJobs();
+  const open = allJobs.filter(j => ['neu', 'termin', 'angebot'].includes(j.status)).length;
+  const hint = document.getElementById('jobs-open-hint');
+  if (hint) hint.textContent = open ? `${open} offen` : 'Alles erledigt';
+}
+
+function filterJobs(st, btn) {
+  jobFilter = st;
+  document.querySelectorAll('#view-anfragen .f-pill').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  loadJobs();
+}
+
+function renderJobs() {
+  const el = document.getElementById('jobs-list');
+  if (!el) return;
+  if (!allJobs.length) {
+    el.innerHTML = '<div class="empty-state"><span class="es-text" style="color:#333;">Keine Anfragen.</span></div>';
+    return;
+  }
+  el.innerHTML = allJobs.map(j => {
+    const amt = j.amount_eur != null ? `${Number(j.amount_eur).toFixed(2)} €` : '–';
+    return `<div class="order-card" onclick="openJobModal(${j.id})">
+      <div class="order-top">
+        <span class="order-num">${escHtml(j.ref || '')}</span>
+        <span class="order-status status-${escHtml(j.status)}">${JOB_STATUS_LABEL[j.status] || j.status}</span>
+      </div>
+      <div class="order-name">${escHtml(j.customer_name || '')}</div>
+      <div class="order-meta">${escHtml(j.phone || '')} · ${escHtml(j.plz || '')} · ${escHtml(j.subject || '')}</div>
+      <div class="order-meta">${amt} · ${JOB_PAY_LABEL[j.pay_method] || j.pay_method || 'Offen'}</div>
+    </div>`;
+  }).join('');
+}
+
+function openJobModal(id) {
+  const modal = document.getElementById('job-modal');
+  document.getElementById('job-id').value = id || '';
+  document.getElementById('job-modal-title').textContent = id ? 'Anfrage bearbeiten' : 'Neue Anfrage';
+  if (id) {
+    const j = allJobs.find(x => x.id === id);
+    if (!j) return;
+    document.getElementById('job-name').value = j.customer_name || '';
+    document.getElementById('job-phone').value = j.phone || '';
+    document.getElementById('job-plz').value = j.plz || '';
+    document.getElementById('job-subject').value = j.subject || '';
+    document.getElementById('job-desc').value = j.description || '';
+    document.getElementById('job-status').value = j.status || 'neu';
+    document.getElementById('job-pay').value = j.pay_method || 'offen';
+    document.getElementById('job-amount').value = j.amount_eur != null ? j.amount_eur : '';
+    document.getElementById('job-notes').value = j.notes || '';
+  } else {
+    ['job-name','job-phone','job-plz','job-subject','job-desc','job-amount','job-notes'].forEach(i => {
+      document.getElementById(i).value = '';
+    });
+    document.getElementById('job-status').value = 'neu';
+    document.getElementById('job-pay').value = 'offen';
+  }
+  modal.style.display = 'block';
+}
+
+function closeJobModal() {
+  document.getElementById('job-modal').style.display = 'none';
+}
+
+async function downloadJobsCsv() {
+  const r = await fetch(`${API}/admin/export/orders.csv`, { headers: { 'X-Admin-Token': adminToken } });
+  if (!r.ok) { showToast('Export fehlgeschlagen', '#ef4444'); return; }
+  const blob = await r.blob();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'jobs_monat.csv';
+  a.click();
+}
+
+async function saveJob() {
+  const id = document.getElementById('job-id').value;
+  const payload = {
+    customer_name: document.getElementById('job-name').value.trim(),
+    phone: document.getElementById('job-phone').value.trim(),
+    plz: document.getElementById('job-plz').value.trim(),
+    subject: document.getElementById('job-subject').value.trim(),
+    description: document.getElementById('job-desc').value.trim(),
+    status: document.getElementById('job-status').value,
+    pay_method: document.getElementById('job-pay').value,
+    amount_eur: document.getElementById('job-amount').value,
+    notes: document.getElementById('job-notes').value.trim(),
+  };
+  if (!payload.customer_name) { showToast('Name fehlt', '#ef4444'); return; }
+  const url = id ? `${API}/admin/jobs/${id}` : `${API}/admin/jobs`;
+  const r = await fetch(url, {
+    method: id ? 'PATCH' : 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+    body: JSON.stringify(payload),
+  });
+  if (r.ok) {
+    closeJobModal();
+    loadJobs();
+    showToast('Gespeichert', '#22c55e');
+  } else {
+    const e = await r.json().catch(() => ({}));
+    showToast(e.error || 'Fehler', '#ef4444');
+  }
+}
+
 // ── POLLING ───────────────────────────────────────────────────────────────
 function startPolling() {
-  loadOrders();
-  loadAdminPromo();
-  setInterval(loadOrders, 8000);
-  setInterval(loadAdminPromo, 30000);
+  applyPortalMode().then(() => {
+    if (portalMode === 'handwerk') {
+      loadJobs();
+      jobPollTimer = setInterval(loadJobs, 12000);
+      return;
+    }
+    loadOrders();
+    loadAdminPromo();
+    setInterval(loadOrders, 8000);
+    setInterval(loadAdminPromo, 30000);
+  });
 }
 
 // ── ONLINE / OFFLINE ───────────────────────────────────────────────────────
 let isOnline = true;
+let onlineToggleBusy = false;
 
 async function loadSettings() {
   try {
     const r = await fetch('/api/settings');
     const s = await r.json();
-    isOnline = s.online;
+    isOnline = !!s.online;
     applyOnlineUI();
     document.getElementById('wait-pickup').value   = s.wait_pickup   || 20;
     document.getElementById('wait-delivery').value = s.wait_delivery || 40;
@@ -1315,6 +1620,7 @@ async function loadSettings() {
 function applyOnlineUI() {
   const btn = document.getElementById('online-toggle');
   const lbl = document.getElementById('online-label');
+  if (!btn || !lbl) return;
   if (isOnline) {
     btn.className = 'online-toggle online';
     lbl.textContent = 'Online';
@@ -1322,17 +1628,47 @@ function applyOnlineUI() {
     btn.className = 'online-toggle offline';
     lbl.textContent = 'Offline';
   }
+  btn.style.pointerEvents = onlineToggleBusy ? 'none' : '';
+  btn.style.opacity = onlineToggleBusy ? '0.6' : '';
 }
 
 async function toggleOnline() {
-  isOnline = !isOnline;
+  if (onlineToggleBusy) return;
+
+  const nextOnline = !isOnline;
+  if (!nextOnline) {
+    const ok = confirm(
+      'Bestellportal wirklich AUSSCHALTEN?\n\nKunden können dann nicht mehr bestellen.'
+    );
+    if (!ok) return;
+  } else {
+    const ok = confirm('Bestellportal wieder einschalten?');
+    if (!ok) return;
+  }
+
+  onlineToggleBusy = true;
   applyOnlineUI();
-  await fetch('/api/admin/settings', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
-    body: JSON.stringify({online: isOnline ? '1' : '0'})
-  });
-  showToast(isOnline ? '✓ Bestellportal ist jetzt ONLINE' : '⚑ Bestellportal ist OFFLINE – Kunden können nicht bestellen', isOnline ? '#22c55e' : '#ef4444');
+  try {
+    const r = await fetch('/api/admin/settings', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
+      body: JSON.stringify({online: nextOnline ? '1' : '0'})
+    });
+    if (!r.ok) throw new Error('Speichern fehlgeschlagen (' + r.status + ')');
+    isOnline = nextOnline;
+    showToast(
+      isOnline
+        ? 'Bestellportal ist jetzt ONLINE'
+        : 'Bestellportal ist OFFLINE. Kunden können nicht bestellen.',
+      isOnline ? '#22c55e' : '#ef4444'
+    );
+  } catch (e) {
+    showToast(String(e.message || e), '#ef4444');
+    await loadSettings();
+  } finally {
+    onlineToggleBusy = false;
+    applyOnlineUI();
+  }
 }
 
 // ── WARTEZEIT ──────────────────────────────────────────────────────────────
@@ -1341,7 +1677,7 @@ async function saveWaitTime() {
   const de = parseInt(document.getElementById('wait-delivery').value) || 40;
   await fetch('/api/admin/settings', {
     method: 'POST',
-    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
     body: JSON.stringify({wait_pickup: pu, wait_delivery: de})
   });
   const el = document.getElementById('wait-saved');
@@ -1360,7 +1696,7 @@ function showToast(msg, color='#C9A84C') {
 
 // ── TAGESBERICHT ───────────────────────────────────────────────────────────
 async function openReport() {
-  const r = await fetch('/api/admin/report/today', {headers:{'X-Admin-Password':adminPw}});
+  const r = await fetch('/api/admin/report/today', {headers:{'X-Admin-Token':adminToken}});
   if (!r.ok) return;
   const d = await r.json();
   const el = document.getElementById('report-modal');
@@ -1465,7 +1801,7 @@ async function toggleArticle(itemId, available) {
   articleOverrides[itemId] = {available, note:''};
   await fetch('/api/admin/menu-override', {
     method: 'POST',
-    headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+    headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
     body: JSON.stringify({itemId, available})
   });
   const item = MENU_ITEMS.find(i=>i.id===itemId);
@@ -1475,15 +1811,16 @@ async function toggleArticle(itemId, available) {
 
 // ── INIT ──────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  const saved = sessionStorage.getItem('admin_pw');
+  const saved = sessionStorage.getItem('admin_token');
   if (saved) {
-    adminPw = saved;
+    adminToken = saved;
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard').style.display    = 'block';
     startPolling();
     loadSettings();
     initPush();
   }
+  sessionStorage.removeItem('admin_pw');
   document.getElementById('pw-input').focus();
   loadPrinterConfig();
 });

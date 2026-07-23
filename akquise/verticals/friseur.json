@@ -1,0 +1,119 @@
+{
+  "id": "friseur",
+  "name": "Friseur & Beauty",
+  "discovery": {
+    "type": "overpass",
+    "shops": [
+      "hairdresser",
+      "beauty",
+      "cosmetics"
+    ],
+    "amenities": []
+  },
+  "google_places_type": "hair_care",
+  "delivery_platforms": [],
+  "order_keywords": [
+    "termin buchen",
+    "online termin",
+    "terminvereinbarung",
+    "schnitt buchen",
+    "anfrage"
+  ],
+  "job_keywords": [
+    "friseur",
+    "stylist",
+    "stellenangebot",
+    "jobs",
+    "verstärkung",
+    "lehrling"
+  ],
+  "subpages": [
+    "/preise",
+    "/team",
+    "/termin",
+    "/karriere",
+    "/kontakt"
+  ],
+  "priority_amenities": [],
+  "reference_client": {
+    "name": "Webschmiede Local Digital",
+    "pitch": "Online-Termin + Google + Stammkunden-SMS"
+  },
+  "local_wins": [
+    "Treatwell/Planity-Link prüfen",
+    "Instagram → Termin-Link",
+    "Google Maps"
+  ],
+  "offers": {
+    "standard": {
+      "name": "Salon Digital",
+      "setup": "1580–5600 € einmalig",
+      "monthly": "98 €/Mo",
+      "includes": [
+        "Website + Preisliste",
+        "Online-Termin Cal.com",
+        "Google Maps + Reviews",
+        "CRM Stammkunden"
+      ]
+    },
+    "starter": {
+      "name": "Salon Starter",
+      "setup": "798–2360 €",
+      "monthly": "58 €/Mo",
+      "includes": [
+        "One-Page + Termin-Button",
+        "Instagram-Link-Optimierung"
+      ]
+    },
+    "local": {
+      "name": "Quick-Wins",
+      "setup": "0 €",
+      "monthly": "0 €",
+      "includes": [
+        "Google Profil + Termin-Link in Bio"
+      ]
+    },
+    "premium": {
+      "name": "Salon + Automation",
+      "setup": "3000 €+",
+      "monthly": "138 €/Mo",
+      "includes": [
+        "Termin-Erinnerung SMS",
+        "Recall nach 6 Wochen",
+        "Review-Funnel"
+      ]
+    }
+  },
+  "intents": {
+    "digital_neu": {
+      "label": "Nur Instagram",
+      "want": "Termine per DM, chaotisch",
+      "approach": "Professioneller Termin-Flow statt DM-Ping-Pong",
+      "when": "no_website_or_social"
+    },
+    "leads": {
+      "label": "Kein Online-Termin",
+      "want": "Telefon klingelt während Schneiden",
+      "approach": "Cal.com + SMS-Erinnerung",
+      "when": "no_order_signals"
+    },
+    "entlastung": {
+      "label": "Personal gesucht",
+      "want": "Inhaberin macht alles",
+      "approach": "Termin-Automation = 1h/Tag gespart",
+      "when": "job_signals"
+    },
+    "vertrauen": {
+      "label": "Konkurrenz-Salon digital vorn",
+      "want": "Neukunden gehen zum Salon mit besseren Reviews",
+      "approach": "Review-Funnel + Galerie",
+      "when": "trust_issue"
+    },
+    "standard": {
+      "label": "Salon-Digital",
+      "want": "Voller Kalender ohne Telefonstress",
+      "approach": "Referenz-Flow in 15 Min. zeigen",
+      "when": "default"
+    }
+  }
+}

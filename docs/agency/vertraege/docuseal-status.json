@@ -1,0 +1,72 @@
+{
+  "via": "rails-community",
+  "folder": "Webschmiede Verträge",
+  "templates": [
+    {
+      "external_id": "ws-angebot",
+      "id": 1,
+      "name": "WS Angebot",
+      "slug": "c8K8hMW1R81iLS",
+      "fields": 22,
+      "signatures": 2,
+      "documents": 1,
+      "submitters": [
+        "Webschmiede",
+        "Kunde"
+      ]
+    },
+    {
+      "external_id": "ws-auftrag",
+      "id": 2,
+      "name": "WS Auftrag Dienstleistung",
+      "slug": "gcusFkAVFrS9ou",
+      "fields": 19,
+      "signatures": 2,
+      "documents": 1,
+      "submitters": [
+        "Webschmiede",
+        "Kunde"
+      ]
+    },
+    {
+      "external_id": "ws-agb",
+      "id": 3,
+      "name": "WS AGB B2B",
+      "slug": "AT7kA9NVgKXdQt",
+      "fields": 5,
+      "signatures": 2,
+      "documents": 1,
+      "submitters": [
+        "Webschmiede",
+        "Kunde"
+      ]
+    },
+    {
+      "external_id": "ws-avv",
+      "id": 4,
+      "name": "WS AVV Auftragsverarbeitung",
+      "slug": "92u1fFshnfuvfL",
+      "fields": 9,
+      "signatures": 2,
+      "documents": 1,
+      "submitters": [
+        "Webschmiede",
+        "Kunde"
+      ]
+    },
+    {
+      "external_id": "ws-kundenpaket",
+      "id": 7,
+      "name": "WS Kundenpaket Auftrag AGB AVV",
+      "slug": "HuCwF1vcBLJNYt",
+      "fields": 33,
+      "signatures": 6,
+      "documents": 3,
+      "submitters": [
+        "Webschmiede",
+        "Kunde"
+      ]
+    }
+  ],
+  "dashboard": "https://sign.digitalehandwerkskunst.de/templates"
+}

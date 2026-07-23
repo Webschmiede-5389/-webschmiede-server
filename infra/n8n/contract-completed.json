@@ -1,0 +1,135 @@
+{
+  "name": "Webschmiede – Contract Completed CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contract-completed",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh-contract",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "contract-completed"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nconst body = j.body || j;\nconst event = body.event || body.type || '';\nconst data = body.data || body;\nconst completed = ['submission.completed','contract.completed'].includes(event) || data.status === 'completed';\nconst email = (data.submitters || []).find(s => (s.role || '').toLowerCase() === 'kunde')?.email || data.submitters?.[0]?.email || '';\nconst row = {\n  event,\n  completed,\n  submission_id: data.id,\n  status: completed ? 'Signiert' : 'Ausstehend',\n  customer_email: email,\n  received_at: new Date().toISOString()\n};\nconst tg = `✅ Vertrag signiert\\nSubmission: ${row.submission_id}\\nStatus: ${row.status}\\nKunde: ${row.customer_email || '–'}`;\nconst brain = `[Vertrag signiert] Submission ${row.submission_id}, Kunde ${row.customer_email}. CRM-Status auf Signiert. Stefan: Onboarding starten. Nils: Portal/Deploy vorbereiten.`;\nreturn [{ json: { ...row, tg_text: tg, brain_message: brain } }];"
+      },
+      "id": "parse-contract",
+      "name": "Payload parsen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.CRM_STATUS_WEBHOOK_URL || 'https://digitalehandwerkskunst.de/api/agency/crm/status' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Agency-Password", "value": "={{ $env.AGENCY_ADMIN_PASSWORD }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'set_status', status: $json.status, submission_id: $json.submission_id, email: $json.customer_email, source: 'docuseal' }) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "crm-update",
+      "name": "CRM Status setzen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 0],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: ($env.TELEGRAM_STEFAN_CHAT_ID || $env.TELEGRAM_OWNER_CHAT_ID), text: $('Payload parsen').item.json.tg_text, disable_web_page_preview: true }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "tg-stefan",
+      "name": "Telegram Stefan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, -80],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: ($env.TELEGRAM_NILS_CHAT_ID || $env.TELEGRAM_OWNER_CHAT_ID), text: $('Payload parsen').item.json.tg_text, disable_web_page_preview: true }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "tg-nils",
+      "name": "Telegram Nils",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 80],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/brain",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{ $env.CRON_SECRET }}" },
+            { "name": "X-Agency-Password", "value": "={{ $env.AGENCY_ADMIN_PASSWORD }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: $('Payload parsen').item.json.brain_message, force_agent: 'stefan', dispatch: true, source: 'contract-completed' }) }}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "brain-stefan",
+      "name": "Brain Stefan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, 0],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, status: $('Payload parsen').item.json.status, routed: ['stefan', 'nils'] }) }}",
+        "options": {}
+      },
+      "id": "resp-contract",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1180, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Payload parsen", "type": "main", "index": 0 }]] },
+    "Payload parsen": { "main": [[{ "node": "CRM Status setzen", "type": "main", "index": 0 }]] },
+    "CRM Status setzen": {
+      "main": [[
+        { "node": "Telegram Stefan", "type": "main", "index": 0 },
+        { "node": "Telegram Nils", "type": "main", "index": 0 }
+      ]]
+    },
+    "Telegram Stefan": { "main": [[{ "node": "Brain Stefan", "type": "main", "index": 0 }]] },
+    "Telegram Nils": { "main": [[{ "node": "Brain Stefan", "type": "main", "index": 0 }]] },
+    "Brain Stefan": { "main": [[{ "node": "Antwort", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "webschmiede" }, { "name": "docuseal" }, { "name": "stefan" }, { "name": "nils" }]
+}

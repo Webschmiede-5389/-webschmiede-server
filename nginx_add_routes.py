@@ -15,7 +15,8 @@ def run(cmd, timeout=20):
     return o
 
 CLEAN_CONFIG = r"""server {
-    listen 80;
+    listen 80 default_server;
+    listen [::]:80 default_server;
     server_name _;
 
     root /var/www/snackhouse-mechernich;
@@ -31,12 +32,51 @@ CLEAN_CONFIG = r"""server {
         try_files /admin.html =404;
     }
 
+    # Akquise Lead-Report
+    location = /akquise {
+        try_files /akquise-report.html =404;
+    }
+
+    # Agency Admin & Tools (Snack-Server Webroot)
+    location = /angebote {
+        try_files /angebote.html =404;
+    }
+    location = /seminare {
+        try_files /seminare.html =404;
+    }
+    location = /agency {
+        try_files /agency.html =404;
+    }
+    location = /agency-keys {
+        try_files /agency-setup.html =404;
+    }
+    location = /agency-setup {
+        try_files /agency-setup.html =404;
+    }
+    location = /onboarding {
+        try_files /onboarding.html =404;
+    }
+
     # Datenschutz & Impressum
     location = /datenschutz {
         try_files /datenschutz.html =404;
     }
     location = /impressum {
         try_files /impressum.html =404;
+    }
+
+    # n8n Automation Hub
+    location /n8n/ {
+        proxy_pass         http://127.0.0.1:5678/n8n/;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection "upgrade";
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_read_timeout 300;
+        chunked_transfer_encoding off;
     }
 
     # Backend API Proxy
@@ -56,7 +96,7 @@ CLEAN_CONFIG = r"""server {
     # Crawler blockieren
     location = /robots.txt {
         add_header Content-Type text/plain;
-        return 200 "User-agent: *\nDisallow: /bestellen\nDisallow: /admin\nDisallow: /api/\n";
+        return 200 "User-agent: *\nDisallow: /bestellen\nDisallow: /admin\nDisallow: /agency\nDisallow: /agency-keys\nDisallow: /api/\n";
     }
 
     # Security & DSGVO Headers
@@ -84,7 +124,8 @@ else:
 
 print("\nRouten-Check:")
 run('curl -so /dev/null -w "%{http_code}" http://localhost/datenschutz')
-run('curl -so /dev/null -w "%{http_code}" http://localhost/impressum')
+run('curl -so /dev/null -w "%{http_code}" http://localhost/seminare')
+run('curl -so /dev/null -w "%{http_code}" http://localhost/agency')
 
 client.close()
 print("Fertig!")

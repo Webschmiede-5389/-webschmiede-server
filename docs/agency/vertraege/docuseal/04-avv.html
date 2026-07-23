@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><title>AVV Webschmiede</title>
+<style>
+body { font-family: DejaVu Sans, Arial, sans-serif; font-size: 11px; color: #1a1a1a; line-height: 1.45; }
+h1 { font-size: 18px; margin: 0 0 4px; }
+h2 { font-size: 13px; margin: 16px 0 6px; border-bottom: 1px solid #FF6600; padding-bottom: 3px; color: #1a1a1a; }
+h3 { font-size: 11px; margin: 10px 0 4px; font-weight: 700; }
+.muted { color: #666; font-size: 10px; }
+.bar { height: 4px; background: #FF6600; margin-bottom: 12px; }
+.box { border: 1px solid #FF6600; background: #FFF4ED; padding: 10px 12px; margin: 8px 0; border-radius: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 10px; }
+th { background: #1a1a1a; color: #fff; text-align: left; padding: 6px 8px; }
+td { padding: 6px 8px; border-bottom: 1px solid #eee; vertical-align: top; }
+ul, ol { margin: 4px 0 8px 18px; padding: 0; }
+li { margin-bottom: 4px; }
+.siggrid { width: 100%; margin-top: 24px; }
+.siggrid td { width: 50%; vertical-align: top; border: 0; padding: 8px 12px 0 0; }
+.small { font-size: 9px; color: #555; }
+@media print {
+  h1, h2, h3, .box, .siggrid, table, ol, ul { break-inside: avoid; page-break-inside: avoid; }
+  .siggrid { break-before: avoid-page; page-break-before: avoid; }
+  p { orphans: 3; widows: 3; }
+}
+</style></head><body>
+<div class="bar"></div>
+
+<h1>Auftragsverarbeitungsvertrag (AVV)</h1>
+<p class="muted">gemäß Art. 28 Abs. 3 Datenschutz-Grundverordnung (DSGVO) · Nr.
+<text-field name="AVV Nummer" role="Webschmiede" required="true" style="width: 120px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="AVV-2026-"></text-field>
+· Stand Juli 2026 · 99,8 % Standard</p>
+
+<p><strong>Zwischen</strong></p>
+<div class="box">
+<strong>Verantwortlicher (Kunde)</strong><br>
+<text-field name="Firma" role="Kunde" required="true" style="width: 280px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field><br>
+Vertreten durch:
+<text-field name="Vertreter" role="Kunde" required="true" style="width: 220px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field><br>
+<text-field name="Adresse" role="Kunde" required="true" style="width: 320px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field><br>
+E-Mail Datenschutz:
+<text-field name="Email Datenschutz" role="Kunde" required="true" style="width: 220px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field>
+</div>
+
+<div class="box">
+<strong>Auftragsverarbeiter</strong><br>
+Christian Kummetat, handelnd unter „Webschmiede – digitale Handwerkskunst“<br>
+Meinertzhagener Str. 16, 53894 Mechernich, Deutschland<br>
+info@digitalehandwerkskunst.de · USt-IdNr. DE370109681
+</div>
+
+<h2>§ 1 Gegenstand, Dauer und Spezifikation der Verarbeitung</h2>
+<ol>
+<li><strong>Gegenstand:</strong> Der Auftragsverarbeiter erbringt für den Verantwortlichen Leistungen im Rahmen des Hauptvertrages (Dienstleistungsvertrag / Managed Services). Hierbei verarbeitet der Auftragsverarbeiter personenbezogene Daten im Auftrag und nach Weisung des Verantwortlichen – insbesondere Automatisierung von Kundenanfragen, Lead-Routing, CRM-Synchronisation und messaging-basierte Kommunikation via n8n/APIs
+(<text-field name="Leistungen AVV" role="Webschmiede" required="true" style="width: 260px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="n8n-Automation, Portal, CRM, Hosting, KI-Workflows, Messaging/Voice soweit gebucht"></text-field>).</li>
+<li><strong>Dauer:</strong> Die Dauer dieses Vertrages entspricht der Laufzeit des Hauptvertrages.</li>
+<li><strong>Art und Zweck:</strong> Erhebung, Erfassung, Strukturierung, Speicherung, Anpassung, Auslesen, Abfrage, Verknüpfung und Löschung von Daten im Rahmen der eingerichteten Automatisierungs-Pipelines.</li>
+<li><strong>Kategorien betroffener Personen:</strong>
+<text-field name="Betroffene" role="Kunde" required="true" style="width: 280px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="Kunden, Interessenten (Leads), Ansprechpartner, Mitarbeiter und Kommunikationspartner"></text-field></li>
+<li><strong>Kategorien personenbezogener Daten:</strong>
+<text-field name="Datenarten" role="Kunde" required="true" style="width: 300px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="Kontaktdaten, Kommunikationsinhalte, Metadaten (IP, Zeitstempel, Opt-In), Stammdaten"></text-field></li>
+</ol>
+
+<h2>§ 2 Pflichten und Weisungsgebundenheit des Auftragsverarbeiters</h2>
+<ol>
+<li>Der Auftragsverarbeiter verarbeitet personenbezogene Daten ausschließlich auf dokumentierte Weisung des Verantwortlichen. Dies gilt auch für Übermittlungen an ein Drittland oder eine internationale Organisation.</li>
+<li>Die Weisungen werden anfänglich durch den Hauptvertrag und diesen AVV konkretisiert. Der Verantwortliche ist berechtigt, nachträgliche Weisungen in Textform (z. B. per E-Mail) zu erteilen.</li>
+<li>Der Auftragsverarbeiter informiert den Verantwortlichen unverzüglich, wenn er der Auffassung ist, dass eine Weisung gegen die DSGVO oder andere Datenschutzbestimmungen verstößt.</li>
+</ol>
+
+<h2>§ 3 Vertraulichkeit und Personal</h2>
+<ol>
+<li>Der Auftragsverarbeiter sichert zu, dass alle mit der Verarbeitung betrauten Personen zur Vertraulichkeit verpflichtet wurden oder einer angemessenen gesetzlichen Verschwiegenheitspflicht unterliegen.</li>
+<li>Die Verpflichtung zur Vertraulichkeit besteht auch nach Beendigung des Vertrages fort.</li>
+</ol>
+
+<h2>§ 4 Datensicherheit &amp; Technische und Organisatorische Maßnahmen (TOMs)</h2>
+<ol>
+<li>Der Auftragsverarbeiter trifft gemäß Art. 32 DSGVO alle erforderlichen technischen und organisatorischen Maßnahmen, um ein dem Risiko angemessenes Schutzniveau zu gewährleisten.</li>
+<li>Die konkreten Maßnahmen sind in <strong>Anlage 1</strong> geregelt (u. a. TLS/SSL, Zugriffsbeschränkungen, automatisches Pruning von n8n-Execution-Logs).</li>
+<li>Der Auftragsverarbeiter ist berechtigt, die Sicherheitsmaßnahmen während der Vertragslaufzeit anzupassen, sofern das vereinbarte Schutzniveau nicht unterschritten wird.</li>
+</ol>
+
+<h2>§ 5 Subunternehmer (Weitere Auftragsverarbeiter) &amp; KI-APIs</h2>
+<ol>
+<li>Der Verantwortliche erteilt dem Auftragsverarbeiter die allgemeine Genehmigung, weitere Auftragsverarbeiter gemäß Art. 28 Abs. 2 DSGVO einzusetzen. Die derzeit genehmigten Subunternehmer sind in <strong>Anlage 2</strong> aufgeführt.</li>
+<li><strong>Dynamisches Änderungsverfahren:</strong> Beabsichtigt der Auftragsverarbeiter, weitere Subunternehmer einzubinden oder bestehende zu ersetzen (z. B. neue KI-Nodes oder Schnittstellen in n8n), informiert er den Verantwortlichen mindestens <strong>14 Tage</strong> vorher in Textform (E-Mail).</li>
+<li>Der Verantwortliche kann der Änderung aus wichtigem datenschutzrechtlichem Grund innerhalb von 14 Tagen widersprechen. Erfolgt kein Widerspruch, gilt die Zustimmung als erteilt.</li>
+<li><strong>KI-Schnittstellen (APIs):</strong> Sofern KI-Dienste im Rahmen der Pipelines eingesetzt werden, nutzt der Auftragsverarbeiter ausschließlich Enterprise/API-Schnittstellen, bei denen verarbeitete Daten laut Anbieter-SLA nicht für das Training von KI-Modellen verwendet werden (Zero Data Retention / No-Training-SLA). Sensible Verarbeitung erfolgt vorrangig lokal oder über EU-Enterprise-Gateways.</li>
+</ol>
+
+<h2>§ 6 Rechte der Betroffenen &amp; Unterstützungspflichten</h2>
+<ol>
+<li>Der Auftragsverarbeiter unterstützt den Verantwortlichen bei der Erfüllung von Anträgen auf Wahrnehmung von Betroffenenrechten (Art. 12–22 DSGVO), soweit technisch möglich und zumutbar.</li>
+<li>Der Auftragsverarbeiter unterstützt bei der Einhaltung der Pflichten gemäß Art. 32 bis 36 DSGVO (Datensicherheit, Meldung von Verletzungen, Datenschutz-Folgenabschätzungen).</li>
+</ol>
+
+<h2>§ 7 Audits und Kontrollrechte des Verantwortlichen</h2>
+<ol>
+<li>Der Auftragsverarbeiter stellt dem Verantwortlichen alle erforderlichen Informationen zum Nachweis der Einhaltung zur Verfügung.</li>
+<li>Nachweise über TOMs können primär durch aktuelle Testate, Berichte oder Zertifikate unabhängiger Instanzen erbracht werden (z. B. ISO/IEC 27001-Zertifikat des Rechenzentrumsbetreibers Hetzner Online GmbH).</li>
+<li>Vor-Ort-Inspektionen sind nach vorheriger schriftlicher Ankündigung zu den normalen Geschäftszeiten zulässig, dürfen den Betrieb nicht unangemessen stören und keine Daten anderer Kunden gefährden.</li>
+</ol>
+
+<h2>§ 8 Löschung und Rückgabe von Daten</h2>
+<ol>
+<li>Nach Abschluss der Verarbeitungsleistungen oder nach Beendigung des Hauptvertrages löscht der Auftragsverarbeiter alle personenbezogenen Daten oder gibt sie dem Verantwortlichen zurück – <strong>binnen 30 Tagen</strong> nach Vertragsende bzw. nach schriftlicher Weisung, sofern keine gesetzliche Speicherpflicht besteht. Backup-Kopien werden im Rahmen der üblichen Backup-Rotation zeitnah mitgelöscht, längstens innerhalb weiterer 30 Tage.</li>
+<li>Automatisch erzeugte System-Logs in der Automatisierungsinfrastruktur (n8n Execution Logs) werden gemäß konfigurierter Retention-Guidelines nach spätestens <strong>7 bis 14 Tagen</strong> automatisch bereinigt (<code>EXECUTIONS_DATA_PRUNE=true</code>).</li>
+</ol>
+
+<h2>§ 9 Schlussbestimmungen</h2>
+<ol>
+<li>Sollten einzelne Teile unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.</li>
+<li>Es gilt ausschließlich deutsches Recht. Anlage zum Dienstleistungsvertrag.</li>
+</ol>
+
+<h2>Anlage 1: Technische und Organisatorische Maßnahmen (TOMs)</h2>
+<h3>Vertraulichkeit (Art. 32 Abs. 1 lit. b DSGVO)</h3>
+<ul>
+<li><strong>Zutrittskontrolle:</strong> ISO-27001-zertifizierte Rechenzentren (Hetzner Online GmbH, Nürnberg/Falkenstein, Deutschland).</li>
+<li><strong>Zugangskontrolle:</strong> SSH-Keys, 2FA für Server- und n8n-Administration, Passwort-Manager.</li>
+<li><strong>Zugriffskontrolle:</strong> Rollenbasierte Rechte; Mandantentrennung durch dedizierte Docker-Container pro Kunde.</li>
+</ul>
+<h3>Integrität (Art. 32 Abs. 1 lit. b DSGVO)</h3>
+<ul>
+<li><strong>Weitergabekontrolle:</strong> Transportverschlüsselung aller Datenströme (HTTPS/TLS 1.3) zwischen Webhooks, n8n, DocuSeal und externen APIs.</li>
+<li><strong>Verschlüsselung at Rest:</strong> Datenbanken und n8n-Credentials (N8N_ENCRYPTION_KEY).</li>
+</ul>
+<h3>Verfügbarkeit und Belastbarkeit (Art. 32 Abs. 1 lit. b DSGVO)</h3>
+<ul>
+<li><strong>Verfügbarkeitskontrolle:</strong> Automatisierte nächtliche Backups auf verschlüsselte Storage-Locations (DE).</li>
+<li><strong>Wiederherstellbarkeit:</strong> Disaster-Recovery-Routinen für Docker-Container und Datenbanken.</li>
+</ul>
+<h3>Regelmäßige Überprüfung (Art. 32 Abs. 1 lit. d DSGVO)</h3>
+<ul>
+<li>Security-Updates für Server-OS, Docker-Engine und n8n.</li>
+<li>Automatisiertes Pruning unbenötigter Ausführungsdaten (<code>EXECUTIONS_DATA_PRUNE=true</code>, max. 7–14 Tage).</li>
+<li>KI-Transparenz: Dokumentation, ob Verarbeitung lokal (Ollama/self-hosted) oder über EU-Enterprise-API erfolgt.</li>
+</ul>
+
+<h2>Anlage 2: Liste der genehmigten Subunternehmer</h2>
+<table>
+<tr><th>Unternehmen</th><th>Leistung / Funktion</th><th>Standort</th><th>Datenschutz-Grundlage</th></tr>
+<tr><td><strong>Hetzner Online GmbH</strong></td><td>Server-Hosting &amp; Infrastruktur</td><td>Deutschland (Nürnberg)</td><td>Art. 28 DSGVO (AVV)</td></tr>
+<tr><td><strong>DocuSeal</strong> (self-hosted)</td><td>E-Signatur &amp; Vertragsabwicklung</td><td>DE-Server auf Hetzner</td><td>Art. 28 DSGVO</td></tr>
+<tr><td><strong>Meta Platforms Ireland Ltd.</strong></td><td>WhatsApp Business API</td><td>Irland / EU</td><td>SCCs / DPF</td></tr>
+<tr><td><strong>OpenAI Ireland Ltd.</strong> (optional)</td><td>KI-Textgenerierung via API</td><td>Irland / USA</td><td>DPA, EU-U.S. DPF</td></tr>
+<tr><td><strong>Requesty B.V.</strong> (optional)</td><td>LLM-Routing / KI-Gateway</td><td>EU</td><td>Art. 28 DSGVO, No-Training</td></tr>
+<tr><td>seven.io GmbH (soweit gebucht)</td><td>SMS</td><td>Deutschland</td><td>Art. 28 DSGVO</td></tr>
+<tr><td>Stripe Inc. (soweit gebucht)</td><td>Zahlungsabwicklung</td><td>EU/SCC</td><td>SCCs</td></tr>
+<tr><td>Cloudflare Inc. (soweit CDN)</td><td>CDN/DNS</td><td>EU-Verarbeitung</td><td>SCCs</td></tr>
+<tr><td>Cal.com (self-hosted, optional)</td><td>Terminbuchung</td><td>DE</td><td>Art. 28 DSGVO</td></tr>
+</table>
+<p class="muted">Weitere Anbieter nur nach § 5 Abs. 2–3 (14-Tage-Fiktionsklausel). Stand: Vertragsabschluss.</p>
+
+<table class="siggrid"><tr>
+<td>
+  <date-field name="Datum Kunde AVV" role="Kunde" required="true" style="width: 110px; height: 18px; display: inline-block; margin-bottom: -3px;"></date-field><br>
+  <signature-field name="Unterschrift Kunde AVV" role="Kunde" required="true" style="width: 220px; height: 70px; display: inline-block; border: 1px dashed #bbb;"></signature-field><br>
+  <span class="small">Verantwortlicher (Kunde)</span>
+</td>
+<td>
+  <date-field name="Datum Webschmiede AVV" role="Webschmiede" required="true" style="width: 110px; height: 18px; display: inline-block; margin-bottom: -3px;"></date-field><br>
+  <signature-field name="Unterschrift Webschmiede AVV" role="Webschmiede" required="true" style="width: 220px; height: 70px; display: inline-block; border: 1px dashed #bbb;"></signature-field><br>
+  <span class="small">Webschmiede – digitale Handwerkskunst (Auftragsverarbeiter)</span>
+</td>
+</tr></table>
+
+</body></html>

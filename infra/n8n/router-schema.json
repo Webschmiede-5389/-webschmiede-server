@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://digitalehandwerkskunst.de/schemas/agency-router.json",
+  "title": "Webschmiede Agency Router (13 Workflows)",
+  "type": "object",
+  "required": ["mitarbeiter", "prioritaet", "payload"],
+  "properties": {
+    "mitarbeiter": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "stefan",
+          "scout",
+          "outreach",
+          "crm",
+          "texter",
+          "design",
+          "lektor",
+          "nils",
+          "anwalt",
+          "finanz",
+          "account",
+          "service"
+        ]
+      }
+    },
+    "prioritaet": { "type": "string", "enum": ["hoch", "normal", "niedrig"] },
+    "payload": { "type": "string" },
+    "ziel": { "type": "string" },
+    "context": { "type": "string" },
+    "force_agent": {
+      "type": "string",
+      "enum": [
+        "stefan",
+        "scout",
+        "outreach",
+        "crm",
+        "texter",
+        "design",
+        "lektor",
+        "nils",
+        "anwalt",
+        "finanz",
+        "account",
+        "service"
+      ]
+    }
+  }
+}

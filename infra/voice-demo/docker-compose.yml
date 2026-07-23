@@ -1,0 +1,39 @@
+# Webschmiede Voice Demo (eigen, ohne Retell)
+# Mindestens: 4 vCPU, 8 GB RAM (besser 16 GB). NICHT auf dem 2-GB-Shop-Server starten.
+#
+# Stack: Ollama (LLM) + Gateway (Whisper STT + edge-tts DE + Branchen-Prompt)
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+
+  gateway:
+    build: ./gateway
+    restart: unless-stopped
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen2.5:3b}
+      - WHISPER_MODEL=${WHISPER_MODEL:-base}
+      - TTS_VOICE=${TTS_VOICE:-conrad}
+      - DEFAULT_STYLE=${DEFAULT_STYLE:-freundlich}
+      - AGENT_NAME=Webschmiede Digitale Handwerkskunst
+      - DEFAULT_VERTICAL=general
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./web:/app/web:ro
+      - ./packs:/app/packs:ro
+      - ./styles:/app/styles:ro
+      - ./catalog:/app/catalog:ro
+      - whisper_cache:/root/.cache/huggingface
+
+volumes:
+  ollama_data:
+  whisper_cache:

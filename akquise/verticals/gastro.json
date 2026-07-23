@@ -1,0 +1,153 @@
+{
+  "id": "gastro",
+  "name": "Gastronomie",
+  "discovery": {
+    "type": "overpass",
+    "amenities": [
+      "restaurant",
+      "fast_food",
+      "cafe",
+      "bar",
+      "pub",
+      "biergarten",
+      "food_court",
+      "ice_cream"
+    ]
+  },
+  "google_places_type": "restaurant",
+  "delivery_platforms": [
+    "lieferando",
+    "takeaway.com",
+    "ubereats",
+    "uber eats",
+    "wolt.com",
+    "wolt",
+    "deliveryhero",
+    "foodora",
+    "mjam",
+    "just-eat",
+    "lieferservice",
+    "bringdienst"
+  ],
+  "order_keywords": [
+    "online bestellen",
+    "online-bestellen",
+    "jetzt bestellen",
+    "speisekarte",
+    "lieferservice",
+    "abholung",
+    "click & collect",
+    "bestellung"
+  ],
+  "job_keywords": [
+    "stellenangebot",
+    "jobs",
+    "wir suchen",
+    "mitarbeiter gesucht",
+    "karriere",
+    "bewerbung",
+    "team verstärken"
+  ],
+  "subpages": [
+    "/speisekarte",
+    "/menu",
+    "/bestellen",
+    "/online-bestellen",
+    "/karriere",
+    "/jobs"
+  ],
+  "priority_amenities": [
+    "restaurant",
+    "fast_food"
+  ],
+  "reference_client": {
+    "id": "SHY001",
+    "name": "Snack House Yassine",
+    "pitch": "Eigenes Bestellportal ohne Lieferando-Provision, Bonuskarte, SMS bei Anruf"
+  },
+  "local_wins": [
+    "Google Maps Eintrag optimieren (kostenlos)",
+    "WhatsApp-Bestelllink in Bio/Profil (0 €)",
+    "QR-Speisekarte als PDF → später digitale Karte",
+    "Checkliste „5 Dinge vor Lieferando“ per E-Mail"
+  ],
+  "offers": {
+    "premium": {
+      "name": "Paket Gastro Digital (voll)",
+      "setup": "3000 € einmalig",
+      "monthly": "98 €/Mo Wartung (optional)",
+      "includes": [
+        "Website + Online-Bestellportal (Abholung/Lieferung)",
+        "Admin-Dashboard, Speisekarte, Aktionen, Tagesbericht",
+        "CRM + digitale Bonuskarte (10 Bestellungen = Gratis-Getränk)",
+        "SMS Bestelllink bei Anruf · Review-Automation",
+        "Hosting DE, DSGVO, Onboarding 30 Min."
+      ]
+    },
+    "standard": {
+      "name": "Bestellportal + Website",
+      "setup": "1980–6000 € einmalig",
+      "monthly": "98 €/Mo oder Selbst-Hosting",
+      "includes": [
+        "Online-Bestellen wie Snack House (Referenz live zeigen)",
+        "Speisekarte pflegen ohne Programmierer",
+        "Stripe/Bar/EC, Gäste zahlen online",
+        "Schrittweise: erst Portal, dann Bonuskarte/SMS"
+      ]
+    },
+    "starter": {
+      "name": "Einstieg Digital",
+      "setup": "998 € einmalig",
+      "monthly": "58 €/Mo",
+      "includes": [
+        "One-Page Website + Speisekarte online",
+        "Bestell-Button (Telefon/WhatsApp/Formular)",
+        "Google Maps + Impressum/DSGVO",
+        "Upgrade jederzeit zum Vollportal"
+      ]
+    },
+    "local": {
+      "name": "Quick-Wins (noch kein Budget)",
+      "setup": "0 €",
+      "monthly": "0 €",
+      "includes": [
+        "Kostenlose Google-Maps-Checkliste",
+        "WhatsApp-Link + QR-Speisekarte Vorlage",
+        "Später Upgrade wenn Umsatz da ist",
+        "Nicht anrufen zum Verkauf, nur Mehrwert geben"
+      ]
+    }
+  },
+  "intents": {
+    "provision": {
+      "label": "Provision sparen",
+      "want": "Zahlt Lieferando, Marge behalten",
+      "approach": "Eigenes Portal wie Snack House, kein Provisionsschnitt.",
+      "when": "delivery_platforms"
+    },
+    "digital_neu": {
+      "label": "Digital starten",
+      "want": "Kein professioneller Web-Auftritt",
+      "approach": "Website + Bestellportal aus einer Hand.",
+      "when": "no_website_or_social"
+    },
+    "entlastung": {
+      "label": "Entlastung",
+      "want": "Sucht Personal, Telefon-Chaos",
+      "approach": "Online-Bestellung + SMS-Link bei Anruf.",
+      "when": "job_signals"
+    },
+    "umsatz": {
+      "label": "Mehr Bestellungen",
+      "want": "Kein eigenes Online-Bestellen",
+      "approach": "Stammkunden-Portal + Admin-Dashboard.",
+      "when": "no_order_signals"
+    },
+    "standard": {
+      "label": "Gastro-Digital",
+      "want": "Potenzial für eigenes System",
+      "approach": "15 Min. Erstgespräch, Referenz Snack House live zeigen.",
+      "when": "default"
+    }
+  }
+}

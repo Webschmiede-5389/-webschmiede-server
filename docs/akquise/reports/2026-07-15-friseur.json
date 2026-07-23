@@ -1,0 +1,3029 @@
+{
+  "date": "2026-07-15",
+  "generated_at": "2026-07-15T09:08:50",
+  "vertical": "friseur",
+  "vertical_name": "Friseur & Beauty",
+  "center": "Mechernich",
+  "radius_km": 4.0,
+  "total": 18,
+  "crawled": 0,
+  "places_merged": 0,
+  "ads_checked": 18,
+  "register_checked": 18,
+  "local_ranked": 16,
+  "high": 0,
+  "medium": 18,
+  "call_ready": 0,
+  "budget_a": 0,
+  "leads": [
+    {
+      "name": "Petra's Haarwerkstatt",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Doktor-Felix-Gerhardus-Straße 5, 53894, Mechernich",
+      "phone": "+49 2443 2460",
+      "website": "",
+      "email": "",
+      "lat": 50.5900038,
+      "lon": 6.6559667,
+      "osm_id": 7520487263,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Petra%27s%20Haarwerkstatt&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Petra%27s%20Haarwerkstatt",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 3,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 2,
+        "behind": 13,
+        "label": "#3 von 16 in Mechernich",
+        "pitch": "2 Konkurrent(en) digital stärker — aufholen möglich"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "+49 2443 2460",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 3,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 2,
+          "behind": 13,
+          "label": "#3 von 16 in Mechernich",
+          "pitch": "2 Konkurrent(en) digital stärker — aufholen möglich"
+        },
+        "local_rank_label": "#3 von 16 in Mechernich",
+        "local_rank_pitch": "2 Konkurrent(en) digital stärker — aufholen möglich",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Friseur-Salon Gentz",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Bahnstraße 37, 53894, Mechernich",
+      "phone": "+49 2443 2326",
+      "website": "https://de-de.facebook.com/haarstudio.gentz",
+      "email": "",
+      "lat": 50.5913909,
+      "lon": 6.6503287,
+      "osm_id": 8677947543,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Friseur-Salon%20Gentz&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Friseur-Salon%20Gentz",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 4,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 3,
+        "behind": 12,
+        "label": "#4 von 16 in Mechernich",
+        "pitch": "3 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "+49 2443 2326",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 4,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 3,
+          "behind": 12,
+          "label": "#4 von 16 in Mechernich",
+          "pitch": "3 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#4 von 16 in Mechernich",
+        "local_rank_pitch": "3 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "JS Hände, Füße & Gesicht",
+      "amenity": "cosmetics",
+      "cuisine": "",
+      "description": "",
+      "address": "Bahnstraße 45, 53894, Mechernich",
+      "phone": "+49 2484 8419025",
+      "website": "https://www.js-medizinischekosmetik.de/",
+      "email": "info@js-medizinischekosmetik.de",
+      "lat": 50.5913269,
+      "lon": 6.6494332,
+      "osm_id": 8677947546,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=JS%20H%C3%A4nde%2C%20F%C3%BC%C3%9Fe%20%26%20Gesicht&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=JS%20H%C3%A4nde%2C%20F%C3%BC%C3%9Fe%20%26%20Gesicht",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 5,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 4,
+        "behind": 11,
+        "label": "#5 von 16 in Mechernich",
+        "pitch": "4 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "info@js-medizinischekosmetik.de",
+        "contact_phone": "+49 2484 8419025",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 5,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 4,
+          "behind": 11,
+          "label": "#5 von 16 in Mechernich",
+          "pitch": "4 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#5 von 16 in Mechernich",
+        "local_rank_pitch": "4 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Salon Tobehn",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Bahnstraße 51, 53894, Mechernich",
+      "phone": "+49 2443 314231",
+      "website": "https://www.salon-tobehn.de/",
+      "email": "salontobehn@freenet.de",
+      "lat": 50.5912625,
+      "lon": 6.6486211,
+      "osm_id": 8677947548,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Salon%20Tobehn&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Salon%20Tobehn",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 6,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 5,
+        "behind": 10,
+        "label": "#6 von 16 in Mechernich",
+        "pitch": "5 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "salontobehn@freenet.de",
+        "contact_phone": "+49 2443 314231",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 6,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 5,
+          "behind": 10,
+          "label": "#6 von 16 in Mechernich",
+          "pitch": "5 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#6 von 16 in Mechernich",
+        "local_rank_pitch": "5 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Atelier Alexandra",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Stiftsweg 4, 53894, Mechernich",
+      "phone": "+49 2443 2860",
+      "website": "",
+      "email": "atelieralexandra@gmx.de",
+      "lat": 50.5915575,
+      "lon": 6.6461463,
+      "osm_id": 8677947550,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Atelier%20Alexandra&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Atelier%20Alexandra",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 7,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 6,
+        "behind": 9,
+        "label": "#7 von 16 in Mechernich",
+        "pitch": "6 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "atelieralexandra@gmx.de",
+        "contact_phone": "+49 2443 2860",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 7,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 6,
+          "behind": 9,
+          "label": "#7 von 16 in Mechernich",
+          "pitch": "6 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#7 von 16 in Mechernich",
+        "local_rank_pitch": "6 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Haar Wandel",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Kölner Straße 62, 53894, Mechernich",
+      "phone": "+49 2443 310001",
+      "website": "https://www.haar-wandel.de/",
+      "email": "vanzyl@gmx.de",
+      "lat": 50.6132146,
+      "lon": 6.6488032,
+      "osm_id": 9215155431,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Haar%20Wandel&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Haar%20Wandel",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 8,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 7,
+        "behind": 8,
+        "label": "#8 von 16 in Mechernich",
+        "pitch": "7 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "vanzyl@gmx.de",
+        "contact_phone": "+49 2443 310001",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 8,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 7,
+          "behind": 8,
+          "label": "#8 von 16 in Mechernich",
+          "pitch": "7 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#8 von 16 in Mechernich",
+        "local_rank_pitch": "7 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Perücken- und Haarstudio Iris",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Turmhofstraße 36, 53894, Mechernich",
+      "phone": "+49 2443 1500",
+      "website": "https://www.haarstudio-iris.de/",
+      "email": "info@haarstudio-iris.de",
+      "lat": 50.5915225,
+      "lon": 6.6558752,
+      "osm_id": 9542861797,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Per%C3%BCcken-%20und%20Haarstudio%20Iris&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Per%C3%BCcken-%20und%20Haarstudio%20Iris",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 9,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 8,
+        "behind": 7,
+        "label": "#9 von 16 in Mechernich",
+        "pitch": "8 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "info@haarstudio-iris.de",
+        "contact_phone": "+49 2443 1500",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 9,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 8,
+          "behind": 7,
+          "label": "#9 von 16 in Mechernich",
+          "pitch": "8 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#9 von 16 in Mechernich",
+        "local_rank_pitch": "8 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Beauty Hair Design",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Turmhofstraße 48, 53894, Mechernich",
+      "phone": "+49 2443 6469",
+      "website": "https://www.beauty-hair-design.eu/",
+      "email": "salonkohlgraf@aol.com",
+      "lat": 50.5922031,
+      "lon": 6.6557464,
+      "osm_id": 9542861798,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Beauty%20Hair%20Design&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Beauty%20Hair%20Design",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 10,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 9,
+        "behind": 6,
+        "label": "#10 von 16 in Mechernich",
+        "pitch": "9 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "salonkohlgraf@aol.com",
+        "contact_phone": "+49 2443 6469",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 10,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 9,
+          "behind": 6,
+          "label": "#10 von 16 in Mechernich",
+          "pitch": "9 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#10 von 16 in Mechernich",
+        "local_rank_pitch": "9 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "DD Hairdesign",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Weierstraße 9, 53894, Mechernich",
+      "phone": "+49 2443 8255",
+      "website": "https://www.dd-hairdesign.de/",
+      "email": "info@dd-hairdesign.de",
+      "lat": 50.5893141,
+      "lon": 6.6533558,
+      "osm_id": 282357825,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=DD%20Hairdesign&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=DD%20Hairdesign",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 11,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 10,
+        "behind": 5,
+        "label": "#11 von 16 in Mechernich",
+        "pitch": "10 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "info@dd-hairdesign.de",
+        "contact_phone": "+49 2443 8255",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 11,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 10,
+          "behind": 5,
+          "label": "#11 von 16 in Mechernich",
+          "pitch": "10 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#11 von 16 in Mechernich",
+        "local_rank_pitch": "10 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Haarstudio H. Broeders",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Gölertzstraße 13, 53894, Mechernich",
+      "phone": "",
+      "website": "",
+      "email": "",
+      "lat": 50.5998771,
+      "lon": 6.6112147,
+      "osm_id": 8575179527,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Haarstudio%20H.%20Broeders&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Haarstudio%20H.%20Broeders",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 40,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 25.0,
+      "local_rank": {
+        "rank": 12,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 11,
+        "behind": 4,
+        "label": "#12 von 16 in Mechernich",
+        "pitch": "11 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 12,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 11,
+          "behind": 4,
+          "label": "#12 von 16 in Mechernich",
+          "pitch": "11 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#12 von 16 in Mechernich",
+        "local_rank_pitch": "11 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Beauty Balance",
+      "amenity": "beauty",
+      "cuisine": "",
+      "description": "",
+      "address": "Kölner Straße 39, 53894, Mechernich",
+      "phone": "",
+      "website": "",
+      "email": "",
+      "lat": 50.6121617,
+      "lon": 6.6474758,
+      "osm_id": 9215155430,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Beauty%20Balance&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Beauty%20Balance",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 40,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 25.0,
+      "local_rank": {
+        "rank": 13,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 12,
+        "behind": 3,
+        "label": "#13 von 16 in Mechernich",
+        "pitch": "12 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 13,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 12,
+          "behind": 3,
+          "label": "#13 von 16 in Mechernich",
+          "pitch": "12 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#13 von 16 in Mechernich",
+        "local_rank_pitch": "12 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Zagros Style",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Kölner Straße 44, 53894, Mechernich",
+      "phone": "",
+      "website": "",
+      "email": "",
+      "lat": 50.6124704,
+      "lon": 6.6479154,
+      "osm_id": 9215155490,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Zagros%20Style&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Zagros%20Style",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 40,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 25.0,
+      "local_rank": {
+        "rank": 14,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 13,
+        "behind": 2,
+        "label": "#14 von 16 in Mechernich",
+        "pitch": "13 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 14,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 13,
+          "behind": 2,
+          "label": "#14 von 16 in Mechernich",
+          "pitch": "13 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#14 von 16 in Mechernich",
+        "local_rank_pitch": "13 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Nageldesign Antje Gnädig",
+      "amenity": "beauty",
+      "cuisine": "",
+      "description": "",
+      "address": "Bahnstraße 23, 53894, Mechernich",
+      "phone": "",
+      "website": "",
+      "email": "",
+      "lat": 50.5915259,
+      "lon": 6.6521553,
+      "osm_id": 9247320919,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Nageldesign%20Antje%20Gn%C3%A4dig&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Nageldesign%20Antje%20Gn%C3%A4dig",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 40,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 25.0,
+      "local_rank": {
+        "rank": 15,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 14,
+        "behind": 1,
+        "label": "#15 von 16 in Mechernich",
+        "pitch": "14 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 15,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 14,
+          "behind": 1,
+          "label": "#15 von 16 in Mechernich",
+          "pitch": "14 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#15 von 16 in Mechernich",
+        "local_rank_pitch": "14 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "72 Barber Shop",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "Bergstraße 2a, 53894, Mechernich",
+      "phone": "",
+      "website": "",
+      "email": "",
+      "lat": 50.5907276,
+      "lon": 6.6520853,
+      "osm_id": 12641691644,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=72%20Barber%20Shop&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=72%20Barber%20Shop",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 40,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 25.0,
+      "local_rank": {
+        "rank": 16,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 15,
+        "behind": 0,
+        "label": "#16 von 16 in Mechernich",
+        "pitch": "15 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Neutral — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "local_rank_losing",
+            "label": "Konkurrenz in der Stadt digital vorne",
+            "category": "wettbewerb",
+            "solution_type": "website",
+            "solution": "Lokal stärkster Partner werden — Maps + Portal + Reviews",
+            "automation": "Quartals-Ranking-Report",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Konkurrenz in der Stadt digital vorne",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | WEBSITE: Lokal stärkster Partner werden — Maps + Portal + Reviews",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "Quartals-Ranking-Report",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 52,
+          "tier": "neutral",
+          "label": "Neutral",
+          "approach": "Erst Schmerz sichtbar machen (Zahlen, Nachbar-Vergleich)",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+            "Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins · Viele versteckte Probleme — Beratungshebel wenn Gespräch klappt",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "neutral",
+        "openness_label": "Neutral",
+        "openness_score": 52,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 16,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 15,
+          "behind": 0,
+          "label": "#16 von 16 in Mechernich",
+          "pitch": "15 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial"
+        },
+        "local_rank_label": "#16 von 16 in Mechernich",
+        "local_rank_pitch": "15 Betriebe in Mechernich digital vor dir — Lokal-Matador-Potenzial",
+        "triggers": []
+      }
+    },
+    {
+      "name": "beautymed Petra Jansen",
+      "amenity": "beauty",
+      "cuisine": "",
+      "description": "",
+      "address": "Weierstraße 56, 53894, Mechernich",
+      "phone": "+49 2443 316969",
+      "website": "https://beautymed-jansen.de/",
+      "email": "",
+      "lat": 50.5912698,
+      "lon": 6.6532422,
+      "osm_id": 2659930813,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=beautymed%20Petra%20Jansen&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=beautymed%20Petra%20Jansen",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 1,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 0,
+        "behind": 15,
+        "label": "#1 von 16 in Mechernich",
+        "pitch": "Lokal digital führend in Mechernich"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Keine Stammkunden-Bindung Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Traditionell — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "+49 2443 316969",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Keine Stammkunden-Bindung",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | CRM: Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 42,
+          "tier": "tradition",
+          "label": "Traditionell",
+          "approach": "Nicht verkaufen — kostenloser Check, Nachfolger ansprechen",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "tradition",
+        "openness_label": "Traditionell",
+        "openness_score": 42,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 1,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 0,
+          "behind": 15,
+          "label": "#1 von 16 in Mechernich",
+          "pitch": "Lokal digital führend in Mechernich"
+        },
+        "local_rank_label": "#1 von 16 in Mechernich",
+        "local_rank_pitch": "Lokal digital führend in Mechernich",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Hautnah Beautyatelier",
+      "amenity": "beauty",
+      "cuisine": "",
+      "description": "",
+      "address": "Hinter den Gärten 6, 53894, Mechernich",
+      "phone": "+49 2443 912798",
+      "website": "https://hautnah-beautyatelier.de/",
+      "email": "",
+      "lat": 50.6258169,
+      "lon": 6.6560283,
+      "osm_id": 2701916860,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Hautnah%20Beautyatelier&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Hautnah%20Beautyatelier",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 50,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 35.0,
+      "local_rank": {
+        "rank": 2,
+        "total": 16,
+        "city": "mechernich",
+        "ahead": 1,
+        "behind": 14,
+        "label": "#2 von 16 in Mechernich",
+        "pitch": "1 Konkurrent(en) digital stärker — aufholen möglich"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Keine Stammkunden-Bindung Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Traditionell — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "+49 2443 912798",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Keine Stammkunden-Bindung",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | CRM: Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 42,
+          "tier": "tradition",
+          "label": "Traditionell",
+          "approach": "Nicht verkaufen — kostenloser Check, Nachfolger ansprechen",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "tradition",
+        "openness_label": "Traditionell",
+        "openness_score": 42,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 2,
+          "total": 16,
+          "city": "mechernich",
+          "ahead": 1,
+          "behind": 14,
+          "label": "#2 von 16 in Mechernich",
+          "pitch": "1 Konkurrent(en) digital stärker — aufholen möglich"
+        },
+        "local_rank_label": "#2 von 16 in Mechernich",
+        "local_rank_pitch": "1 Konkurrent(en) digital stärker — aufholen möglich",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Friseursalon Petra Frings",
+      "amenity": "hairdresser",
+      "cuisine": "",
+      "description": "",
+      "address": "",
+      "phone": "",
+      "website": "",
+      "email": "",
+      "lat": 50.5919462,
+      "lon": 6.627949,
+      "osm_id": 7758114173,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Friseursalon%20Petra%20Frings&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Friseursalon%20Petra%20Frings",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 40,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 25.0,
+      "local_rank": {
+        "rank": 1,
+        "total": 1,
+        "city": "unknown",
+        "ahead": 0,
+        "label": "—"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Keine Stammkunden-Bindung Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Traditionell — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Keine Stammkunden-Bindung",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | CRM: Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 42,
+          "tier": "tradition",
+          "label": "Traditionell",
+          "approach": "Nicht verkaufen — kostenloser Check, Nachfolger ansprechen",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "tradition",
+        "openness_label": "Traditionell",
+        "openness_score": 42,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 1,
+          "total": 1,
+          "city": "unknown",
+          "ahead": 0,
+          "label": "—"
+        },
+        "local_rank_label": "—",
+        "local_rank_pitch": "",
+        "triggers": []
+      }
+    },
+    {
+      "name": "Kosmetikstudio Hilger",
+      "amenity": "beauty",
+      "cuisine": "",
+      "description": "",
+      "address": "",
+      "phone": "",
+      "website": "",
+      "email": "",
+      "lat": 50.5970361,
+      "lon": 6.6540569,
+      "osm_id": 13033398106,
+      "google_places": {},
+      "signals": {
+        "meta_ads": {
+          "runs_ads": false,
+          "ad_count": 0,
+          "source": "public_html",
+          "library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=DE&q=Kosmetikstudio%20Hilger&search_type=keyword_unordered"
+        },
+        "meta_ads_checked": true,
+        "runs_facebook_ads": false,
+        "register": {
+          "found": false,
+          "source": "manual",
+          "northdata_url": "https://www.northdata.de/?q=Kosmetikstudio%20Hilger",
+          "handelsregister_url": "https://www.handelsregister.de/rp_web/welcome.xhtml",
+          "hint": "GF-Wechsel manuell prüfen oder North Data API hinterlegen"
+        },
+        "register_checked": true,
+        "providers": []
+      },
+      "score": 40,
+      "priority": "medium",
+      "pitch_angle": "Keine Website — Komplett-Paket Website + Bestellportal",
+      "pitch_angles": [
+        "Keine Website — Komplett-Paket Website + Bestellportal"
+      ],
+      "digital_index": 25.0,
+      "local_rank": {
+        "rank": 1,
+        "total": 1,
+        "city": "unknown",
+        "ahead": 0,
+        "label": "—"
+      },
+      "intent": {
+        "code": "digital_neu",
+        "label": "Nur Instagram",
+        "want": "Termine per DM — chaotisch",
+        "approach": "Angebot: Quick-Wins (0 € + 0 €) Jetzt: Google Profil + Termin-Link in Bio Probleme: Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Keine Stammkunden-Bindung Umsatz-Schätzung: ca. 6.581–10.968 €/Monat (+1.053 €/Mo möglich) Offenheit: Traditionell — Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+        "who": "Inhaber / Geschäftsführung",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "",
+        "stack": [],
+        "stack_summary": "Kein Anbieter erkannt",
+        "monthly_spend_est": "0 € (kein bezahltes Tool erkannt)",
+        "counter_pitch": "",
+        "action_now": [
+          "Google Profil + Termin-Link in Bio"
+        ],
+        "offer_tier": "local",
+        "offer_name": "Quick-Wins",
+        "offer_setup": "0 €",
+        "offer_monthly": "0 €",
+        "budget_tier": "D",
+        "budget_label": "Später",
+        "budget_score": 18,
+        "contact_priority": "skip",
+        "contact_action": "Nicht anrufen — in Nurture-Liste oder ignorieren",
+        "budget_reason": "Keine Website — eher langsam starten (kostenlose Quick-Wins) · Kein Digital-Spend erkennbar",
+        "problems": [
+          {
+            "id": "invisible_google",
+            "label": "Auf Google praktisch unsichtbar",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden werden",
+            "automation": "n8n: Google-Review-Anfrage nach Besuch",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "only_social",
+            "label": "Nur Facebook/Instagram — kein eigener Auftritt",
+            "category": "sichtbarkeit",
+            "solution_type": "website",
+            "solution": "Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab",
+            "automation": "Link-in-Bio → Bestellportal",
+            "severity": "high",
+            "hidden": false
+          },
+          {
+            "id": "no_loyalty",
+            "label": "Keine Stammkunden-Bindung",
+            "category": "umsatz",
+            "solution_type": "crm",
+            "solution": "Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+            "automation": "CRM + automatische Promo-SMS",
+            "severity": "low",
+            "hidden": true
+          }
+        ],
+        "problems_summary": "Auf Google praktisch unsichtbar · Nur Facebook/Instagram — kein eigener Auftrit · Keine Stammkunden-Bindung",
+        "solutions_summary": "WEBSITE: Eigene Website + Google Business optimieren — bei „Restaurant + Ort\" gefunden we | WEBSITE: Professionelle Website statt Meta-Profil — Gäste unter 40 springen bei FB ab | CRM: Digitale Bonuskarte (10 Bestellungen = Gratis-Getränk) — Gäste kommen wieder",
+        "automations": [
+          "n8n: Google-Review-Anfrage nach Besuch",
+          "Link-in-Bio → Bestellportal",
+          "CRM + automatische Promo-SMS"
+        ],
+        "revenue": {
+          "monthly_est": 8775,
+          "range": "6.581–10.968 €/Monat",
+          "label": "ca. 6.581–10.968 €/Monat",
+          "confidence": "niedrig",
+          "factors": [
+            "kaum/keine Google-Daten",
+            "keine Website"
+          ],
+          "digital_uplift_est": "+1.053 €/Mo möglich",
+          "can_afford_setup": false,
+          "can_afford_monthly": false
+        },
+        "revenue_label": "ca. 6.581–10.968 €/Monat",
+        "revenue_uplift": "+1.053 €/Mo möglich",
+        "openness": {
+          "score": 42,
+          "tier": "tradition",
+          "label": "Traditionell",
+          "approach": "Nicht verkaufen — kostenloser Check, Nachfolger ansprechen",
+          "reasons": [
+            "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins"
+          ],
+          "reason_summary": "Geschätzter Umsatz niedrig — eher Starter/Quick-Wins",
+          "successor_hint": "",
+          "call_despite_budget": false
+        },
+        "openness_tier": "tradition",
+        "openness_label": "Traditionell",
+        "openness_score": 42,
+        "successor_hint": "",
+        "local_rank": {
+          "rank": 1,
+          "total": 1,
+          "city": "unknown",
+          "ahead": 0,
+          "label": "—"
+        },
+        "local_rank_label": "—",
+        "local_rank_pitch": "",
+        "triggers": []
+      }
+    }
+  ],
+  "diff": {
+    "previous": null,
+    "changes": 0,
+    "trigger_count": 0
+  }
+}

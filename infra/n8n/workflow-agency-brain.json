@@ -1,0 +1,129 @@
+{
+  "name": "Agency – Hirn scharf (Router+Dispatch)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-brain",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "br-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "agency-brain"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; const body=j.body||j; const message=(body.message||body.text||body.payload||'').toString().trim(); if(!message) return [{json:{ok:false,error:'message fehlt'}}]; return [{json:{message, force_agent:body.force_agent||'', kunde_id:body.kunde_id||body.tenant_id||'AGENCY', dispatch: body.dispatch!==false && body.dispatch!==0, commander:!!body.commander}}];"
+      },
+      "id": "br-norm",
+      "name": "Normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/brain",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.CRON_SECRET}}"
+            },
+            {
+              "name": "X-Agency-Password",
+              "value": "={{$env.AGENCY_ADMIN_PASSWORD}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "br-http",
+      "name": "Brain API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "br-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        720,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalisieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalisieren": {
+      "main": [
+        [
+          {
+            "node": "Brain API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Brain API": {
+      "main": [
+        [
+          {
+            "node": "Antwort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "notes": "Scharfes Hirn. Kein Auto-Send. Env CRON_SECRET + AGENCY_ADMIN_PASSWORD."
+  }
+}

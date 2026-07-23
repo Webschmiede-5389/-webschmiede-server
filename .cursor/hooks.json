@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "python .cursor/hooks/agency_brain_session.py",
+        "timeout": 20
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "command": "python .cursor/hooks/agency_brain_prompt.py",
+        "matcher": "UserPromptSubmit",
+        "timeout": 90
+      }
+    ]
+  }
+}

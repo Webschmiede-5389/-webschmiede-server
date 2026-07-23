@@ -1,0 +1,133 @@
+{
+  "name": "Agency 04 – Outreach Entwuerfe",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-04-outreach",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "04-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "agency-04-outreach"
+    },
+    {
+      "parameters": {
+        "jsCode": "const b=($input.first().json.body)||$input.first().json||{}; if(b.lead||b.name){ return [{json:{ mode:'draft', lead:b.lead||b, ticket:String(b.ticket||'5000'), offer:b.offer||'' }}]; } return [{json:{ mode:'campaign', vertical:b.vertical||'', limit:b.limit||5, ticket:String(b.ticket||b.budget||'5000'), offer:b.offer||'' }}];"
+      },
+      "id": "04-norm",
+      "name": "Eingabe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [200, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/scout/campaign",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{$env.CRON_SECRET}}" },
+            { "name": "X-Agency-Password", "value": "={{$env.AGENCY_ADMIN_PASSWORD}}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ vertical: $json.vertical, limit: $json.limit, ticket: $json.ticket, offer: $json.offer }) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "04-camp",
+      "name": "Campaign (Fallback)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, -80]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/scout/outreach-draft",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{$env.CRON_SECRET}}" },
+            { "name": "X-Agency-Password", "value": "={{$env.AGENCY_ADMIN_PASSWORD}}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ lead: $json.lead, ticket: $json.ticket, offer: $json.offer }) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "04-draft",
+      "name": "Einzel-Entwurf",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 80]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.mode }}",
+              "value2": "draft"
+            }
+          ]
+        }
+      },
+      "id": "04-if",
+      "name": "Ist Einzel-Draft?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [340, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; return [{ json: { ok: true, workflow: 'outreach', auto_send: false, note: 'Nur Entwurf. Christian muss freigeben.', result: j } }];"
+      },
+      "id": "04-pack",
+      "name": "Ergebnis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "04-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Eingabe", "type": "main", "index": 0 }]] },
+    "Eingabe": { "main": [[{ "node": "Ist Einzel-Draft?", "type": "main", "index": 0 }]] },
+    "Ist Einzel-Draft?": {
+      "main": [
+        [{ "node": "Einzel-Entwurf", "type": "main", "index": 0 }],
+        [{ "node": "Campaign (Fallback)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Einzel-Entwurf": { "main": [[{ "node": "Ergebnis", "type": "main", "index": 0 }]] },
+    "Campaign (Fallback)": { "main": [[{ "node": "Ergebnis", "type": "main", "index": 0 }]] },
+    "Ergebnis": { "main": [[{ "node": "Antwort", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "notes": "WF4 Outreach Entwuerfe. NIEMALS auto-send."
+  },
+  "tags": [{ "name": "agency" }, { "name": "system-13" }, { "name": "outreach" }]
+}

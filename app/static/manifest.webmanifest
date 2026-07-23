@@ -1,0 +1,32 @@
+{
+  "name": "Snack House Yassine",
+  "short_name": "Snack House",
+  "description": "Shawarma, Pizza und Burger in Mechernich. Zuerst die Startseite, dann online bestellen.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0e0b08",
+  "theme_color": "#0e0b08",
+  "lang": "de-DE",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

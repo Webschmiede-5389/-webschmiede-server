@@ -1,0 +1,538 @@
+{
+  "version": 1,
+  "updated": "2026-07-15",
+  "region": "Eifel · Kreis Euskirchen · Zülpich · Mechernich · Düren",
+  "contact": {
+    "name": "Christian Kummetat",
+    "phone": "+49 177 8011350",
+    "phone_link": "tel:+491778011350",
+    "whatsapp": "https://wa.me/491778011350",
+    "email": "info@digitalehandwerkskunst.de"
+  },
+  "tier_labels": {
+    "fundament": "Stufe 1",
+    "system": "Stufe 2",
+    "automatik": "Stufe 3",
+    "komplett": "Stufe 4",
+    "beleg": "Einfach",
+    "sync": "Mittel",
+    "silo": "Komplex"
+  },
+  "services": [
+    {
+      "id": "buchhaltung",
+      "icon": "fa-file-invoice",
+      "name": "Buchhaltungs-Automation",
+      "headline": "Schluss mit Beleg-Chaos vor dem Steuerberater.",
+      "intro": "Ihr Steuerberater bucht weiter in DATEV, Sie liefern sortierte Unterlagen statt Sonntag-Excel. Wir automatisieren den Weg von Bon, Rechnung und Umsatz bis ins Monatspaket.",
+      "note": "Zubuchbar zu jedem Portal-Paket (ab Stufe Automatik oft sinnvoll). Einmal-Setup je nach Komplexität, Monatspauschale für Betrieb & Anpassungen.",
+      "for_industries": ["handwerk", "dach", "gastro", "kfz", "friseur"],
+      "pains": [
+        "Belege in WhatsApp, Handschuhfach und Mail, am Monatsende fehlt die Hälfte",
+        "Steuerberater ruft nach: „Wo ist der Beleg zu Job 847?“",
+        "Dieselben Beträge in Portal, Excel und Lexware/sevDesk eintippen",
+        "Eingangsrechnungen versanden im Postfach, niemand sortiert sie"
+      ],
+      "not_included": "Keine laufende Buchführung, keine Steuererklärung, keine Rechtsberatung, das bleibt bei Ihrer Kanzlei.",
+      "packages": [
+        {
+          "tier": "beleg",
+          "complexity": "Einfach",
+          "name": "Beleg-Pipeline",
+          "tagline": "Vom Foto zur sortierten Monatsmappe",
+          "problem": "Belege liegen verstreut in WhatsApp, Handschuhfach und Mail. Vor dem Steuerberater-Termin fehlt immer die Hälfte.",
+          "solution": "Ein festes Postfach und automatische Sortierung. Am 1. des Monats liegt ein fertiges Paket für DATEV bereit.",
+          "setup_eur": 1200,
+          "setup_hint": "950 bis 1.500 €",
+          "monthly_eur": 248,
+          "highlight": false,
+          "features": [
+            "belege@…, Foto, PDF & Mail landen im richtigen Monatsordner",
+            "Eingangsrechnungen aus Mail vorsortieren (Absender, Datum, Betrag)",
+            "Monats-CSV aus Portal: Umsätze Bar/EC getrennt",
+            "Am 1.: E-Mail an Sie + Kopie an Steuerberater",
+            "Kurz-Zusammenfassung: Umsatz, Bar, EC, Anzahl Belege",
+            "Upload in DATEV Unternehmen online wie gewohnt"
+          ]
+        },
+        {
+          "tier": "sync",
+          "complexity": "Mittel · Sweetspot",
+          "name": "Finanz-Sync",
+          "tagline": "Portal, CRM & Buchhaltung reden miteinander",
+          "problem": "Der Job ist erledigt, aber Kontakt, Rechnung und Beleg existieren dreimal. Jeder tippt dieselben Beträge nochmal ein.",
+          "solution": "Wenn der Auftrag abgeschlossen ist, landen Kontakt und Umsatz automatisch im Monatsexport. Ohne Doppelpflege.",
+          "setup_eur": 3200,
+          "setup_hint": "2.500 bis 4.000 €",
+          "monthly_eur": 398,
+          "highlight": true,
+          "features": [
+            "Alles aus Beleg-Pipeline",
+            "Kontakt-Sync zu Lexware Office / sevDesk (wenn vorhanden)",
+            "Job/Bestellung abgeschlossen → automatisch im Export",
+            "Erinnerung wenn Beleg zu abgeschlossenem Job fehlt",
+            "Steuerberater-Paket mit Fehlende-Belege-Liste",
+            "Automatische Abläufe, die zu Ihrer Firma passen"
+          ]
+        },
+        {
+          "tier": "silo",
+          "complexity": "Komplex",
+          "name": "System-Brücke",
+          "tagline": "Schluss mit der Datensilo-Hölle",
+          "problem": "CRM, Projektboard und Buchhaltung laufen nebeneinander. Nichts stimmt zwischen den Systemen überein.",
+          "solution": "Die Systeme werden synchronisiert. Bei Fehlern kommt eine Benachrichtigung, damit nichts still liegenbleibt.",
+          "setup_eur": 5990,
+          "setup_hint": "4.500 bis 7.500 €+",
+          "monthly_eur": 698,
+          "highlight": false,
+          "features": [
+            "Alles aus Finanz-Sync",
+            "Mehr-System-Anbindung (z. B. CRM, ClickUp/Monday, sevDesk/Lexware)",
+            "Abgleich-Reports: Was fehlt wo?",
+            "Fehlerhandling & Benachrichtigung bei Sync-Ausfall",
+            "Individuelle Regeln (z. B. nur erledigte Jobs, nur bezahlte Rechnungen)",
+            "Onboarding mit Ihrer Kanzlei, ein gemeinsamer Prozess"
+          ]
+        }
+      ],
+      "alltag": [
+        { "when": "Baustelle / Schicht", "text": "Bon fotografieren oder Rechnung weiterleiten, kein Sammelordner mehr." },
+        { "when": "Job erledigt", "text": "Im Admin abschließen, Betrag & Zahlart sind im Monatsexport." },
+        { "when": "1. im Monat", "text": "Paket öffnen, in DATEV hochladen. Steuerberater hat schon die Kopie." }
+      ]
+    }
+  ],
+  "industries": [
+    {
+      "id": "gastro",
+      "label": "Gastronomie",
+      "icon": "fa-utensils",
+      "short": "Restaurant, Imbiss, Café, Pizza",
+      "headline": "Bestellen über Ihre eigene Seite.",
+      "intro": "Gäste bestellen bei Ihnen. Nicht über fremde Portale, die pro Bestellung mitnehmen. Ihre Marke, Ihre Preise, Ihre Daten.",
+      "benefits": [
+        "Mehr bleibt in der Kasse",
+        "Stammgäste erkennen Sie wieder",
+        "In Google & Maps in der Gegend gefunden werden"
+      ],
+      "automations": [
+        "Bestellseite unter Ihrer Adresse",
+        "Admin für Küche, Bon, Status",
+        "Wartezeit am Portal anzeigen",
+        "SMS wenn niemand ans Telefon geht",
+        "Bitte um Google-Bewertung nach dem Essen",
+        "Treuekarte für Stammgäste"
+      ],
+      "proof": {
+        "label": "Läuft bei Snack House Yassine, Mechernich",
+        "url": "https://snackhouse-mechernich.de/bestellen"
+      },
+      "packages": [
+        {
+          "tier": "fundament",
+          "name": "Fundament",
+          "tagline": "Website steht, Maps stimmt",
+          "setup_eur": 798,
+          "monthly_eur": 248,
+          "highlight": false,
+          "features": [
+            "Website, mobil & schnell",
+            "Speisekarte online",
+            "Google Maps & Firmeneintrag",
+            "Impressum & Datenschutz",
+            "Kontakt & Anfahrt"
+          ]
+        },
+        {
+          "tier": "system",
+          "name": "Bestell-System",
+          "tagline": "Bestellen + Admin für die Küche",
+          "setup_eur": 998,
+          "monthly_eur": 298,
+          "highlight": true,
+          "features": [
+            "Alles aus Fundament",
+            "Eigene Bestellseite (/bestellen)",
+            "Bestellungen annehmen, drucken, Status setzen",
+            "Zu / Auf + Wartezeit einstellen",
+            "Hosting in Deutschland"
+          ]
+        },
+        {
+          "tier": "automatik",
+          "name": "Automatik",
+          "tagline": "Kunden merken, SMS, Aktionen",
+          "setup_eur": 1980,
+          "monthly_eur": 500,
+          "highlight": false,
+          "features": [
+            "Alles aus Bestell-System",
+            "Kundenliste mit Bestellhistorie",
+            "SMS (z. B. Bestätigung, Erinnerung)",
+            "Rabattaktionen einstellbar",
+            "SMS für Google-Bewertung",
+            "Einweisung & Support"
+          ]
+        },
+        {
+          "tier": "komplett",
+          "name": "Komplett",
+          "tagline": "Mail, Posteingang, Treuekarte",
+          "setup_eur": 2980,
+          "monthly_eur": 698,
+          "highlight": false,
+          "features": [
+            "Alles aus Automatik",
+            "E-Mail-Posteingang mit Erstantwort",
+            "Anfragen aus Mail werden erfasst",
+            "Treueprogramm / Bonuskarte",
+            "Automatische Reports & Hinweise",
+            "Schnellere Hilfe bei Anpassungen"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "handwerk",
+      "label": "Handwerk & Bau",
+      "icon": "fa-hammer",
+      "short": "Maler, Lackierer, Elektro, Sanitär, Trockenbau …",
+      "headline": "Malerbetrieb: Anfrage rein, Job erledigt, Beleg erfasst.",
+      "intro": "Kunde fragt online an, Sie setzen den Job auf erledigt, Kassenbon fotografieren, am Monatsanfang liegt das Paket für DATEV. Kein Excel am Sonntag.",
+      "benefits": [
+        "Anfragen und Jobs in einer Liste, nicht auf Zetteln",
+        "Bar und EC pro Job mitgeschrieben",
+        "Steuerberater bekommt Monats-CSV und Belege sortiert"
+      ],
+      "automations": [
+        "Anfrageformular mit Fotos und PLZ",
+        "Termin für Besichtigung online",
+        "Job-Status: offen, Termin, erledigt",
+        "Erste Mail-Antwort automatisch",
+        "Kassenbon per Foto an belege@…",
+        "Am 1.: Umsatz-CSV + Belege für DATEV"
+      ],
+      "proof": null,
+      "packages": [
+        {
+          "tier": "fundament",
+          "name": "Fundament",
+          "tagline": "Website + Galerie + Maps",
+          "setup_eur": 798,
+          "monthly_eur": 248,
+          "highlight": false,
+          "features": [
+            "Website, mobil & schnell",
+            "Leistungen & Referenzfotos",
+            "Google Maps Basis",
+            "Impressum & Datenschutz",
+            "Logo kann ich mit machen"
+          ]
+        },
+        {
+          "tier": "system",
+          "name": "Anfrage-System",
+          "tagline": "Formular + Termin + Benachrichtigung",
+          "setup_eur": 1198,
+          "monthly_eur": 298,
+          "highlight": true,
+          "features": [
+            "Alles aus Fundament",
+            "Anfrageformular mit den Feldern die Sie brauchen",
+            "Terminbuchung",
+            "Mail/SMS wenn was reinkommt",
+            "Bis zu 5 Unterseiten für Leistungen"
+          ]
+        },
+        {
+          "tier": "automatik",
+          "name": "Automatik",
+          "tagline": "Nichts geht unter",
+          "setup_eur": 1980,
+          "monthly_eur": 500,
+          "highlight": false,
+          "features": [
+            "Alles aus Anfrage-System",
+            "Kunden & Jobs in einer Liste",
+            "Mail-Agent für Erstantworten",
+            "Erinnerung wenn Anfrage offen liegt",
+            "Job abschließen mit Betrag und Zahlart",
+            "Monats-CSV für den Steuerberater"
+          ]
+        },
+        {
+          "tier": "komplett",
+          "name": "Komplett",
+          "tagline": "Buchhaltung + Gesellen + alles drin",
+          "setup_eur": 2980,
+          "monthly_eur": 698,
+          "highlight": false,
+          "features": [
+            "Alles aus Automatik",
+            "Eingangsrechnungen aus Mail archivieren",
+            "Monats-Mail an Steuerberater",
+            "Kurzes Formular für Bewerber",
+            "Seite „Arbeiten bei uns“",
+            "Ich begleite den Start persönlich"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dach",
+      "label": "Dachdecker & Bedachung",
+      "icon": "fa-house-chimney",
+      "short": "Dachdecker, Spengler, Fassade",
+      "headline": "Nach dem Sturm: Anfragen sortiert, nicht im Kopf.",
+      "intro": "Formular für Notfälle, Termin für Besichtigung, alles in einer Übersicht. Sie rufen zurück, wenn Sie Luft haben.",
+      "benefits": [
+        "Auch wenn es voll ist: nichts geht verloren",
+        "In Maps und Google in der Region sichtbar",
+        "Kunde bekommt schnell eine Rückmeldung"
+      ],
+      "automations": [
+        "Notfall-Formular (Sturm, undicht, Fotos)",
+        "SMS: „Wir melden uns“",
+        "Besichtigungstermin online",
+        "Vorher/Nachher-Bilder",
+        "Bewertung nach dem Job",
+        "Status: offen, Termin, Angebot"
+      ],
+      "proof": null,
+      "packages": [
+        {
+          "tier": "fundament",
+          "name": "Fundament",
+          "tagline": "Website mit Referenzen",
+          "setup_eur": 898,
+          "monthly_eur": 248,
+          "highlight": false,
+          "features": [
+            "Website mit Fotos von Jobs",
+            "Leistungen: neu, sanieren, reparieren",
+            "Google Maps",
+            "Impressum & Datenschutz",
+            "Notfallnummer gut sichtbar"
+          ]
+        },
+        {
+          "tier": "system",
+          "name": "Anfrage-System",
+          "tagline": "Formular + Termin + Übersicht",
+          "setup_eur": 1298,
+          "monthly_eur": 318,
+          "highlight": true,
+          "features": [
+            "Alles aus Fundament",
+            "Formular: Was, wie dringend, Fotos",
+            "Termin für Besichtigung",
+            "Bestätigungs-Mail an Kunden",
+            "Alle Anfragen im Admin"
+          ]
+        },
+        {
+          "tier": "automatik",
+          "name": "Automatik",
+          "tagline": "SMS + Erinnerungen",
+          "setup_eur": 1980,
+          "monthly_eur": 500,
+          "highlight": false,
+          "features": [
+            "Alles aus Anfrage-System",
+            "SMS an Sie bei neuer Anfrage",
+            "Auto-Antwort an Kunden",
+            "Kundenliste mit Status",
+            "Bewertung nach Abschluss"
+          ]
+        },
+        {
+          "tier": "komplett",
+          "name": "Komplett",
+          "tagline": "Mehr PLZ, mehr Leistungsseiten",
+          "setup_eur": 2980,
+          "monthly_eur": 698,
+          "highlight": false,
+          "features": [
+            "Alles aus Automatik",
+            "Mehrere Orte / Gebiete",
+            "Eigene Seite pro Leistung",
+            "Optional: Hinweis bei Sturmwetter",
+            "Gesellen-Formular",
+            "Priorität beim Support"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "friseur",
+      "label": "Friseur & Beauty",
+      "icon": "fa-scissors",
+      "short": "Salon, Barber, Kosmetik",
+      "headline": "Termin online. Weniger Telefon in der Schicht.",
+      "intro": "Kunde sieht Preise, bucht selbst, bekommt vorher eine Erinnerung. Sie schneiden, statt dauernd abzunehmen.",
+      "benefits": [
+        "Telefon klingelt seltener",
+        "Weniger leere Stühle durch Erinnerungs-SMS",
+        "Nicht nur Instagram: auch Google"
+      ],
+      "automations": [
+        "Termin online buchen",
+        "SMS 24 h vorher",
+        "Leistungen & Preise auf der Seite",
+        "Google Maps & Bewertungen",
+        "Absage → nächster Kunde",
+        "Stammkunden gelegentlich anschreiben"
+      ],
+      "proof": null,
+      "packages": [
+        {
+          "tier": "fundament",
+          "name": "Fundament",
+          "tagline": "Salon-Seite + Galerie",
+          "setup_eur": 798,
+          "monthly_eur": 248,
+          "highlight": false,
+          "features": [
+            "Website + Bilder",
+            "Leistungen & Preise",
+            "Google Maps, Link zu Instagram",
+            "Impressum & Datenschutz",
+            "Team vorstellen"
+          ]
+        },
+        {
+          "tier": "system",
+          "name": "Termin-System",
+          "tagline": "Buchung ohne Telefon-Marathon",
+          "setup_eur": 1098,
+          "monthly_eur": 278,
+          "highlight": true,
+          "features": [
+            "Alles aus Fundament",
+            "Online-Termin (Cal.com)",
+            "Bestätigung per Mail",
+            "Formular für Sonderwünsche",
+            "Gut am Handy"
+          ]
+        },
+        {
+          "tier": "automatik",
+          "name": "Automatik",
+          "tagline": "Erinnerung + Kundenliste",
+          "setup_eur": 1780,
+          "monthly_eur": 438,
+          "highlight": false,
+          "features": [
+            "Alles aus Termin-System",
+            "SMS-Erinnerung",
+            "Wer wann da war",
+            "Bitte um Google-Bewertung",
+            "Aktion auf der Startseite einblendbar"
+          ]
+        },
+        {
+          "tier": "komplett",
+          "name": "Komplett",
+          "tagline": "Mehrere Kalender, Mail-Agent",
+          "setup_eur": 2580,
+          "monthly_eur": 598,
+          "highlight": false,
+          "features": [
+            "Alles aus Automatik",
+            "Kalender pro Mitarbeiter",
+            "Posteingang mit Erstantwort",
+            "Rabatt für Stammkunden",
+            "Monatsstatistik Buchungen",
+            "Einweisung vor Ort möglich"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kfz",
+      "label": "Kfz-Werkstatt",
+      "icon": "fa-car",
+      "short": "Werkstatt, Reifen, HU/AU, Karosserie",
+      "headline": "Termin online. In der Halle bleibt Ruhe.",
+      "intro": "Kunde bucht HU, Reifen oder Reparatur selbst. Sie sehen es im Dashboard, statt zwischendurch ans Telefon zu gehen.",
+      "benefits": [
+        "Weniger „Haben Sie morgen Zeit?“ am Hebebock",
+        "Alles dokumentiert, nicht im Kopf",
+        "Werkstatt in der Gegend auffindbar"
+      ],
+      "automations": [
+        "Termin nach Service-Art",
+        "Formular: Kennzeichen, Problem, wie eilig",
+        "SMS Bestätigung & Erinnerung",
+        "Seiten für HU, Reifen, Klima …",
+        "Google Maps & Bewertungen",
+        "Neukunden in der Liste"
+      ],
+      "proof": null,
+      "packages": [
+        {
+          "tier": "fundament",
+          "name": "Fundament",
+          "tagline": "Website + Leistungen + Maps",
+          "setup_eur": 798,
+          "monthly_eur": 248,
+          "highlight": false,
+          "features": [
+            "Website mit Leistungen",
+            "Öffnungszeiten & Anfahrt",
+            "Google Maps",
+            "Impressum & Datenschutz",
+            "Abschlepp-Hinweis optional"
+          ]
+        },
+        {
+          "tier": "system",
+          "name": "Termin-System",
+          "tagline": "Buchung + Fahrzeugdaten",
+          "setup_eur": 1198,
+          "monthly_eur": 298,
+          "highlight": true,
+          "features": [
+            "Alles aus Fundament",
+            "Termin nach Art (HU, Reifen …)",
+            "Formular mit Kennzeichen & Anliegen",
+            "Mail an Werkstatt bei neuer Anfrage",
+            "Für Kunden am Handy bedienbar"
+          ]
+        },
+        {
+          "tier": "automatik",
+          "name": "Automatik",
+          "tagline": "Erinnerung + Kundenkartei",
+          "setup_eur": 1980,
+          "monthly_eur": 500,
+          "highlight": false,
+          "features": [
+            "Alles aus Termin-System",
+            "SMS vor dem Termin",
+            "Telefon & Historie pro Kunde",
+            "Bewertung nach Reparatur",
+            "Hinweis Reifenwechsel-Saison optional"
+          ]
+        },
+        {
+          "tier": "komplett",
+          "name": "Komplett",
+          "tagline": "Mehr Hebebühnen, Mail, HU-Erinnerung",
+          "setup_eur": 2780,
+          "monthly_eur": 638,
+          "highlight": false,
+          "features": [
+            "Alles aus Automatik",
+            "Mehrere Termin-Slots",
+            "Posteingang mit Erstantwort",
+            "Erinnerung HU optional",
+            "Schneller Support",
+            "Schulung in der Werkstatt möglich"
+          ]
+        }
+      ]
+    }
+  ]
+}

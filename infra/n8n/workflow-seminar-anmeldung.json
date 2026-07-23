@@ -1,0 +1,93 @@
+{
+  "name": "Webschmiede – â€“ Seminar-Anmeldung",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "seminar-registration",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-seminar",
+      "name": "Webhook Seminar",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "ws-seminar-reg"
+    },
+    {
+      "parameters": {
+        "jsCode": "const b = $input.first().json.body || $input.first().json;\nconst text = [\n  'NEUE SEMINAR-ANMELDUNG',\n  `Seminar: ${b.title}`,\n  `Datum: ${b.event_date}`,\n  `Name: ${b.name}`,\n  `E-Mail: ${b.email}`,\n  `ID: ${b.seminar_id}`\n].join('\\n');\nreturn [{ json: { ...b, notify_text: text, email_subject: `Seminar-Anmeldung: ${b.title}`, email_html: text.replace(/\\n/g, '<br>') } }];"
+      },
+      "id": "code-format",
+      "name": "Nachricht formatieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.ALERT_FROM_EMAIL }}",
+        "toEmail": "={{ $env.AGENCY_OWNER_EMAIL || $env.ALERT_TO_EMAIL }}",
+        "subject": "={{ $json.email_subject }}",
+        "emailFormat": "html",
+        "html": "=<p style=\"font-family:Arial,sans-serif\">{{ $json.email_html }}</p><p><a href=\"http://167.233.211.170/agency\">Agency Admin</a></p>",
+        "options": {}
+      },
+      "id": "email-agency",
+      "name": "E-Mail an Webschmiede",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        300
+      ],
+      "continueOnFail": true,
+      "credentials": {
+        "smtp": {
+          "id": "CONFIGURE_SMTP",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Seminar": {
+      "main": [
+        [
+          {
+            "node": "Nachricht formatieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nachricht formatieren": {
+      "main": [
+        [
+          {
+            "node": "E-Mail an Webschmiede",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "webschmiede"
+    }
+  ],
+  "active": false
+}

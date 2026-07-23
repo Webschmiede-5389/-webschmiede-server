@@ -1,0 +1,83 @@
+{
+  "center": {
+    "name": "Mechernich",
+    "lat": 50.5997,
+    "lon": 6.6500,
+    "address": "53894 Mechernich, DE"
+  },
+  "radius_km": 25,
+  "vertical": "gastro",
+  "user_agent": "Webschmiede-Akquise/1.0 (local business research; +491778011350)",
+  "amenities": [
+    "restaurant",
+    "fast_food",
+    "cafe",
+    "bar",
+    "pub",
+    "biergarten",
+    "food_court",
+    "ice_cream"
+  ],
+  "delivery_platforms": [
+    "lieferando",
+    "takeaway.com",
+    "ubereats",
+    "uber eats",
+    "wolt.com",
+    "wolt",
+    "deliveryhero",
+    "foodora",
+    "mjam",
+    "just-eat"
+  ],
+  "order_keywords": [
+    "online bestellen",
+    "online-bestellen",
+    "jetzt bestellen",
+    "speisekarte",
+    "lieferservice",
+    "abholung",
+    "click & collect",
+    "click and collect",
+    "bestellung"
+  ],
+  "job_keywords": [
+    "stellenangebot",
+    "stellenangebote",
+    "jobs",
+    "job",
+    "wir suchen",
+    "mitarbeiter gesucht",
+    "mitarbeiter/in",
+    "stellenmarkt",
+    "karriere",
+    "bewerbung",
+    "team verstärken",
+    "verstärkung gesucht"
+  ],
+  "impressum_paths": ["/impressum", "/imprint", "/legal", "/kontakt", "/contact", "/datenschutz"],
+  "subpages": [
+    "/speisekarte",
+    "/menu",
+    "/bestellen",
+    "/online-bestellen",
+    "/karriere",
+    "/jobs",
+    "/stellenangebote"
+  ],
+  "crawl": {
+    "all_websites": true,
+    "max_workers": 8,
+    "request_timeout": 14,
+    "max_subpages": 5,
+    "html_max_bytes": 180000
+  },
+  "google_places": {
+    "enabled": true
+  },
+  "reference_client": {
+    "id": "SHY001",
+    "name": "Snack House Yassine",
+    "pitch": "Eigenes Bestellportal ohne Lieferando-Provision, Bonuskarte, SMS bei Anruf"
+  }
+}

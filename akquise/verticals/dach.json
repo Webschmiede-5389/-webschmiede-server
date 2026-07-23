@@ -1,0 +1,123 @@
+{
+  "id": "dach",
+  "name": "Dachdecker & Bedachung",
+  "discovery": {
+    "type": "overpass",
+    "crafts": [
+      "roofer",
+      "carpenter"
+    ],
+    "office_tags": [
+      "company"
+    ]
+  },
+  "google_places_type": "roofing_contractor",
+  "delivery_platforms": [],
+  "order_keywords": [
+    "angebot anfordern",
+    "kostenvoranschlag",
+    "dach check",
+    "termin",
+    "anfrage",
+    "kontaktformular"
+  ],
+  "job_keywords": [
+    "dachdecker",
+    "geselle",
+    "azubi",
+    "stellenangebot",
+    "jobs",
+    "verstärkung"
+  ],
+  "subpages": [
+    "/leistungen",
+    "/referenzen",
+    "/projekte",
+    "/karriere",
+    "/kontakt"
+  ],
+  "priority_amenities": [],
+  "reference_client": {
+    "name": "Webschmiede Handwerk Digital",
+    "pitch": "Anfrage-Automatisierung + Google Maps Dominanz, wie digitalehandwerkskunst.de"
+  },
+  "local_wins": [
+    "Google Maps Audit",
+    "WhatsApp-Anfrage-Link",
+    "Saison-Checkliste Herbst/Winter"
+  ],
+  "offers": {
+    "standard": {
+      "name": "Dach Digital",
+      "setup": "1980–7200 € einmalig",
+      "monthly": "98 €/Mo",
+      "includes": [
+        "Website + Leistungsseiten",
+        "Anfrageformular → CRM",
+        "Google 3-Pack SEO",
+        "Referenzprojekte-Galerie"
+      ]
+    },
+    "starter": {
+      "name": "Dach Starter",
+      "setup": "998–3160 €",
+      "monthly": "58 €/Mo",
+      "includes": [
+        "One-Page + Anfrage",
+        "Logo in 24h",
+        "Maps-Eintrag"
+      ]
+    },
+    "local": {
+      "name": "Quick-Wins",
+      "setup": "0 €",
+      "monthly": "0 €",
+      "includes": [
+        "Sturm-Schaden Saison-Tipps PDF",
+        "Google-Check"
+      ]
+    },
+    "premium": {
+      "name": "Dach + Automation",
+      "setup": "4000 €+",
+      "monthly": "158 €/Mo",
+      "includes": [
+        "Anfrage n8n → SMS Bestätigung",
+        "Bewertungs-Funnel nach Auftrag",
+        "Monatsreport"
+      ]
+    }
+  },
+  "intents": {
+    "digital_neu": {
+      "label": "Kein Web-Auftritt",
+      "want": "Empfehlung reicht, bis sie nicht mehr reicht",
+      "approach": "Sturm-Saison: online sichtbar oder Aufträge an Nachbarn",
+      "when": "no_website_or_social"
+    },
+    "leads": {
+      "label": "Kein Anfrage-System",
+      "want": "Anruf verpasst = Auftrag weg",
+      "approach": "Formular + Robert-Assistent 24/7",
+      "when": "no_order_signals"
+    },
+    "entlastung": {
+      "label": "Geselle gesucht",
+      "want": "Chef telefoniert statt auf dem Dach",
+      "approach": "Automatische Anfrage-Qualifizierung",
+      "when": "job_signals"
+    },
+    "vertrauen": {
+      "label": "Google schwach",
+      "want": "Nachbar-Dachdecker #1 bei Google",
+      "approach": "Lokal-Matador: Bewertungen + Referenzfotos",
+      "when": "trust_issue"
+    },
+    "standard": {
+      "label": "Dach-Saison ready",
+      "want": "Herbst/Winter Aufträge sichern",
+      "approach": "SEO + Maps vor der Saison starten",
+      "when": "default"
+    }
+  }
+}

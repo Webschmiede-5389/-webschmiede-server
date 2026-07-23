@@ -1,0 +1,207 @@
+{
+  "name": "Agency 02 – Stefan Guru-Filter + Plan",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-02-stefan",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "02-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "agency-02-stefan"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; const b=j.body||j; const brief=(b.brief||b.idea||b.message||b.text||'').toString().trim(); const firma=(b.firma||b.company||'').toString().trim(); const mode=(b.mode||'').toString().toLowerCase(); const filter=!!(b.filter || mode==='filter' || mode==='guru' || mode==='reality'); if(!brief) return [{json:{ok:false,error:'brief/idea fehlt'}}]; return [{json:{brief,firma,filter}}];"
+      },
+      "id": "02-norm",
+      "name": "Eingabe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.filter}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "02-if",
+      "name": "Filter-Modus?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/stefan/filter",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.CRON_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ idea: $json.brief }) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "02-filter",
+      "name": "Guru-Filter API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/stefan/plan",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.CRON_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ brief: $json.brief, firma: $json.firma }) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "02-plan",
+      "name": "Schlachtplan API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "02-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        920,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Eingabe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eingabe": {
+      "main": [
+        [
+          {
+            "node": "Filter-Modus?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter-Modus?": {
+      "main": [
+        [
+          {
+            "node": "Guru-Filter API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Schlachtplan API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guru-Filter API": {
+      "main": [
+        [
+          {
+            "node": "Antwort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schlachtplan API": {
+      "main": [
+        [
+          {
+            "node": "Antwort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "notes": "POST {brief|idea, firma?, filter?:true}. System-Prompt in agency_stefan.SYSTEM_PROMPT"
+  }
+}

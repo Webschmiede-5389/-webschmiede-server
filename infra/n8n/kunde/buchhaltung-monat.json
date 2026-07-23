@@ -1,0 +1,72 @@
+{
+  "name": "__KUNDE_ID__ - Monats-Buchhaltung",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 7 1 * *" }] }
+      },
+      "id": "cron-first",
+      "name": "1. des Monats 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/admin/report/month",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-Admin-Password", "value": "={{ $env.__KUNDE_ID___ADMIN_PASSWORD || $env.ADMIN_PASSWORD }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-month",
+      "name": "Monatsreport API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8000/api/admin/export/orders.csv?year={{ $json.year }}&month={{ $json.month }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-Admin-Password", "value": "={{ $env.__KUNDE_ID___ADMIN_PASSWORD || $env.ADMIN_PASSWORD }}" }
+          ]
+        },
+        "options": { "response": { "response": { "responseFormat": "text" } } }
+      },
+      "id": "http-csv",
+      "name": "CSV Export",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.AGENCY_FROM_EMAIL }}",
+        "toEmail": "__BOOKKEEPER_EMAIL__",
+        "subject": "=[__KUNDE_ID__] Buchhaltung {{ $('Monatsreport API').item.json.month }}/{{ $('Monatsreport API').item.json.year }}",
+        "emailFormat": "text",
+        "text": "=Monatsuebersicht __KUNDE_NAME__ (__KUNDE_ID__)\n\nBestellungen: {{ $('Monatsreport API').item.json.order_count }}\nUmsatz: {{ $('Monatsreport API').item.json.total_revenue }} EUR\nBar: {{ $('Monatsreport API').item.json.cash_total }} EUR\nEC/Karte: {{ $('Monatsreport API').item.json.card_total }} EUR\n\nWebschmiede Buchhaltungs-Vorbereitung",
+        "options": {}
+      },
+      "id": "mail-buchhaltung",
+      "name": "Mail an Buchhaltung",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [960, 300],
+      "credentials": { "smtp": { "id": "CONFIGURE_SMTP", "name": "SMTP account" } }
+    }
+  ],
+  "connections": {
+    "1. des Monats 07:00": { "main": [[{ "node": "Monatsreport API", "type": "main", "index": 0 }]] },
+    "Monatsreport API": { "main": [[{ "node": "CSV Export", "type": "main", "index": 0 }]] },
+    "CSV Export": { "main": [[{ "node": "Mail an Buchhaltung", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Rechnung · Webschmiede</title>
+  <link rel="stylesheet" href="webschmiede-ci.css">
+</head>
+<body class="ws-doc">
+<button class="ws-print-btn ws-no-print" onclick="window.print()">Als PDF speichern</button>
+<div class="ws-page">
+
+  <div class="ws-doc-header">
+    <div class="ws-brand-lockup">
+      <img src="webschmiede-logo.png" alt="WebSchmiede">
+      <div>
+        <div class="ws-brand-name">Webschmiede</div>
+        <div class="ws-brand-tagline">Digitale Handwerkskunst · Der Digitale Handwerksmeister</div>
+      </div>
+    </div>
+    <div class="ws-doc-meta ws-editable" contenteditable="true">
+      <strong>Rechnung</strong><br>
+      Nr. <span id="inv-no">101</span><br>
+      Datum: 06.07.2026<br>
+      Fällig: bei Erhalt
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+    <div>
+      <div class="ws-label">Rechnungssteller</div>
+      <div class="ws-box ws-editable" contenteditable="true">
+        Christian Kummetat (Einzelunternehmer)<br>
+        Webschmiede · Digitale Handwerkskunst<br>
+        Meinertzhagener Str. 16 · 53894 Mechernich<br>
+        Tel: +49 177 8011350<br>
+        info@digitalehandwerkskunst.de<br>
+        USt-IdNr.: DE370109681
+      </div>
+    </div>
+    <div>
+      <div class="ws-label">Rechnungsempfänger</div>
+      <div class="ws-box ws-editable" contenteditable="true">
+        Prooffice Leverkusen GmbH<br>
+        Muamed Safer<br>
+        Campusallee 10<br>
+        51379 Leverkusen<br>
+        Tel: +49 2171 776 820
+      </div>
+    </div>
+  </div>
+
+  <h1 class="ws-h1">Rechnung</h1>
+
+  <table class="ws-table ws-editable" contenteditable="true">
+    <thead>
+      <tr>
+        <th style="width:6%">Pos.</th>
+        <th style="width:54%">Leistung</th>
+        <th class="num" style="width:20%">Einzelpreis</th>
+        <th class="num" style="width:20%">Summe</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Erstellung und Einrichtung der Landingpage inkl. Umfrage/Lead-Formular</td>
+        <td class="num">–</td>
+        <td class="num">–</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Einrichtung Business-Management-System (CRM) inkl. Telefonnummer, Pipelines, Lead-Erfassung</td>
+        <td class="num">–</td>
+        <td class="num">–</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Workflow zur automatischen Lead-Verarbeitung</td>
+        <td class="num">–</td>
+        <td class="num">–</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Gestaltung Werbemittel Facebook/Instagram (Grafiken, Kampagnenvisuals)</td>
+        <td class="num">–</td>
+        <td class="num">–</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Einrichtung &amp; Management Google Ads, Facebook Ads, Instagram Ads</td>
+        <td class="num">–</td>
+        <td class="num">–</td>
+      </tr>
+      <tr>
+        <td colspan="2"><em>Pauschalpreis für alle oben genannten Leistungen</em></td>
+        <td class="num"></td>
+        <td class="num"><strong>999,00 €</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="ws-totals ws-editable" contenteditable="true">
+    <tr><td>Zwischensumme</td><td>999,00 €</td></tr>
+    <tr><td>Umsatzsteuer 19 %</td><td>189,81 €</td></tr>
+    <tr class="grand"><td><strong>Gesamtbetrag fällig</strong></td><td><strong>1.188,81 €</strong></td></tr>
+  </table>
+
+  <div class="ws-pay ws-editable" contenteditable="true">
+    <strong>Zahlungsbedingungen:</strong> Fällig bei Erhalt, ohne Abzug.<br>
+    <strong>Bitte überweisen Sie auf:</strong><br>
+    Christian Kummetat · ING<br>
+    IBAN: DE04 5001 0517 5422 3130 24<br>
+    Verwendungszweck: Rechnung Nr. 101
+  </div>
+
+  <div class="ws-legal">
+    Gemäß § 14 UStG · Leistungsdatum entspricht Rechnungsdatum, sofern nicht anders vermerkt.
+  </div>
+
+  <div class="ws-doc-footer">
+    Webschmiede · Digitale Handwerkskunst · www.digitalehandwerkskunst.de
+  </div>
+</div>
+</body>
+</html>

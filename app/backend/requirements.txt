@@ -3,3 +3,10 @@ flask-cors==5.0.0
 requests==2.32.3
 python-dotenv==1.0.1
 gunicorn==23.0.0
+stripe==11.4.0
+pywebpush==2.0.1
+cryptography>=46
+pyotp>=2.9.0
+pypdf>=5.0.0
+cursor-sdk>=0.1.0
+

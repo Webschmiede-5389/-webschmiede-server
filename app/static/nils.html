@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#FF6600">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Nils">
+  <link rel="icon" type="image/png" href="/ci/webschmiede-logo-mark.png">
+  <link rel="apple-touch-icon" href="/ci/webschmiede-logo-mark.png">
+  <title>Nils</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.bunny.net/css?family=dm-sans:400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6600;
+      --orange-soft: #FFF4ED;
+      --ink: #1A1A1A;
+      --muted: #667085;
+      --border: #E8E8E8;
+      --bg: #F0F2F5;
+      --panel: #ffffff;
+      --user: #FF6600;
+      --bot: #ffffff;
+      --ok: #16a34a;
+      --err: #dc2626;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-t: env(safe-area-inset-top, 0px);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%; height: 100dvh;
+      background: var(--bg); color: var(--ink);
+      font-family: "DM Sans", system-ui, sans-serif;
+      overscroll-behavior: none;
+    }
+    button, input, textarea { font: inherit; }
+    .hidden { display: none !important; }
+
+    #login {
+      min-height: 100%; display: flex; align-items: center; justify-content: center;
+      padding: 24px; background: linear-gradient(180deg, #fff 0%, var(--orange-soft) 100%);
+    }
+    .login-box {
+      width: 100%; max-width: 380px; background: #fff; border: 1px solid var(--border);
+      border-radius: 20px; padding: 28px 24px; box-shadow: 0 12px 40px rgba(26,26,26,.06);
+    }
+    .login-person {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
+    }
+    .avatar {
+      width: 56px; height: 56px; border-radius: 50%; background: var(--orange);
+      color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 1.2rem;
+      flex-shrink: 0; position: relative;
+    }
+    .avatar.sm { width: 40px; height: 40px; font-size: 0.95rem; }
+    .avatar .dot {
+      position: absolute; right: 1px; bottom: 1px; width: 12px; height: 12px;
+      background: var(--ok); border: 2px solid #fff; border-radius: 50%;
+    }
+    .login-box h1 { font-size: 1.35rem; font-weight: 700; }
+    .login-box .sub { font-size: 0.88rem; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+    .login-box input {
+      width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border);
+      background: #fafafa; color: var(--ink); margin: 16px 0 12px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border);
+      background: #fff; color: var(--ink); font-weight: 600; font-size: 0.9rem; cursor: pointer;
+    }
+    .btn:disabled { opacity: .5; }
+    .btn-primary { background: var(--orange); color: #fff; border-color: var(--orange); width: 100%; }
+    .btn-icon {
+      width: 44px; height: 44px; padding: 0; border-radius: 50%; flex-shrink: 0;
+      background: #fff; border: 1px solid var(--border); color: var(--ink);
+    }
+    .btn-icon.active, .btn-recording {
+      background: #fee2e2; border-color: #fca5a5; color: #b91c1c;
+    }
+    .btn-send {
+      background: var(--orange); border-color: var(--orange); color: #fff;
+    }
+
+    #app {
+      display: flex; flex-direction: column; height: 100%; height: 100dvh;
+      max-width: 720px; margin: 0 auto; background: var(--bg);
+    }
+
+    header {
+      flex-shrink: 0; padding: 10px 14px; padding-top: max(10px, var(--safe-t));
+      background: #fff; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    header .title { flex: 1; min-width: 0; }
+    header h1 { font-size: 1.05rem; font-weight: 700; }
+    header p { font-size: 0.75rem; color: var(--ok); font-weight: 600; }
+
+    #msgs {
+      flex: 1; overflow-y: auto; padding: 14px 12px 8px;
+      display: flex; flex-direction: column; gap: 10px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .day-sep {
+      align-self: center; font-size: 0.7rem; color: var(--muted);
+      background: rgba(255,255,255,.8); padding: 4px 10px; border-radius: 99px;
+      margin: 4px 0;
+    }
+    .msg { max-width: 88%; display: flex; gap: 8px; align-items: flex-end; }
+    .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .msg.bot { align-self: flex-start; }
+    .bubble {
+      padding: 10px 14px; border-radius: 18px; font-size: 0.95rem; line-height: 1.45;
+      white-space: pre-wrap; word-break: break-word;
+      box-shadow: 0 1px 2px rgba(26,26,26,.04);
+    }
+    .msg.user .bubble {
+      background: var(--user); color: #fff; border-bottom-right-radius: 5px;
+    }
+    .msg.bot .bubble {
+      background: var(--bot); border: 1px solid var(--border); border-bottom-left-radius: 5px;
+    }
+    .msg .meta {
+      font-size: 0.65rem; color: var(--muted); padding: 0 4px; margin-top: 3px;
+    }
+    .msg.user .meta { text-align: right; }
+    .msg-col { display: flex; flex-direction: column; min-width: 0; }
+    .media-thumb {
+      max-width: 220px; border-radius: 12px; display: block; margin-bottom: 6px;
+    }
+    .media-tag {
+      font-size: 0.75rem; color: var(--muted); margin-bottom: 4px;
+    }
+    .typing {
+      display: inline-flex; gap: 4px; align-items: center; padding: 12px 16px;
+    }
+    .typing span {
+      width: 7px; height: 7px; border-radius: 50%; background: #98a2b3;
+      animation: blink 1.2s infinite ease-in-out;
+    }
+    .typing span:nth-child(2) { animation-delay: .15s; }
+    .typing span:nth-child(3) { animation-delay: .3s; }
+    @keyframes blink {
+      0%, 80%, 100% { opacity: .35; transform: translateY(0); }
+      40% { opacity: 1; transform: translateY(-2px); }
+    }
+
+    #actions {
+      flex-shrink: 0; padding: 0 12px 8px; display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    #actions .btn { font-size: 0.8rem; padding: 8px 12px; border-radius: 99px; }
+
+    #composer {
+      flex-shrink: 0; padding: 8px 10px calc(10px + var(--safe-b));
+      background: #fff; border-top: 1px solid var(--border);
+    }
+    .composer-row { display: flex; align-items: flex-end; gap: 8px; }
+    #text {
+      flex: 1; min-height: 44px; max-height: 140px; padding: 11px 14px; border-radius: 22px;
+      border: 1px solid var(--border); background: #f7f7f8; color: var(--ink); resize: none;
+    }
+    #pending-files { padding: 6px 4px 0; display: flex; flex-wrap: wrap; gap: 8px; }
+    .file-chip {
+      font-size: 0.72rem; background: var(--orange-soft); border: 1px solid #FFD4B8;
+      border-radius: 99px; padding: 4px 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .file-chip button { background: none; border: none; color: var(--muted); cursor: pointer; }
+    #status-hint {
+      font-size: 0.75rem; color: var(--muted); text-align: center; padding: 6px 0 0; min-height: 1.1em;
+    }
+    #err {
+      color: var(--err); font-size: 0.82rem; padding: 8px 14px; text-align: center; background: #fef2f2;
+    }
+    input[type=file] { display: none; }
+    .icon { width: 18px; height: 18px; display: block; }
+  </style>
+</head>
+<body>
+
+<div id="login">
+  <div class="login-box">
+    <div class="login-person">
+      <div class="avatar">N<span class="dot"></span></div>
+      <div>
+        <h1>Nils</h1>
+        <p class="sub">Ops · Webschmiede. Wie WhatsApp mit dem Kollegen.</p>
+      </div>
+    </div>
+    <input id="pw" type="password" placeholder="Dein Agency-Passwort" autocomplete="current-password">
+    <button type="button" class="btn btn-primary" id="login-btn">Rein</button>
+    <p id="login-err" class="hidden" style="color:var(--err);font-size:0.82rem;margin-top:10px;"></p>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <div class="avatar sm">N<span class="dot"></span></div>
+    <div class="title">
+      <h1>Nils</h1>
+      <p id="presence">online</p>
+    </div>
+    <button type="button" class="btn btn-icon" id="logout-btn" title="Abmelden" aria-label="Abmelden">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </button>
+  </header>
+
+  <div id="msgs"></div>
+  <div id="actions"></div>
+  <p id="err" class="hidden"></p>
+
+  <div id="composer">
+    <div id="pending-files"></div>
+    <div class="composer-row">
+      <button type="button" class="btn btn-icon" id="attach-btn" title="Foto / Video" aria-label="Anhängen">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+      </button>
+      <input type="file" id="file-input" accept="image/*,video/*,audio/*" multiple>
+      <button type="button" class="btn btn-icon" id="voice-btn" title="Sprachnachricht" aria-label="Sprache">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <textarea id="text" rows="1" placeholder="Nachricht an Nils…" enterkeyhint="send"></textarea>
+      <button type="button" class="btn btn-icon btn-send" id="send-btn" title="Senden" aria-label="Senden">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <p id="status-hint"></p>
+  </div>
+</div>
+
+<script src="/agency-auth.js"></script>
+<script>
+(function () {
+  const REQ_MS = 120000;
+  let pending = null;
+  let pendingFiles = [];
+  let busy = false;
+  let mediaRecorder = null;
+  let voiceChunks = [];
+  let recording = false;
+  let abortCtrl = null;
+
+  const $ = (id) => document.getElementById(id);
+  function getPw() { return AgencyAuth.getToken(); }
+  function hdrJson() { return AgencyAuth.headers(); }
+  function hdrForm() {
+    const h = {};
+    const t = AgencyAuth.getToken();
+    if (t) h['X-Agency-Token'] = t;
+    return h;
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function renderMd(text) {
+    let s = esc(text || '');
+    s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/\n/g, '<br>');
+    return s;
+  }
+  function fmtTime(iso) {
+    if (!iso) return '';
+    try {
+      const d = new Date(String(iso).includes('T') ? iso : iso.replace(' ', 'T') + 'Z');
+      return d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    } catch (_) { return ''; }
+  }
+
+  function showErr(msg) {
+    const el = $('err');
+    if (!msg) { el.classList.add('hidden'); el.textContent = ''; return; }
+    el.textContent = msg;
+    el.classList.remove('hidden');
+  }
+  function setHint(msg) { $('status-hint').textContent = msg || ''; }
+  function setPresence(t) { $('presence').textContent = t; }
+
+  function removeTyping() {
+    const t = document.querySelector('.msg.typing-row');
+    if (t) t.remove();
+  }
+  function showTyping() {
+    removeTyping();
+    const box = $('msgs');
+    const wrap = document.createElement('div');
+    wrap.className = 'msg bot typing-row';
+    wrap.innerHTML = `
+      <div class="avatar sm">N</div>
+      <div class="msg-col">
+        <div class="bubble typing"><span></span><span></span><span></span></div>
+      </div>`;
+    box.appendChild(wrap);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function appendBubble(role, body, meta, time) {
+    removeTyping();
+    const box = $('msgs');
+    const wrap = document.createElement('div');
+    wrap.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+    let mediaHtml = '';
+    ((meta && meta.media) || []).forEach(m => {
+      if (m.kind === 'image' && m.url) {
+        mediaHtml += `<img class="media-thumb" src="${esc(m.url)}" alt="" loading="lazy">`;
+      } else {
+        mediaHtml += `<div class="media-tag">${esc(m.filename || m.kind || 'Datei')}</div>`;
+      }
+    });
+    const avatar = role === 'bot'
+      ? `<div class="avatar sm">N</div>`
+      : '';
+    wrap.innerHTML = `
+      ${avatar}
+      <div class="msg-col">
+        ${mediaHtml}
+        <div class="bubble">${renderMd(body)}</div>
+        <div class="meta">${esc(time || '')}</div>
+      </div>`;
+    box.appendChild(wrap);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function renderActions(actions) {
+    const el = $('actions');
+    el.innerHTML = '';
+    (actions || []).forEach(a => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn' + (a.type === 'confirm' ? ' btn-primary' : '');
+      if (a.type === 'confirm') b.style.width = 'auto';
+      b.textContent = a.label || a.type;
+      b.onclick = () => {
+        if (a.type === 'confirm') sendMessage(true);
+        else if (a.type === 'cancel') {
+          pending = null; renderActions([]);
+          appendBubble('bot', 'Alles klar, abgebrochen.', {}, fmtTime(new Date().toISOString()));
+        } else if (a.type === 'quick') {
+          $('text').value = a.message || '';
+          sendMessage(false);
+        } else if (a.type === 'open_url' && a.url) window.open(a.url, '_blank');
+      };
+      el.appendChild(b);
+    });
+  }
+
+  async function fetchJson(url, opts, ms) {
+    abortCtrl = new AbortController();
+    const t = setTimeout(() => abortCtrl.abort(), ms || REQ_MS);
+    try {
+      const r = await fetch(url, { ...opts, signal: abortCtrl.signal });
+      let d = {};
+      try { d = await r.json(); } catch (_) { d = {}; }
+      if (r.status === 401) { logout(); throw new Error('Sitzung abgelaufen. Bitte neu einloggen.'); }
+      if (!r.ok) throw new Error(d.error || ('Fehler ' + r.status));
+      return d;
+    } catch (e) {
+      if (e.name === 'AbortError') throw new Error('Das hat zu lange gedauert. Nochmal senden.');
+      throw e;
+    } finally {
+      clearTimeout(t);
+      abortCtrl = null;
+    }
+  }
+
+  async function loadHistory() {
+    try {
+      const d = await fetchJson('/api/nils/history', { headers: hdrJson() }, 20000);
+      $('msgs').innerHTML = '';
+      const msgs = d.messages || [];
+      if (!msgs.length) {
+        appendBubble('bot',
+          'Hey Christian. Hier bin ich.\n\nSchreib, schick Foto oder tipp aufs Mikro.\nKunden, Server, Deploy, TourMeter, Domains. Einfach loslegen.',
+          {}, '');
+        return;
+      }
+      msgs.forEach(m => {
+        appendBubble(
+          m.role === 'assistant' || m.role === 'bot' ? 'bot' : 'user',
+          m.body,
+          m.meta,
+          fmtTime(m.created_at)
+        );
+      });
+    } catch (e) {
+      showErr(e.message || 'Verlauf nicht geladen');
+    }
+  }
+
+  function renderPendingFiles() {
+    const el = $('pending-files');
+    if (!pendingFiles.length) { el.innerHTML = ''; return; }
+    el.innerHTML = pendingFiles.map((f, i) =>
+      `<span class="file-chip">${esc(f.name)} <button type="button" data-i="${i}">×</button></span>`
+    ).join('');
+    el.querySelectorAll('button').forEach(btn => {
+      btn.onclick = () => { pendingFiles.splice(+btn.dataset.i, 1); renderPendingFiles(); };
+    });
+  }
+
+  async function sendMessage(confirmOnly) {
+    if (busy) return;
+    const text = $('text').value.trim();
+    if (!text && !pendingFiles.length && !confirmOnly) return;
+
+    busy = true;
+    showErr('');
+    $('send-btn').disabled = true;
+    setPresence('schreibt…');
+    setHint('');
+
+    if (!confirmOnly) {
+      appendBubble('user', text || '(Anhang)', {
+        media: pendingFiles.map(f => ({
+          kind: f.type.startsWith('video') ? 'video' : (f.type.startsWith('audio') ? 'audio' : 'image'),
+          filename: f.name,
+        })),
+      }, fmtTime(new Date().toISOString()));
+    }
+
+    showTyping();
+
+    try {
+      let d;
+      if (pendingFiles.length) {
+        const fd = new FormData();
+        if (text) fd.append('message', text);
+        pendingFiles.forEach((f, i) => fd.append('file' + i, f, f.name));
+        if (confirmOnly) {
+          fd.append('confirm', '1');
+          fd.append('pending', JSON.stringify(pending));
+        }
+        d = await fetchJson('/api/nils/upload', { method: 'POST', headers: hdrForm(), body: fd });
+      } else {
+        d = await fetchJson('/api/nils/message', {
+          method: 'POST',
+          headers: hdrJson(),
+          body: JSON.stringify({
+            message: confirmOnly ? 'ja' : text,
+            confirm: !!confirmOnly,
+            pending: confirmOnly ? pending : undefined,
+          }),
+        });
+      }
+
+      pending = d.needs_confirm ? d.pending : null;
+      appendBubble('bot', d.reply || 'OK', { media: d.media }, fmtTime(new Date().toISOString()));
+      renderActions(d.actions || []);
+      $('text').value = '';
+      pendingFiles = [];
+      renderPendingFiles();
+      autoResize();
+    } catch (e) {
+      removeTyping();
+      showErr(e.message || 'Netzwerkfehler. Prüfe kurz die Verbindung und sende nochmal.');
+      setHint('Tippe nochmal auf Senden.');
+    } finally {
+      busy = false;
+      $('send-btn').disabled = false;
+      setPresence('online');
+    }
+  }
+
+  function autoResize() {
+    const t = $('text');
+    t.style.height = 'auto';
+    t.style.height = Math.min(t.scrollHeight, 140) + 'px';
+  }
+
+  async function testLogin(pw) {
+    try {
+      await AgencyAuth.login('', pw);
+      const r = await fetch('/api/nils/history', {
+        headers: hdrForm(),
+        credentials: 'same-origin',
+        signal: AbortSignal.timeout(15000),
+      });
+      return r.ok;
+    } catch (_) { return false; }
+  }
+
+  function showApp() {
+    $('login').classList.add('hidden');
+    $('app').classList.remove('hidden');
+    loadHistory();
+  }
+  async function logout() {
+    await AgencyAuth.logout();
+    $('login').classList.remove('hidden');
+    $('app').classList.add('hidden');
+  }
+
+  async function toggleVoice() {
+    if (recording) {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      voiceChunks = [];
+      const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : 'audio/webm';
+      mediaRecorder = new MediaRecorder(stream, { mimeType: mime });
+      mediaRecorder.ondataavailable = e => { if (e.data && e.data.size) voiceChunks.push(e.data); };
+      mediaRecorder.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
+        recording = false;
+        $('voice-btn').classList.remove('btn-recording');
+        const blob = new Blob(voiceChunks, { type: 'audio/webm' });
+        if (blob.size < 800) {
+          setHint('Aufnahme zu kurz.');
+          return;
+        }
+        pendingFiles = [new File([blob], 'sprache-' + Date.now() + '.webm', { type: 'audio/webm' })];
+        renderPendingFiles();
+        setHint('Schicke die Sprachnachricht…');
+        await sendMessage(false);
+      };
+      mediaRecorder.start(250);
+      recording = true;
+      $('voice-btn').classList.add('btn-recording');
+      setHint('Aufnahme läuft. Nochmal tippen zum Stoppen.');
+    } catch (_) {
+      showErr('Mikrofon nicht freigegeben.');
+    }
+  }
+
+  $('login-btn').onclick = async () => {
+    const pw = $('pw').value;
+    const err = $('login-err');
+    err.classList.add('hidden');
+    if (!pw) return;
+    $('login-btn').disabled = true;
+    $('login-btn').textContent = 'Einen Moment…';
+    const ok = await testLogin(pw);
+    $('login-btn').disabled = false;
+    $('login-btn').textContent = 'Rein';
+    if (ok) {
+      showApp();
+    } else {
+      err.textContent = 'Passwort stimmt nicht, oder Server kurz nicht erreichbar.';
+      err.classList.remove('hidden');
+    }
+  };
+  $('pw').onkeydown = e => { if (e.key === 'Enter') $('login-btn').click(); };
+  $('logout-btn').onclick = logout;
+  $('send-btn').onclick = () => sendMessage(false);
+  $('text').oninput = autoResize;
+  $('text').onkeydown = e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(false); }
+  };
+  $('attach-btn').onclick = () => $('file-input').click();
+  $('file-input').onchange = (e) => {
+    [...(e.target.files || [])].forEach(f => pendingFiles.push(f));
+    e.target.value = '';
+    renderPendingFiles();
+  };
+  $('voice-btn').onclick = (e) => { e.preventDefault(); toggleVoice(); };
+
+  if (AgencyAuth.getToken()) {
+    fetch('/api/nils/history', { headers: hdrForm(), credentials: 'same-origin' })
+      .then(r => { if (r.ok) showApp(); else AgencyAuth.clear(); })
+      .catch(() => AgencyAuth.clear());
+  }
+})();
+</script>
+</body>
+</html>

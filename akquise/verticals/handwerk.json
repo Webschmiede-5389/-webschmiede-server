@@ -1,0 +1,155 @@
+{
+  "id": "handwerk",
+  "name": "Handwerk & lokale Betriebe",
+  "discovery": {
+    "type": "overpass",
+    "amenities": [],
+    "crafts": [
+      "plumber",
+      "electrician",
+      "carpenter",
+      "painter",
+      "roofer",
+      "hvac",
+      "tiler",
+      "glazier",
+      "locksmith",
+      "gardener",
+      "stonemason",
+      "sawmill"
+    ],
+    "shops": [
+      "trade",
+      "hardware",
+      "electrical",
+      "doityourself",
+      "garden_centre"
+    ],
+    "office_tags": [
+      "company",
+      "engineer",
+      "architect"
+    ]
+  },
+  "google_places_type": "general_contractor",
+  "delivery_platforms": [],
+  "order_keywords": [
+    "angebot anfordern",
+    "kontaktformular",
+    "termin vereinbaren",
+    "anfrage",
+    "rückruf",
+    "kostenvoranschlag",
+    "online anfrage"
+  ],
+  "job_keywords": [
+    "stellenangebot",
+    "jobs",
+    "wir suchen",
+    "mitarbeiter",
+    "geselle",
+    "azubi",
+    "karriere",
+    "bewerbung",
+    "verstärkung"
+  ],
+  "subpages": [
+    "/leistungen",
+    "/services",
+    "/referenzen",
+    "/projekte",
+    "/karriere",
+    "/jobs",
+    "/kontakt"
+  ],
+  "priority_amenities": [],
+  "reference_client": {
+    "id": "WS-AGENCY",
+    "name": "Webschmiede Digitale Handwerkskunst",
+    "pitch": "Website, Google-Sichtbarkeit, Anfrage-Automatisierung, wie digitalehandwerkskunst.de"
+  },
+  "local_wins": [
+    "Google Business Profil optimieren (kostenlos)",
+    "WhatsApp-Anfrage-Link auf Website/Profil",
+    "E-Mail-Signatur mit Anfrage-Formular",
+    "Robert-Assistent Demo (kostenlos testen)"
+  ],
+  "offers": {
+    "standard": {
+      "name": "Handwerk Digital",
+      "setup": "1980–7200 € einmalig",
+      "monthly": "98 €/Mo Wartung",
+      "includes": [
+        "Professionelle Website + Leistungsseiten",
+        "Anfrageformular + automatische Bestätigung (n8n)",
+        "Google Maps Dominanz + DSGVO",
+        "Robert-Assistent für Rückfragen außerhalb Bürozeiten"
+      ]
+    },
+    "starter": {
+      "name": "Website + Anfrage",
+      "setup": "998–3160 € einmalig",
+      "monthly": "58 €/Mo",
+      "includes": [
+        "One-Page oder 3-Seiten Website",
+        "Kontaktformular → E-Mail + CRM-Eintrag",
+        "Logo-Entwurf in 24h (Agency-Versprechen)",
+        "Cal.com Terminbuchung optional"
+      ]
+    },
+    "local": {
+      "name": "Lokal sichtbar (0 € Einstieg)",
+      "setup": "0 €",
+      "monthly": "0 €",
+      "includes": [
+        "Google Maps Audit (kostenlos)",
+        "WhatsApp-Rückruf-Link",
+        "Später Website wenn Auftragslage stabil",
+        "Kein Verkaufsgespräch, Vertrauen aufbauen"
+      ]
+    },
+    "premium": {
+      "name": "Handwerk + Automation",
+      "setup": "3600 €+ einmalig",
+      "monthly": "158 €/Mo",
+      "includes": [
+        "Website + SEO-Seiten pro Leistung",
+        "Anfrage-Workflow (Formular → CRM → SMS)",
+        "Bewertungs-Funnel nach Auftrag",
+        "Monatsreport automatisch (n8n)"
+      ]
+    }
+  },
+  "intents": {
+    "digital_neu": {
+      "label": "Digital starten",
+      "want": "Schwacher oder fehlender Web-Auftritt",
+      "approach": "Professionelle Website + Google Maps, Paket ab Richtfest.",
+      "when": "no_website_or_social"
+    },
+    "entlastung": {
+      "label": "Personal & Anfragen",
+      "want": "Sucht Gesellen / mehr Aufträge",
+      "approach": "Anfrageformular + Robert-Assistent, keine verlorene Anfrage.",
+      "when": "job_signals"
+    },
+    "leads": {
+      "label": "Mehr Anfragen",
+      "want": "Kein klares Online-Anfrage-System",
+      "approach": "Lokal-Matador: SEO + Maps + Kontaktformular.",
+      "when": "no_order_signals"
+    },
+    "vertrauen": {
+      "label": "Vertrauen / Google",
+      "want": "Schlechte Sichtbarkeit oder veraltete Seite",
+      "approach": "Neuer Auftritt + Google-Dominanz in der Region.",
+      "when": "trust_issue"
+    },
+    "standard": {
+      "label": "Handwerk-Digital",
+      "want": "Digitaler Nachholbedarf",
+      "approach": "Kostenloses Erstgespräch, Logo-Entwurf in 24h.",
+      "when": "default"
+    }
+  }
+}

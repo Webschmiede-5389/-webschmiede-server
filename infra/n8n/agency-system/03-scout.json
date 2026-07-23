@@ -1,0 +1,86 @@
+{
+  "name": "Agency 03 – Markt-Scout Campaign",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-03-scout",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "03-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "agency-03-scout"
+    },
+    {
+      "parameters": {
+        "jsCode": "const b=($input.first().json.body)||$input.first().json||{}; return [{json:{ vertical:b.vertical||b.branche||'', limit:b.limit||10, ticket:String(b.ticket||b.budget||'5000'), offer:b.offer||b.angebot||'' }}];"
+      },
+      "id": "03-norm",
+      "name": "Eingabe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [200, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/scout/campaign",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{$env.CRON_SECRET}}" },
+            { "name": "X-Agency-Password", "value": "={{$env.AGENCY_ADMIN_PASSWORD}}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "03-http",
+      "name": "Scout Campaign API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [420, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; return [{ json: { ok: !!j.ok, workflow: 'scout', auto_send: false, count: j.count||0, note: 'Entwuerfe nur. Kein Spam. Freigabe: /api/agency/akquise/approvals', result: j } }];"
+      },
+      "id": "03-pack",
+      "name": "Ergebnis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [640, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "03-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [860, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Eingabe", "type": "main", "index": 0 }]] },
+    "Eingabe": { "main": [[{ "node": "Scout Campaign API", "type": "main", "index": 0 }]] },
+    "Scout Campaign API": { "main": [[{ "node": "Ergebnis", "type": "main", "index": 0 }]] },
+    "Ergebnis": { "main": [[{ "node": "Antwort", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "notes": "WF3 Scout. Kein Auto-Send. Fresh leads: python -m akquise <vertical>"
+  },
+  "tags": [{ "name": "agency" }, { "name": "system-13" }, { "name": "scout" }]
+}

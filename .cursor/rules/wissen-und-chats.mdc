@@ -1,0 +1,38 @@
+---
+description: Wissensbasis pflegen, Chat-Überlast erkennen, Neustart vorschlagen
+alwaysApply: true
+---
+
+# Wissen & Chat-Hygiene (Webschmiede)
+
+## Pflicht-Wissen
+
+Vor wichtigen Antworten und nach Beschlüssen:
+
+1. `docs/memory/CURRENT.md` lesen (aktueller Fokus)
+2. Beschlüsse / Status **sofort** in `docs/memory/` schreiben, nicht nur im Chat
+3. Thema → `docs/memory/topics/{thema}.md` (kurz, Fakten, nächster Schritt)
+
+Kein Meta-/seven-/API-Key in Memory. Nur was konfiguriert ist und was fehlt.
+
+## Wann neuer Chat (Agent schlägt vor)
+
+Selbst merken und **klar sagen**, wenn ≥2 zutreffen:
+
+- Thema gewechselt (z. B. Akquise → Messaging → Deploy)
+- Chat sehr lang / Zusammenfassung schon gelaufen
+- Nutzer korrigiert „das hatten wir schon“ oder Fokus verloren
+- Mehrere offene Baustellen ohne klare Reihenfolge
+
+Dann:
+
+1. Memory updaten (`CURRENT.md` + Topic)
+2. `docs/memory/HANDOFF.md` mit 5–10 Zeilen füllen (Ziel, Stand, nächster Schritt, Dateien)
+3. Nutzer bitten: neuen Chat öffnen, Handoff als erste Nachricht
+4. Im alten Chat nur noch abschließen, nichts Neues anfangen
+
+**Grenze:** Agent kann in Cursor keinen neuen Chat starten. Nur vorbereiten + vorschlagen.
+
+## Wachstum
+
+Repo = Gehirn. Regeln + `docs/memory/` + Skills. Nicht Chat-Länge.

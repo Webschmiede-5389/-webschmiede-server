@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anfrage stellen</title>
+  <link href="https://fonts.bunny.net/css?family=inter:400,600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --o: #FF6600; --ink: #1A1A1A; --muted: #666; --border: #E8E8E8; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Inter, system-ui, sans-serif; background: #F5F5F5; color: var(--ink); padding: 24px 16px 48px; }
+    .wrap { max-width: 520px; margin: 0 auto; }
+    .card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; }
+    h1 { font-size: 1.35rem; margin-bottom: 6px; }
+    p.sub { color: var(--muted); font-size: .9rem; margin-bottom: 24px; line-height: 1.5; }
+    label { display: block; font-size: .75rem; font-weight: 600; margin-bottom: 6px; color: var(--muted); }
+    input, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; font: inherit; margin-bottom: 14px; }
+    textarea { resize: vertical; min-height: 100px; }
+    .hp { position: absolute; left: -9999px; opacity: 0; height: 0; }
+    button { width: 100%; padding: 14px; background: var(--o); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    .ok { display: none; text-align: center; padding: 24px; color: var(--muted); }
+    .ok strong { display: block; color: var(--ink); font-size: 1.1rem; margin-bottom: 8px; }
+    .err { color: #c00; font-size: .85rem; margin-bottom: 12px; display: none; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="form-card">
+    <h1>Anfrage stellen</h1>
+    <p class="sub">Beschreiben Sie kurz Ihr Projekt. Wir melden uns bei Ihnen. Angaben werden nur zur Bearbeitung der Anfrage genutzt. Details: <a href="/datenschutz.html" style="color:var(--o)">Datenschutz</a>.</p>
+    <div class="err" id="err"></div>
+    <form id="f">
+      <input class="hp" name="website" tabindex="-1" autocomplete="off">
+      <label>Name *</label>
+      <input name="customer_name" required autocomplete="name">
+      <label>Telefon *</label>
+      <input name="phone" required autocomplete="tel">
+      <label>E-Mail</label>
+      <input name="email" type="email" autocomplete="email">
+      <label>PLZ / Ort</label>
+      <input name="plz">
+      <label>Was soll gemacht werden?</label>
+      <input name="subject" placeholder="z. B. Wohnzimmer streichen">
+      <label>Details</label>
+      <textarea name="description" placeholder="Größe, Terminwunsch, Fotos schicken Sie gern per Mail …"></textarea>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:500;color:var(--ink);margin-bottom:16px;line-height:1.4;">
+        <input type="checkbox" name="privacy_ok" required style="width:auto;margin:3px 0 0;flex-shrink:0;">
+        <span>Ich habe den <a href="/datenschutz.html" style="color:var(--o)">Datenschutzhinweis</a> gelesen und willige in die Verarbeitung meiner Angaben zur Bearbeitung dieser Anfrage ein.</span>
+      </label>
+      <button type="submit" id="btn">Anfrage senden</button>
+    </form>
+  </div>
+  <div class="card ok" id="done">
+    <strong>Danke, Anfrage ist da.</strong>
+    Referenz: <span id="ref"></span><br><br>
+    Wir melden uns in Kürze.
+  </div>
+</div>
+<script>
+document.getElementById('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('btn');
+  const err = document.getElementById('err');
+  err.style.display = 'none';
+  btn.disabled = true;
+  const fd = new FormData(e.target);
+  const body = Object.fromEntries(fd.entries());
+  try {
+    const r = await fetch('/api/anfrage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Fehler');
+    document.getElementById('form-card').style.display = 'none';
+    document.getElementById('ref').textContent = data.ref || '';
+    document.getElementById('done').style.display = 'block';
+  } catch (ex) {
+    err.textContent = ex.message;
+    err.style.display = 'block';
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

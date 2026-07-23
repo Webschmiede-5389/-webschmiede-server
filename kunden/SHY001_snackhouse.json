@@ -12,14 +12,79 @@
     "adresse": "Dr.-Felix-Gerhardus-Str. 7, 53894 Mechernich"
   },
   "urls": {
-    "test_hauptseite": "http://167.233.211.170/",
-    "test_bestellen": "http://167.233.211.170/bestellen",
-    "domain": "",
-    "live_hauptseite": "",
-    "live_bestellen": ""
+    "subdomain": "yassine",
+    "demo_url": "https://muster.digitalehandwerkskunst.de/",
+    "onboarding_url": "https://yassine.digitalehandwerkskunst.de/onboarding?k=SHY001",
+    "test_hauptseite": "https://yassine.digitalehandwerkskunst.de/",
+    "test_bestellen": "https://yassine.digitalehandwerkskunst.de/bestellen",
+    "test_admin": "https://yassine.digitalehandwerkskunst.de/admin",
+    "domain": "snackhouse-yassine.de",
+    "live_hauptseite": "https://snackhouse-yassine.de/",
+    "live_bestellen": "https://snackhouse-yassine.de/bestellen",
+    "live_admin": "https://snackhouse-yassine.de/admin"
+  },
+  "domain": {
+    "status": "pending_purchase",
+    "selected": "snackhouse-yassine.de",
+    "wish": "snackhouse-yassine.de",
+    "options": [
+      "snackhouse-yassine.de",
+      "snackhouse-mechernich.de",
+      "snackhousemechernich.de",
+      "snack-house-mechernich.de",
+      "yassine-mechernich.de",
+      "snackhouse-yassine.com"
+    ],
+    "selected_at": "2026-07-17T11:59:10Z",
+    "cloudflare": {
+      "nameservers": [
+        "phil.ns.cloudflare.com",
+        "vera.ns.cloudflare.com"
+      ],
+      "origin": "167.233.150.230"
+    }
+  },
+  "brand": {
+    "logo": "/brand/snackhouse-yassine-logo.png",
+    "logo_shape": "diamond",
+    "colors": {
+      "gold": "#C9A84C",
+      "gold_soft": "#F0D878",
+      "dark": "#0e0b08",
+      "ink": "#f5f0e8",
+      "muted": "#a39888",
+      "border": "#3a3228"
+    },
+    "font_display": "Playfair Display",
+    "font_body": "Inter",
+    "table": {
+      "tag": "Am Tisch",
+      "headline": "Hier bestellen",
+      "sub": "Code scannen, am Handy bestellen. Wir bringen es euch.",
+      "promo": "Erste Online-Bestellung: 5 % Rabatt",
+      "hint": "Keine Lust aufs Handy? Einfach an der Theke bestellen."
+    },
+    "google": {
+      "tag": "An der Theke",
+      "headline": "Hat’s geschmeckt?",
+      "sub": "Kurz bewerten. Hilft uns enorm und dauert nur einen Moment.",
+      "promo": "Google-Bewertung",
+      "hint": "Für Gäste an der Theke oder nach dem Essen."
+    }
+  },
+  "google": {
+    "status": "open",
+    "review_url": "",
+    "owner_email": "yassinehassan910@gmail.com",
+    "place_id": "",
+    "location_name": "Snack House Yassine",
+    "manager_invited": false,
+    "oauth_connected": false,
+    "auto_reply_enabled": false,
+    "notes": ""
   },
   "server": {
-    "ip": "167.233.211.170",
+    "ip": "167.233.150.230",
     "ordner": "/var/www/snackhouse-mechernich",
     "service": "snack-api",
     "port": "8000"
@@ -35,22 +100,90 @@
     "sms_provider": "seven.io",
     "sms_enabled": false
   },
+  "sms": {
+    "enabled": false,
+    "provider": "seven.io",
+    "phone_number": "",
+    "sender_id": "SnackHouse",
+    "owner_phone": "+4924433088966",
+    "notes": "OWNER_PHONE Interim = Shop-Festnetz. SMS_API_KEY noch offen. Hassan-Handy ersetzen."
+  },
+  "voice": {
+    "enabled": false,
+    "provider": "",
+    "agent_id": "",
+    "phone_number": "",
+    "knowledge_pack": "gastro",
+    "billing": {
+      "plan": "none",
+      "included_minutes": 0,
+      "overage_per_min_eur": 0
+    }
+  },
   "stripe": {
     "status": "ausstehend",
     "payment_link": ""
   },
+  "billing": {},
+  "n8n": {
+    "order_webhook": "http://127.0.0.1:5678/webhook/new-order-shy001",
+    "owner_phone": "+4924433088966",
+    "alert_email": "yassinehassan910@gmail.com",
+    "provisioned_at": "2026-07-15T14:03:53Z",
+    "workflows": [
+      "SHY001 - Neue Bestellung Alert",
+      "SHY001 - Monats-Buchhaltung"
+    ],
+    "portal_mode": "gastro"
+  },
+  "buchhaltung": {
+    "bookkeeper_email": ""
+  },
+  "integrations": {
+    "buchhaltung": "",
+    "lexware": {
+      "enabled": false,
+      "sync_contacts": true,
+      "sync_invoices": false,
+      "api_key_env": "LEXWARE_API_KEY_SHY001"
+    }
+  },
+  "knowledge": {
+    "pack": "gastro",
+    "locale": "de-DE",
+    "overrides": {},
+    "voice": {
+      "enabled": false,
+      "provider": "",
+      "voice_id": ""
+    }
+  },
   "offene_punkte": [
-    "Hassan-Handynummer für SMS (OWNER_PHONE) eintragen",
+    "Domain snackhouse-yassine.de: bei IONOS kaufen, Nameserver auf Cloudflare setzen",
+    "Hassan-Handynummer für SMS (OWNER_PHONE) eintragen (jetzt Interim Festnetz)",
     "seven.io Account + SMS_API_KEY",
     "Google Review Link",
-    "Domain registrieren",
     "Stripe-Account erstellen",
     "Eigene Speisefotos"
   ],
   "whatsapp": {
     "enabled": true,
-    "allowed_phones": ["+4924433088966"],
-    "permissions": ["menu_price", "menu_text", "menu_image", "menu_available"],
-    "blocked": ["code", "domain", "admin_password", "delete_items"]
+    "phone_number_id": "",
+    "business_phone": "",
+    "allowed_phones": [
+      "+4924433088966"
+    ],
+    "permissions": [
+      "menu_price",
+      "menu_text",
+      "menu_image",
+      "menu_available"
+    ],
+    "blocked": [
+      "code",
+      "domain",
+      "admin_password",
+      "delete_items"
+    ]
   }
 }

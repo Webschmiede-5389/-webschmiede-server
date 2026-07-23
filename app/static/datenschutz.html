@@ -109,7 +109,7 @@
     <p>Nach einer Bestellung erhältst du automatisch eine Bestätigungs-E-Mail. Bei Statusänderungen (z. B. „In Zubereitung", „Unterwegs") werden weitere E-Mails versendet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).</p>
 
     <h3>3.3 Server-Logdaten</h3>
-    <p>Unser Webserver speichert automatisch technische Zugriffsdaten: IP-Adresse, Uhrzeit, aufgerufene Seite, Browser-Typ. Diese Daten dienen ausschließlich der technischen Sicherheit und werden nach 7 Tagen automatisch gelöscht. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).</p>
+    <p>Unser Webserver speichert automatisch technische Zugriffsdaten: IP-Adresse, Uhrzeit, aufgerufene Seite, Browser-Typ. Diese Daten dienen der technischen Sicherheit und dem Betrieb. Auf dem Server gilt die Standard-Logrotation von Nginx: täglich, Aufbewahrung <strong>14 Tage</strong> (belegt über <code>/etc/logrotate.d/nginx</code>). Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).</p>
   </section>
 
   <!-- 4. Drittanbieter -->
@@ -117,14 +117,11 @@
     <h2>4. Eingesetzte Drittdienste</h2>
     <p>Wir nutzen folgende externe Dienste. Alle werden ausschließlich für technische Zwecke eingesetzt – kein Tracking.</p>
 
-    <h3>Bunny Fonts <span class="badge-eu">EU-Server</span> <span class="badge-ok">Kein Tracking</span></h3>
-    <p>Für die Schriftarten dieser Website nutzen wir Bunny Fonts, einen datenschutzfreundlichen Dienst mit Servern ausschließlich in der EU. Es werden keine personenbezogenen Daten gespeichert oder weitergegeben. <a href="https://bunny.net/privacy" target="_blank" rel="noopener">Datenschutz Bunny.net</a></p>
+    <h3>Bunny Fonts <span class="badge-eu">fonts.bunny.net</span></h3>
+    <p>Für die Schriftarten dieser Website nutzen wir Bunny Fonts. Beim Laden der Schriften wird technisch deine IP-Adresse an den CDN-Anbieter übertragen. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. <a href="https://bunny.net/privacy" target="_blank" rel="noopener">Datenschutz Bunny.net</a></p>
 
-    <h3>Cloudflare CDN (Font Awesome, Tailwind CSS) <span class="badge-eu">EU-Vertrag</span></h3>
-    <p>Icons und CSS-Framework werden von Cloudflare-Servern geladen. Cloudflare verarbeitet dabei technisch deine IP-Adresse, speichert sie jedoch nicht dauerhaft und setzt keine Tracking-Cookies. Cloudflare ist nach dem EU-US Data Privacy Framework zertifiziert. <a href="https://www.cloudflare.com/de-de/privacypolicy/" target="_blank" rel="noopener">Datenschutz Cloudflare</a></p>
-
-    <h3>Tailwind CSS (CDN)</h3>
-    <p>Für das Layout des Bestellportals wird Tailwind CSS über ein Content-Delivery-Network geladen. Dabei wird technisch deine IP-Adresse übertragen. Es werden keine Tracking-Cookies gesetzt. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (technisch notwendig).</p>
+    <h3>CDN (Font Awesome über cdnjs / Cloudflare, Tailwind CSS CDN)</h3>
+    <p>Icons werden über cdnjs (Cloudflare) geladen, Layout-CSS über das Tailwind-CDN (<code>cdn.tailwindcss.com</code>). Dabei wird technisch deine IP-Adresse an den jeweiligen CDN-Anbieter übertragen. Es werden keine Tracking-Cookies durch uns gesetzt. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. <a href="https://www.cloudflare.com/de-de/privacypolicy/" target="_blank" rel="noopener">Datenschutz Cloudflare</a></p>
 
     <h3>Unsplash (Speisekarten-Bilder) <span class="badge-ok">Nur Bilder</span></h3>
     <p>Die Kategoriebilder in unserem Bestellportal werden von Unsplash geladen. Beim Laden eines Bildes wird deine IP-Adresse technisch an Unsplash übertragen. Es werden keine Cookies gesetzt. <a href="https://unsplash.com/privacy" target="_blank" rel="noopener">Datenschutz Unsplash</a></p>
@@ -133,28 +130,36 @@
     <p>Das Snack-House-Logo und einzelne Fotos werden über einen externen Bild-Host geladen (catbox.moe). Beim Abruf wird technisch deine IP-Adresse übertragen. Es werden keine Cookies gesetzt. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
 
     <h3>Eigenes Kunden-CRM (Webschmiede)</h3>
-    <p>Bestelldaten (Name, Telefon, E-Mail, Bestellhistorie) werden in unserer <strong>eigenen Kundendatenbank</strong> auf einem Server in Deutschland gespeichert – ausschließlich zur Bestellabwicklung und Kundenbetreuung. Es erfolgt keine Weitergabe an externe CRM-Anbieter. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
+    <p>Bestelldaten (Name, Telefon, E-Mail, Bestellhistorie) werden in unserer <strong>eigenen Kundendatenbank</strong> auf einem Server in Deutschland gespeichert – ausschließlich zur Bestellabwicklung und Kundenbetreuung. Es erfolgt keine Weitergabe an GoHighLevel oder vergleichbare externe CRM-SaaS. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
 
-    <h3>SMS-Benachrichtigungen (seven.io) <span class="badge-eu">DE-Anbieter</span></h3>
-    <p>Für Bestellbestätigungen und Statusupdates können wir SMS über seven.io (Deutschland/EU) versenden. Dabei wird deine Telefonnummer an seven.io übermittelt. Es werden keine Marketing-SMS ohne Einwilligung versendet. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung). <a href="https://www.seven.io/de/datenschutz/" target="_blank" rel="noopener">Datenschutz seven.io</a></p>
+    <h3>SMS-Benachrichtigungen (seven.io) <span class="badge-eu">DE-Anbieter</span> – soweit freigeschaltet</h3>
+    <p>Soweit SMS für Bestellbestätigungen oder Statusupdates freigeschaltet sind, erfolgt der Versand über seven.io. Dabei wird deine Telefonnummer an seven.io übermittelt. Es werden keine Marketing-SMS ohne Einwilligung versendet. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO. <a href="https://www.seven.io/de/datenschutz/" target="_blank" rel="noopener">Datenschutz seven.io</a></p>
+
+    <h3>WhatsApp (Meta) – soweit freigeschaltet</h3>
+    <p>Soweit WhatsApp Business für Support oder Benachrichtigungen freigeschaltet ist, werden Nachrichteninhalte und Telefonnummer über die Meta Cloud API verarbeitet. Rechtsgrundlage dann: Art. 6 Abs. 1 lit. b bzw. lit. a DSGVO je nach Einsatz. <a href="https://www.whatsapp.com/legal/privacy-policy-eea" target="_blank" rel="noopener">Datenschutz WhatsApp</a></p>
+
+    <h3>Web-Push-Benachrichtigungen – nur nach Einwilligung</h3>
+    <p>Nach einer Bestellung kannst du optional Browser-Push-Nachrichten zu deinem Bestellstatus aktivieren. Dafür speichern wir ein Push-Endpoint und zugehörige Schlüssel (VAPID) auf unserem Server. Die Freigabe erfolgt nur über die Browser-Berechtigung (Einwilligung). Du kannst Push jederzeit in den Browser-Einstellungen widerrufen. Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO.</p>
 
     <h3>E-Mail-Versand (SMTP)</h3>
     <p>Für den Versand von Bestell- und Statusbestätigungen nutzen wir einen SMTP-E-Mail-Dienst. Deine E-Mail-Adresse wird dabei ausschließlich zum Versand der jeweiligen Benachrichtigung verwendet und nicht für Werbung genutzt.</p>
 
-    <h3>Stripe (Online-Zahlung) – optional</h3>
-    <p>Wenn du dich für eine Online-Zahlung per Karte entscheidest, werden Zahlungsdaten direkt an <strong>Stripe Inc.</strong> (USA) übermittelt. Wir speichern keine vollständigen Kartendaten auf unserem Server. Stripe ist nach dem EU-U.S. Data Privacy Framework zertifiziert. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO. <a href="https://stripe.com/de/privacy" target="_blank" rel="noopener">Datenschutz Stripe</a></p>
+    <h3>Stripe (Online-Zahlung) – optional / soweit freigeschaltet</h3>
+    <p>Wenn Online-Zahlung per Karte freigeschaltet ist und du sie wählst, werden Zahlungsdaten direkt an <strong>Stripe</strong> übermittelt. Wir speichern keine vollständigen Kartendaten auf unserem Server. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO. <a href="https://stripe.com/de/privacy" target="_blank" rel="noopener">Datenschutz Stripe</a></p>
 
     <h3>Hosting</h3>
-    <p>Unsere Website, das Bestellportal und die Bestelldatenbank werden auf einem Server in <strong>Deutschland</strong> betrieben. Der Zugriff auf Bestelldaten ist ausschließlich dem Inhaber und autorisierten Mitarbeitern vorbehalten.</p>
+    <p>Website, Bestellportal und Datenbank laufen auf einem Server bei <strong>Hetzner Online GmbH</strong> in Deutschland. Der Zugriff auf Bestelldaten ist dem Inhaber und autorisierten Personen vorbehalten.</p>
   </section>
 
   <!-- 5. Speicherdauer -->
   <section>
     <h2>5. Speicherdauer</h2>
     <ul>
-      <li><strong>Bestelldaten:</strong> Werden aus steuerrechtlichen Gründen 10 Jahre aufbewahrt (§ 147 AO)</li>
-      <li><strong>Server-Logdaten:</strong> Werden nach 7 Tagen automatisch gelöscht</li>
+      <li><strong>Bestelldaten:</strong> Werden aus steuerrechtlichen Gründen 10 Jahre aufbewahrt (§ 147 AO), soweit einschlägig</li>
+      <li><strong>Server-Zugriffs-Logs (Nginx):</strong> Rotation täglich, Aufbewahrung 14 Tage</li>
+      <li><strong>Technische Nachrichten-Logs (z. B. SMS-Versandprotokoll):</strong> in der Regel max. 90 Tage, soweit nicht länger nötig</li>
       <li><strong>E-Mail-Adressen:</strong> Werden gelöscht, sobald der Zweck (Bestellabwicklung) entfallen ist und keine gesetzliche Aufbewahrungspflicht besteht</li>
+      <li><strong>Push-Abonnements:</strong> bis Widerruf / Löschung der Subscription</li>
     </ul>
   </section>
 
@@ -165,8 +170,8 @@
     <p>Der Cookie-Hinweis auf unserer Website dient der <strong>Information</strong> über technisch eingesetzte Dienste. Da wir keine nicht-notwendigen Cookies setzen, ist nach aktuellem Rechtsstand <strong>keine Einwilligung erforderlich</strong> (§ 25 TTDSG). Mit „OK“ speicherst du nur, dass du den Hinweis gelesen hast.</p>
     <table>
       <tr><th>Speicher</th><th>Inhalt</th><th>Zweck</th><th>Ablauf</th></tr>
-      <tr><td>localStorage</td><td><code>cookie-ok-order</code></td><td>Speichert deine Cookie-Zustimmung, damit der Hinweis nicht bei jedem Besuch erneut erscheint</td><td>Kein Ablauf (du kannst ihn jederzeit löschen)</td></tr>
-      <tr><td>sessionStorage</td><td>Admin-Session</td><td>Nur für das Admin-Dashboard, wird beim Schließen des Browsers gelöscht</td><td>Browser-Session</td></tr>
+      <tr><td>localStorage</td><td><code>cookie-ok</code> / <code>cookie-ok-order</code></td><td>Merkt, dass der Cookie-Hinweis gelesen wurde</td><td>Kein Ablauf (im Browser löschbar)</td></tr>
+      <tr><td>Cookie</td><td><code>admin_session</code> (HttpOnly, Secure, SameSite=Strict)</td><td>Nur Admin-Login, nicht für Gäste</td><td>Session-TTL</td></tr>
     </table>
     <p>Du kannst gespeicherte Daten jederzeit über die Browser-Einstellungen löschen.</p>
   </section>
@@ -214,7 +219,7 @@
     <p>Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf anzupassen, um sie stets den aktuellen rechtlichen Anforderungen anzupassen oder Änderungen unserer Dienste umzusetzen. Die jeweils aktuelle Version ist auf dieser Seite abrufbar.</p>
   </section>
 
-  <div class="stand">Stand: Juli 2026 · Snack House Yassine · Mechernich · <a href="/impressum">Impressum</a></div>
+  <div class="stand">Stand: 18. Juli 2026 · Snack House Yassine · Mechernich · <a href="/impressum">Impressum</a></div>
 
 </div>
 </body>

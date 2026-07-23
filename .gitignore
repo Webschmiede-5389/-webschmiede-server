@@ -1,10 +1,21 @@
 # Local secrets — never commit
 deploy.secrets.local
+requesty.secrets.local
+cursor.secrets.local
 n8n-credentials.local.txt
 .env
 *.local.txt
+*.local.json
+agency/hetzner-buyer-state.local.json
+agency/retell_demo.json
+agency/jay_retell.json
+agency/jay_usage.json
+agency/ops-guardian-state.json
+agency/radar_queue.json
 app/backend/.env
 app/backend/orders.db
+agency-web/dist-backup/
+agency-web/node_modules/
 __pycache__/
 *.py[cod]
 .Python
@@ -13,3 +24,18 @@ venv/
 *.log
 .DS_Store
 Thumbs.db
+.cursor/brain-routing.md
+
+# Local scratch / diagnostics
+tmp_*.txt
+tmp_*.log
+.tools/
+
+# Runtime / customer DB dumps
+app/data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Script outbox (may contain PII)
+scripts/outbox/

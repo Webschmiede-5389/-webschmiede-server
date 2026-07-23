@@ -1,0 +1,28 @@
+---
+description: Gastro-Standard Tischaufsteller + Kunden-CI im Onboarding
+alwaysApply: true
+---
+
+# Gastro: Tischaufsteller & Brand
+
+## Standard für Gastronomen
+
+Bei neuen Gastro-Kunden (restaurant/gastro/imbiss/cafe/bar) immer:
+
+1. `brand` in `kunden/*.json` (Logo, Farben, Tisch-/Google-Texte)
+2. Logo unter `app/static/brand/{slug}-logo.png`
+3. Onboarding-Link **Tischaufsteller mit QR** + Checklisten-Task
+4. Richtlinie: Tisch = bestellen (+ Erstbesteller-Rabatt), Theke = Theke, Google-QR an der Theke
+
+## Nicht vermischen
+
+- Kunden-CI auf Tischaufstellern (Dunkel/Gold o. ä. des Ladens)
+- Webschmiede-Orange nur für Agency-Material, nicht für Gast-Tischaufsteller
+
+## Technik
+
+- `app/backend/client_brand.py`
+- `app/static/ci/tischaufsteller.html?k=…`
+- Doku: `docs/agency/tischaufsteller-standard.md`
+
+`create_kunde` setzt Gastro-`brand` Defaults automatisch.

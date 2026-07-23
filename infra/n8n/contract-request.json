@@ -1,0 +1,91 @@
+{
+  "name": "Webschmiede – Contract Request (Kalkulator)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contract-request",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://digitalehandwerkskunst.de,http://localhost:5173"
+        }
+      },
+      "id": "wh-contract-req",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "contract-request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nconst body = j.body || j;\nconst sel = body.selection || {};\nconst data = {\n  type: 'contract-request',\n  setup_total: sel.setupTotal || 0,\n  retainer_total: sel.retainerTotal || 0,\n  net_total: sel.netTotal || 0,\n  gross_total: sel.grossTotal || 0,\n  setup_items: (sel.setupItems || []).join(', '),\n  retainer_items: (sel.retainerItems || []).join(', '),\n  submitted_at: body.submittedAt || new Date().toISOString(),\n  source: body.source || 'calculator'\n};\nconst tg = `💼 Vertragsanfrage Kalkulator\\n\\nSetup: ${data.setup_items} (${data.setup_total} EUR)\\nRetainer: ${data.retainer_items} (${data.retainer_total} EUR/Mo)\\nNetto: ${data.net_total} EUR | Brutto 1. Monat: ${data.gross_total} EUR\\n\\n→ Stefan: Angebot/DocuSeal vorbereiten.`;\nconst brain = `[Vertragsanfrage Kalkulator] Netto ${data.net_total} EUR, Brutto ${data.gross_total} EUR. Setup: ${data.setup_items}. Retainer: ${data.retainer_items} (${data.retainer_total}/Mo). Quelle: ${data.source}. Stefan: Kunde kontaktieren, DocuSeal Kombi-Vertrag senden.`;\nreturn [{ json: { ...data, tg_text: tg, brain_message: brain } }];"
+      },
+      "id": "parse-req",
+      "name": "Anfrage parsen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: ($env.TELEGRAM_STEFAN_CHAT_ID || $env.TELEGRAM_OWNER_CHAT_ID || $env.TELEGRAM_ADMIN_CHAT_ID), text: $json.tg_text, disable_web_page_preview: true }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "tg-stefan",
+      "name": "Telegram Stefan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 0],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/brain",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{ $env.CRON_SECRET }}" },
+            { "name": "X-Agency-Password", "value": "={{ $env.AGENCY_ADMIN_PASSWORD }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: $('Anfrage parsen').item.json.brain_message, force_agent: 'stefan', dispatch: true, source: 'contract-request' }) }}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "brain-stefan",
+      "name": "Brain Stefan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 0],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, routed: ['stefan'] }) }}",
+        "options": {}
+      },
+      "id": "resp-req",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [960, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Anfrage parsen", "type": "main", "index": 0 }]] },
+    "Anfrage parsen": { "main": [[{ "node": "Telegram Stefan", "type": "main", "index": 0 }]] },
+    "Telegram Stefan": { "main": [[{ "node": "Brain Stefan", "type": "main", "index": 0 }]] },
+    "Brain Stefan": { "main": [[{ "node": "Antwort", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "webschmiede" }, { "name": "sales" }, { "name": "stefan" }]
+}

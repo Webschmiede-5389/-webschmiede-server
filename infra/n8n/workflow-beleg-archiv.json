@@ -1,0 +1,102 @@
+{
+  "name": "Webschmiede – â€“ Beleg-E-Mail archivieren",
+  "nodes": [
+    {
+      "parameters": {
+        "mailbox": "INBOX",
+        "format": "resolved",
+        "downloadAttachments": true,
+        "options": {}
+      },
+      "id": "email-trigger",
+      "name": "IMAP Belege (z.B. Hosting)",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "credentials": {
+        "imap": {
+          "id": "CONFIGURE_IMAP",
+          "name": "Agency IMAP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.subject }}",
+              "rightValue": "rechnung",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        }
+      },
+      "id": "filter-invoice",
+      "name": "Nur Rechnungen?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $now.format('yyyy-MM') }}/{{ $json.subject.replace(/[^a-zA-Z0-9Ã¤Ã¶Ã¼Ã„Ã–ÃœÃŸ_-]/g,'_').slice(0,60) }}.eml",
+        "options": {}
+      },
+      "id": "save-file",
+      "name": "Speichern (n8n /data/belege)",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        720,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "IMAP Belege (z.B. Hosting)": {
+      "main": [
+        [
+          {
+            "node": "Nur Rechnungen?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nur Rechnungen?": {
+      "main": [
+        [
+          {
+            "node": "Speichern (n8n /data/belege)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Vorlage: Agency-IMAP mit Rechnungs-Mails â†’ Ordner nach Monat. IMAP + Pfad in n8n konfigurieren."
+  },
+  "active": false
+}

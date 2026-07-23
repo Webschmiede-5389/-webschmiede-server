@@ -1,0 +1,104 @@
+{
+  "name": "Webschmiede – â€“ E-Mail-Agent (Posteingang)",
+  "nodes": [
+    {
+      "parameters": {
+        "mailbox": "INBOX",
+        "format": "resolved",
+        "downloadAttachments": false,
+        "options": {}
+      },
+      "id": "imap-inbox",
+      "name": "IMAP Agency Posteingang",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "credentials": {
+        "imap": {
+          "id": "CONFIGURE_IMAP",
+          "name": "Agency IMAP (info@)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nconst from = j.from?.text || j.from?.value?.[0]?.address || j.from || '';\nconst fromName = j.from?.value?.[0]?.name || '';\nreturn [{\n  json: {\n    from,\n    from_name: fromName,\n    subject: j.subject || '',\n    body_text: j.textPlain || j.text || '',\n    body_html: j.textHtml || j.html || '',\n    message_id: j.metadata?.['message-id'] || j.messageId || j.id || '',\n    received_at: j.date || new Date().toISOString()\n  }\n}];"
+      },
+      "id": "code-normalize",
+      "name": "Felder normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/inbox/process",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{ $env.CRON_SECRET }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "http-process",
+      "name": "Flask Inbox Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "IMAP Agency Posteingang": {
+      "main": [
+        [
+          {
+            "node": "Felder normalisieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Felder normalisieren": {
+      "main": [
+        [
+          {
+            "node": "Flask Inbox Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "active": false
+}

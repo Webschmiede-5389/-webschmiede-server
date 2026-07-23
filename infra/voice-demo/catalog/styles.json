@@ -1,0 +1,60 @@
+{
+  "note": "Sprachstile steuern den Text (LLM). TTS liest den Text mit der gewählten Stimme – bei Dialekt klingt die Aussprache weiter eher hochdeutsch, der Wortlaut aber dialektal.",
+  "default": "freundlich",
+  "styles": [
+    {
+      "id": "sachlich",
+      "label": "Sachlich (Hochdeutsch)",
+      "file": "sachlich.txt",
+      "accent_listen": "hochdeutsch"
+    },
+    {
+      "id": "freundlich",
+      "label": "Freundlich (Hochdeutsch)",
+      "file": "freundlich.txt",
+      "accent_listen": "hochdeutsch"
+    },
+    {
+      "id": "rheinland",
+      "label": "Rheinland (leicht)",
+      "file": "rheinland.txt",
+      "accent_listen": "rheinisch"
+    },
+    {
+      "id": "koelsch",
+      "label": "Kölsch",
+      "file": "koelsch.txt",
+      "accent_listen": "koelsch"
+    },
+    {
+      "id": "platt",
+      "label": "Plattdeutsch",
+      "file": "platt.txt",
+      "accent_listen": "platt"
+    },
+    {
+      "id": "bayrisch",
+      "label": "Bayrisch",
+      "file": "bayrisch.txt",
+      "accent_listen": "bayrisch"
+    },
+    {
+      "id": "berlinerisch",
+      "label": "Berlinerisch",
+      "file": "berlinerisch.txt",
+      "accent_listen": "berlinerisch"
+    },
+    {
+      "id": "oesterreichisch",
+      "label": "Österreichisch",
+      "file": "oesterreichisch.txt",
+      "accent_listen": "oesterreichisch"
+    },
+    {
+      "id": "schweizerdeutsch",
+      "label": "Schweizerdeutsch (leicht)",
+      "file": "schweizerdeutsch.txt",
+      "accent_listen": "schweizerdeutsch"
+    }
+  ]
+}

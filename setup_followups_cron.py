@@ -1,6 +1,8 @@
 """Deploy follow-up cron + CRON_SECRET on server."""
-import paramiko, secrets, os
+import paramiko, secrets, os, sys
+sys.path.insert(0, os.path.dirname(__file__))
 from agency_config import ssh_connect
+from deploy_shell import upload_shell_script, verify_remote_shell
 
 LOCAL_SCRIPT = os.path.join(os.path.dirname(__file__), 'app', 'scripts', 'run_followups.sh')
 ENV_PATH = '/root/app/backend/.env'
@@ -18,10 +20,13 @@ def run(cmd, timeout=20):
 
 run('mkdir -p /root/app/scripts')
 sftp = client.open_sftp()
-sftp.put(LOCAL_SCRIPT, '/root/app/scripts/run_followups.sh')
+upload_shell_script(sftp, LOCAL_SCRIPT, '/root/app/scripts/run_followups.sh')
 sftp.close()
-run('sed -i "s/\\r$//" /root/app/scripts/run_followups.sh')
 run('chmod +x /root/app/scripts/run_followups.sh')
+ok, msg = verify_remote_shell(client, '/root/app/scripts/run_followups.sh')
+if not ok:
+    raise SystemExit(f"Syntax-Fehler: {msg}")
+print('script_syntax_ok')
 
 secret = secrets.token_hex(24)
 run(f"grep -q '^CRON_SECRET=' {ENV_PATH} || echo 'CRON_SECRET={secret}' >> {ENV_PATH}")

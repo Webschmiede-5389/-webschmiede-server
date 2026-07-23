@@ -1,0 +1,51 @@
+{
+  "SMS_ENABLED": {
+    "raw": "false",
+    "truthy": false
+  },
+  "GHL_ENABLED": {
+    "raw": "false",
+    "truthy": false
+  },
+  "STRIPE_SECRET_KEY": {
+    "set": false
+  },
+  "RETELL_API_KEY": {
+    "set": true,
+    "len": 32
+  },
+  "VAPID_PUBLIC_KEY": {
+    "set": true,
+    "len": 87
+  },
+  "VAPID_PRIVATE_KEY": {
+    "set": true,
+    "len": 246
+  },
+  "WHATSAPP_ACCESS_TOKEN": {
+    "set": false
+  },
+  "WHATSAPP_PHONE_NUMBER_ID": {
+    "set": false
+  },
+  "SMS_API_KEY": {
+    "set": false,
+    "len": 0
+  },
+  "DOCUSEAL_URL": {
+    "set": true,
+    "value": "https://sign.digitalehandwerkskunst.de/"
+  },
+  "CALCOM_URL": {
+    "set": true,
+    "value": "https://cal.digitalehandwerkskunst.de"
+  },
+  "PUBLIC_BASE_URL": {
+    "set": true,
+    "value": "https://yassine.digitalehandwerkskunst.de"
+  },
+  "logrotate_nginx": {
+    "exists": true,
+    "preview": "/var/log/nginx/*.log {\n\tdaily\n\tmissingok\n\trotate 14\n\tcompress\n\tdelaycompress\n\tnotifempty\n\tcreate 0640 www-data adm\n\tsharedscripts\n\tprerotate\n\t\tif [ -d /etc/logrotate.d/httpd-prerotate ]; then \\\n\t\t\trun-parts /etc/logrotate.d/httpd-prerotate; \\\n\t\tfi \\\n\tendscript\n\tpostrotate\n\t\tinvoke-rc.d nginx rotate >/dev/null 2>&1\n\tendscript\n}\n"
+  }
+}

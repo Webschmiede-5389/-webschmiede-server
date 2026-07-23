@@ -1,0 +1,125 @@
+{
+  "id": "dental",
+  "name": "Zahnarzt & Praxis",
+  "discovery": {
+    "type": "overpass",
+    "amenities": [
+      "dentist",
+      "clinic"
+    ],
+    "office_tags": [
+      "dentist"
+    ]
+  },
+  "google_places_type": "dentist",
+  "delivery_platforms": [],
+  "order_keywords": [
+    "termin buchen",
+    "online termin",
+    "terminvereinbarung",
+    "anfrage",
+    "kontaktformular"
+  ],
+  "job_keywords": [
+    "zahnmedizinische fachangestellte",
+    "zfa",
+    "stellenangebot",
+    "jobs",
+    "team"
+  ],
+  "subpages": [
+    "/leistungen",
+    "/team",
+    "/termin",
+    "/karriere",
+    "/kontakt",
+    "/impressum"
+  ],
+  "priority_amenities": [
+    "dentist",
+    "clinic"
+  ],
+  "reference_client": {
+    "name": "Webschmiede Praxis-Digital",
+    "pitch": "Website + Online-Termin + Review-Funnel, DSGVO-konform"
+  },
+  "local_wins": [
+    "Google Business Profil optimieren",
+    "Doctolib-Link prüfen",
+    "WhatsApp-Rückruf"
+  ],
+  "offers": {
+    "standard": {
+      "name": "Praxis Digital",
+      "setup": "2400–8000 € einmalig",
+      "monthly": "118 €/Mo",
+      "includes": [
+        "Website + Leistungen",
+        "Online-Termin (Cal.com)",
+        "Review-Funnel SMS",
+        "DSGVO + Impressum"
+      ]
+    },
+    "starter": {
+      "name": "Praxis Starter",
+      "setup": "1380 € einmalig",
+      "monthly": "78 €/Mo",
+      "includes": [
+        "One-Page + Team",
+        "Kontaktformular → CRM",
+        "Google Maps"
+      ]
+    },
+    "local": {
+      "name": "Quick-Wins",
+      "setup": "0 €",
+      "monthly": "0 €",
+      "includes": [
+        "Google-Checkliste",
+        "Jameda-Profil-Tipps"
+      ]
+    },
+    "premium": {
+      "name": "Praxis + Automation",
+      "setup": "5000 €+",
+      "monthly": "178 €/Mo",
+      "includes": [
+        "Recall-SMS Erinnerungen",
+        "n8n Termin-Workflow",
+        "Bewertungs-Automation"
+      ]
+    }
+  },
+  "intents": {
+    "digital_neu": {
+      "label": "Praxis online fehlt",
+      "want": "Kein professioneller Praxis-Auftritt",
+      "approach": "Vertrauen + Termin online, Patienten unter 45 erwarten das",
+      "when": "no_website_or_social"
+    },
+    "leads": {
+      "label": "Kein Online-Termin",
+      "want": "Telefon besetzt, Patient verloren",
+      "approach": "Cal.com + Erinnerungs-SMS",
+      "when": "no_order_signals"
+    },
+    "entlastung": {
+      "label": "Team überlastet",
+      "want": "ZFA gesucht, Telefon-Chaos",
+      "approach": "FAQ + Termin-Automation entlastet Anmeldung",
+      "when": "job_signals"
+    },
+    "vertrauen": {
+      "label": "Google/Jameda schwach",
+      "want": "Konkurrenzpraxis besser sichtbar",
+      "approach": "Review-Funnel nach Behandlung",
+      "when": "trust_issue"
+    },
+    "standard": {
+      "label": "Praxis-Digital",
+      "want": "Mehr Neupatienten lokal",
+      "approach": "Lokal stärkste Praxis in der Stadt werden",
+      "when": "default"
+    }
+  }
+}

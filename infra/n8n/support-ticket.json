@@ -1,0 +1,135 @@
+{
+  "name": "Webschmiede – Support Ticket",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "support-ticket",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://digitalehandwerkskunst.de,http://localhost:5173"
+        }
+      },
+      "id": "wh-support",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "support-ticket"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nconst body = j.body || j;\nconst priority = (body.priority || 'normal').toString();\nconst sla = priority === 'critical'\n  ? 'KRITISCH – SLA: Reaktion max. 4 Std. (Mo–Fr 9–17)'\n  : 'Normal – Bearbeitung innerhalb 1–2 Werktage';\nconst ticket = {\n  ticket_id: `TKT-${Date.now()}`,\n  subject: body.subject || 'Ohne Betreff',\n  priority,\n  sla,\n  message: body.message || '',\n  name: body.name || '',\n  email: body.email || '',\n  phone: body.phone || '',\n  company: body.company || '',\n  source: body.source || 'web',\n  submitted_at: body.submittedAt || new Date().toISOString()\n};\nconst tg = `🎫 Support ${ticket.ticket_id}\\n${ticket.sla}\\n\\nBetreff: ${ticket.subject}\\nVon: ${ticket.name} <${ticket.email}>\\nFirma: ${ticket.company || '–'}\\nTel: ${ticket.phone || '–'}\\n\\n${ticket.message}`;\nconst brain = `[Support-Ticket ${ticket.ticket_id}] ${ticket.sla}\\nBetreff: ${ticket.subject}\\nKunde: ${ticket.name} (${ticket.email})\\nFirma: ${ticket.company}\\nTel: ${ticket.phone}\\n\\n${ticket.message}\\n\\n→ Nils: Ticket bearbeiten, ggf. Stefan einbinden.`;\nreturn [{ json: { ...ticket, tg_text: tg, brain_message: brain } }];"
+      },
+      "id": "norm-ticket",
+      "name": "Ticket normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: ($env.TELEGRAM_NILS_CHAT_ID || $env.TELEGRAM_OWNER_CHAT_ID || $env.TELEGRAM_ADMIN_CHAT_ID), text: $json.tg_text, disable_web_page_preview: true }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "tg-nils",
+      "name": "Telegram Nils",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 0],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/brain",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{ $env.CRON_SECRET }}" },
+            { "name": "X-Agency-Password", "value": "={{ $env.AGENCY_ADMIN_PASSWORD }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: $('Ticket normalisieren').item.json.brain_message, force_agent: 'nils', dispatch: true, source: 'support-ticket' }) }}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "brain-nils",
+      "name": "Brain Nils",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 0],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "crit",
+              "leftValue": "={{ $('Ticket normalisieren').item.json.priority }}",
+              "rightValue": "critical",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-critical",
+      "name": "Kritisch?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [960, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: ($env.TELEGRAM_STEFAN_CHAT_ID || $env.TELEGRAM_OWNER_CHAT_ID || $env.TELEGRAM_ADMIN_CHAT_ID), text: '⚠️ KRITISCH – ' + $('Ticket normalisieren').item.json.tg_text, disable_web_page_preview: true }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "tg-stefan",
+      "name": "Telegram Stefan (kritisch)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1180, -80],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, ticket_id: $('Ticket normalisieren').item.json.ticket_id, routed: ['nils', $('Ticket normalisieren').item.json.priority === 'critical' ? 'stefan' : null].filter(Boolean) }) }}",
+        "options": {}
+      },
+      "id": "resp-ok",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1400, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Ticket normalisieren", "type": "main", "index": 0 }]] },
+    "Ticket normalisieren": { "main": [[{ "node": "Telegram Nils", "type": "main", "index": 0 }]] },
+    "Telegram Nils": { "main": [[{ "node": "Brain Nils", "type": "main", "index": 0 }]] },
+    "Brain Nils": { "main": [[{ "node": "Kritisch?", "type": "main", "index": 0 }]] },
+    "Kritisch?": {
+      "main": [
+        [{ "node": "Telegram Stefan (kritisch)", "type": "main", "index": 0 }],
+        [{ "node": "Antwort", "type": "main", "index": 0 }]
+      ]
+    },
+    "Telegram Stefan (kritisch)": { "main": [[{ "node": "Antwort", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "webschmiede" }, { "name": "support" }, { "name": "nils" }]
+}

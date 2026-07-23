@@ -4,8 +4,13 @@ JARVIS – Agentur-Verwaltung
 Befehle:
   python jarvis.py kunden               → alle Kunden anzeigen
   python jarvis.py kunde SHY001         → Kundendetails anzeigen
-  python jarvis.py neu                  → neuen Kunden anlegen
+  python jarvis.py neu                  → neuen Kunden anlegen (+ n8n automatisch)
+  python jarvis.py next-id handwerk     → nächste Kunden-ID vorschlagen
+  python jarvis.py n8n SHY001           → n8n-Workflows für Kunde provisionieren
+  python jarvis.py onboard SHY001       → Onboarding-E-Mail an Kunden senden
   python jarvis.py deploy SHY001        → Kunde auf Server deployen
+  python jarvis.py subdomain SHY001 yassine [--ssl]  → Kunden-Subdomain (nginx + SSL)
+  python jarvis.py checkout SHY001 pro               → Stripe-Zahlungslink
   python jarvis.py status               → Server-Status aller Kunden
 
   Aktions-Verwaltung:
@@ -13,9 +18,25 @@ Befehle:
   python jarvis.py promo stop           → Aktion deaktivieren
   python jarvis.py promo pizza cola     → Pizza bestellen → Cola gratis (bis 21 Uhr)
   python jarvis.py promo burger pommes 18:00  → Burger → Pommes gratis bis 18:00
+
+  Onboarding:
+  python jarvis.py onboard SHY001 --dry-run
+  python jarvis.py onboard SHY001 --upload-handout --support-email du@webschmiede.de
+
+  Go-Live (Paket A+B):
+  python scripts/go_live.py SHY001 check
+  python scripts/go_live.py SHY001 run --support-email du@webschmiede.de --owner-phone +49... --sms-key KEY
 """
 import json, os, sys, paramiko, datetime
 from agency_config import load_secrets, ssh_connect
+from kunden_ids import (
+    prefix_for_branche,
+    suggest_next_id_for_branche,
+    suggest_next_id,
+    n8n_order_webhook,
+    validate_kunde_id,
+    list_prefixes,
+)
 try:
     import requests as req
     REQUESTS_OK = True
@@ -82,6 +103,10 @@ def cmd_kunde(kid):
     print(f"\n  TEST-LINKS:")
     print(f"    Hauptseite: {k['urls']['test_hauptseite']}")
     print(f"    Bestellen:  {k['urls']['test_bestellen']}")
+    if k['urls'].get('test_admin'):
+        print(f"    Admin:      {k['urls']['test_admin']}")
+    if k['urls'].get('onboarding_url'):
+        print(f"    Onboarding: {k['urls']['onboarding_url']}")
     if k['urls'].get('domain'):
         print(f"\n  LIVE-LINKS:")
         print(f"    Hauptseite: {k['urls']['live_hauptseite']}")
@@ -93,16 +118,24 @@ def cmd_kunde(kid):
 
 def cmd_neu():
     print("\n=== NEUEN KUNDEN ANLEGEN ===\n")
-    kunden = lade_kunden()
-    nr = len(kunden) + 1
-    kid = input(f"Kunden-ID (z.B. SHY{nr:03d}): ").strip().upper()
+    print("Branchen-Prefixe:")
+    for p in list_prefixes():
+        print(f"  {p['prefix']} = {p['label']} ({p['beispiel']})")
+    print()
+    branche = input("Branche (restaurant/handwerk/beauty/...): ").strip().lower() or "restaurant"
+    prefix = prefix_for_branche(branche)
+    vorschlag = suggest_next_id_for_branche(KUNDEN_DIR, branche)
+    kid = input(f"Kunden-ID [{vorschlag}]: ").strip().upper() or vorschlag
+    if not validate_kunde_id(kid):
+        print(f"Abbruch: '{kid}' ist ungueltig (Format z.B. {prefix}001)")
+        return
     name = input("Firmenname: ").strip()
     inhaber = input("Inhaber (Vor- und Nachname): ").strip()
     slug = input("Slug (z.B. pizzeria-roma-koeln): ").strip().lower()
-    branche = input("Branche (restaurant/handwerk/beauty/...): ").strip()
     telefon = input("Telefon: ").strip()
     email = input("E-Mail: ").strip()
     adresse = input("Adresse: ").strip()
+    buchhaltung = input("Buchhaltungs-E-Mail (optional): ").strip()
 
     k = {
         "id": kid,
@@ -111,7 +144,7 @@ def cmd_neu():
         "slug": slug,
         "branche": branche,
         "erstellt": datetime.date.today().isoformat(),
-        "status": "neu",
+        "status": "lead",
         "kontakt": {"telefon": telefon, "email": email, "adresse": adresse},
         "urls": {
             "test_hauptseite": f"http://{SERVER_IP}/",
@@ -121,14 +154,60 @@ def cmd_neu():
         "server": {
             "ip": SERVER_IP,
             "ordner": f"/var/www/{slug}",
-            "service": f"{slug}-api",
-            "port": str(9000 + nr)
+            "service": "snack-api",
+            "port": "8000"
         },
-        "ghl": {"location_id": "", "pipeline_id": "", "stage_neu": ""},
+        "crm": {"provider": "webschmiede", "sms_provider": "seven.io", "sms_enabled": False},
+        "sms": {
+            "enabled": False,
+            "provider": "seven.io",
+            "phone_number": "",
+            "sender_id": "",
+            "owner_phone": telefon,
+            "notes": "",
+        },
+        "whatsapp": {
+            "enabled": False,
+            "phone_number_id": "",
+            "business_phone": "",
+            "allowed_phones": [],
+            "permissions": ["menu_price", "menu_text", "menu_image", "menu_available"],
+            "blocked": ["code", "domain", "admin_password", "delete_items"],
+        },
+        "voice": {
+            "enabled": False,
+            "provider": "",
+            "agent_id": "",
+            "phone_number": "",
+            "knowledge_pack": "handwerk" if branche in ("handwerk", "dach", "dental", "friseur") else (
+                "gastro" if branche in ("restaurant", "gastro") else "general"
+            ),
+            "billing": {"plan": "none", "included_minutes": 0, "overage_per_min_eur": 0},
+        },
+        "knowledge": {
+            "pack": "handwerk" if branche in ("handwerk", "dach", "dental", "friseur") else (
+                "gastro" if branche in ("restaurant", "gastro") else "general"
+            ),
+            "locale": "de-DE",
+            "overrides": {},
+            "voice": {"enabled": False, "provider": "", "voice_id": ""},
+        },
+        "n8n": {"order_webhook": n8n_order_webhook(kid)},
+        "buchhaltung": {"bookkeeper_email": buchhaltung},
+        "integrations": {
+            "buchhaltung": "",
+            "lexware": {
+                "enabled": False,
+                "sync_contacts": True,
+                "sync_invoices": False,
+                "api_key_env": f"LEXWARE_API_KEY_{kid}",
+            },
+        },
         "stripe": {"status": "ausstehend", "payment_link": ""},
         "offene_punkte": [
-            "Inhaber-Nummer eintragen",
-            "GHL Location ID eintragen",
+            "Angebot senden & Freigabe einholen",
+            "Subdomain/DNS einrichten",
+            f"n8n-Workflows für {kid} anlegen",
             "Domain registrieren",
             "Stripe-Account erstellen"
         ]
@@ -137,7 +216,29 @@ def cmd_neu():
     os.makedirs(KUNDEN_DIR, exist_ok=True)
     speichere_kunde(k)
     print(f"\nKunde '{name}' ({kid}) gespeichert!")
-    print(f"Datei: kunden/{kid}_{slug}.json\n")
+    print(f"Datei: kunden/{kid}_{slug}.json")
+    print("\n n8n-Workflows werden angelegt …")
+    cmd_n8n(kid)
+
+
+def cmd_n8n(kid: str):
+    import subprocess
+    script = os.path.join(os.path.dirname(__file__), "scripts", "provision_kunde_n8n.py")
+    r = subprocess.run([sys.executable, script, kid.upper()], check=False)
+    if r.returncode != 0:
+        print(f"\nHinweis: n8n-Provisionierung fehlgeschlagen (Code {r.returncode}).")
+        print(f"Später: python jarvis.py n8n {kid.upper()}")
+    else:
+        print(f"\nn8n-Workflows für {kid.upper()} bereit.\n")
+
+
+def cmd_next_id(branche: str):
+    b = (branche or "restaurant").strip().lower()
+    prefix = prefix_for_branche(b)
+    nid = suggest_next_id_for_branche(KUNDEN_DIR, b)
+    print(f"\nBranche: {b}")
+    print(f"Prefix:  {prefix}")
+    print(f"Naechste ID: {nid}\n")
 
 def cmd_status():
     print(f"\nServer {SERVER_IP} – Status:\n")
@@ -258,6 +359,37 @@ def cmd_promo(args):
         print(f"\n  Fehler: {r.text}\n")
 
 
+def cmd_onboard(kid, extra_args):
+    import subprocess
+    script = os.path.join(os.path.dirname(__file__), "scripts", "send_onboarding_email.py")
+    cmd = [sys.executable, script, kid.upper()] + extra_args
+    print(f"\n  Onboarding-E-Mail für {kid.upper()} …\n")
+    subprocess.run(cmd, check=False)
+
+
+def cmd_subdomain(kid, extra_args):
+    """Kunden-Subdomain einrichten (nginx + optional SSL). DNS: Wildcard * oder A-Record."""
+    import subprocess
+    script = os.path.join(os.path.dirname(__file__), "scripts", "setup_client_subdomain.py")
+    ssl = "--ssl" in extra_args
+    subs = [a for a in extra_args if a != "--ssl"]
+    if not subs:
+        print("Usage: python jarvis.py subdomain SHY001 yassine [--ssl]")
+        return
+    cmd = [sys.executable, script, kid.upper(), subs[0]]
+    if ssl:
+        cmd.append("--ssl")
+    subprocess.run(cmd, check=False)
+
+
+def cmd_checkout(kid, extra_args):
+    """Stripe Checkout-Link für Kunden (Setup + Abo)."""
+    import subprocess
+    pkg = extra_args[0] if extra_args else "pro"
+    script = os.path.join(os.path.dirname(__file__), "scripts", "create_checkout.py")
+    subprocess.run([sys.executable, script, kid.upper(), pkg], check=False)
+
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
@@ -268,10 +400,20 @@ def main():
         cmd_kunde(args[1])
     elif args[0] == 'neu':
         cmd_neu()
+    elif args[0] == 'next-id':
+        cmd_next_id(args[1] if len(args) > 1 else "restaurant")
+    elif args[0] == 'n8n' and len(args) > 1:
+        cmd_n8n(args[1])
+    elif args[0] == 'onboard' and len(args) > 1:
+        cmd_onboard(args[1], args[2:])
     elif args[0] == 'status':
         cmd_status()
     elif args[0] == 'promo':
         cmd_promo(args[1:])
+    elif args[0] == 'subdomain' and len(args) > 2:
+        cmd_subdomain(args[1], args[2:])
+    elif args[0] == 'checkout' and len(args) > 1:
+        cmd_checkout(args[1], args[2:])
     else:
         print(__doc__)
 

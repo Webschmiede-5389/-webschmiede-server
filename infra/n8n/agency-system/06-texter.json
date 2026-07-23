@@ -1,0 +1,140 @@
+{
+  "name": "Agency 06 – Premium-Texter",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-06-texter",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "06-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "agency-06-texter"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/router",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.CRON_SECRET}}"
+            },
+            {
+              "name": "X-Agency-Password",
+              "value": "={{$env.AGENCY_ADMIN_PASSWORD}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: ($json.body && ($json.body.message || $json.body.text)) || $json.message || 'Starte texter', force_agent: 'texter' })"
+      },
+      "id": "06-http",
+      "name": "Agency API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json;\nreturn [{ json: { ok: true, workflow: 'texter', note: \"Cursor Skill texter. n8n: Klassifizierung + Playbook.\", result: j } }];"
+      },
+      "id": "06-pack",
+      "name": "Ergebnis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "06-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        660,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Agency API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agency API": {
+      "main": [
+        [
+          {
+            "node": "Ergebnis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ergebnis": {
+      "main": [
+        [
+          {
+            "node": "Antwort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "notes": "Cursor Skill texter. n8n: Klassifizierung + Playbook."
+  },
+  "tags": [
+    {
+      "name": "agency"
+    },
+    {
+      "name": "system-13"
+    },
+    {
+      "name": "texter"
+    }
+  ]
+}

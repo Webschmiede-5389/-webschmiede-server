@@ -1,0 +1,16 @@
+# DSGVO-konforme n8n Log-Bereinigung (Hetzner)
+# Kopieren nach /opt/n8n/ oder als docker-compose.override.yml verwenden
+
+services:
+  n8n:
+    environment:
+      # Erfolgreiche Ausführungen nicht dauerhaft speichern
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=none
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS=false
+      # Automatische Löschung nach 7 Tagen (168 Stunden)
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=168
+      # Optional: Zeitzone
+      - GENERIC_TIMEZONE=Europe/Berlin
+      - TZ=Europe/Berlin

@@ -1,0 +1,93 @@
+[
+  {
+    "id": "01",
+    "slug": "router",
+    "name": "Agency 01 – Router (Gehirn)",
+    "file": "01-router.json",
+    "note": "Delegiert an Flask /api/agency/router. Produktiv: infra/n8n/workflow-agency-router.json"
+  },
+  {
+    "id": "02",
+    "slug": "stefan",
+    "name": "Agency 02 – Stefan Digest",
+    "file": "02-stefan.json",
+    "note": "Tages-Überblick Ops. Cursor-Skill stefan für Strategie."
+  },
+  {
+    "id": "03",
+    "slug": "scout",
+    "name": "Agency 03 – Markt-Scout",
+    "file": "03-scout.json",
+    "note": "Akquise-Engine lokal: python -m akquise / agency_akquise. Webhook startet Queue-Hinweis."
+  },
+  {
+    "id": "04",
+    "slug": "outreach",
+    "name": "Agency 04 – Outreach",
+    "file": "04-outreach.json",
+    "note": "Texte nur nach Freigabe. Nutzt Router→texter+lektor. Kein Spam-Auto-Send."
+  },
+  {
+    "id": "05",
+    "slug": "crm",
+    "name": "Agency 05 – CRM Follow-Up",
+    "file": "05-crm.json",
+    "note": "Bestehend: workflow-followups.json + workflow-akquise-reminders.json"
+  },
+  {
+    "id": "06",
+    "slug": "texter",
+    "name": "Agency 06 – Premium-Texter",
+    "file": "06-texter.json",
+    "note": "Cursor Skill texter. n8n: Klassifizierung + Playbook."
+  },
+  {
+    "id": "07",
+    "slug": "design",
+    "name": "Agency 07 – Kreativ/Design",
+    "file": "07-design.json",
+    "note": "Cursor Skill design. Bild-API nur nach Christians OK."
+  },
+  {
+    "id": "08",
+    "slug": "lektor",
+    "name": "Agency 08 – Lektor",
+    "file": "08-lektor.json",
+    "note": "Immer nach Texter. Skill texter (Lektor-Pass)."
+  },
+  {
+    "id": "09",
+    "slug": "nils",
+    "name": "Agency 09 – Nils Infra",
+    "file": "09-nils.json",
+    "note": "Bestehend: workflow-healthcheck + nightly_watchdog. Skill nils."
+  },
+  {
+    "id": "10",
+    "slug": "anwalt",
+    "name": "Agency 10 – Anwalt",
+    "file": "10-anwalt.json",
+    "note": "Cursor Skill anwalt + Checkliste. Vorprüfung, kein Ersatz Anwalt."
+  },
+  {
+    "id": "11",
+    "slug": "finanz",
+    "name": "Agency 11 – Finanz/Rechnung",
+    "file": "11-finanz.json",
+    "note": "Bestehend: workflow-buchhaltung-monat, meta-rechnungen, DocuSeal Angebote."
+  },
+  {
+    "id": "12",
+    "slug": "account",
+    "name": "Agency 12 – Account-Manager",
+    "file": "12-account.json",
+    "note": "Bestehend: workflow-inbox-agent + inbox-digest."
+  },
+  {
+    "id": "13",
+    "slug": "service",
+    "name": "Agency 13 – Service-Wächter",
+    "file": "13-service.json",
+    "note": "Bestehend: nightly_watchdog + resource_watchdog + healthcheck."
+  }
+]

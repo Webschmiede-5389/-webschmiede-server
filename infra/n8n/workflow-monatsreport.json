@@ -1,0 +1,103 @@
+{
+  "name": "Webschmiede – â€“ SHY001 Wochenreport E-Mail",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "cron-monday",
+      "name": "Montag 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/admin/report/today",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Admin-Password",
+              "value": "={{ $env.ADMIN_PASSWORD }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-report",
+      "name": "Tagesreport API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.AGENCY_FROM_EMAIL }}",
+        "toEmail": "={{ $env.AGENCY_OWNER_EMAIL }}",
+        "subject": "=Snack House Wochenstart â€” {{ $json.date }}: {{ $json.order_count }} Bestellungen, {{ $json.total_revenue }} â‚¬",
+        "emailFormat": "text",
+        "text": "=Snack House Yassine (SHY001)\n\nDatum: {{ $json.date }}\nBestellungen: {{ $json.order_count }}\nUmsatz: {{ $json.total_revenue }} â‚¬\nLieferung: {{ $json.delivery_count }} Â· Abholung: {{ $json.pickup_count }}\n\nTop-Artikel:\n{{ $json.top_items.map(i => '- ' + i.name + ': ' + i.qty).join('\\n') }}\n\nâ€” Webschmiede n8n",
+        "options": {}
+      },
+      "id": "email-report",
+      "name": "E-Mail an dich",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        300
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "CONFIGURE_SMTP",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Montag 08:00": {
+      "main": [
+        [
+          {
+            "node": "Tagesreport API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tagesreport API": {
+      "main": [
+        [
+          {
+            "node": "E-Mail an dich",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "active": false
+}

@@ -1,0 +1,14 @@
+# Optional – nur nach ausdruecklichem OK von Christian.
+# Standard: /b2b-portal.html (eigenes Flask-Portal).
+# Start: docker compose -f infra/docker/budibase.compose.yml up -d
+services:
+  budibase:
+    image: budibase/budibase:latest
+    ports:
+      - "10000:80"
+    volumes:
+      - budibase_data:/data
+    restart: unless-stopped
+
+volumes:
+  budibase_data:

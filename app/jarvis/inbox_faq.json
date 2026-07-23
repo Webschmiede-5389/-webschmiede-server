@@ -1,0 +1,82 @@
+{
+  "spam_keywords": [
+    "seo", "newsletter", "unsubscribe", "bitcoin", "crypto", "viagra",
+    "marketingangebot", "google ranking", "backlink", "casino", "lottery",
+    "click here to unsubscribe", "abmelden", "werbung", "promo code"
+  ],
+  "urgent_keywords": [
+    "dringend", "sofort", "asap", "notfall", "beschwerde", "funktioniert nicht",
+    "geht nicht", "kaputt", "fehler", "bug", "admin passwort", "passwort vergessen",
+    "system down", "offline", "anwalt", "rechtsanwalt", "rückzahlung", "stornieren sofort"
+  ],
+  "pending_keywords": [
+    "termin", "anruf", "rückruf", "telefonieren", "gespräch", "individuell",
+    "angebot", "custom", "sonderwunsch", "vertrag", "kündigung"
+  ],
+  "faqs": [
+    {
+      "id": "preise",
+      "label": "Preise & Pakete",
+      "keywords": ["preis", "preise", "kosten", "was kostet", "paket", "monatlich", "einmalig", "gebühr", "tarif"],
+      "subject": "Ihre Anfrage zu Preisen — Webschmiede",
+      "reply_text": "Guten Tag,\n\nvielen Dank für Ihre Anfrage.\n\nUnsere Pakete für Gastronomie & lokale Betriebe:\n\n• Starter: 998 € Einrichtung + 298 €/Monat\n• Pro: 1.980 € Einrichtung + 500 €/Monat\n\nEnthalten: Website, Online-Bestellportal, Admin-Dashboard, Kundenverwaltung und Automatisierungen.\n\nLive-Demo (ohne Anmeldung): https://muster.digitalehandwerkskunst.de\n\nFür ein individuelles Gespräch antworten Sie auf diese E-Mail — wir melden uns persönlich.\n\nFreundliche Grüße\nWebschmiede · Digitale Handwerkskunst",
+      "reply_html": "<p>Guten Tag,</p><p>vielen Dank für Ihre Anfrage.</p><p><strong>Unsere Pakete:</strong></p><ul><li><strong>Starter:</strong> 998 € Einrichtung + 298 €/Monat</li><li><strong>Pro:</strong> 1.980 € Einrichtung + 500 €/Monat</li></ul><p>Enthalten: Website, Bestellportal, Admin-Dashboard, CRM und Automatisierungen.</p><p><a href=\"https://muster.digitalehandwerkskunst.de\" style=\"color:#FF6600;\">Live-Demo ansehen</a></p><p>Für ein persönliches Gespräch antworten Sie einfach auf diese E-Mail.</p><p>Freundliche Grüße<br>Webschmiede</p>"
+    },
+    {
+      "id": "demo",
+      "label": "Demo & Test",
+      "keywords": ["demo", "muster", "ausprobieren", "testen", "beispiel", "vorschau", "showcase"],
+      "subject": "Live-Demo — Webschmiede Bestellportal",
+      "reply_text": "Guten Tag,\n\nunsere öffentliche Demo finden Sie hier:\n\nhttps://muster.digitalehandwerkskunst.de\n\n• Website & Bestellportal (/bestellen)\n• Admin-Dashboard (/admin — Zugang auf Anfrage)\n\nInteresse an Ihrem eigenen System? Antworten Sie kurz mit Branche und Ort — wir melden uns.\n\nFreundliche Grüße\nWebschmiede",
+      "reply_html": "<p>Guten Tag,</p><p>unsere Live-Demo:</p><p><a href=\"https://muster.digitalehandwerkskunst.de\" style=\"display:inline-block;background:#FF6600;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:700;\">Demo öffnen</a></p><p>Bestellportal: /bestellen · Admin: /admin (Zugang auf Anfrage)</p><p>Freundliche Grüße<br>Webschmiede</p>"
+    },
+    {
+      "id": "onboarding",
+      "label": "Onboarding & Start",
+      "keywords": ["onboarding", "start", "loslegen", "einrichtung", "übergabe", "handbuch", "wie fange ich an"],
+      "subject": "Onboarding — so starten Sie mit Webschmiede",
+      "reply_text": "Guten Tag,\n\nnach der Freischaltung erhalten Sie ein persönliches Onboarding-Portal mit allen Links, Checkliste und Admin-Zugang.\n\nTypische Schritte:\n1. Testbestellung durchführen\n2. Admin-Dashboard öffnen\n3. Speisekarte prüfen\n\nBei Fragen antworten Sie auf diese E-Mail.\n\nFreundliche Grüße\nWebschmiede",
+      "reply_html": "<p>Guten Tag,</p><p>nach der Freischaltung erhalten Sie ein <strong>Onboarding-Portal</strong> mit Links, Checkliste und Admin-Zugang.</p><ol><li>Testbestellung</li><li>Admin öffnen</li><li>Speisekarte prüfen</li></ol><p>Freundliche Grüße<br>Webschmiede</p>"
+    },
+    {
+      "id": "support",
+      "label": "Support & Erreichbarkeit",
+      "keywords": ["support", "hilfe", "erreichbar", "telefon", "kontakt", "sprechzeiten", "wann"],
+      "subject": "Support — Webschmiede",
+      "reply_text": "Guten Tag,\n\nvielen Dank für Ihre Nachricht.\n\nWir bearbeiten Anfragen werktags in der Regel innerhalb von 24 Stunden. Für dringende technische Probleme beschreiben Sie bitte kurz Betrieb, Link und Fehler — wir priorisieren dann.\n\nFreundliche Grüße\nWebschmiede\ninfo@digitalehandwerkskunst.de",
+      "reply_html": "<p>Guten Tag,</p><p>wir bearbeiten Anfragen werktags in der Regel <strong>innerhalb von 24 Stunden</strong>.</p><p>Bei technischen Problemen: Betrieb, Link und Fehlerbeschreibung senden — wir priorisieren dann.</p><p>Freundliche Grüße<br>Webschmiede</p>"
+    },
+    {
+      "id": "lieferando",
+      "label": "Lieferando / Bestellportal",
+      "keywords": ["lieferando", "bestellportal", "online bestellen", "lieferservice", "takeaway", "bestellung online"],
+      "subject": "Eigenes Bestellportal statt Lieferando",
+      "reply_text": "Guten Tag,\n\nWebschmiede richtet Ihr eigenes Bestellportal ein — ohne Lieferando-Provision, mit Admin-Dashboard, Kundenliste und SMS-Automation.\n\nDemo: https://muster.digitalehandwerkskunst.de/bestellen\n\nGerne besprechen wir Ihren Betrieb in einem kurzen Gespräch.\n\nFreundliche Grüße\nWebschmiede",
+      "reply_html": "<p>Guten Tag,</p><p>Ihr <strong>eigenes Bestellportal</strong> — ohne Lieferando-Provision, mit Admin, CRM und SMS.</p><p><a href=\"https://muster.digitalehandwerkskunst.de/bestellen\" style=\"color:#FF6600;\">Bestellportal-Demo</a></p><p>Freundliche Grüße<br>Webschmiede</p>"
+    },
+    {
+      "id": "seminar",
+      "label": "Seminare",
+      "keywords": ["seminar", "workshop", "schulung", "webinar", "vortrag", "teilnehmen"],
+      "subject": "Seminare — Webschmiede",
+      "reply_text": "Guten Tag,\n\naktuelle Seminare und Anmeldung:\n\nhttps://digitalehandwerkskunst.de/seminare\n\nFreundliche Grüße\nWebschmiede",
+      "reply_html": "<p>Guten Tag,</p><p><a href=\"https://digitalehandwerkskunst.de/seminare\" style=\"color:#FF6600;\">Seminare & Anmeldung</a></p><p>Freundliche Grüße<br>Webschmiede</p>"
+    },
+    {
+      "id": "dsgvo",
+      "label": "Datenschutz",
+      "keywords": ["datenschutz", "dsgvo", "cookies", "tracking", "personenbezogen"],
+      "subject": "Datenschutz — Webschmiede",
+      "reply_text": "Guten Tag,\n\nInformationen zum Datenschutz:\n\nhttps://digitalehandwerkskunst.de/datenschutz\n\nWir setzen auf Hosting in Deutschland, Bunny Fonts (kein Google Tracking) und eigenes CRM ohne Drittanbieter-CRM.\n\nFreundliche Grüße\nWebschmiede",
+      "reply_html": "<p>Guten Tag,</p><p><a href=\"https://digitalehandwerkskunst.de/datenschutz\" style=\"color:#FF6600;\">Datenschutzerklärung</a></p><p>Hosting DE · Bunny Fonts · kein Tracking-Cookie-Banner nötig für reine Info-Seiten.</p><p>Freundliche Grüße<br>Webschmiede</p>"
+    },
+    {
+      "id": "zahlung",
+      "label": "Zahlung & Rechnung",
+      "keywords": ["zahlung", "bezahlen", "rechnung", "stripe", "überweisung", "abo", "monatsbeitrag"],
+      "subject": "Zahlung & Abrechnung — Webschmiede",
+      "reply_text": "Guten Tag,\n\nZahlung erfolgt sicher über Stripe (Karte/SEPA). Nach Zahlung erhalten Sie automatisch Zugangsdaten und Onboarding-Link.\n\nFragen zu einer konkreten Rechnung? Antworten Sie mit Firmenname — wir prüfen das.\n\nFreundliche Grüße\nWebschmiede",
+      "reply_html": "<p>Guten Tag,</p><p>Zahlung sicher über <strong>Stripe</strong>. Nach Zahlung: automatisches Onboarding + Zugangsdaten.</p><p>Rechnungsfragen? Firmenname mitteilen — wir prüfen das.</p><p>Freundliche Grüße<br>Webschmiede</p>"
+    }
+  ]
+}

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0F14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Jay">
+  <link rel="icon" type="image/png" href="/ci/webschmiede-logo-mark.png">
+  <title>Jay · Jarvis</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.bunny.net/css?family=sora:500;600;700|dm-sans:400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B0F14;
+      --panel: #121821;
+      --line: rgba(255,255,255,.08);
+      --ink: #F4F7FB;
+      --muted: #8B95A7;
+      --orange: #FF6600;
+      --ok: #22c55e;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-t: env(safe-area-inset-top, 0px);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%; height: 100dvh; background: var(--bg); color: var(--ink);
+      font-family: "DM Sans", system-ui, sans-serif; overscroll-behavior: none;
+    }
+    button, select { font: inherit; color: inherit; }
+    .hidden { display: none !important; }
+
+    #login, #app {
+      min-height: 100%; min-height: 100dvh; display: flex; flex-direction: column;
+      max-width: 480px; margin: 0 auto;
+    }
+    #login { justify-content: center; padding: 24px; }
+    .card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 24px;
+    }
+    .card h1 { font-family: Sora, sans-serif; font-size: 1.5rem; margin-bottom: 6px; }
+    .card p { color: var(--muted); font-size: 0.9rem; line-height: 1.45; margin-bottom: 16px; }
+    input[type=password] {
+      width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--line);
+      background: #0B0F14; color: var(--ink); margin-bottom: 12px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 18px; border-radius: 999px; border: 1px solid var(--line);
+      background: #1a2230; font-weight: 600; cursor: pointer;
+    }
+    .btn-primary { background: var(--orange); border-color: var(--orange); color: #fff; width: 100%; }
+    .btn:disabled { opacity: .5; }
+
+    header {
+      padding: 12px 16px; padding-top: max(12px, var(--safe-t));
+      display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--line);
+    }
+    .mark {
+      width: 42px; height: 42px; border-radius: 50%; background: var(--orange);
+      display: grid; place-items: center; font-family: Sora, sans-serif; font-weight: 700;
+    }
+    header h1 { font-family: Sora, sans-serif; font-size: 1.1rem; }
+    header p { font-size: 0.75rem; color: var(--ok); }
+    header .spacer { flex: 1; }
+
+    .stage {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 20px 16px; gap: 18px; position: relative;
+    }
+    .orb-wrap {
+      width: min(260px, 70vw); height: min(260px, 70vw); position: relative;
+      display: grid; place-items: center;
+    }
+    .orb {
+      width: 58%; height: 58%; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffb070, var(--orange) 45%, #9a3200 100%);
+      box-shadow: 0 0 40px rgba(255,102,0,.35), inset 0 -10px 30px rgba(0,0,0,.25);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .orb.idle { animation: breathe 3.2s ease-in-out infinite; }
+    .orb.user { box-shadow: 0 0 55px rgba(255,102,0,.55); }
+    .orb.agent {
+      box-shadow: 0 0 70px rgba(255,160,60,.7);
+      animation: pulse 1s ease-in-out infinite;
+    }
+    .ring {
+      position: absolute; inset: 8%; border-radius: 50%;
+      border: 1px solid rgba(255,102,0,.25);
+      animation: spin 12s linear infinite;
+    }
+    .ring2 { inset: 0; border-color: rgba(255,255,255,.08); animation-duration: 18s; animation-direction: reverse; }
+    @keyframes breathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status {
+      font-family: Sora, sans-serif; font-size: 0.95rem; color: var(--muted); text-align: center; min-height: 1.4em;
+    }
+    .status.live { color: var(--ink); }
+
+    .controls { width: 100%; padding: 0 16px 8px; display: grid; gap: 10px; }
+    .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    label.field { display: block; font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+    label.field select {
+      width: 100%; margin-top: 6px; padding: 12px; border-radius: 12px;
+      border: 1px solid var(--line); background: var(--panel); appearance: none;
+    }
+    .talk-row { display: flex; gap: 10px; align-items: center; justify-content: center; padding: 8px 0 4px; }
+    .talk {
+      width: 88px; height: 88px; border-radius: 50%; border: 0; cursor: pointer;
+      background: var(--orange); color: #fff; font-family: Sora, sans-serif; font-weight: 700; font-size: 0.95rem;
+      box-shadow: 0 12px 30px rgba(255,102,0,.35);
+    }
+    .talk.on { background: #b91c1c; box-shadow: 0 12px 30px rgba(185,28,28,.35); }
+    .mute {
+      width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line);
+      background: var(--panel); cursor: pointer; font-size: 0.75rem; font-weight: 600;
+    }
+    .footer {
+      padding: 8px 16px calc(14px + var(--safe-b)); text-align: center;
+      font-size: 0.72rem; color: var(--muted);
+    }
+    #err { color: #fca5a5; text-align: center; font-size: 0.85rem; padding: 0 16px 8px; min-height: 1.2em; }
+    .cost-box {
+      margin: 0 16px 8px; padding: 12px 14px; border-radius: 12px;
+      border: 1px solid rgba(255,102,0,.35); background: rgba(255,102,0,.08);
+      font-size: 0.82rem; line-height: 1.45; color: var(--ink);
+    }
+    .cost-box label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; margin-top: 10px; }
+    .cost-box input { margin-top: 3px; accent-color: var(--orange); }
+    .budget { font-size: 0.72rem; color: var(--muted); margin-top: 8px; }
+    .timer {
+      font-family: Sora, sans-serif; font-size: 0.85rem; color: var(--orange);
+      text-align: center; min-height: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+<div id="login">
+  <div class="card">
+    <h1>Jay</h1>
+    <p>Jarvis auf dem Handy. Gespräche kosten Retell-Minuten. Agency-Login nötig.</p>
+    <input id="pw" type="password" placeholder="Agency-Passwort" autocomplete="current-password">
+    <button type="button" class="btn btn-primary" id="login-btn">Rein</button>
+    <p id="login-err" class="hidden" style="color:#fca5a5;margin-top:10px;font-size:.85rem;"></p>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <div class="mark">J</div>
+    <div>
+      <h1>Jay</h1>
+      <p id="presence">bereit</p>
+    </div>
+    <div class="spacer"></div>
+    <button type="button" class="btn" id="logout-btn" style="padding:8px 12px;font-size:.8rem">Raus</button>
+  </header>
+
+  <div class="stage">
+    <div class="orb-wrap">
+      <div class="ring ring2"></div>
+      <div class="ring"></div>
+      <div class="orb idle" id="orb"></div>
+    </div>
+    <div class="status" id="status">Stimme wählen, Kosten bestätigen, dann Start</div>
+    <div class="timer" id="timer"></div>
+  </div>
+
+  <div class="cost-box" id="cost-box">
+    <div id="cost-text">Retell-Minuten kosten Geld. Typisch 2–3 Minuten pro Gespräch.</div>
+    <label>
+      <input type="checkbox" id="confirm-cost">
+      <span>Ich weiß, dass Minuten kosten. Gespräch starten.</span>
+    </label>
+    <div class="budget" id="budget"></div>
+  </div>
+
+  <div class="controls">
+    <div class="grid3">
+      <label class="field">Stimme
+        <select id="voice"></select>
+      </label>
+      <label class="field">Persönlichkeit
+        <select id="personality"></select>
+      </label>
+      <label class="field">Akzent / Stil
+        <select id="style"></select>
+      </label>
+    </div>
+    <div class="talk-row">
+      <button type="button" class="mute" id="mute-btn" disabled>Mic</button>
+      <button type="button" class="talk" id="talk-btn">Start</button>
+      <button type="button" class="mute" id="end-btn" disabled>Ende</button>
+    </div>
+  </div>
+  <p id="err"></p>
+  <div class="footer">Max. 3 Min./Gespräch · Tagesbudget · Agency only · by Webschmiede</div>
+</div>
+
+<script src="/agency-auth.js"></script>
+<script type="module">
+import { RetellWebClient } from "https://esm.sh/retell-client-js-sdk@2.0.7";
+
+let client = null;
+let inCall = false;
+let muted = false;
+let catalog = null;
+let maxCallSeconds = 180;
+let callStartedAt = 0;
+let timerIv = null;
+
+const $ = (id) => document.getElementById(id);
+const getPw = () => window.AgencyAuth.getToken();
+
+function setStatus(t, live) {
+  const el = $("status");
+  el.textContent = t;
+  el.classList.toggle("live", !!live);
+}
+function setPresence(t) { $("presence").textContent = t; }
+function setOrb(mode) {
+  const o = $("orb");
+  o.classList.remove("idle", "user", "agent");
+  o.classList.add(mode || "idle");
+}
+function showErr(msg) { $("err").textContent = msg || ""; }
+
+function fmtSec(s) {
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return m + ":" + String(r).padStart(2, "0");
+}
+
+function updateBudgetUi() {
+  const lim = catalog?.limits || {};
+  const use = catalog?.usage || {};
+  maxCallSeconds = lim.max_call_seconds || 180;
+  $("cost-text").textContent = catalog?.cost_warning
+    || ("Retell kostet ca. 0,15–0,20 $/Min. Max. " + Math.floor(maxCallSeconds / 60) + " Min. pro Gespräch.");
+  const rem = use.seconds_remaining_today;
+  const day = lim.daily_max_seconds;
+  if (typeof rem === "number" && day) {
+    $("budget").textContent =
+      "Heute noch ca. " + Math.floor(rem / 60) + " von " + Math.floor(day / 60) + " Min. Budget.";
+  } else {
+    $("budget").textContent = "";
+  }
+}
+
+function stopTimer() {
+  if (timerIv) clearInterval(timerIv);
+  timerIv = null;
+  $("timer").textContent = "";
+}
+
+function startTimer(maxSec) {
+  stopTimer();
+  callStartedAt = Date.now();
+  const tick = () => {
+    const elapsed = Math.floor((Date.now() - callStartedAt) / 1000);
+    const left = Math.max(0, maxSec - elapsed);
+    $("timer").textContent = "Noch " + fmtSec(left);
+    if (left <= 0) {
+      showErr("Zeitlimit erreicht.");
+      endCall();
+    }
+  };
+  tick();
+  timerIv = setInterval(tick, 500);
+}
+
+async function api(path, opts = {}) {
+  const r = await fetch(path, {
+    ...opts,
+    credentials: "same-origin",
+    headers: {
+      ...window.AgencyAuth.headers(),
+      ...(opts.headers || {}),
+    },
+  });
+  const d = await r.json().catch(() => ({}));
+  if (r.status === 401) {
+    logout();
+    throw new Error("Passwort / Sitzung");
+  }
+  if (!r.ok) throw new Error(d.error || ("Fehler " + r.status));
+  return d;
+}
+
+function fillSelect(sel, items, defId) {
+  sel.innerHTML = items.map(i =>
+    `<option value="${i.id}"${i.id === defId ? " selected" : ""}>${i.label}${i.tag ? " · " + i.tag : ""}</option>`
+  ).join("");
+}
+
+async function loadCatalog() {
+  catalog = await api("/api/jay/catalog");
+  fillSelect($("voice"), catalog.voices, catalog.default_voice);
+  fillSelect($("personality"), catalog.personalities, catalog.default_personality);
+  fillSelect($("style"), catalog.styles, catalog.default_style);
+  updateBudgetUi();
+  if (!catalog.agent_ready) {
+    showErr("Jay-Agent noch nicht auf Retell. setup_jay_retell.py einmal laufen lassen.");
+  }
+}
+
+async function startCall() {
+  if (inCall) return;
+  showErr("");
+  if (!$("confirm-cost").checked) {
+    showErr("Erst den Kosten-Haken setzen.");
+    return;
+  }
+  $("talk-btn").disabled = true;
+  setStatus("Verbinde…", true);
+  setPresence("verbindet");
+  try {
+    const session = await api("/api/jay/session", {
+      method: "POST",
+      body: JSON.stringify({
+        voice: $("voice").value,
+        personality: $("personality").value,
+        style: $("style").value,
+        confirm_cost: true,
+      }),
+    });
+    if (!session.ok || !session.access_token) {
+      throw new Error(session.error || "Kein Token");
+    }
+    if (session.usage) {
+      catalog = catalog || {};
+      catalog.usage = session.usage;
+      updateBudgetUi();
+    }
+    const callMax = session.max_call_seconds || maxCallSeconds;
+
+    client = new RetellWebClient();
+    client.on("call_started", () => {
+      inCall = true;
+      $("talk-btn").textContent = "Live";
+      $("talk-btn").classList.add("on");
+      $("talk-btn").disabled = true;
+      $("end-btn").disabled = false;
+      $("mute-btn").disabled = false;
+      $("voice").disabled = true;
+      $("personality").disabled = true;
+      $("style").disabled = true;
+      $("confirm-cost").disabled = true;
+      setStatus("Jay hört zu. Einfach sprechen.", true);
+      setPresence("im Gespräch");
+      setOrb("idle");
+      startTimer(callMax);
+    });
+    client.on("call_ended", () => resetCallUi("Gespräch beendet."));
+    client.on("error", (e) => {
+      showErr(typeof e === "string" ? e : "Verbindungsfehler");
+      resetCallUi("Fehler. Nochmal starten.");
+    });
+    client.on("agent_start_talking", () => {
+      setOrb("agent");
+      setStatus("Jay spricht…", true);
+    });
+    client.on("agent_stop_talking", () => {
+      setOrb("idle");
+      setStatus("Dein Turn. Einfach weiterreden.", true);
+    });
+    client.on("update", (u) => { void u; });
+
+    await client.startCall({
+      accessToken: session.access_token,
+      emitRawAudioSamples: false,
+    });
+    try { await client.startAudioPlayback(); } catch (_) {}
+  } catch (e) {
+    showErr(e.message || String(e));
+    resetCallUi("Bereit.");
+  } finally {
+    if (!inCall) $("talk-btn").disabled = false;
+  }
+}
+
+function resetCallUi(msg) {
+  inCall = false;
+  muted = false;
+  stopTimer();
+  try { client && client.stopCall(); } catch (_) {}
+  client = null;
+  $("talk-btn").textContent = "Start";
+  $("talk-btn").classList.remove("on");
+  $("talk-btn").disabled = false;
+  $("end-btn").disabled = true;
+  $("mute-btn").disabled = true;
+  $("mute-btn").textContent = "Mic";
+  $("voice").disabled = false;
+  $("personality").disabled = false;
+  $("style").disabled = false;
+  $("confirm-cost").disabled = false;
+  setOrb("idle");
+  setPresence("bereit");
+  setStatus(msg || "Bereit.");
+  loadCatalog().catch(() => {});
+}
+
+function endCall() {
+  try { client && client.stopCall(); } catch (_) {}
+  resetCallUi("Beendet. Jederzeit neu starten.");
+}
+
+function toggleMute() {
+  if (!client || !inCall) return;
+  muted = !muted;
+  try { client.mute(muted); } catch (_) {}
+  $("mute-btn").textContent = muted ? "Stumm" : "Mic";
+  setStatus(muted ? "Mikro stumm." : "Mikro an.", true);
+}
+
+async function testLogin(pw) {
+  try {
+    await window.AgencyAuth.login("", pw);
+    const r = await fetch("/api/jay/catalog", {
+      headers: window.AgencyAuth.headers(),
+      credentials: "same-origin",
+    });
+    return r.ok;
+  } catch (_) {
+    return false;
+  }
+}
+
+function showApp() {
+  $("login").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  loadCatalog().catch(e => showErr(e.message));
+}
+async function logout() {
+  await window.AgencyAuth.logout();
+  endCall();
+  $("login").classList.remove("hidden");
+  $("app").classList.add("hidden");
+}
+
+$("login-btn").onclick = async () => {
+  const pw = $("pw").value;
+  const err = $("login-err");
+  err.classList.add("hidden");
+  if (!pw) return;
+  $("login-btn").disabled = true;
+  const ok = await testLogin(pw);
+  $("login-btn").disabled = false;
+  if (ok) {
+    showApp();
+  } else {
+    err.textContent = "Passwort falsch oder Server offline.";
+    err.classList.remove("hidden");
+  }
+};
+$("pw").onkeydown = (e) => { if (e.key === "Enter") $("login-btn").click(); };
+$("logout-btn").onclick = logout;
+$("talk-btn").onclick = startCall;
+$("end-btn").onclick = endCall;
+$("mute-btn").onclick = toggleMute;
+
+if (getPw()) {
+  fetch("/api/jay/catalog", { headers: window.AgencyAuth.headers(), credentials: "same-origin" })
+    .then((r) => { if (r.ok) showApp(); else window.AgencyAuth.clear(); })
+    .catch(() => window.AgencyAuth.clear());
+}
+</script>
+</body>
+</html>

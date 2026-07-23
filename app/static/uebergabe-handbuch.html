@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/ci/webschmiede-logo-mark.png">
+  <title>Betriebs-Handbuch · WebSchmiede</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    :root {
+      --orange: #FF6600;
+      --orange-dark: #E55A00;
+      --orange-soft: #FFF4ED;
+      --ink: #1A1A1A;
+      --muted: #666;
+      --border: #E8E8E8;
+      --paper: #FAFAFA;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: #E8E8E8;
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    a { color: var(--orange); }
+
+    .toolbar {
+      position: sticky; top: 0; z-index: 40;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px 18px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .toolbar-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .toolbar-left .logo-h {
+      height: 42px; width: auto; max-width: 180px;
+      object-fit: contain; display: block; flex-shrink: 0;
+    }
+    .toolbar-left p {
+      font-size: 0.82rem; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      border-left: 1px solid var(--border); padding-left: 12px;
+    }
+    .toolbar-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      height: 42px; padding: 0 16px; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 700; font-family: inherit;
+      border: 1px solid var(--border); background: #fff; color: var(--ink);
+      cursor: pointer; text-decoration: none; box-sizing: border-box;
+    }
+    .btn-primary { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .btn-primary:hover { background: var(--orange-dark); }
+    .btn:disabled { opacity: .65; cursor: wait; }
+
+    .stage { padding: 20px 12px 48px; }
+    .sheet {
+      max-width: 210mm;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 8px 40px rgba(0,0,0,.12);
+    }
+    .page {
+      padding: 14mm 16mm 12mm;
+      position: relative;
+    }
+    .page + .page { border-top: 1px dashed #ddd; }
+    .page-break { page-break-before: always; break-before: page; }
+
+    .cover {
+      text-align: center;
+      padding: 4mm 0 8mm;
+      border-bottom: 3px solid var(--orange);
+      margin-bottom: 8mm;
+    }
+    .cover-badge {
+      display: inline-block;
+      background: var(--orange); color: #fff;
+      font-weight: 700; font-size: 9pt;
+      padding: 6px 14px; border-radius: 99px;
+      letter-spacing: .08em; text-transform: uppercase;
+      margin: 14px 0 12px;
+    }
+    .cover .logo-h {
+      width: 100%;
+      max-width: 420px;
+      height: auto;
+      object-fit: contain;
+      display: block; margin: 0 auto;
+    }
+    .cover h1 {
+      font-size: 20pt; font-weight: 700; line-height: 1.2;
+      margin-bottom: 6px; color: var(--ink);
+      display: inline-block; /* für Breiten-Abgleich mit Logo */
+    }
+    .cover .sub { color: var(--muted); font-size: 11.5pt; margin-bottom: 4px; }
+    .cover .intro {
+      max-width: 440px; margin: 12px auto 0;
+      font-size: 10.5pt; color: #444; line-height: 1.55;
+    }
+    .meta-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+      max-width: 460px; margin: 16px auto 0; text-align: left;
+    }
+    .meta-grid div {
+      background: var(--paper); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px; font-size: 10pt;
+    }
+    .meta-grid strong {
+      display: block; font-size: 7.5pt; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--muted); margin-bottom: 2px;
+    }
+
+    h2 {
+      font-size: 13.5pt; font-weight: 700;
+      margin: 0 0 10px; padding-bottom: 6px;
+      border-bottom: 2px solid var(--orange-soft); color: var(--ink);
+    }
+    h3 { font-size: 11pt; font-weight: 700; margin: 14px 0 8px; color: #333; }
+    p { font-size: 10.5pt; color: #444; margin-bottom: 8px; }
+
+    .flow {
+      counter-reset: step;
+      list-style: none; margin: 10px 0 4px;
+    }
+    .flow li {
+      counter-increment: step;
+      position: relative;
+      padding: 10px 12px 10px 44px;
+      margin-bottom: 8px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      border-left: 3px solid var(--orange);
+      break-inside: avoid;
+    }
+    .flow li::before {
+      content: counter(step);
+      position: absolute; left: 10px; top: 10px;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--orange); color: #fff;
+      font-size: 10pt; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .pipeline {
+      display: flex; flex-wrap: wrap; align-items: stretch; gap: 0;
+      margin: 12px 0 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--paper);
+    }
+    .pipeline .step {
+      flex: 1 1 70px;
+      min-width: 72px;
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 8.5pt; font-weight: 700; color: var(--ink);
+      line-height: 1.25;
+      position: relative;
+      border-right: 1px solid var(--border);
+    }
+    .pipeline .step:last-child { border-right: none; }
+    .pipeline .step span {
+      display: block;
+      width: 22px; height: 22px; margin: 0 auto 6px;
+      border-radius: 50%;
+      background: var(--orange); color: #fff;
+      font-size: 9pt; line-height: 22px;
+    }
+    .msg-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      background: #fff;
+      break-inside: avoid;
+    }
+    .msg-card .meta {
+      font-size: 8pt; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--orange); margin-bottom: 4px;
+    }
+    .msg-card .ch {
+      font-size: 9.5pt; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+    }
+    .msg-card .tx { font-size: 10pt; color: #444; margin: 0; }
+    .point-list { margin: 8px 0 12px; }
+    .point-list .pt {
+      border-left: 3px solid var(--orange);
+      padding: 8px 10px 8px 12px;
+      margin-bottom: 8px;
+      background: var(--paper);
+      border-radius: 0 10px 10px 0;
+      break-inside: avoid;
+    }
+    .point-list .pt strong { display: block; font-size: 10.5pt; margin-bottom: 2px; color: var(--ink); }
+    .point-list .pt p { margin: 0; font-size: 10pt; }
+    .flow strong { display: block; font-size: 10.5pt; color: var(--ink); margin-bottom: 2px; }
+    .flow span { font-size: 9.5pt; color: var(--muted); }
+
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 14px; font-size: 9.5pt; }
+    th {
+      background: var(--orange); color: #fff;
+      text-align: left; padding: 9px 10px; font-weight: 600; font-size: 8.5pt;
+    }
+    td {
+      padding: 8px 10px; border-bottom: 1px solid var(--border);
+      vertical-align: top; color: #333;
+    }
+    tr:nth-child(even) td { background: #FAFAFA; }
+    .url { font-size: 8pt; color: var(--muted); word-break: break-all; }
+
+    .tip-box {
+      background: var(--orange-soft);
+      border: 1px solid #FFD4B8;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 10px 0 14px;
+    }
+    .tip-box p { margin: 0 0 6px; font-size: 10pt; }
+    .tip-box p:last-child { margin: 0; }
+
+    .cheat {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0 14px;
+    }
+    .cheat div {
+      background: #fff;
+      border: 1.5px solid var(--ink);
+      border-radius: 10px;
+      padding: 12px;
+      break-inside: avoid;
+    }
+    .cheat .q { font-size: 7.5pt; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 4px; }
+    .cheat .a { font-size: 9.5pt; font-weight: 600; word-break: break-all; }
+
+    .notes {
+      min-height: 55mm;
+      border: 1.5px dashed #ccc;
+      border-radius: 10px;
+      background: repeating-linear-gradient(
+        transparent, transparent 27px,
+        #eee 27px, #eee 28px
+      );
+      margin-top: 8px;
+    }
+
+    .footer-doc {
+      margin-top: 14px; padding-top: 10px;
+      border-top: 1px solid var(--border);
+      text-align: center; font-size: 8pt; color: var(--muted); line-height: 1.6;
+    }
+    .footer-doc .logo-h {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      object-fit: contain;
+      display: block; margin: 0 auto 14px;
+    }
+
+    .center-box { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .hidden { display: none !important; }
+    .err-panel {
+      max-width: 420px; text-align: center; background: #fff;
+      border: 1px solid var(--border); border-radius: 14px; padding: 24px;
+    }
+
+    .overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(26,26,26,.72);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .overlay-card {
+      background: #fff; border-radius: 16px; padding: 28px 24px;
+      max-width: 360px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+    .overlay-card h2 { font-size: 1.15rem; border: none; margin-bottom: 8px; }
+    .spinner {
+      width: 36px; height: 36px; margin: 0 auto 14px;
+      border: 3px solid #FFE0CC; border-top-color: var(--orange);
+      border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media print {
+      body { background: #fff; }
+      .no-print { display: none !important; }
+      .stage { padding: 0; }
+      .sheet { box-shadow: none; max-width: none; }
+      .page { padding: 10mm 12mm; }
+      .page + .page { border-top: none; }
+      .page-break { page-break-before: always; }
+    }
+    @media (max-width: 640px) {
+      .cheat { grid-template-columns: 1fr; }
+      .meta-grid { grid-template-columns: 1fr; }
+      .toolbar-left p { display: none; }
+      .toolbar-left .logo-h { height: 42px; max-width: 160px; }
+      .cover .logo-h { max-width: 100%; }
+      .footer-doc .logo-h { max-width: 280px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading" class="center-box no-print"><p style="color:var(--muted)">Handbuch wird geladen …</p></div>
+
+  <div id="err" class="hidden center-box no-print">
+    <div class="err-panel">
+      <img src="/ci/webschmiede-logo.png" alt="WebSchmiede" style="height:40px;margin:0 auto 12px;display:block;">
+      <p style="font-size:0.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:8px;">WebSchmiede</p>
+      <h1 style="font-size:1.2rem;margin-bottom:8px;">Handbuch nicht gefunden</h1>
+      <p style="color:var(--muted);font-size:0.9rem;">In der URL fehlt die Projekt-ID, z.&nbsp;B. <code>?k=SHY001</code>.</p>
+    </div>
+  </div>
+
+  <div id="dl-overlay" class="overlay hidden no-print">
+    <div class="overlay-card">
+      <div class="spinner" id="dl-spinner"></div>
+      <h2 id="dl-title">PDF wird erstellt …</h2>
+      <p id="dl-msg" style="color:var(--muted);font-size:0.9rem;margin-top:6px;">Einen Moment. Danach startet der Download.</p>
+      <button type="button" class="btn btn-primary" id="dl-again" style="margin-top:16px;display:none;" onclick="downloadPdf()">Nochmal herunterladen</button>
+    </div>
+  </div>
+
+  <div id="app" class="hidden">
+    <div class="toolbar no-print">
+      <div class="toolbar-left">
+        <img class="logo-h" src="/ci/webschmiede-logo.png" alt="WebSchmiede">
+        <p id="toolbar-label">Betriebs-Handbuch</p>
+      </div>
+      <div class="toolbar-actions">
+        <a class="btn" id="link-onboarding" href="#">Zum Onboarding</a>
+        <button type="button" class="btn" onclick="window.print()">Drucken</button>
+        <button type="button" class="btn btn-primary" id="btn-pdf" onclick="downloadPdf()">PDF herunterladen</button>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="sheet" id="pdf-root">
+        <div class="page">
+          <div class="cover">
+            <img class="logo-h" id="cover-logo" src="/ci/webschmiede-logo.png" alt="WebSchmiede · Digitale Handwerkskunst">
+            <div class="cover-badge">Betriebs-Handbuch</div>
+            <h1 id="title">–</h1>
+            <p class="sub" id="subtitle">–</p>
+            <p class="intro" id="intro">–</p>
+            <div class="meta-grid">
+              <div><strong>Inhaber</strong><span id="meta-inhaber">–</span></div>
+              <div><strong>Projekt</strong><span id="meta-id">–</span></div>
+              <div><strong>Stand</strong><span id="meta-date">–</span></div>
+              <div><strong>Von</strong>WebSchmiede · Digitale Handwerkskunst</div>
+            </div>
+          </div>
+
+          <h2>1. So läuft eine Bestellung</h2>
+          <p>Vom Scan bis zum Follow-up. Einmal lesen, dann liegt das Heft neben dem Gerät.</p>
+          <div class="pipeline" id="order-pipeline"></div>
+          <ol class="flow" id="daily-flow"></ol>
+        </div>
+
+        <div class="page page-break">
+          <h2>2. Was der Gast bekommt</h2>
+          <p>Das schreibt das System (wenn E-Mail/SMS aktiv sind). Sie müssen die Texte nicht tippen.</p>
+          <div id="guest-messages"></div>
+
+          <h2>3. Follow-up und Stammkunden</h2>
+          <div class="point-list" id="followup"></div>
+        </div>
+
+        <div class="page page-break">
+          <h2>4. Google: Profil, Sterne, Ranking</h2>
+          <p id="google-intro"></p>
+          <div class="point-list" id="google-points"></div>
+
+          <h2>5. Warum das mehr Umsatz bringt</h2>
+          <p id="value-intro"></p>
+          <div class="point-list" id="value-points"></div>
+        </div>
+
+        <div class="page page-break">
+          <h2>6. Ihre wichtigen Links</h2>
+          <table>
+            <thead><tr><th>Seite</th><th>Wofür</th><th>Adresse</th></tr></thead>
+            <tbody id="guest-pages"></tbody>
+          </table>
+
+          <h2>7. Admin-Dashboard</h2>
+          <p>Hier arbeiten Sie. Das Passwort bekommen Sie separat, nicht in diesem PDF.</p>
+          <p class="url" id="admin-url" style="margin-bottom:10px;"></p>
+          <table>
+            <thead><tr><th>Bereich</th><th>Was Sie damit machen</th></tr></thead>
+            <tbody id="admin-tabs"></tbody>
+          </table>
+
+          <h2>8. Häufige Aufgaben</h2>
+          <table>
+            <thead><tr><th>Aufgabe</th><th>So geht’s</th></tr></thead>
+            <tbody id="howto"></tbody>
+          </table>
+        </div>
+
+        <div class="page page-break">
+          <h2>9. Spickzettel (für den Schreibtisch)</h2>
+          <div class="cheat" id="cheat-sheet"></div>
+
+          <div class="tip-box">
+            <p style="font-weight:700;color:var(--ink);margin-bottom:8px;">Kurze Tipps</p>
+            <div id="tips"></div>
+          </div>
+
+          <h2>10. Zugänge</h2>
+          <table>
+            <thead><tr><th>Was</th><th>Wo / Wie</th></tr></thead>
+            <tbody id="access"></tbody>
+          </table>
+
+          <h2>11. Eigene Notizen</h2>
+          <p>Platz für Passwort-Hinweis (nicht das Passwort selbst), Öffnungszeiten oder Absprachen mit der Küche.</p>
+          <div class="notes"></div>
+
+          <div class="footer-doc">
+            <img class="logo-h" src="/ci/webschmiede-logo.png" alt="WebSchmiede">
+            Christian Kummetat · +49 177 8011350 · info@digitalehandwerkskunst.de<br>
+            www.digitalehandwerkskunst.de
+            <span id="footer-shop"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const kid = (params.get('k') || params.get('id') || '').toUpperCase().trim();
+    const wantDl = params.get('dl') === '1' || params.get('download') === '1';
+    let pdfFilename = 'Betriebs-Handbuch-WebSchmiede.pdf';
+    let pdfBusy = false;
+
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function monthDe() {
+      return new Date().toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+    }
+
+    async function downloadPdf() {
+      if (pdfBusy || typeof html2pdf === 'undefined') {
+        if (typeof html2pdf === 'undefined') window.print();
+        return;
+      }
+      pdfBusy = true;
+      const overlay = document.getElementById('dl-overlay');
+      const spinner = document.getElementById('dl-spinner');
+      const title = document.getElementById('dl-title');
+      const msg = document.getElementById('dl-msg');
+      const again = document.getElementById('dl-again');
+      const btn = document.getElementById('btn-pdf');
+      overlay.classList.remove('hidden');
+      spinner.style.display = 'block';
+      title.textContent = 'PDF wird erstellt …';
+      msg.textContent = 'Einen Moment. Danach startet der Download.';
+      again.style.display = 'none';
+      if (btn) btn.disabled = true;
+
+      try {
+        const el = document.getElementById('pdf-root');
+        await html2pdf().set({
+          margin: [8, 8, 8, 8],
+          filename: pdfFilename,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['css', 'legacy'], avoid: ['.flow li', 'tr', '.cheat div', '.tip-box', '.msg-card', '.pt', '.pipeline'] },
+        }).from(el).save();
+
+        title.textContent = 'PDF ist fertig';
+        msg.textContent = 'Die Datei liegt in Ihren Downloads. Ausdrucken und neben den Rechner legen.';
+        spinner.style.display = 'none';
+        again.style.display = 'inline-flex';
+        setTimeout(() => {
+          if (!again.matches(':hover')) overlay.classList.add('hidden');
+        }, 2800);
+      } catch (e) {
+        title.textContent = 'Download hat nicht geklappt';
+        msg.textContent = 'Nutzen Sie „Drucken“ und wählen Sie „Als PDF speichern“.';
+        spinner.style.display = 'none';
+        again.style.display = 'inline-flex';
+        again.textContent = 'Nochmal versuchen';
+      } finally {
+        pdfBusy = false;
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    async function load() {
+      if (!kid) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('err').classList.remove('hidden');
+        return;
+      }
+      try {
+        const r = await fetch('/api/onboarding/' + encodeURIComponent(kid));
+        if (!r.ok) throw new Error('404');
+        const d = await r.json();
+        const h = d.handbook || {};
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+
+        document.title = (h.title || 'Handbuch') + ' · WebSchmiede';
+        document.getElementById('title').textContent = h.title || ('Handbuch · ' + (d.name || ''));
+        document.getElementById('subtitle').textContent = h.subtitle || 'Kurzanleitung für den Alltag';
+        document.getElementById('intro').textContent = h.intro || '';
+        document.getElementById('toolbar-label').textContent = d.name ? ('für ' + d.name) : 'Betriebs-Handbuch';
+        // Logo oben: so breit wie die Überschrift „Betriebs-Handbuch …“
+        requestAnimationFrame(() => {
+          const titleEl = document.getElementById('title');
+          const logoEl = document.getElementById('cover-logo');
+          if (titleEl && logoEl) {
+            const w = Math.ceil(titleEl.getBoundingClientRect().width);
+            if (w > 120) {
+              logoEl.style.width = w + 'px';
+              logoEl.style.maxWidth = '100%';
+              logoEl.style.height = 'auto';
+            }
+          }
+        });
+        document.getElementById('meta-inhaber').textContent = d.inhaber || d.name || '–';
+        document.getElementById('meta-id').textContent = d.id || kid;
+        document.getElementById('meta-date').textContent = monthDe();
+        pdfFilename = (h.pdf_filename || ('Handbuch-' + (d.id || kid) + '.pdf')).replace(/[^\w.\-ÄÖÜäöüß]+/g, '_');
+
+        const ob = (d.urls && d.urls.onboarding) || ('/onboarding?k=' + encodeURIComponent(kid));
+        document.getElementById('link-onboarding').href = ob;
+
+        document.getElementById('daily-flow').innerHTML = (h.daily_flow || []).map(s =>
+          `<li><strong>${esc(s.title)}</strong><span>${esc(s.text)}</span></li>`
+        ).join('');
+
+        const pipe = h.order_pipeline || [];
+        document.getElementById('order-pipeline').innerHTML = pipe.map((s, i) =>
+          `<div class="step"><span>${i + 1}</span>${esc(s.label)}</div>`
+        ).join('');
+        document.getElementById('order-pipeline').style.display = pipe.length ? '' : 'none';
+
+        const msgs = h.guest_messages || [];
+        const msgBox = document.getElementById('guest-messages');
+        if (msgs.length) {
+          msgBox.innerHTML = msgs.map(m => `
+            <div class="msg-card">
+              <div class="meta">${esc(m.when)}</div>
+              <div class="ch">${esc(m.channel)}</div>
+              <p class="tx">${esc(m.text)}</p>
+            </div>`).join('');
+        } else {
+          msgBox.innerHTML = '<p>Für diese Branche gelten die Meldungen aus dem Portal. Details mit WebSchmiede absprechen.</p>';
+        }
+
+        document.getElementById('followup').innerHTML = (h.followup || []).map(p => `
+          <div class="pt"><strong>${esc(p.title)}</strong><p>${esc(p.text)}</p></div>`
+        ).join('') || '<p>Follow-up nach Absprache.</p>';
+
+        const g = h.google || {};
+        document.getElementById('google-intro').textContent = g.intro || '';
+        document.getElementById('google-points').innerHTML = (g.points || []).map(p => `
+          <div class="pt"><strong>${esc(p.title)}</strong><p>${esc(p.text)}</p></div>`
+        ).join('');
+
+        const v = h.value || {};
+        document.getElementById('value-intro').textContent = v.intro || '';
+        document.getElementById('value-points').innerHTML = (v.points || []).map(p => `
+          <div class="pt"><strong>${esc(p.title)}</strong><p>${esc(p.text)}</p></div>`
+        ).join('');
+
+        document.getElementById('guest-pages').innerHTML = (h.guest_pages || []).map(row => `
+          <tr>
+            <td><strong>${esc(row.label)}</strong></td>
+            <td>${esc(row.benefit)}</td>
+            <td class="url">${esc(row.url || '–')}</td>
+          </tr>`).join('');
+
+        const admin = (h.access || []).find(a => /admin/i.test(a.label || ''));
+        document.getElementById('admin-url').textContent = admin ? admin.value : ((d.urls && d.urls.admin) || '');
+
+        document.getElementById('admin-tabs').innerHTML = (h.admin_tabs || []).map(row =>
+          `<tr><td><strong>${esc(row.label)}</strong></td><td>${esc(row.desc)}</td></tr>`
+        ).join('');
+
+        document.getElementById('howto').innerHTML = (h.howto || []).map(row =>
+          `<tr><td><strong>${esc(row.task)}</strong></td><td>${esc(row.how)}</td></tr>`
+        ).join('');
+
+        document.getElementById('cheat-sheet').innerHTML = (h.cheat_sheet || []).map(row =>
+          `<div><div class="q">${esc(row.q)}</div><div class="a">${esc(row.a)}</div></div>`
+        ).join('');
+
+        document.getElementById('tips').innerHTML = (h.tips || []).map(t =>
+          `<p>• ${esc(t)}</p>`
+        ).join('');
+
+        document.getElementById('access').innerHTML = (h.access || []).map(row => {
+          const val = row.value || '';
+          return `<tr><td><strong>${esc(row.label)}</strong></td><td class="${/^https?:/i.test(val) ? 'url' : ''}">${esc(val)}</td></tr>`;
+        }).join('');
+
+        const shop = d.name || '';
+        const addr = (d.kontakt && d.kontakt.adresse) || '';
+        document.getElementById('footer-shop').innerHTML = shop
+          ? `<br>${esc(shop)}${addr ? ' · ' + esc(addr) : ''}`
+          : '';
+
+        if (wantDl) setTimeout(downloadPdf, 450);
+      } catch (e) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('err').classList.remove('hidden');
+      }
+    }
+    load();
+  </script>
+</body>
+</html>

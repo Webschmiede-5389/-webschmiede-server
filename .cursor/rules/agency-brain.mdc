@@ -1,0 +1,24 @@
+---
+description: Agency-Hirn Pflicht – jede Nachricht ueber Routing
+alwaysApply: true
+---
+
+# Agency-Hirn (eingestellt / scharf)
+
+## Pflicht bei jeder User-Nachricht
+
+1. **Zuerst** `.cursor/brain-routing.md` lesen (Hook schreibt sie bei Send).
+2. Wenn Datei fehlt oder veraltet: sofort  
+   `python scripts/agency_brain_cli.py "<User-Nachricht>"` ausführen.
+3. `summary` + Playbook abarbeiten (Stefan, Nils, Scout, … in der Reihenfolge).
+4. Cursor-Skills (texter/design/lektor) laut Playbook nachziehen.
+
+## Ausnahme (Hirn überspringen)
+
+Nur bei reinen Einwort-/Bestätigungen (ok, ja, danke) oder wenn der User explizit sagt „ohne Hirn“ / „direkt Nils“.
+
+## Grenzen
+
+- Kein Auto-Send an Kunden
+- Keine Käufe ohne Christians OK
+- Hook blockiert den Chat nie (`continue: true`)

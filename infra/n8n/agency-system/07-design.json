@@ -1,0 +1,140 @@
+{
+  "name": "Agency 07 – Kreativ/Design",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-07-design",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "07-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "agency-07-design"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/router",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.CRON_SECRET}}"
+            },
+            {
+              "name": "X-Agency-Password",
+              "value": "={{$env.AGENCY_ADMIN_PASSWORD}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: ($json.body && ($json.body.message || $json.body.text)) || $json.message || 'Starte design', force_agent: 'design' })"
+      },
+      "id": "07-http",
+      "name": "Agency API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json;\nreturn [{ json: { ok: true, workflow: 'design', note: \"Cursor Skill design. Bild-API nur nach Christians OK.\", result: j } }];"
+      },
+      "id": "07-pack",
+      "name": "Ergebnis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "07-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        660,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Agency API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agency API": {
+      "main": [
+        [
+          {
+            "node": "Ergebnis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ergebnis": {
+      "main": [
+        [
+          {
+            "node": "Antwort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "notes": "Cursor Skill design. Bild-API nur nach Christians OK."
+  },
+  "tags": [
+    {
+      "name": "agency"
+    },
+    {
+      "name": "system-13"
+    },
+    {
+      "name": "design"
+    }
+  ]
+}

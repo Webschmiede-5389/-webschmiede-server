@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/ci/webschmiede-logo-mark.png" sizes="32x32">
+  <title>Agency Admin – Webschmiede</title>
+  <meta name="robots" content="noindex, nofollow">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { gold: '#FF6600', card: '#FFFFFF', border: '#E8E8E8', muted: '#666666', ink: '#1A1A1A' } } }
+    }
+  </script>
+  <style>
+    :root { --orange: #FF6600; --orange-soft: #FFF4ED; --sidebar-w: 15.5rem; }
+    body { background: #F5F5F5; color: #1A1A1A; font-family: 'Inter', sans-serif; }
+    input, textarea, select { background: #fff; border: 1px solid #E0E0E0; border-radius: 8px; padding: 10px 12px; width: 100%; color: #1A1A1A; font-size: 14px; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #FF6600; }
+    .panel { background: #fff; border: 1px solid #E8E8E8; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    .btn-gold { background: #FF6600; color: #fff; font-weight: 600; }
+    .btn-gold:hover { background: #E55A00; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid #EEEEEE; text-align: left; }
+    th { color: #888; font-weight: 500; }
+    .badge-auto { background: #22c55e; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; }
+    .badge-pending { background: #FF6600; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; }
+    .badge-urgent { background: #e74c3c; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; }
+    .badge-ignored { background: #444; color: #ccc; font-size: 10px; padding: 2px 8px; border-radius: 99px; }
+    .badge-done { background: #3498db; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; }
+    .progress-bar { height: 5px; background: #EEEEEE; border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #FF6600; border-radius: 99px; transition: width .3s; }
+    .chip-on { background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; font-size: 11px; padding: 4px 10px; border-radius: 99px; }
+    .chip-off { background: #F9FAFB; color: #888; border: 1px solid #E5E7EB; font-size: 11px; padding: 4px 10px; border-radius: 99px; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .modal-box { background: #fff; border-radius: 14px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.15); }
+    .chat-wrap { display: flex; flex-direction: column; height: min(560px, calc(100vh - 12rem)); }
+    .chat-msgs { flex: 1; overflow-y: auto; padding: 12px; background: #FAFAFA; border: 1px solid #EEE; border-radius: 10px; margin-bottom: 10px; }
+    .chat-bubble { max-width: 88%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; margin-bottom: 8px; white-space: pre-wrap; }
+    .chat-user { margin-left: auto; background: #FF6600; color: #fff; border-bottom-right-radius: 4px; }
+    .chat-bot { background: #fff; border: 1px solid #E8E8E8; border-bottom-left-radius: 4px; }
+    .chat-bot strong { color: #FF6600; font-weight: 600; }
+    .mic-active { background: #FEE2E2 !important; border-color: #EF4444 !important; color: #EF4444 !important; animation: pulse-mic 1s infinite; }
+    @keyframes pulse-mic { 50% { opacity: .7; } }
+    /* Sidebar CRM layout */
+    #app { display: flex; min-height: 100vh; max-width: none; margin: 0; padding: 0; }
+    .sidebar { width: var(--sidebar-w); background: #fff; border-right: 1px solid #E8E8E8; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; }
+    .nav-section { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #999; padding: 1rem 1rem .35rem; }
+    .nav-item { display: flex; align-items: center; gap: .65rem; width: 100%; text-align: left; padding: .6rem .85rem; margin: 0 .5rem; width: calc(100% - 1rem); border-radius: 8px; font-size: 13px; font-weight: 500; color: #555; border: none; background: transparent; cursor: pointer; transition: background .12s, color .12s; }
+    .nav-item:hover { background: #FAFAFA; color: #1A1A1A; }
+    .nav-item.active { background: var(--orange-soft); color: var(--orange); }
+    .nav-item .nav-badge { margin-left: auto; background: var(--orange); color: #fff; font-size: 10px; font-weight: 700; min-width: 1.25rem; height: 1.25rem; border-radius: 99px; display: flex; align-items: center; justify-content: center; padding: 0 5px; }
+    .main-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .topbar { height: 3.5rem; background: #fff; border-bottom: 1px solid #E8E8E8; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; flex-shrink: 0; }
+    .main-content { flex: 1; overflow: auto; padding: 1.5rem; }
+    .kpi-card { padding: 1rem 1.15rem; }
+    .kpi-value { font-size: 1.75rem; font-weight: 700; line-height: 1.1; color: #1A1A1A; }
+    .kpi-label { font-size: 12px; color: #888; margin-top: .25rem; }
+    .kunde-row { display: block; width: 100%; text-align: left; padding: .75rem; border-radius: 8px; border: 1px solid transparent; background: transparent; cursor: pointer; transition: background .12s, border-color .12s; }
+    .kunde-row:hover { background: #FAFAFA; }
+    .kunde-row.selected { background: var(--orange-soft); border-color: #FFD4B8; }
+    .clients-layout { display: grid; grid-template-columns: minmax(240px, 280px) 1fr; gap: 1rem; min-height: calc(100vh - 8rem); }
+    .pipeline-board { display: grid; grid-template-columns: repeat(4, minmax(200px, 1fr)); gap: .75rem; min-height: calc(100vh - 8rem); align-items: start; }
+    .pipeline-col { background: #FAFAFA; border: 1px solid #E8E8E8; border-radius: 12px; display: flex; flex-direction: column; max-height: calc(100vh - 8rem); }
+    .pipeline-col-head { padding: .75rem 1rem; border-bottom: 1px solid #E8E8E8; background: #fff; border-radius: 12px 12px 0 0; flex-shrink: 0; }
+    .pipeline-col-body { flex: 1; overflow-y: auto; padding: .5rem; min-height: 120px; transition: background .15s; }
+    .pipeline-col-body.drag-over { background: var(--orange-soft); outline: 2px dashed #FF6600; outline-offset: -4px; border-radius: 0 0 12px 12px; }
+    .pipe-card { background: #fff; border: 1px solid #E8E8E8; border-radius: 10px; padding: .75rem; margin-bottom: .5rem; cursor: grab; box-shadow: 0 1px 2px rgba(0,0,0,.04); transition: box-shadow .12s, border-color .12s; }
+    .pipe-card:hover { border-color: #FFD4B8; box-shadow: 0 2px 8px rgba(255,102,0,.08); }
+    .pipe-card.dragging { opacity: .45; cursor: grabbing; }
+    .pipe-card-email { cursor: pointer; border-left: 3px solid #FF6600; background: #FFFAF7; }
+    .pipe-card-email:hover { border-color: #FF6600; }
+    .pipe-count { font-size: 11px; font-weight: 700; color: #999; background: #F0F0F0; padding: 2px 8px; border-radius: 99px; }
+    @media (max-width: 1100px) {
+      .pipeline-board { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .clients-layout { grid-template-columns: 1fr; }
+      .clients-list-panel { max-height: 220px; overflow-y: auto; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div id="login-screen" class="min-h-screen flex items-center justify-center px-4">
+    <div class="panel p-8 w-full max-w-sm text-center">
+      <img src="/ci/webschmiede-logo-mark.png" alt="" class="h-20 w-20 mx-auto mb-3 object-contain" aria-hidden="true">
+      <p class="text-xl font-bold text-ink leading-tight">WebSchmiede</p>
+      <p class="text-sm font-medium text-gold mb-4">Digitale Handwerkskunst</p>
+      <h1 class="text-sm font-semibold mb-6 text-muted">Agency Admin</h1>
+      <div id="login-form">
+        <label class="text-muted text-xs block mb-1 text-left">Benutzername</label>
+        <input type="text" id="login-user" class="mb-3" placeholder="christian" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+        <label class="text-muted text-xs block mb-1 text-left">Passwort</label>
+        <input type="password" id="login-pw" class="mb-3" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        <div id="login-totp-wrap" class="hidden">
+          <label class="text-muted text-xs block mb-1 text-left">2FA-Code</label>
+          <input type="text" id="login-totp" class="mb-3" inputmode="numeric" autocomplete="one-time-code" placeholder="6 Ziffern" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <button type="button" onclick="doLogin()" class="btn-gold w-full py-2.5 rounded-lg text-sm">Anmelden</button>
+        <button type="button" onclick="showForgot()" class="text-xs text-gold mt-3 underline">Passwort vergessen</button>
+      </div>
+      <div id="forgot-form" class="hidden text-left">
+        <label class="text-muted text-xs block mb-1">Benutzername oder E-Mail</label>
+        <input type="text" id="forgot-q" class="mb-3" placeholder="christian oder mail@…">
+        <button type="button" onclick="doForgot()" class="btn-gold w-full py-2.5 rounded-lg text-sm">Reset-Link senden</button>
+        <button type="button" onclick="showLoginForm()" class="text-xs text-muted mt-3 underline">Zurück</button>
+      </div>
+      <div id="reset-form" class="hidden text-left">
+        <label class="text-muted text-xs block mb-1">Neues Passwort (min. 10 Zeichen)</label>
+        <input type="password" id="reset-pw" class="mb-3" autocomplete="new-password">
+        <button type="button" onclick="doReset()" class="btn-gold w-full py-2.5 rounded-lg text-sm">Passwort speichern</button>
+      </div>
+      <p id="login-err" class="text-red-400 text-xs mt-3 hidden"></p>
+      <p id="login-ok" class="text-green-600 text-xs mt-3 hidden"></p>
+    </div>
+  </div>
+
+  <div id="app" class="hidden">
+    <aside class="sidebar">
+      <div class="px-4 py-4 border-b border-border">
+        <div class="flex items-center gap-2.5 mb-2">
+          <img src="/ci/webschmiede-logo-mark.png" alt="" class="h-10 w-10 object-contain shrink-0" aria-hidden="true">
+          <div class="min-w-0 leading-tight">
+            <p class="text-sm font-bold text-ink">WebSchmiede</p>
+            <p class="text-[11px] font-medium text-gold">Digitale Handwerkskunst</p>
+          </div>
+        </div>
+        <p class="text-[10px] font-semibold text-muted uppercase tracking-wider">Agency Cockpit</p>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-2">
+        <button type="button" id="nav-home" class="nav-item active" onclick="showTab('home')"><i class="fa-solid fa-gauge-high w-4"></i> Übersicht</button>
+        <p class="nav-section">CRM</p>
+        <button type="button" id="nav-pipeline" class="nav-item" onclick="showTab('pipeline')"><i class="fa-solid fa-columns w-4"></i> Pipeline</button>
+        <button type="button" id="nav-kunden" class="nav-item" onclick="showTab('kunden')"><i class="fa-solid fa-building w-4"></i> Kunden</button>
+        <button type="button" id="nav-jarvis" class="nav-item" onclick="showTab('jarvis')"><i class="fa-solid fa-robot w-4"></i> Jarvis</button>
+        <p class="nav-section">Kommunikation</p>
+        <button type="button" id="nav-inbox" class="nav-item" onclick="showTab('inbox')"><i class="fa-solid fa-inbox w-4"></i> Posteingang <span id="nav-inbox-badge" class="nav-badge hidden">0</span></button>
+        <p class="nav-section">System</p>
+        <button type="button" id="nav-ops" class="nav-item" onclick="showTab('ops')"><i class="fa-solid fa-heart-pulse w-4"></i> Betrieb <span id="nav-ops-badge" class="nav-badge hidden">!</span></button>
+        <p class="nav-section">Finanzen</p>
+        <button type="button" id="nav-kalkulator" class="nav-item" onclick="showTab('kalkulator')"><i class="fa-solid fa-calculator w-4"></i> Kalkulator</button>
+        <button type="button" id="nav-abrechnung" class="nav-item" onclick="showTab('abrechnung')"><i class="fa-solid fa-credit-card w-4"></i> Abrechnung</button>
+      </nav>
+      <div class="p-3 border-t border-border space-y-1">
+        <a href="/agency-setup" class="nav-item !mx-0 !w-full"><i class="fa-solid fa-sliders w-4"></i> Setup</a>
+        <button type="button" onclick="logout()" class="nav-item !mx-0 !w-full text-muted"><i class="fa-solid fa-right-from-bracket w-4"></i> Abmelden</button>
+      </div>
+    </aside>
+
+    <div class="main-col">
+      <header class="topbar">
+        <h1 id="page-title" class="text-lg font-semibold text-ink">Übersicht</h1>
+        <div id="topbar-actions" class="flex gap-2 hidden">
+          <button onclick="openNewKundeModal()" class="btn-gold px-4 py-2 rounded-lg text-sm"><i class="fa-solid fa-plus"></i> Neuer Kunde</button>
+        </div>
+      </header>
+
+      <main class="main-content">
+
+    <div id="panel-home">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="dash-kpis"></div>
+      <div class="grid lg:grid-cols-3 gap-6 mb-6">
+        <section class="panel p-5 lg:col-span-2">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-semibold text-sm">Kunden</h2>
+            <button onclick="showTab('pipeline')" class="text-xs text-gold font-medium">Pipeline →</button>
+          </div>
+          <div id="dash-kunden-list" class="text-sm text-muted">Lade…</div>
+        </section>
+        <section class="panel p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-semibold text-sm">Posteingang heute</h2>
+            <button onclick="showTab('inbox')" class="text-xs text-gold font-medium">Öffnen →</button>
+          </div>
+          <div id="dash-inbox-summary" class="text-sm text-muted">Lade…</div>
+        </section>
+      </div>
+        <section class="panel p-5">
+          <h2 class="font-semibold text-sm mb-3">Server-Automationen</h2>
+          <div id="dash-automations" class="flex flex-wrap gap-2 text-xs"></div>
+          <a href="https://cal.digitalehandwerkskunst.de/christian/erstgespraech" target="_blank" rel="noopener"
+             class="inline-flex mt-4 text-sm text-gold font-medium">
+            <i class="fa-solid fa-calendar mr-2"></i> Cal.com Termine öffnen →
+          </a>
+        </section>
+    </div>
+
+    <div id="panel-pipeline" class="hidden">
+      <p class="text-xs text-muted mb-4">Karten zwischen Spalten ziehen · Klick öffnet Kunden-Detail</p>
+      <div id="pipeline-board" class="pipeline-board"></div>
+    </div>
+
+    <div id="panel-kunden" class="hidden">
+      <div class="clients-layout">
+        <aside class="panel p-3 clients-list-panel flex flex-col">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <p class="text-xs font-semibold text-muted uppercase tracking-wide">Accounts</p>
+            <span id="kunden-count" class="text-xs text-muted"></span>
+          </div>
+          <div id="kunden-list" class="flex-1 overflow-y-auto space-y-1 text-sm">Lade…</div>
+        </aside>
+        <div class="panel p-5 overflow-y-auto">
+          <div id="kunde-detail-empty" class="flex flex-col items-center justify-center text-center py-16 text-muted">
+            <i class="fa-solid fa-building text-4xl mb-4 opacity-20"></i>
+            <p class="font-medium text-ink mb-1">Kunde auswählen</p>
+            <p class="text-xs max-w-xs">Links einen Account wählen. Rechts erscheinen Details, Aktionen und Fortschritt.</p>
+          </div>
+          <div id="kunde-detail" class="hidden"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-jarvis" class="hidden">
+      <section class="panel p-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <p class="text-muted text-xs">Assistent · Sprache oder Text</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="jarvis-kunde" class="!w-auto text-sm min-w-[200px]" onchange="onJarvisKundeChange()">
+              <option value="">– Global (Agency) –</option>
+            </select>
+            <label class="text-xs text-muted flex items-center gap-1 cursor-pointer">
+              <input type="checkbox" id="jarvis-speak" checked> Vorlesen
+            </label>
+          </div>
+        </div>
+        <div id="jarvis-context" class="text-xs mb-3 px-3 py-2 rounded-lg border border-border bg-[#FFF4ED]/60 text-muted"></div>
+        <div class="chat-wrap">
+          <div id="jarvis-msgs" class="chat-msgs"></div>
+          <div id="jarvis-actions" class="flex flex-wrap gap-2 mb-2"></div>
+          <div class="flex gap-2">
+            <button type="button" id="jarvis-mic" onclick="toggleVoice()" class="px-3 py-2.5 rounded-lg border border-border text-muted hover:border-gold" title="Spracheingabe"><i class="fa-solid fa-microphone"></i></button>
+            <input id="jarvis-input" class="flex-1" placeholder="z.B. Status · Angebot senden · Subdomain SSL…" onkeydown="if(event.key==='Enter')sendJarvis()">
+            <button type="button" onclick="sendJarvis()" class="btn-gold px-4 py-2.5 rounded-lg text-sm">Senden</button>
+          </div>
+          <p id="jarvis-voice-hint" class="text-xs text-muted mt-2 hidden">Hört zu… (Chrome/Edge, Mikrofon erlauben)</p>
+        </div>
+      </section>
+    </div>
+
+    <div id="panel-inbox" class="hidden">
+      <section class="panel p-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <p class="text-muted text-xs">Auto-Antworten · Abend-Digest 18:00 · Export</p>
+          <div class="flex flex-wrap gap-2">
+            <select id="inbox-filter-day" class="!w-auto text-sm" onchange="loadInbox()">
+              <option value="today">Heute</option>
+              <option value="all">Alle</option>
+            </select>
+            <select id="inbox-filter-status" class="!w-auto text-sm" onchange="loadInbox()">
+              <option value="">Alle Status</option>
+              <option value="pending">Manuell offen</option>
+              <option value="urgent">Dringend</option>
+              <option value="auto">Auto beantwortet</option>
+              <option value="manual_done">Erledigt</option>
+              <option value="ignored">Ignoriert</option>
+            </select>
+            <a id="inbox-export" href="#" class="text-sm text-gold px-3 py-2 border border-border rounded-lg">CSV</a>
+          </div>
+        </div>
+        <div id="inbox-stats" class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4 text-center text-xs"></div>
+        <div id="inbox-table" class="text-muted text-sm overflow-x-auto">Lade…</div>
+      </section>
+    </div>
+
+    <div id="panel-kalkulator" class="hidden">
+      <section class="panel p-5 mb-4">
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+          <div>
+            <h2 class="font-semibold">B2B-Preis-Kalkulator</h2>
+            <p class="text-muted text-xs mt-1">High-End-Pakete (Standard) oder Bausteine · Firmen-Faktor · Laufzeit · netto zzgl. 19&nbsp;% MwSt.</p>
+          </div>
+          <p id="kalk-status" class="text-xs text-muted"></p>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-5" id="kalk-modes">
+          <button type="button" id="kalk-mode-pakete" onclick="setKalkMode('pakete')" class="px-4 py-2 rounded-lg text-sm border border-gold bg-[#FFF4ED] font-semibold">Pakete · High-End</button>
+          <button type="button" id="kalk-mode-bausteine" onclick="setKalkMode('bausteine')" class="px-4 py-2 rounded-lg text-sm border border-border">Bausteine · modular</button>
+        </div>
+        <p id="kalk-notes" class="text-[11px] text-muted mb-4 hidden"></p>
+        <div class="grid lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 space-y-5">
+            <div>
+              <label class="text-muted text-xs font-semibold uppercase tracking-wide">Kundentyp / Firma</label>
+              <div id="kalk-firmen" class="mt-2 grid sm:grid-cols-3 gap-2"></div>
+            </div>
+
+            <div id="kalk-block-pakete" class="space-y-5">
+              <div>
+                <label class="text-muted text-xs font-semibold uppercase tracking-wide">Kern-Setup (Einmal)</label>
+                <div id="kalk-kern" class="mt-2"></div>
+              </div>
+              <div>
+                <label class="text-muted text-xs font-semibold uppercase tracking-wide">Betreuungs-Paket (Monat)</label>
+                <div id="kalk-pakete" class="mt-2 space-y-2"></div>
+              </div>
+              <div>
+                <label class="text-muted text-xs font-semibold uppercase tracking-wide">API-Call Staffel (Monat)</label>
+                <div id="kalk-api" class="mt-2 space-y-2"></div>
+              </div>
+              <div>
+                <label class="text-muted text-xs font-semibold uppercase tracking-wide">Zusatz (außerhalb Retainer)</label>
+                <div id="kalk-zusatz" class="mt-2 space-y-2"></div>
+              </div>
+            </div>
+
+            <div id="kalk-block-bausteine" class="space-y-5 hidden">
+              <div>
+                <label class="text-muted text-xs font-semibold uppercase tracking-wide">Setup-Bausteine (Einmal)</label>
+                <div id="kalk-setup" class="mt-2 space-y-2"></div>
+              </div>
+              <div>
+                <label class="text-muted text-xs font-semibold uppercase tracking-wide">Retainer-Bausteine (Monat)</label>
+                <div id="kalk-retainer" class="mt-2 space-y-2"></div>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-muted text-xs font-semibold uppercase tracking-wide">Laufzeit (Retainer-Rabatt)</label>
+              <div id="kalk-laufzeit" class="mt-2 grid sm:grid-cols-3 gap-2"></div>
+            </div>
+          </div>
+          <div>
+            <div class="rounded-xl border border-border bg-[#FFFBF7] p-4 sticky top-20">
+              <h3 class="font-semibold text-sm mb-3">Zusammenfassung</h3>
+              <dl id="kalk-summary" class="text-sm space-y-2"></dl>
+              <button type="button" onclick="copyKalkOffer()" class="btn-gold w-full mt-4 px-4 py-2.5 rounded-lg text-sm">
+                <i class="fa-solid fa-copy"></i> Angebotstext kopieren
+              </button>
+              <p id="kalk-copy-msg" class="text-xs text-muted mt-2 hidden"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="panel-abrechnung" class="hidden">
+      <section class="panel p-5 max-w-3xl">
+        <h2 class="font-semibold mb-1">Stripe Checkout</h2>
+        <p class="text-muted text-xs mb-4">Einmalzahlung + monatliches Abo · nach Zahlung Auto-Onboarding</p>
+        <div class="grid sm:grid-cols-2 gap-3 mb-4">
+          <div><label class="text-muted text-xs">Kunde</label><select id="bill-kunde"></select></div>
+          <div><label class="text-muted text-xs">Paket</label><select id="bill-pkg"><option value="pro">Pro (1980 + 500/Mo)</option><option value="starter">Starter (998 + 298/Mo)</option></select></div>
+          <div class="sm:col-span-2"><label class="text-muted text-xs">E-Mail (optional)</label><input id="bill-email" placeholder="Standard aus kunden.json"></div>
+        </div>
+        <button onclick="createCheckout()" class="btn-gold px-5 py-2.5 rounded-lg text-sm">Zahlungslink erstellen</button>
+        <p id="bill-msg" class="text-sm mt-3 hidden"></p>
+        <a id="bill-link" href="#" target="_blank" rel="noopener" class="hidden text-sm text-gold mt-2 inline-block break-all"></a>
+      </section>
+    </div>
+
+    <div id="panel-ops" class="hidden">
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <span id="ops-server-badge" class="text-xs font-bold px-3 py-1.5 rounded-full bg-[#FFF4ED] text-gold">Lade…</span>
+        <button type="button" onclick="loadOps()" class="text-sm px-3 py-2 rounded-lg border border-border hover:border-gold"><i class="fa-solid fa-rotate"></i> Aktualisieren</button>
+        <a href="/agency-setup" class="text-sm text-gold">Setup / Keys →</a>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 mb-6" id="ops-kpis"></div>
+      <div class="grid lg:grid-cols-2 gap-6 mb-6">
+        <section class="panel p-5">
+          <h2 class="font-semibold text-sm mb-3">Server</h2>
+          <div id="ops-server-detail" class="text-sm text-muted space-y-1">Lade…</div>
+        </section>
+        <section class="panel p-5">
+          <h2 class="font-semibold text-sm mb-3">Backups</h2>
+          <div id="ops-backup-detail" class="text-sm text-muted space-y-1">Lade…</div>
+        </section>
+      </div>
+      <section class="panel p-5 mb-6">
+        <h2 class="font-semibold text-sm mb-3">Kunden-Health</h2>
+        <div id="ops-clients" class="space-y-3 text-sm">Lade…</div>
+      </section>
+      <section class="panel p-5">
+        <h2 class="font-semibold text-sm mb-3">Letzte Events</h2>
+        <div id="ops-events" class="text-xs text-muted font-mono overflow-x-auto">Lade…</div>
+      </section>
+      <p id="ops-err" class="text-sm text-red-600 mt-3 hidden"></p>
+    </div>
+
+      </main>
+    </div>
+  </div>
+
+  <div id="modal-new-kunde" class="modal-backdrop hidden" onclick="if(event.target===this)closeNewKundeModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div id="nk-step1">
+        <h3 class="font-bold text-lg mb-4">Neuer Kunde</h3>
+        <form id="new-kunde-form" onsubmit="createKunde(event)" class="grid gap-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="text-muted text-xs">Kunden-ID *</label><input id="nk-id" required placeholder="SHY002"></div>
+            <div><label class="text-muted text-xs">Subdomain *</label><input id="nk-subdomain" required placeholder="z.B. pizzeria-roma"></div>
+          </div>
+          <div><label class="text-muted text-xs">Betriebsname *</label><input id="nk-name" required oninput="suggestSubdomain()"></div>
+          <div><label class="text-muted text-xs">Inhaber</label><input id="nk-inhaber"></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="text-muted text-xs">E-Mail</label><input id="nk-email" type="email"></div>
+            <div><label class="text-muted text-xs">Telefon</label><input id="nk-telefon"></div>
+          </div>
+          <div><label class="text-muted text-xs">Adresse</label><input id="nk-adresse"></div>
+          <div><label class="text-muted text-xs">Branche</label><select id="nk-branche"><option value="restaurant">Restaurant / Gastro</option><option value="handwerk">Handwerk</option><option value="sonstiges">Sonstiges</option></select></div>
+          <p class="text-xs text-muted">Nach dem Anlegen: Site vorbereiten → Subdomain → SSL (DNS: Wildcard * oder A-Record)</p>
+          <p id="nk-msg" class="text-sm hidden"></p>
+          <div class="flex gap-2 pt-2">
+            <button type="submit" class="btn-gold px-4 py-2 rounded-lg text-sm flex-1">Anlegen & weiter</button>
+            <button type="button" onclick="closeNewKundeModal()" class="px-4 py-2 rounded-lg text-sm border border-border text-muted">Abbrechen</button>
+          </div>
+        </form>
+      </div>
+      <div id="nk-step2" class="hidden">
+        <h3 class="font-bold text-lg mb-1">Einrichtung</h3>
+        <p class="text-muted text-sm mb-4"><span id="nk-setup-label"></span></p>
+        <div class="grid gap-2 mb-4">
+          <button type="button" onclick="wizardPrepareSite()" class="px-4 py-2.5 rounded-lg text-sm border border-border hover:border-gold text-left"><i class="fa-solid fa-folder-open text-gold"></i> 1. Site vorbereiten (Static → Webroot)</button>
+          <button type="button" onclick="wizardSubdomain(false)" class="px-4 py-2.5 rounded-lg text-sm border border-border hover:border-gold text-left"><i class="fa-solid fa-globe text-gold"></i> 2. Subdomain (nginx)</button>
+          <button type="button" onclick="wizardSubdomain(true)" class="px-4 py-2.5 rounded-lg text-sm border border-border hover:border-gold text-left"><i class="fa-solid fa-lock text-gold"></i> 3. Subdomain + SSL</button>
+        </div>
+        <p id="nk-setup-msg" class="text-sm hidden"></p>
+        <button type="button" onclick="finishWizard()" class="btn-gold w-full py-2.5 rounded-lg text-sm">Fertig · Kunde öffnen</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-offer" class="modal-backdrop hidden" onclick="if(event.target===this)closeOfferModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3 class="font-bold text-lg mb-1">Angebot senden</h3>
+      <p id="offer-kunde-name" class="text-muted text-sm mb-4"></p>
+      <form id="offer-form" onsubmit="sendOffer(event)" class="grid gap-3">
+        <div><label class="text-muted text-xs">Paket</label><select id="offer-pkg"><option value="pro">Pro · 1.980 € + 500 €/Mo</option><option value="starter">Starter · 998 € + 298 €/Mo</option></select></div>
+        <div><label class="text-muted text-xs">E-Mail (optional)</label><input id="offer-email" type="email" placeholder="Standard aus kunden.json"></div>
+        <div><label class="text-muted text-xs">Persönliche Notiz</label><textarea id="offer-note" rows="3" placeholder="z.B. Termin für Demo vorschlagen…"></textarea></div>
+        <p id="offer-msg" class="text-sm hidden"></p>
+        <div class="flex gap-2 pt-2">
+          <button type="submit" class="btn-gold px-4 py-2 rounded-lg text-sm flex-1">Per E-Mail senden</button>
+          <button type="button" onclick="closeOfferModal()" class="px-4 py-2 rounded-lg text-sm border border-border text-muted">Abbrechen</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/agency-auth.js"></script>
+  <script>
+    let kunden = [];
+    let selectedKundeId = null;
+    let kundeDetail = null;
+    let offerKundeId = null;
+    let wizardKundeId = null;
+    let jarvisPending = null;
+    let speechRec = null;
+    let micActive = false;
+
+    function getPw() { return AgencyAuth.getToken(); }
+    function hdr() { return AgencyAuth.headers(); }
+
+    const PAGE_TITLES = { home: 'Übersicht', pipeline: 'Pipeline', kunden: 'Kunden', jarvis: 'Jarvis', inbox: 'Posteingang', kalkulator: 'Kalkulator', abrechnung: 'Abrechnung', ops: 'Betrieb' };
+    let opsCache = null;
+    const PIPELINE_COLUMNS = [
+      { stage: 'lead', label: 'Lead', hint: 'Neu · Erstkontakt' },
+      { stage: 'angebot_gesendet', label: 'Angebot', hint: 'Angebot raus' },
+      { stage: 'test', label: 'Test / Setup', hint: 'Technik & Onboarding' },
+      { stage: 'live', label: 'Live', hint: 'Kunde aktiv' },
+    ];
+    let dragKundeId = null;
+    let pipeJustDragged = false;
+    let inboxStatsCache = {};
+    let emailLeads = [];
+
+    function showApp() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      showTab('home');
+      loadKunden();
+      loadGlobalAutomations();
+      loadInbox();
+      loadBillKunden();
+      updateExportLink();
+      loadOps(true);
+    }
+
+    async function loadOps(silent) {
+      const errEl = document.getElementById('ops-err');
+      if (errEl) errEl.classList.add('hidden');
+      try {
+        const r = await fetch('/api/agency/ops/overview', { headers: hdr() });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'HTTP ' + r.status);
+        opsCache = data;
+        renderOps(data);
+        updateOpsBadge(data);
+      } catch (e) {
+        if (!silent && errEl) {
+          errEl.textContent = e.message || 'Ops laden fehlgeschlagen';
+          errEl.classList.remove('hidden');
+        }
+      }
+    }
+
+    function updateOpsBadge(data) {
+      const badge = document.getElementById('nav-ops-badge');
+      if (!badge) return;
+      const bad = !(data?.server?.ok) || (data?.kunden || []).some(k => !k.ok);
+      badge.classList.toggle('hidden', !bad);
+    }
+
+    function renderOps(data) {
+      const srv = data.server || {};
+      const badge = document.getElementById('ops-server-badge');
+      if (badge) {
+        badge.textContent = srv.ok ? 'Server OK' : ('Achtung: ' + ((srv.issues || []).join(', ') || 'Prüfen'));
+        badge.className = 'text-xs font-bold px-3 py-1.5 rounded-full ' + (srv.ok ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700');
+      }
+      const k = data.kpis || {};
+      const kpis = document.getElementById('ops-kpis');
+      if (kpis) {
+        kpis.innerHTML = [
+          ['Bestellungen heute', k.orders_today],
+          ['Bestellungen 7d', k.orders_period],
+          ['SMS ok 7d', k.sms_sent],
+          ['SMS Fehler 7d', k.sms_failed],
+          ['Bot 7d', k.bot_messages],
+          ['Fehler 24h', k.events_error_24h],
+        ].map(([label, val]) => `<div class="panel kpi-card"><p class="kpi-value">${esc(val ?? '–')}</p><p class="kpi-label">${esc(label)}</p></div>`).join('');
+      }
+      const svc = srv.services || {};
+      const auto = srv.automations || {};
+      const sd = document.getElementById('ops-server-detail');
+      if (sd) {
+        sd.innerHTML = `
+          <p>snack-api: ${svc.snack_api ? '✓' : '✗'} · n8n: ${svc.n8n ? '✓' : '✗'} · nginx: ${svc.nginx ? '✓' : '✗'}</p>
+          <p>RAM: ${esc(srv.ram_percent ?? '–')}% · API: ${srv.api_health ? 'OK' : 'Fehler'}</p>
+          <p class="text-xs mt-2">SMS: ${auto.sms?.active ? 'aktiv' : 'aus'} · Follow-ups: ${auto.followups?.active ? 'aktiv' : 'aus'}</p>`;
+      }
+      const bk = srv.backup || {};
+      const off = bk.offsite || {};
+      const bd = document.getElementById('ops-backup-detail');
+      if (bd) {
+        bd.innerHTML = `
+          <p>Lokal heute: ${bk.ok ? '<span class="text-green-600 font-medium">OK</span>' : '<span class="text-red-600 font-medium">fehlt</span>'}</p>
+          <p class="text-xs">${esc(bk.detail || '')}</p>
+          <p class="mt-2">Off-Server: ${off.ok ? '<span class="text-green-600 font-medium">OK</span>' : '<span class="text-muted">–</span>'}</p>
+          <p class="text-xs">${esc(off.detail || 'In Agency Setup → Backup (Off-Server) eintragen')}</p>`;
+      }
+      const clients = document.getElementById('ops-clients');
+      if (clients) {
+        clients.innerHTML = (data.kunden || []).map(c => {
+          const checks = (c.checks || []).map(ch =>
+            `<p class="${ch.ok ? 'text-green-700' : 'text-red-600'}">${ch.ok ? '✓' : '✗'} ${esc(ch.label)}: ${esc(ch.detail)}</p>`
+          ).join('');
+          return `<div class="border border-border rounded-lg p-3">
+            <p class="font-semibold text-ink mb-1">${esc(c.name)} <span class="text-muted font-normal">(${esc(c.kid)})</span>
+            <span class="float-right text-xs ${c.ok ? 'text-green-600' : 'text-gold'}">${c.ok ? 'OK' : 'Hinweis'}</span></p>
+            ${checks}
+          </div>`;
+        }).join('') || '<p class="text-muted">Keine Kunden.</p>';
+      }
+      const ev = document.getElementById('ops-events');
+      if (ev) {
+        ev.innerHTML = (data.recent_events || []).slice(0, 12).map(e =>
+          `<div class="py-1 border-b border-border last:border-0">${esc(e.created_at)} · ${esc(e.category)}/${esc(e.action)} · ${esc(e.status)} ${esc(e.detail || '')}</div>`
+        ).join('') || 'Keine Events.';
+      }
+    }
+
+    function showTab(name) {
+      ['home', 'pipeline', 'kunden', 'jarvis', 'inbox', 'kalkulator', 'abrechnung', 'ops'].forEach(t => {
+        document.getElementById('panel-' + t)?.classList.toggle('hidden', name !== t);
+        document.getElementById('nav-' + t)?.classList.toggle('active', name === t);
+      });
+      const title = document.getElementById('page-title');
+      if (title) title.textContent = PAGE_TITLES[name] || '';
+      document.getElementById('topbar-actions')?.classList.toggle('hidden', !['kunden', 'pipeline'].includes(name));
+      if (name === 'home') renderDashboard();
+      if (name === 'pipeline') renderPipeline();
+      if (name === 'ops') loadOps();
+      if (name === 'kalkulator') loadKalkulator();
+      if (name === 'jarvis') {
+        syncJarvisKundeSelect();
+        updateJarvisContextBanner();
+        loadJarvisHistory();
+      }
+    }
+
+    function renderDashboard() {
+      const total = kunden.length;
+      const live = kunden.filter(k => k.status === 'live').length;
+      const pipeline = kunden.filter(k => ['lead', 'angebot_gesendet', 'neu'].includes(k.status)).length + emailLeads.length;
+      const avgProgress = total ? Math.round(kunden.reduce((s, k) => s + (k.progress_percent || 0), 0) / total) : 0;
+      const kpis = document.getElementById('dash-kpis');
+      if (kpis) {
+        kpis.innerHTML = [
+          ['Kunden', total, ''],
+          ['Live', live, 'text-green-600'],
+          ['Pipeline', pipeline, 'text-gold'],
+          ['Ø Onboarding', avgProgress + '%', ''],
+        ].map(([l, n, c]) => {
+          const click = l === 'Pipeline' ? ` onclick="showTab('pipeline')" style="cursor:pointer"` : '';
+          return `<div class="panel kpi-card${l === 'Pipeline' ? ' hover:border-gold' : ''}"${click}><p class="kpi-value ${c}">${n}</p><p class="kpi-label">${l}</p></div>`;
+        }).join('');
+      }
+      const list = document.getElementById('dash-kunden-list');
+      if (list) {
+        if (!kunden.length) list.innerHTML = '<p class="text-muted text-sm">Noch keine Kunden.</p>';
+        else list.innerHTML = kunden.slice(0, 5).map(k => `
+          <button type="button" class="w-full text-left flex items-center justify-between gap-3 py-2.5 border-b border-border last:border-0 hover:text-gold" onclick="showTab('kunden');selectKunde('${esc(k.id)}')">
+            <span><strong class="text-ink">${esc(k.name)}</strong><span class="text-xs text-muted block">${esc(k.id)}</span></span>
+            <span class="text-xs">${k.progress_percent || 0}% · ${esc(k.status || '')}</span>
+          </button>`).join('');
+      }
+      const inboxEl = document.getElementById('dash-inbox-summary');
+      if (inboxEl && inboxStatsCache) {
+        const st = inboxStatsCache;
+        inboxEl.innerHTML = `<div class="space-y-2 text-sm">
+          <p><span class="text-gold font-semibold">${st.pending || 0}</span> offen · <span class="text-red-500 font-semibold">${st.urgent || 0}</span> dringend</p>
+          <p class="text-muted text-xs">${st.auto || 0} auto · ${st.total || 0} gesamt heute</p>
+        </div>`;
+      }
+    }
+
+    function updateInboxBadge(st) {
+      const badge = document.getElementById('nav-inbox-badge');
+      if (!badge) return;
+      const n = (st?.pending || 0) + (st?.urgent || 0);
+      if (n > 0) { badge.textContent = n; badge.classList.remove('hidden'); }
+      else badge.classList.add('hidden');
+    }
+
+    function mdChat(s) {
+      return esc(s || '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    }
+
+    function getJarvisKundeId() {
+      const sel = document.getElementById('jarvis-kunde');
+      return sel ? sel.value : '';
+    }
+
+    function updateJarvisContextBanner() {
+      const el = document.getElementById('jarvis-context');
+      const input = document.getElementById('jarvis-input');
+      if (!el) return;
+      const kid = getJarvisKundeId();
+      if (kid) {
+        const k = kunden.find(x => x.id === kid);
+        el.innerHTML = `<strong class="text-gold">Kunden-Kontext:</strong> ${esc(k ? k.name : kid)} (${esc(kid)}). Aktionen gelten für diesen Kunden. Du bist weiterhin <strong>Agency-Inhaber</strong>, nicht im Kunden-Login.`;
+        if (input) input.placeholder = `Aktion für ${kid}: Status, Angebot, Subdomain…`;
+      } else {
+        el.innerHTML = '<strong class="text-gold">Agency-Modus (Global):</strong> Du bist als <strong>Webschmiede-Inhaber</strong> eingeloggt. Kein Kunden-Account. Wähle oben einen Kunden oder nenne z.B. <strong>SHY001</strong> im Text.';
+        if (input) input.placeholder = 'Global: Alle Kunden · Status SHY001 · Hilfe…';
+      }
+    }
+
+    function syncJarvisKundeSelect() {
+      const sel = document.getElementById('jarvis-kunde');
+      if (!sel) return;
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">– Global (Agency) –</option>' + kunden.map(k =>
+        `<option value="${esc(k.id)}">${esc(k.id)} · ${esc(k.name)}</option>`
+      ).join('');
+      if (cur && kunden.some(k => k.id === cur)) sel.value = cur;
+      else sel.value = '';
+      updateJarvisContextBanner();
+    }
+
+    function onJarvisKundeChange() {
+      jarvisPending = null;
+      updateJarvisContextBanner();
+      loadJarvisHistory();
+    }
+
+    function appendJarvisBubble(role, text) {
+      const box = document.getElementById('jarvis-msgs');
+      if (!box) return;
+      const div = document.createElement('div');
+      div.className = `chat-bubble ${role === 'user' ? 'chat-user' : 'chat-bot'}`;
+      div.innerHTML = role === 'user' ? esc(text) : mdChat(text);
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function renderJarvisActions(actions) {
+      const el = document.getElementById('jarvis-actions');
+      if (!el) return;
+      el.innerHTML = (actions || []).map((a, i) => {
+        if (a.type === 'confirm') return `<button type="button" class="btn-gold px-3 py-1.5 rounded-lg text-xs" onclick="confirmJarvis()">${esc(a.label)}</button>`;
+        if (a.type === 'cancel') return `<button type="button" class="px-3 py-1.5 rounded-lg text-xs border border-border" onclick="cancelJarvis()">${esc(a.label)}</button>`;
+        if (a.type === 'open_url' && a.url) return `<a href="${esc(a.url)}" target="_blank" class="text-xs text-gold px-3 py-1.5 border border-border rounded-lg">${esc(a.label)}</a>`;
+        if (a.type === 'quick') return `<button type="button" class="px-3 py-1.5 rounded-lg text-xs border border-border hover:border-gold" onclick="quickJarvis('${esc(a.message)}')">${esc(a.label)}</button>`;
+        return '';
+      }).join('');
+    }
+
+    async function loadJarvisHistory() {
+      const box = document.getElementById('jarvis-msgs');
+      if (!box) return;
+      const kid = getJarvisKundeId();
+      let url = '/api/agency/chat/history';
+      if (kid) url += `?kunde_id=${encodeURIComponent(kid)}`;
+      try {
+        const r = await fetch(url, { headers: hdr() });
+        const d = await r.json();
+        box.innerHTML = '';
+        const msgs = d.messages || [];
+        if (!msgs.length) {
+          const kid = getJarvisKundeId();
+          const welcome = kid
+            ? `Jarvis für **${kid}**. Sage **Status**, **Angebot senden** oder **Hilfe**.`
+            : '**Agency-Modus.** Du steuerst Kunden von hier, bist nicht in deren Account. Sage **Alle Kunden** oder wähle oben einen Kunden.';
+          appendJarvisBubble('assistant', welcome);
+          renderJarvisActions(kid
+            ? [{ type: 'quick', message: 'Status', label: 'Status' }, { type: 'quick', message: 'Hilfe', label: 'Hilfe' }]
+            : [{ type: 'quick', message: 'Alle Kunden', label: 'Kunden' }, { type: 'quick', message: 'Hilfe', label: 'Hilfe' }]);
+          return;
+        }
+        msgs.forEach(m => appendJarvisBubble(m.role === 'user' ? 'user' : 'assistant', m.body));
+        renderJarvisActions([]);
+      } catch (_) {
+        box.innerHTML = '<p class="text-red-400 text-sm">Chat-Verlauf nicht geladen.</p>';
+      }
+    }
+
+    function speakJarvis(text) {
+      if (!document.getElementById('jarvis-speak')?.checked || !window.speechSynthesis) return;
+      const plain = (text || '').replace(/\*\*/g, '');
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(plain);
+      u.lang = 'de-DE';
+      u.rate = 1.05;
+      window.speechSynthesis.speak(u);
+    }
+
+    async function sendJarvis(forcedMessage) {
+      const input = document.getElementById('jarvis-input');
+      const message = (forcedMessage || input.value || '').trim();
+      if (!message && !jarvisPending) return;
+      if (message) {
+        appendJarvisBubble('user', message);
+        if (input && !forcedMessage) input.value = '';
+      }
+      const body = {
+        message: message || 'ja',
+        kunde_id: getJarvisKundeId() || undefined,
+        pending: jarvisPending,
+        confirm: !message && jarvisPending ? true : undefined,
+      };
+      try {
+        const r = await fetch('/api/agency/chat', { method: 'POST', headers: hdr(), body: JSON.stringify(body) });
+        const d = await r.json();
+        if (!r.ok) {
+          appendJarvisBubble('assistant', d.error || 'Fehler');
+          return;
+        }
+        appendJarvisBubble('assistant', d.reply || 'OK');
+        jarvisPending = d.needs_confirm ? d.pending : null;
+        renderJarvisActions(d.actions || []);
+        speakJarvis(d.reply);
+        if (!d.needs_confirm && (d.reply || '').match(/gesendet|erstellt|live|gespeichert/i)) {
+          loadKunden();
+          if (selectedKundeId) loadKundeDetail(selectedKundeId);
+        }
+      } catch (_) {
+        appendJarvisBubble('assistant', 'Verbindungsfehler.');
+      }
+    }
+
+    function quickJarvis(msg) {
+      document.getElementById('jarvis-input').value = msg;
+      sendJarvis(msg);
+    }
+
+    function confirmJarvis() {
+      sendJarvis('Ja');
+    }
+
+    function cancelJarvis() {
+      jarvisPending = null;
+      appendJarvisBubble('assistant', 'Abgebrochen.');
+      renderJarvisActions([]);
+    }
+
+    function toggleVoice() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const mic = document.getElementById('jarvis-mic');
+      const hint = document.getElementById('jarvis-voice-hint');
+      if (!SpeechRecognition) {
+        appendJarvisBubble('assistant', 'Spracheingabe braucht Chrome oder Edge.');
+        return;
+      }
+      if (micActive && speechRec) {
+        speechRec.stop();
+        return;
+      }
+      speechRec = new SpeechRecognition();
+      speechRec.lang = 'de-DE';
+      speechRec.interimResults = false;
+      speechRec.onstart = () => {
+        micActive = true;
+        mic.classList.add('mic-active');
+        hint.classList.remove('hidden');
+      };
+      speechRec.onend = speechRec.onerror = () => {
+        micActive = false;
+        mic.classList.remove('mic-active');
+        hint.classList.add('hidden');
+      };
+      speechRec.onresult = (e) => {
+        const t = e.results[0][0].transcript;
+        document.getElementById('jarvis-input').value = t;
+        sendJarvis(t);
+      };
+      speechRec.start();
+    }
+
+    function openJarvisForKunde(id) {
+      showTab('jarvis');
+      const sel = document.getElementById('jarvis-kunde');
+      if (sel) sel.value = id;
+      jarvisPending = null;
+      updateJarvisContextBanner();
+      loadJarvisHistory();
+    }
+
+    function kundeStatusBadge(s) {
+      const m = {
+        live: ['badge-auto', 'Live'],
+        test: ['badge-done', 'Test'],
+        lead: ['badge-pending', 'Lead'],
+        angebot_gesendet: ['badge-pending', 'Angebot'],
+        neu: ['badge-pending', 'Neu'],
+      };
+      const [cls, label] = m[s] || ['badge-ignored', s || '?'];
+      return `<span class="${cls}">${label}</span>`;
+    }
+
+    function pipelineStageFor(k) {
+      const s = (k.status || 'lead').toLowerCase();
+      if (s === 'angebot_gesendet') return 'angebot_gesendet';
+      if (s === 'test') return 'test';
+      if (s === 'live') return 'live';
+      return 'lead';
+    }
+
+    function renderPipeline() {
+      const board = document.getElementById('pipeline-board');
+      if (!board) return;
+      board.innerHTML = PIPELINE_COLUMNS.map(col => {
+        const items = kunden.filter(k => pipelineStageFor(k) === col.stage);
+        const leadCards = col.stage === 'lead' ? emailLeads.map(l => `
+          <div class="pipe-card pipe-card-email" onclick="openLeadAsKunde(${l.id})">
+            <p class="font-semibold text-sm text-ink leading-tight mb-1">${esc(l.name || l.email)}</p>
+            <p class="text-xs text-muted mb-1"><i class="fa-solid fa-envelope text-gold"></i> E-Mail-Kontakt</p>
+            <p class="text-xs text-muted truncate mb-1">${esc(l.email)}</p>
+            <p class="text-xs text-muted truncate">${esc(l.subject || l.body_preview || '')}</p>
+          </div>`).join('') : '';
+        const cards = items.map(k => `
+          <div class="pipe-card" draggable="true" data-kid="${esc(k.id)}"
+            ondragstart="pipeDragStart(event,'${esc(k.id)}')" ondragend="pipeDragEnd(event)"
+            onclick="openKundeFromPipeline('${esc(k.id)}')">
+            <p class="font-semibold text-sm text-ink leading-tight mb-1">${esc(k.name)}</p>
+            <p class="text-xs text-muted mb-2">${esc(k.id)} · ${esc(k.inhaber || '–')}</p>
+            <div class="progress-bar mb-1"><div class="progress-fill" style="width:${k.progress_percent || 0}%"></div></div>
+            <p class="text-xs text-muted">${k.progress_percent || 0}% · ${esc((k.email || '').split('@')[0] || '')}</p>
+          </div>`).join('');
+        const total = items.length + (col.stage === 'lead' ? emailLeads.length : 0);
+        return `<div class="pipeline-col">
+          <div class="pipeline-col-head flex items-center justify-between gap-2">
+            <div>
+              <p class="font-semibold text-sm">${col.label}</p>
+              <p class="text-xs text-muted">${col.hint}</p>
+            </div>
+            <span class="pipe-count">${total}</span>
+          </div>
+          <div class="pipeline-col-body" data-stage="${col.stage}"
+            ondragover="pipeDragOver(event)" ondragleave="pipeDragLeave(event)" ondrop="pipeDrop(event,'${col.stage}')">
+            ${leadCards}${cards || (!leadCards ? '<p class="text-xs text-muted text-center py-6 px-2">Keine Karten</p>' : '')}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function pipeDragStart(e, kid) {
+      dragKundeId = kid;
+      e.currentTarget.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', kid);
+    }
+
+    function pipeDragEnd(e) {
+      e.currentTarget.classList.remove('dragging');
+      document.querySelectorAll('.pipeline-col-body').forEach(el => el.classList.remove('drag-over'));
+      dragKundeId = null;
+    }
+
+    function pipeDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('drag-over');
+    }
+
+    function pipeDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+
+    async function pipeDrop(e, stage) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      const kid = dragKundeId || e.dataTransfer.getData('text/plain');
+      if (!kid) return;
+      const k = kunden.find(x => x.id === kid);
+      if (k && pipelineStageFor(k) === stage) return;
+      pipeJustDragged = true;
+      setTimeout(() => { pipeJustDragged = false; }, 300);
+      await moveKundePipelineStage(kid, stage);
+    }
+
+    async function moveKundePipelineStage(kid, stage) {
+      const r = await fetch(`/api/agency/kunden/${kid}`, {
+        method: 'PATCH', headers: hdr(), body: JSON.stringify({ status: stage }),
+      });
+      if (!r.ok) return;
+      const k = kunden.find(x => x.id === kid);
+      if (k) k.status = stage;
+      renderPipeline();
+      if (selectedKundeId === kid) loadKundeDetail(kid);
+    }
+
+    function openKundeFromPipeline(id) {
+      if (pipeJustDragged) return;
+      showTab('kunden');
+      selectKunde(id);
+    }
+
+    async function openLeadAsKunde(leadId) {
+      const lead = emailLeads.find(l => l.id === leadId);
+      await openNewKundeModal();
+      if (!lead) return;
+      const form = document.getElementById('new-kunde-form');
+      form.dataset.leadId = String(leadId);
+      document.getElementById('nk-email').value = lead.email || '';
+      document.getElementById('nk-telefon').value = lead.phone || '';
+      document.getElementById('nk-name').value = lead.name || lead.email.split('@')[0] || '';
+      document.getElementById('nk-inhaber').value = lead.name || '';
+      suggestSubdomain();
+    }
+
+    async function loadKunden() {
+      const el = document.getElementById('kunden-list');
+      const countEl = document.getElementById('kunden-count');
+      try {
+        const [r, lr] = await Promise.all([
+          fetch('/api/agency/kunden', { headers: hdr() }),
+          fetch('/api/agency/leads', { headers: hdr() }),
+        ]);
+        const d = await r.json();
+        const ld = await lr.json();
+        kunden = d.kunden || [];
+        emailLeads = ld.leads || [];
+        if (countEl) countEl.textContent = kunden.length ? `${kunden.length}` : '';
+        if (!kunden.length) {
+          el.innerHTML = '<p class="text-muted text-xs px-2">Noch keine Kunden.</p>';
+          document.getElementById('kunde-detail')?.classList.add('hidden');
+          document.getElementById('kunde-detail-empty')?.classList.remove('hidden');
+          renderDashboard();
+          renderPipeline();
+          return;
+        }
+        el.innerHTML = kunden.map(k => `
+          <button type="button" class="kunde-row ${selectedKundeId === k.id ? 'selected' : ''}" onclick="selectKunde('${k.id}')">
+            <div class="flex items-start justify-between gap-1 mb-1">
+              <p class="font-semibold text-ink text-sm leading-tight">${esc(k.name)}</p>
+              ${kundeStatusBadge(k.status)}
+            </div>
+            <p class="text-xs text-muted mb-1.5">${esc(k.id)}</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:${k.progress_percent || 0}%"></div></div>
+          </button>`).join('');
+        if (selectedKundeId && kunden.some(x => x.id === selectedKundeId)) {
+          loadKundeDetail(selectedKundeId);
+        } else if (kunden.length === 1) {
+          selectKunde(kunden[0].id);
+        } else {
+          document.getElementById('kunde-detail')?.classList.add('hidden');
+          document.getElementById('kunde-detail-empty')?.classList.remove('hidden');
+        }
+        syncJarvisKundeSelect();
+        renderDashboard();
+        renderPipeline();
+      } catch (_) {
+        el.innerHTML = '<p class="text-red-400 text-xs px-2">Liste nicht geladen.</p>';
+      }
+    }
+
+    async function selectKunde(id) {
+      selectedKundeId = id;
+      loadKunden();
+      await loadKundeDetail(id);
+    }
+
+    async function loadKundeDetail(id) {
+      const el = document.getElementById('kunde-detail');
+      const empty = document.getElementById('kunde-detail-empty');
+      empty?.classList.add('hidden');
+      el.classList.remove('hidden');
+      el.innerHTML = '<p class="text-muted text-sm">Lade Details…</p>';
+      try {
+        const r = await fetch(`/api/agency/kunden/${id}`, { headers: hdr() });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error);
+        kundeDetail = d;
+        renderKundeDetail(d);
+      } catch (e) {
+        el.innerHTML = `<p class="text-red-400 text-sm">${esc(e.message || 'Fehler')}</p>`;
+      }
+    }
+
+    function historyLabel(action) {
+      const m = {
+        kunde_angelegt: 'Kunde angelegt',
+        angebot_gesendet: 'Angebot',
+        onboarding_gesendet: 'Onboarding',
+        status_geaendert: 'Status',
+        subdomain: 'Subdomain',
+        webroot: 'Webroot',
+        automation: 'Automation',
+        notiz: 'Notiz',
+        offene_punkte: 'Checkliste',
+        channels_updated: 'Kanäle',
+        n8n_provisioniert: 'n8n',
+      };
+      return m[action] || action;
+    }
+
+    async function loadGlobalAutomations() {
+      const targets = ['dash-automations'];
+      try {
+        const r = await fetch('/api/agency/automations', { headers: hdr() });
+        const d = await r.json();
+        const html = d.error
+          ? `<span class="text-muted">${esc(d.error)}</span>`
+          : Object.entries(d).filter(([k]) => typeof d[k] === 'object' && d[k].label).map(([, v]) =>
+            `<span class="${v.active ? 'chip-on' : 'chip-off'}" title="${esc(v.hint || '')}">${v.active ? '●' : '○'} ${esc(v.label)}</span>`
+          ).join('');
+        targets.forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = html; });
+      } catch (_) {}
+    }
+
+    function renderChannelsForm(ch, kid) {
+      const sms = ch.sms || {};
+      const wa = ch.whatsapp || {};
+      const voice = ch.voice || {};
+      const packs = ch.packs || [{ id: 'gastro', label: 'Gastronomie' }, { id: 'handwerk', label: 'Handwerk' }, { id: 'general', label: 'Allgemein' }];
+      const providers = ch.voice_providers || ['retell', 'vapi', 'elevenlabs', 'other'];
+      const plans = ch.voice_billing_plans || ['none', 'included', 'per_minute', 'bundle'];
+      const packOpts = packs.map(p => `<option value="${esc(p.id)}" ${(voice.knowledge_pack || '') === p.id ? 'selected' : ''}>${esc(p.label || p.id)}</option>`).join('');
+      const provOpts = ['<option value="">– wählen –</option>'].concat(
+        providers.map(p => `<option value="${esc(p)}" ${voice.provider === p ? 'selected' : ''}>${esc(p)}</option>`)
+      ).join('');
+      const planOpts = plans.map(p => `<option value="${esc(p)}" ${(voice.billing || {}).plan === p ? 'selected' : ''}>${esc(p)}</option>`).join('');
+      const phones = (wa.allowed_phones || []).join(', ');
+
+      return `
+        <div class="border border-border rounded-lg p-3 bg-[#FAFAFA]">
+          <div class="flex items-center justify-between mb-2">
+            <p class="font-semibold text-ink"><i class="fa-solid fa-comment-sms text-gold"></i> SMS (seven.io)</p>
+            <label class="flex items-center gap-1.5 cursor-pointer font-medium">
+              <input type="checkbox" id="ch-sms-enabled" ${sms.enabled ? 'checked' : ''}> an
+            </label>
+          </div>
+          <p class="text-[10px] text-muted mb-2">${esc(sms.agency_hint || '')}</p>
+          <label class="text-muted block mb-1">Kunden-Nummer / Absender</label>
+          <input id="ch-sms-phone" class="mb-2 text-xs" placeholder="+49…" value="${esc(sms.phone_number || '')}">
+          <label class="text-muted block mb-1">Sender-ID (optional)</label>
+          <input id="ch-sms-sender" class="mb-2 text-xs" placeholder="SnackHouse" value="${esc(sms.sender_id || '')}">
+          <label class="text-muted block mb-1">Inhaber-Handy (Alerts)</label>
+          <input id="ch-sms-owner" class="mb-2 text-xs" placeholder="+49…" value="${esc(sms.owner_phone || '')}">
+          <label class="text-muted block mb-1">Notiz</label>
+          <input id="ch-sms-notes" class="text-xs" placeholder="z.B. Nummer bei seven.io am 16.07. gekauft" value="${esc(sms.notes || '')}">
+        </div>
+
+        <div class="border border-border rounded-lg p-3 bg-[#FAFAFA]">
+          <div class="flex items-center justify-between mb-2">
+            <p class="font-semibold text-ink"><i class="fa-brands fa-whatsapp text-gold"></i> WhatsApp</p>
+            <label class="flex items-center gap-1.5 cursor-pointer font-medium">
+              <input type="checkbox" id="ch-wa-enabled" ${wa.enabled ? 'checked' : ''}> an
+            </label>
+          </div>
+          <p class="text-[10px] text-muted mb-2">${esc(wa.agency_hint || '')}</p>
+          <label class="text-muted block mb-1">Business-Nummer</label>
+          <input id="ch-wa-business" class="mb-2 text-xs" placeholder="+49…" value="${esc(wa.business_phone || '')}">
+          <label class="text-muted block mb-1">Phone Number ID (Meta)</label>
+          <input id="ch-wa-pnid" class="mb-2 text-xs" placeholder="Meta Phone Number ID" value="${esc(wa.phone_number_id || '')}">
+          <label class="text-muted block mb-1">Freigeschaltete Handys (Komma)</label>
+          <input id="ch-wa-phones" class="text-xs" placeholder="+49…, +49…" value="${esc(phones)}">
+        </div>
+
+        <div class="border border-border rounded-lg p-3 bg-[#FAFAFA]">
+          <div class="flex items-center justify-between mb-2">
+            <p class="font-semibold text-ink"><i class="fa-solid fa-phone-volume text-gold"></i> Voice Agent</p>
+            <label class="flex items-center gap-1.5 cursor-pointer font-medium">
+              <input type="checkbox" id="ch-voice-enabled" ${voice.enabled ? 'checked' : ''}> an
+            </label>
+          </div>
+          <p class="text-[10px] text-muted mb-2">${esc(voice.agency_hint || '')}</p>
+          <label class="text-muted block mb-1">Provider</label>
+          <select id="ch-voice-provider" class="mb-2 text-xs">${provOpts}</select>
+          <label class="text-muted block mb-1">Agent-ID</label>
+          <input id="ch-voice-agent" class="mb-2 text-xs" placeholder="agt_…" value="${esc(voice.agent_id || '')}">
+          <label class="text-muted block mb-1">Voice-Nummer</label>
+          <input id="ch-voice-phone" class="mb-2 text-xs" placeholder="+49…" value="${esc(voice.phone_number || '')}">
+          <label class="text-muted block mb-1">Knowledge Pack</label>
+          <select id="ch-voice-pack" class="mb-2 text-xs">${packOpts}</select>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-muted block mb-1">Abo-Plan</label>
+              <select id="ch-voice-plan" class="text-xs">${planOpts}</select>
+            </div>
+            <div>
+              <label class="text-muted block mb-1">Min. inkl.</label>
+              <input id="ch-voice-mins" type="number" min="0" class="text-xs" value="${esc((voice.billing || {}).included_minutes ?? 0)}">
+            </div>
+          </div>
+          <label class="text-muted block mb-1 mt-2">Überzug €/Min</label>
+          <input id="ch-voice-overage" type="number" step="0.01" min="0" class="text-xs" value="${esc((voice.billing || {}).overage_per_min_eur ?? 0)}">
+        </div>`;
+    }
+
+    async function saveChannels(kid) {
+      const msg = document.getElementById('channels-msg');
+      if (msg) { msg.classList.remove('hidden'); msg.textContent = 'Speichere…'; msg.className = 'text-xs text-muted'; }
+      const body = {
+        sms: {
+          enabled: !!document.getElementById('ch-sms-enabled')?.checked,
+          phone_number: document.getElementById('ch-sms-phone')?.value || '',
+          sender_id: document.getElementById('ch-sms-sender')?.value || '',
+          owner_phone: document.getElementById('ch-sms-owner')?.value || '',
+          notes: document.getElementById('ch-sms-notes')?.value || '',
+        },
+        whatsapp: {
+          enabled: !!document.getElementById('ch-wa-enabled')?.checked,
+          business_phone: document.getElementById('ch-wa-business')?.value || '',
+          phone_number_id: document.getElementById('ch-wa-pnid')?.value || '',
+          allowed_phones: document.getElementById('ch-wa-phones')?.value || '',
+        },
+        voice: {
+          enabled: !!document.getElementById('ch-voice-enabled')?.checked,
+          provider: document.getElementById('ch-voice-provider')?.value || '',
+          agent_id: document.getElementById('ch-voice-agent')?.value || '',
+          phone_number: document.getElementById('ch-voice-phone')?.value || '',
+          knowledge_pack: document.getElementById('ch-voice-pack')?.value || '',
+          billing: {
+            plan: document.getElementById('ch-voice-plan')?.value || 'none',
+            included_minutes: Number(document.getElementById('ch-voice-mins')?.value || 0),
+            overage_per_min_eur: Number(document.getElementById('ch-voice-overage')?.value || 0),
+          },
+        },
+        knowledge: {
+          pack: document.getElementById('ch-voice-pack')?.value || 'general',
+        },
+      };
+      try {
+        const r = await fetch(`/api/agency/kunden/${kid}/channels`, {
+          method: 'PATCH',
+          headers: hdr(),
+          body: JSON.stringify(body),
+        });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Speichern fehlgeschlagen');
+        if (msg) { msg.textContent = 'Gespeichert · ' + (d.changed || []).join(', '); msg.className = 'text-xs text-green-600'; }
+        loadKundeDetail(kid);
+      } catch (e) {
+        if (msg) { msg.textContent = e.message || 'Fehler'; msg.className = 'text-xs text-red-600'; }
+      }
+    }
+
+    function renderKundeDetail(d) {
+      const el = document.getElementById('kunde-detail');
+      const pct = (d.progress || {}).percent || 0;
+      const kid = d.id;
+      const links = (d.links || []).map(l =>
+        `<a href="${esc(l.url)}" target="_blank" rel="noopener" class="text-sm text-gold px-3 py-2 border border-border rounded-lg inline-flex items-center gap-2 hover:bg-[#FFF4ED]"><i class="fa-solid ${esc(l.icon || 'fa-link')}"></i> ${esc(l.label)}</a>`
+      ).join('');
+      const autos = (d.automations || []).map(a => {
+        const cls = a.active ? 'chip-on' : (a.requested ? 'chip-off border-gold' : 'chip-off');
+        const srv = a.server_ready ? 'Server ✓' : 'Server ○';
+        return `<button type="button" onclick="toggleAutomation('${esc(kid)}','${esc(a.id)}',${!a.requested})" class="${cls} cursor-pointer" title="${esc(a.hint || '')} · ${srv}">${a.requested ? '●' : '○'} ${esc(a.label)}</button>`;
+      }).join('');
+      const openPointsText = (d.open_points || []).join('\n');
+      const history = (d.history || []).slice(0, 12).map(h =>
+        `<li class="text-xs py-1 border-b border-border/50"><span class="text-gold font-medium">${esc(historyLabel(h.action))}</span> <span class="text-muted">${esc((h.at || '').slice(0, 16))}</span><br>${esc(h.detail || '')}</li>`
+      ).join('') || '<li class="text-xs text-muted">Noch keine Aktionen</li>';
+      const stripeLink = (d.stripe || {}).payment_link;
+      const kontakt = d.kontakt || {};
+      const sub = d.subdomain || (d.urls || {}).subdomain || '–';
+      const webroot = (d.server || {}).ordner || '–';
+
+      el.innerHTML = `
+        <div class="flex flex-wrap items-start justify-between gap-4 mb-4">
+          <div>
+            <h3 class="text-xl font-bold">${esc(d.name)}</h3>
+            <p class="text-muted text-sm">${esc(d.id)} · ${esc(d.inhaber || '')} · ${esc(kontakt.email || '')}</p>
+            <p class="text-xs text-muted mt-1">Subdomain: <strong>${esc(sub)}</strong> · Webroot: ${esc(webroot)}</p>
+          </div>
+          <div class="text-right">
+            ${kundeStatusBadge(d.status)}
+            <p class="text-2xl font-bold text-gold mt-1">${pct}%</p>
+            <p class="text-xs text-muted">Fortschritt</p>
+          </div>
+        </div>
+        <div class="progress-bar mb-6"><div class="progress-fill" style="width:${pct}%"></div></div>
+
+        <div class="panel p-4 mb-6 bg-[#FFF4ED]/50">
+          <h4 class="font-semibold text-sm mb-2"><i class="fa-solid fa-wrench text-gold"></i> Technische Einrichtung</h4>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="prepareSite('${esc(kid)}')" class="px-3 py-2 rounded-lg text-xs border border-border hover:border-gold">Site vorbereiten</button>
+            <button onclick="setupSubdomain('${esc(kid)}', false)" class="px-3 py-2 rounded-lg text-xs border border-border hover:border-gold">Subdomain</button>
+            <button onclick="setupSubdomain('${esc(kid)}', true)" class="px-3 py-2 rounded-lg text-xs border border-border hover:border-gold">Subdomain + SSL</button>
+          </div>
+          <p class="text-xs text-muted mt-2">DNS: Wildcard * → 167.233.211.170 oder A-Record für ${esc(sub)}</p>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-6">${links}
+          <a href="/ci/angebot-vorlage.html" target="_blank" rel="noopener" class="text-sm text-muted px-3 py-2 border border-border rounded-lg"><i class="fa-solid fa-file-lines"></i> Angebot-Vorlage</a>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6 mb-6">
+          <div>
+            <h4 class="font-semibold text-sm mb-2">Aktionen</h4>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="openOfferModal('${esc(kid)}')" class="btn-gold px-3 py-2 rounded-lg text-xs"><i class="fa-solid fa-paper-plane"></i> Angebot</button>
+              <button onclick="sendOnboardingMail('${esc(kid)}')" class="px-3 py-2 rounded-lg text-xs border border-border hover:border-gold"><i class="fa-solid fa-envelope"></i> Onboarding</button>
+              <button onclick="createCheckoutForKunde('${esc(kid)}')" class="px-3 py-2 rounded-lg text-xs border border-border hover:border-gold"><i class="fa-solid fa-credit-card"></i> Zahlungslink</button>
+              <button onclick="openJarvisForKunde('${esc(kid)}')" class="px-3 py-2 rounded-lg text-xs border border-gold text-gold hover:bg-[#FFF4ED]"><i class="fa-solid fa-robot"></i> Jarvis</button>
+            </div>
+            ${stripeLink ? `<p class="text-xs mt-2 break-all"><a href="${esc(stripeLink)}" target="_blank" class="text-gold">${esc(stripeLink)}</a></p>` : ''}
+            <p id="kunde-action-msg" class="text-sm mt-2 hidden"></p>
+          </div>
+          <div>
+            <h4 class="font-semibold text-sm mb-2">Status & Notiz</h4>
+            <div class="flex gap-2 mb-2">
+              <select id="kunde-status" class="!w-auto text-xs flex-1">
+                <option value="lead" ${d.status === 'lead' ? 'selected' : ''}>Lead</option>
+                <option value="angebot_gesendet" ${d.status === 'angebot_gesendet' ? 'selected' : ''}>Angebot gesendet</option>
+                <option value="test" ${d.status === 'test' ? 'selected' : ''}>Test</option>
+                <option value="live" ${d.status === 'live' ? 'selected' : ''}>Live</option>
+              </select>
+              <button onclick="saveKundeStatus('${esc(kid)}')" class="px-3 py-1.5 rounded-lg text-xs border border-border">Speichern</button>
+            </div>
+            <textarea id="kunde-notiz" rows="2" class="text-xs mb-2" placeholder="Interne Notiz…"></textarea>
+            <button onclick="saveKundeNotiz('${esc(kid)}')" class="text-xs text-gold">Notiz speichern</button>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <h4 class="font-semibold text-sm mb-1">Automationen <span class="text-muted font-normal">(Klick = für Kunden an/aus · Server-Status in Leiste oben)</span></h4>
+          <div class="flex flex-wrap gap-2">${autos}</div>
+        </div>
+
+        <div class="panel p-4 mb-6 border border-border">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <h4 class="font-semibold text-sm"><i class="fa-solid fa-tower-broadcast text-gold"></i> Kanäle (SMS · WhatsApp · Voice)</h4>
+            <span class="text-[10px] text-muted">Alles bleibt bei Kunden-ID ${esc(kid)}</span>
+          </div>
+          <div id="channels-form" class="grid lg:grid-cols-3 gap-4 text-xs">
+            ${renderChannelsForm(d.channels || {}, kid)}
+          </div>
+          <div class="flex flex-wrap items-center gap-3 mt-4">
+            <button type="button" onclick="saveChannels('${esc(kid)}')" class="btn-gold px-4 py-2 rounded-lg text-xs">Kanäle speichern</button>
+            <p id="channels-msg" class="text-xs text-muted hidden"></p>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <h4 class="font-semibold text-sm mb-2">Offene Punkte (Agency)</h4>
+          <textarea id="kunde-open-points" rows="4" class="text-xs">${esc(openPointsText)}</textarea>
+          <button onclick="saveOpenPoints('${esc(kid)}')" class="text-xs text-gold mt-2">Checkliste speichern</button>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div>
+            <h4 class="font-semibold text-sm mb-2">Kunden-Checkliste</h4>
+            <ul class="text-sm space-y-1">${(d.tasks || []).map(t =>
+              `<li class="flex gap-2"><span class="${t.done ? 'text-green-600' : 'text-muted'}">${t.done ? '✓' : '○'}</span> ${esc(t.label)}</li>`
+            ).join('')}</ul>
+          </div>
+          <div>
+            <h4 class="font-semibold text-sm mb-2">Aktions-Historie</h4>
+            <ul class="space-y-0">${history}</ul>
+          </div>
+        </div>`;
+    }
+
+    async function toggleAutomation(kid, autoId, requested) {
+      await fetch(`/api/agency/kunden/${kid}/automations/${autoId}`, {
+        method: 'PATCH',
+        headers: hdr(),
+        body: JSON.stringify({ requested }),
+      });
+      loadKundeDetail(kid);
+    }
+
+    async function prepareSite(kid) {
+      const msgEl = document.getElementById('kunde-action-msg');
+      if (msgEl) { msgEl.classList.remove('hidden'); msgEl.textContent = 'Site wird vorbereitet…'; msgEl.className = 'text-sm mt-2 text-muted'; }
+      const r = await fetch(`/api/agency/kunden/${kid}/prepare-site`, { method: 'POST', headers: hdr(), body: '{}' });
+      const d = await r.json();
+      if (!msgEl) return;
+      msgEl.textContent = r.ok ? (d.message || `Webroot: ${d.webroot}, ${d.files_copied || 0} Dateien`) : (d.error || 'Fehler');
+      msgEl.className = r.ok ? 'text-sm mt-2 text-green-600' : 'text-sm mt-2 text-red-400';
+      if (r.ok) loadKundeDetail(kid);
+    }
+
+    async function setupSubdomain(kid, ssl) {
+      const msgEl = document.getElementById('kunde-action-msg');
+      if (msgEl) { msgEl.classList.remove('hidden'); msgEl.textContent = ssl ? 'Subdomain + SSL…' : 'Subdomain wird eingerichtet…'; msgEl.className = 'text-sm mt-2 text-muted'; }
+      const r = await fetch(`/api/agency/kunden/${kid}/setup-subdomain`, {
+        method: 'POST', headers: hdr(), body: JSON.stringify({ ssl }),
+      });
+      const d = await r.json();
+      if (!msgEl) return;
+      if (!r.ok) {
+        msgEl.textContent = d.error || 'Fehler';
+        msgEl.className = 'text-sm mt-2 text-red-400';
+        return;
+      }
+      msgEl.innerHTML = d.dry_run
+        ? `Vorschau: ${esc(d.host || '')} · ${esc(d.message || d.dns_hint || '')}`
+        : `Live: <a href="${esc(d.url || '')}" target="_blank" class="text-gold">${esc(d.url || d.host || 'OK')}</a>`;
+      msgEl.className = 'text-sm mt-2 text-green-600';
+      loadKundeDetail(kid);
+      loadKunden();
+      loadGlobalAutomations();
+    }
+
+    async function saveOpenPoints(kid) {
+      const raw = document.getElementById('kunde-open-points').value;
+      const points = raw.split('\n').map(s => s.trim()).filter(Boolean);
+      await fetch(`/api/agency/kunden/${kid}`, {
+        method: 'PATCH', headers: hdr(), body: JSON.stringify({ offene_punkte: points }),
+      });
+      loadKundeDetail(kid);
+    }
+
+    async function saveKundeNotiz(kid) {
+      const notiz = document.getElementById('kunde-notiz').value.trim();
+      if (!notiz) return;
+      await fetch(`/api/agency/kunden/${kid}`, {
+        method: 'PATCH', headers: hdr(), body: JSON.stringify({ notiz }),
+      });
+      document.getElementById('kunde-notiz').value = '';
+      loadKundeDetail(kid);
+    }
+
+    function suggestSubdomain() {
+      const name = document.getElementById('nk-name').value.trim();
+      const sub = document.getElementById('nk-subdomain');
+      if (sub.dataset.touched === '1' || !name) return;
+      sub.value = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24);
+    }
+
+    async function openNewKundeModal() {
+      document.getElementById('modal-new-kunde').classList.remove('hidden');
+      document.getElementById('nk-step1').classList.remove('hidden');
+      document.getElementById('nk-step2').classList.add('hidden');
+      document.getElementById('nk-msg').classList.add('hidden');
+      document.getElementById('nk-setup-msg').classList.add('hidden');
+      wizardKundeId = null;
+      try {
+        const r = await fetch('/api/agency/kunden/next-id', { headers: hdr() });
+        const d = await r.json();
+        if (d.id) document.getElementById('nk-id').value = d.id;
+      } catch (_) {}
+      document.getElementById('nk-subdomain').dataset.touched = '';
+      document.getElementById('nk-subdomain').addEventListener('input', function() { this.dataset.touched = '1'; }, { once: true });
+    }
+    function closeNewKundeModal() {
+      document.getElementById('modal-new-kunde').classList.add('hidden');
+      const form = document.getElementById('new-kunde-form');
+      delete form.dataset.leadId;
+      form.reset();
+      wizardKundeId = null;
+    }
+
+    function finishWizard() {
+      const id = wizardKundeId;
+      closeNewKundeModal();
+      if (id) { selectedKundeId = id; showTab('kunden'); loadKunden(); }
+    }
+
+    async function wizardPrepareSite() {
+      if (!wizardKundeId) return;
+      const msg = document.getElementById('nk-setup-msg');
+      msg.classList.remove('hidden');
+      msg.textContent = 'Site wird vorbereitet…';
+      msg.className = 'text-sm text-muted';
+      const r = await fetch(`/api/agency/kunden/${wizardKundeId}/prepare-site`, { method: 'POST', headers: hdr(), body: '{}' });
+      const d = await r.json();
+      msg.textContent = r.ok ? `OK · ${d.webroot || ''} (${d.files_copied || 0} Dateien)` : (d.error || 'Fehler');
+      msg.className = r.ok ? 'text-sm text-green-600' : 'text-sm text-red-400';
+    }
+
+    async function wizardSubdomain(ssl) {
+      if (!wizardKundeId) return;
+      const msg = document.getElementById('nk-setup-msg');
+      msg.classList.remove('hidden');
+      msg.textContent = ssl ? 'Subdomain + SSL…' : 'Subdomain…';
+      const r = await fetch(`/api/agency/kunden/${wizardKundeId}/setup-subdomain`, {
+        method: 'POST', headers: hdr(), body: JSON.stringify({ ssl }),
+      });
+      const d = await r.json();
+      if (!r.ok) {
+        msg.textContent = d.error || 'Fehler';
+        msg.className = 'text-sm text-red-400';
+        return;
+      }
+      msg.innerHTML = d.dry_run ? esc(d.message || d.dns_hint || '') : `Live: <a href="${esc(d.url)}" target="_blank" class="text-gold">${esc(d.url)}</a>`;
+      msg.className = 'text-sm text-green-600';
+    }
+
+    async function createKunde(e) {
+      e.preventDefault();
+      const msg = document.getElementById('nk-msg');
+      msg.classList.add('hidden');
+      const body = {
+        id: document.getElementById('nk-id').value.trim(),
+        name: document.getElementById('nk-name').value.trim(),
+        inhaber: document.getElementById('nk-inhaber').value.trim(),
+        subdomain: document.getElementById('nk-subdomain').value.trim(),
+        branche: document.getElementById('nk-branche').value,
+        kontakt: {
+          email: document.getElementById('nk-email').value.trim(),
+          telefon: document.getElementById('nk-telefon').value.trim(),
+          adresse: document.getElementById('nk-adresse').value.trim(),
+        },
+      };
+      const r = await fetch('/api/agency/kunden', { method: 'POST', headers: hdr(), body: JSON.stringify(body) });
+      const d = await r.json();
+      if (!r.ok) {
+        msg.textContent = d.error || 'Fehler';
+        msg.className = 'text-sm text-red-400';
+        msg.classList.remove('hidden');
+        return;
+      }
+      wizardKundeId = body.id.toUpperCase();
+      const form = document.getElementById('new-kunde-form');
+      const leadId = form.dataset.leadId;
+      if (leadId) {
+        try {
+          await fetch(`/api/agency/leads/${leadId}/convert`, {
+            method: 'POST', headers: hdr(), body: JSON.stringify({ kunde_id: wizardKundeId }),
+          });
+        } catch (_) {}
+        delete form.dataset.leadId;
+        emailLeads = emailLeads.filter(l => String(l.id) !== String(leadId));
+        renderPipeline();
+      }
+      document.getElementById('nk-step1').classList.add('hidden');
+      document.getElementById('nk-step2').classList.remove('hidden');
+      document.getElementById('nk-setup-label').textContent = `${body.name} (${wizardKundeId}) · ${body.subdomain || ''}.${'digitalehandwerkskunst.de'}`;
+      selectedKundeId = wizardKundeId;
+      loadBillKunden();
+    }
+
+    function openOfferModal(id) {
+      offerKundeId = id;
+      const k = kunden.find(x => x.id === id) || kundeDetail;
+      document.getElementById('offer-kunde-name').textContent = k ? `${k.name} (${id})` : id;
+      document.getElementById('offer-email').value = (k && k.email) || (kundeDetail && kundeDetail.kontakt && kundeDetail.kontakt.email) || '';
+      document.getElementById('offer-note').value = '';
+      document.getElementById('offer-msg').classList.add('hidden');
+      document.getElementById('modal-offer').classList.remove('hidden');
+    }
+    function closeOfferModal() {
+      document.getElementById('modal-offer').classList.add('hidden');
+      offerKundeId = null;
+    }
+
+    async function sendOffer(e) {
+      e.preventDefault();
+      const msg = document.getElementById('offer-msg');
+      msg.classList.add('hidden');
+      const body = {
+        package: document.getElementById('offer-pkg').value,
+        note: document.getElementById('offer-note').value.trim(),
+      };
+      const em = document.getElementById('offer-email').value.trim();
+      if (em) body.email = em;
+      const r = await fetch(`/api/agency/kunden/${offerKundeId}/send-offer`, { method: 'POST', headers: hdr(), body: JSON.stringify(body) });
+      const d = await r.json();
+      if (!r.ok) {
+        msg.textContent = d.error || 'Fehler';
+        msg.className = 'text-sm text-red-400';
+        msg.classList.remove('hidden');
+        return;
+      }
+      msg.textContent = `Angebot gesendet an ${d.to}`;
+      msg.className = 'text-sm text-green-600';
+      msg.classList.remove('hidden');
+      const kid = offerKundeId;
+      closeOfferModal();
+      loadKundeDetail(kid || selectedKundeId);
+      loadKunden();
+    }
+
+    async function sendOnboardingMail(id) {
+      const msgEl = document.getElementById('kunde-action-msg');
+      if (msgEl) { msgEl.classList.add('hidden'); }
+      const r = await fetch(`/api/agency/kunden/${id}/send-onboarding`, { method: 'POST', headers: hdr(), body: '{}' });
+      const d = await r.json();
+      if (!msgEl) return;
+      msgEl.textContent = r.ok ? `Onboarding-Mail gesendet an ${d.to}` : (d.error || 'Fehler');
+      msgEl.className = r.ok ? 'text-sm mt-2 text-green-600' : 'text-sm mt-2 text-red-400';
+      msgEl.classList.remove('hidden');
+      if (r.ok) loadKundeDetail(id);
+    }
+
+    async function createCheckoutForKunde(id) {
+      const msgEl = document.getElementById('kunde-action-msg');
+      if (msgEl) msgEl.classList.add('hidden');
+      const r = await fetch('/api/agency/checkout', {
+        method: 'POST',
+        headers: hdr(),
+        body: JSON.stringify({ kunde_id: id, package: 'pro' }),
+      });
+      const d = await r.json();
+      if (!msgEl) return;
+      if (!r.ok) {
+        msgEl.textContent = d.error || 'Fehler';
+        msgEl.className = 'text-sm mt-2 text-red-400';
+        msgEl.classList.remove('hidden');
+        return;
+      }
+      msgEl.innerHTML = `Zahlungslink: <a href="${esc(d.url)}" target="_blank" class="text-gold break-all">${esc(d.url)}</a>`;
+      msgEl.className = 'text-sm mt-2 text-green-600';
+      msgEl.classList.remove('hidden');
+      loadKundeDetail(id);
+    }
+
+    async function saveKundeStatus(id) {
+      const status = document.getElementById('kunde-status').value;
+      await fetch(`/api/agency/kunden/${id}`, {
+        method: 'PATCH',
+        headers: hdr(),
+        body: JSON.stringify({ status }),
+      });
+      loadKunden();
+      loadKundeDetail(id);
+    }
+
+    function statusBadge(s) {
+      const m = {
+        auto: ['badge-auto', 'Auto'],
+        pending: ['badge-pending', 'Offen'],
+        urgent: ['badge-urgent', 'Dringend'],
+        ignored: ['badge-ignored', 'Spam'],
+        manual_done: ['badge-done', 'Erledigt'],
+      };
+      const [cls, label] = m[s] || ['badge-ignored', s];
+      return `<span class="${cls}">${label}</span>`;
+    }
+
+    function updateExportLink() {
+      const day = document.getElementById('inbox-filter-day')?.value || 'today';
+      const q = day === 'all' ? '?day=all' : `?day=${day}`;
+      const a = document.getElementById('inbox-export');
+      if (!a) return;
+      a.onclick = (e) => {
+        e.preventDefault();
+        fetch(`/api/agency/inbox/export.csv${q}`, { headers: hdr() })
+          .then(r => r.blob())
+          .then(blob => {
+            const u = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = u;
+            link.download = `posteingang_${new Date().toISOString().slice(0, 10)}.csv`;
+            link.click();
+            URL.revokeObjectURL(u);
+          });
+      };
+    }
+
+    async function loadInbox() {
+      const dayEl = document.getElementById('inbox-filter-day');
+      const statusEl = document.getElementById('inbox-filter-status');
+      if (!dayEl) return;
+      const day = dayEl.value;
+      const status = statusEl.value;
+      let url = `/api/agency/inbox?day=${encodeURIComponent(day)}`;
+      if (status) url += `&status=${encodeURIComponent(status)}`;
+      updateExportLink();
+      const el = document.getElementById('inbox-table');
+      const statsEl = document.getElementById('inbox-stats');
+      try {
+        const r = await fetch(url, { headers: hdr() });
+        const d = await r.json();
+        const st = d.stats || {};
+        inboxStatsCache = st;
+        updateInboxBadge(st);
+        if (!document.getElementById('panel-home')?.classList.contains('hidden')) renderDashboard();
+        statsEl.innerHTML = [
+          ['Gesamt', st.total || 0, ''],
+          ['Auto', st.auto || 0, 'text-green-400'],
+          ['Offen', st.pending || 0, 'text-gold'],
+          ['Dringend', st.urgent || 0, 'text-red-400'],
+          ['Erledigt', st.manual_done || 0, 'text-blue-400'],
+        ].map(([l, n, c]) => `<div class="panel p-3"><p class="text-muted">${l}</p><p class="text-lg font-bold ${c}">${n}</p></div>`).join('');
+        const items = d.items || [];
+        if (!items.length) {
+          el.innerHTML = '<p class="text-muted">Keine E-Mails in diesem Filter.</p>';
+          return;
+        }
+        el.innerHTML = `<table><thead><tr><th>Zeit</th><th>Von</th><th>Betreff</th><th>Status</th><th>Kontakt</th><th>Kategorie</th><th></th></tr></thead><tbody>${
+          items.map(it => `<tr>
+            <td class="whitespace-nowrap text-xs">${esc((it.received_at || '').slice(0, 16))}</td>
+            <td class="text-xs">${esc(it.from_email)}</td>
+            <td>${esc(it.subject)}${it.reply_sent ? ' <span class="text-green-400 text-xs">↩</span>' : ''}</td>
+            <td>${statusBadge(it.status)}</td>
+            <td class="text-xs">${it.lead_id ? '<span class="text-green-600 font-medium">✓ angelegt</span>' : '<span class="text-muted">–</span>'}</td>
+            <td class="text-xs text-muted">${esc(it.category)}</td>
+            <td class="whitespace-nowrap">${it.status === 'pending' || it.status === 'urgent' ? `<button class="text-gold text-xs" onclick="markInboxDone(${it.id})">Erledigt</button>` : ''}</td>
+          </tr>`).join('')
+        }</tbody></table>`;
+      } catch (_) {
+        el.innerHTML = '<p class="text-red-400">Posteingang konnte nicht geladen werden.</p>';
+      }
+    }
+
+    async function markInboxDone(id) {
+      await fetch(`/api/agency/inbox/${id}`, {
+        method: 'PATCH',
+        headers: hdr(),
+        body: JSON.stringify({ status: 'manual_done' }),
+      });
+      loadInbox();
+    }
+
+    async function loadBillKunden() {
+      const sel = document.getElementById('bill-kunde');
+      try {
+        const r = await fetch('/api/agency/kunden', { headers: hdr() });
+        const d = await r.json();
+        sel.innerHTML = (d.kunden || []).map(k =>
+          `<option value="${k.id}">${k.id} · ${k.name} (${k.status || '?'})</option>`).join('');
+      } catch (_) { sel.innerHTML = '<option value="SHY001">SHY001</option>'; }
+    }
+
+    async function createCheckout() {
+      const msg = document.getElementById('bill-msg');
+      const link = document.getElementById('bill-link');
+      msg.classList.add('hidden');
+      link.classList.add('hidden');
+      const body = {
+        kunde_id: document.getElementById('bill-kunde').value,
+        package: document.getElementById('bill-pkg').value,
+      };
+      const em = document.getElementById('bill-email').value.trim();
+      if (em) body.email = em;
+      const r = await fetch('/api/agency/checkout', { method: 'POST', headers: hdr(), body: JSON.stringify(body) });
+      const d = await r.json();
+      if (!r.ok) {
+        msg.textContent = d.error || 'Fehler';
+        msg.className = 'text-sm mt-3 text-red-400';
+        msg.classList.remove('hidden');
+        return;
+      }
+      msg.textContent = 'Link erstellt. An Kunden senden (WhatsApp/E-Mail):';
+      msg.className = 'text-sm mt-3 text-green-400';
+      msg.classList.remove('hidden');
+      link.href = d.url;
+      link.textContent = d.url;
+      link.classList.remove('hidden');
+    }
+
+    async function doLogin() {
+      const user = (document.getElementById('login-user') || {}).value || '';
+      const pw = document.getElementById('login-pw').value;
+      const totp = (document.getElementById('login-totp') || {}).value || '';
+      const err = document.getElementById('login-err');
+      const ok = document.getElementById('login-ok');
+      err.classList.add('hidden');
+      if (ok) ok.classList.add('hidden');
+      try {
+        await AgencyAuth.login(user, pw, totp);
+        showApp();
+      } catch (e) {
+        if (e.needs_totp) {
+          document.getElementById('login-totp-wrap').classList.remove('hidden');
+          err.textContent = e.message || '2FA-Code eingeben';
+        } else {
+          err.textContent = e.message || 'Anmeldung fehlgeschlagen';
+        }
+        err.classList.remove('hidden');
+      }
+    }
+
+    function showForgot() {
+      document.getElementById('login-form').classList.add('hidden');
+      document.getElementById('forgot-form').classList.remove('hidden');
+      document.getElementById('reset-form').classList.add('hidden');
+      document.getElementById('login-err').classList.add('hidden');
+    }
+    function showLoginForm() {
+      document.getElementById('login-form').classList.remove('hidden');
+      document.getElementById('forgot-form').classList.add('hidden');
+      document.getElementById('reset-form').classList.add('hidden');
+    }
+    async function doForgot() {
+      const q = document.getElementById('forgot-q').value.trim();
+      const err = document.getElementById('login-err');
+      const ok = document.getElementById('login-ok');
+      err.classList.add('hidden');
+      ok.classList.add('hidden');
+      try {
+        const d = await AgencyAuth.forgot(q);
+        ok.textContent = d.message || 'Wenn ein Konto existiert, wurde eine Mail an die hinterlegte Adresse gesendet (Prüfe Spam).';
+        ok.classList.remove('hidden');
+      } catch (e) {
+        err.textContent = e.message || 'Reset fehlgeschlagen';
+        err.classList.remove('hidden');
+      }
+    }
+    async function doReset() {
+      const params = new URLSearchParams(location.search);
+      const token = params.get('reset') || '';
+      const pw = document.getElementById('reset-pw').value;
+      const err = document.getElementById('login-err');
+      const ok = document.getElementById('login-ok');
+      err.classList.add('hidden');
+      const d = await AgencyAuth.reset(token, pw);
+      if (!d.success) {
+        err.textContent = d.error || 'Reset fehlgeschlagen';
+        err.classList.remove('hidden');
+        return;
+      }
+      ok.textContent = 'Passwort gespeichert. Bitte anmelden.';
+      ok.classList.remove('hidden');
+      history.replaceState({}, '', '/agency');
+      showLoginForm();
+    }
+
+    async function logout() {
+      await AgencyAuth.logout();
+      location.reload();
+    }
+
+    let kalkCatalog = null;
+    let kalkMode = 'pakete';
+    let kalkFirmaId = 'firma_1';
+    let kalkLaufzeitId = '3_monate';
+    let kalkPaketId = 'paket_m';
+    let kalkApiId = 'api_inkl';
+    let kalkKernOn = true;
+    let kalkSelected = new Set();
+    let kalkZusatzQty = {};
+
+    function fmtEur(n) {
+      return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n || 0);
+    }
+
+    async function loadKalkulator() {
+      const status = document.getElementById('kalk-status');
+      if (kalkCatalog) {
+        renderKalkulator();
+        return;
+      }
+      if (status) status.textContent = 'Lade Preisliste…';
+      try {
+        const r = await fetch('/api/agency/kalkulator', { headers: hdr() });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'HTTP ' + r.status);
+        kalkCatalog = data;
+        kalkMode = data.default_mode || 'pakete';
+        (data.setup_bausteine || []).forEach(i => kalkSelected.add(i.id));
+        (data.retainer_bausteine || []).slice(0, 2).forEach(i => kalkSelected.add(i.id));
+        (data.zusatzleistungen || []).forEach(z => { kalkZusatzQty[z.id] = 0; });
+        if (status) status.textContent = 'Stand ' + (data.updated || '–') + ' · v' + (data.version || '');
+        renderKalkulator();
+      } catch (e) {
+        if (status) status.textContent = e.message || 'Laden fehlgeschlagen';
+        document.getElementById('kalk-summary').innerHTML = `<p class="text-red-600 text-sm">${esc(e.message || 'Fehler')}</p>`;
+      }
+    }
+
+    function setKalkMode(mode) {
+      kalkMode = mode;
+      renderKalkulator();
+    }
+
+    function toggleKalkItem(id) {
+      if (kalkSelected.has(id)) kalkSelected.delete(id);
+      else kalkSelected.add(id);
+      renderKalkulator();
+    }
+
+    function setKalkFirma(id) { kalkFirmaId = id; renderKalkulator(); }
+    function setKalkLaufzeit(id) { kalkLaufzeitId = id; renderKalkulator(); }
+    function setKalkPaket(id) { kalkPaketId = id; renderKalkulator(); }
+    function setKalkApi(id) { kalkApiId = id; renderKalkulator(); }
+    function setKalkKern(on) { kalkKernOn = !!on; renderKalkulator(); }
+    function setKalkZusatzQty(id, qty) {
+      const n = Math.max(0, parseInt(qty, 10) || 0);
+      kalkZusatzQty[id] = n;
+      renderKalkulator();
+    }
+
+    function calcKalk() {
+      const c = kalkCatalog;
+      if (!c) return null;
+      const firma = (c.kunden_typen || []).find(f => f.id === kalkFirmaId) || c.kunden_typen[0];
+      const lz = (c.laufzeiten || []).find(l => l.id === kalkLaufzeitId) || c.laufzeiten[0];
+      const vat = c.vat_rate || 0.19;
+      const months = lz.months || 3;
+
+      let setupItems = [];
+      let retItems = [];
+      let setupList = 0;
+      let retList = 0;
+      let zusatzItems = [];
+      let zusatzList = 0;
+      let apiItem = null;
+
+      if (kalkMode === 'pakete') {
+        if (kalkKernOn && c.kern_setup) {
+          setupItems = [c.kern_setup];
+          setupList = c.kern_setup.price_eur || 0;
+        }
+        const paket = (c.retainer_pakete || []).find(p => p.id === kalkPaketId) || c.retainer_pakete[0];
+        if (paket) {
+          retItems = [paket];
+          retList = paket.price_eur || 0;
+        }
+        apiItem = (c.api_staffeln || []).find(a => a.id === kalkApiId) || c.api_staffeln[0];
+        if (apiItem && (apiItem.price_eur || 0) > 0) {
+          retList += apiItem.price_eur;
+          retItems = retItems.concat([{ ...apiItem, label: apiItem.label + ' (API)' }]);
+        }
+        (c.zusatzleistungen || []).forEach(z => {
+          const qty = kalkZusatzQty[z.id] || 0;
+          if (qty > 0) {
+            const line = qty * (z.price_eur || 0);
+            zusatzList += line;
+            zusatzItems.push({ ...z, qty, line });
+          }
+        });
+      } else {
+        setupItems = (c.setup_bausteine || []).filter(i => kalkSelected.has(i.id));
+        retItems = (c.retainer_bausteine || []).filter(i => kalkSelected.has(i.id));
+        setupList = setupItems.reduce((s, i) => s + (i.price_eur || 0), 0);
+        retList = retItems.reduce((s, i) => s + (i.price_eur || 0), 0);
+      }
+
+      const setupNet = Math.round(setupList * (firma.setup_factor || 1));
+      const retAfterFirma = retList * (firma.retainer_factor || 1);
+      const retNet = Math.round(retAfterFirma * (lz.retainer_factor || 1));
+      const zusatzNet = Math.round(zusatzList * (firma.setup_factor || 1));
+      const firstMonthNet = setupNet + retNet + zusatzNet;
+      const firstMonthGross = Math.round(firstMonthNet * (1 + vat));
+      const contractRetNet = retNet * months;
+      const contractTotalNet = setupNet + contractRetNet + zusatzNet;
+
+      return {
+        mode: kalkMode, firma, lz, setupItems, retItems, zusatzItems, apiItem,
+        setupList, retList, zusatzList, setupNet, retNet, zusatzNet, months,
+        firstMonthNet, firstMonthGross, vat,
+        contractRetNet, contractTotalNet,
+        vatFirst: firstMonthGross - firstMonthNet,
+      };
+    }
+
+    function renderKalkulator() {
+      if (!kalkCatalog) return;
+      const c = kalkCatalog;
+
+      document.getElementById('kalk-mode-pakete').className =
+        'px-4 py-2 rounded-lg text-sm border ' + (kalkMode === 'pakete' ? 'border-gold bg-[#FFF4ED] font-semibold' : 'border-border');
+      document.getElementById('kalk-mode-bausteine').className =
+        'px-4 py-2 rounded-lg text-sm border ' + (kalkMode === 'bausteine' ? 'border-gold bg-[#FFF4ED] font-semibold' : 'border-border');
+      document.getElementById('kalk-block-pakete').classList.toggle('hidden', kalkMode !== 'pakete');
+      document.getElementById('kalk-block-bausteine').classList.toggle('hidden', kalkMode !== 'bausteine');
+
+      const notesEl = document.getElementById('kalk-notes');
+      if (c.notes && c.notes.length) {
+        notesEl.textContent = c.notes.join(' · ');
+        notesEl.classList.remove('hidden');
+      }
+
+      document.getElementById('kalk-firmen').innerHTML = (c.kunden_typen || []).map(f => `
+        <button type="button" onclick="setKalkFirma('${esc(f.id)}')"
+          class="text-left rounded-lg border px-3 py-2.5 ${f.id === kalkFirmaId ? 'border-gold bg-[#FFF4ED]' : 'border-border hover:border-gold'}">
+          <p class="text-sm font-semibold">${esc(f.label)}</p>
+          <p class="text-[11px] text-muted mt-0.5">${esc(f.hint || '')}</p>
+        </button>`).join('');
+
+      if (c.kern_setup) {
+        const k = c.kern_setup;
+        document.getElementById('kalk-kern').innerHTML = `
+          <label class="flex items-start gap-3 rounded-lg border px-3 py-2.5 cursor-pointer ${kalkKernOn ? 'border-gold bg-[#FFF4ED]' : 'border-border'}">
+            <input type="checkbox" class="mt-1" ${kalkKernOn ? 'checked' : ''} onchange="setKalkKern(this.checked)">
+            <span class="flex-1 min-w-0">
+              <span class="block text-sm font-medium">${esc(k.label)}</span>
+              <span class="block text-[11px] text-muted">${esc(k.description || '')}</span>
+            </span>
+            <span class="shrink-0 font-mono text-sm">${fmtEur(k.price_eur)}</span>
+          </label>`;
+      }
+
+      document.getElementById('kalk-pakete').innerHTML = (c.retainer_pakete || []).map(p => `
+        <label class="flex items-start gap-3 rounded-lg border px-3 py-2.5 cursor-pointer ${p.id === kalkPaketId ? 'border-gold bg-[#FFF4ED]' : 'border-border'}">
+          <input type="radio" name="kalk-paket" class="mt-1" ${p.id === kalkPaketId ? 'checked' : ''} onchange="setKalkPaket('${esc(p.id)}')">
+          <span class="flex-1 min-w-0">
+            <span class="block text-sm font-medium">${esc(p.label)}${p.highlight ? ' <span class="text-gold text-[10px]">EMPFOHLEN</span>' : ''}</span>
+            <span class="block text-[11px] text-muted">${esc(p.description || '')}</span>
+          </span>
+          <span class="shrink-0 font-mono text-sm">${fmtEur(p.price_eur)}/Mo</span>
+        </label>`).join('');
+
+      document.getElementById('kalk-api').innerHTML = (c.api_staffeln || []).map(a => `
+        <label class="flex items-start gap-3 rounded-lg border px-3 py-2.5 cursor-pointer ${a.id === kalkApiId ? 'border-gold bg-[#FFF4ED]' : 'border-border'}">
+          <input type="radio" name="kalk-api" class="mt-1" ${a.id === kalkApiId ? 'checked' : ''} onchange="setKalkApi('${esc(a.id)}')">
+          <span class="flex-1 min-w-0">
+            <span class="block text-sm font-medium">${esc(a.label)}</span>
+            <span class="block text-[11px] text-muted">${esc(a.description || '')}</span>
+          </span>
+          <span class="shrink-0 font-mono text-sm">${(a.price_eur || 0) ? '+' + fmtEur(a.price_eur) + '/Mo' : 'inkl.'}</span>
+        </label>`).join('');
+
+      document.getElementById('kalk-zusatz').innerHTML = (c.zusatzleistungen || []).map(z => {
+        const qty = kalkZusatzQty[z.id] || 0;
+        const unit = z.unit === 'day' ? 'Tage' : 'Stunden';
+        return `<div class="flex items-center gap-3 rounded-lg border border-border px-3 py-2.5">
+          <span class="flex-1 min-w-0">
+            <span class="block text-sm font-medium">${esc(z.label)}</span>
+            <span class="block text-[11px] text-muted">${esc(z.description || '')} · ${fmtEur(z.price_eur)}/${z.unit === 'day' ? 'Tag' : 'Std.'}</span>
+          </span>
+          <label class="text-[11px] text-muted shrink-0">${unit}
+            <input type="number" min="0" max="99" value="${qty}" class="ml-1 w-16 rounded border border-border px-2 py-1 text-sm"
+              onchange="setKalkZusatzQty('${esc(z.id)}', this.value)">
+          </label>
+        </div>`;
+      }).join('') || '<p class="text-muted text-sm">–</p>';
+
+      const itemRow = (item, kind) => {
+        const on = kalkSelected.has(item.id);
+        const suffix = kind === 'retainer' ? ' / Mo.' : '';
+        return `<label class="flex items-start gap-3 rounded-lg border px-3 py-2.5 cursor-pointer ${on ? 'border-gold bg-[#FFF4ED]' : 'border-border'}">
+          <input type="checkbox" class="mt-1" ${on ? 'checked' : ''} onchange="toggleKalkItem('${esc(item.id)}')">
+          <span class="flex-1 min-w-0">
+            <span class="block text-sm font-medium">${esc(item.label)}</span>
+            <span class="block text-[11px] text-muted">${esc(item.description || '')}</span>
+          </span>
+          <span class="shrink-0 font-mono text-sm">${fmtEur(item.price_eur)}${suffix}</span>
+        </label>`;
+      };
+
+      document.getElementById('kalk-setup').innerHTML =
+        (c.setup_bausteine || []).map(i => itemRow(i, 'setup')).join('') || '<p class="text-muted text-sm">Keine Bausteine</p>';
+      document.getElementById('kalk-retainer').innerHTML =
+        (c.retainer_bausteine || []).map(i => itemRow(i, 'retainer')).join('') || '<p class="text-muted text-sm">Keine Bausteine</p>';
+
+      document.getElementById('kalk-laufzeit').innerHTML = (c.laufzeiten || []).map(l => `
+        <button type="button" onclick="setKalkLaufzeit('${esc(l.id)}')"
+          class="text-left rounded-lg border px-3 py-2.5 ${l.id === kalkLaufzeitId ? 'border-gold bg-[#FFF4ED]' : 'border-border hover:border-gold'}">
+          <p class="text-sm font-semibold">${esc(l.label)}</p>
+          <p class="text-[11px] text-muted mt-0.5">${esc(l.hint || '')}</p>
+        </button>`).join('');
+
+      const s = calcKalk();
+      if (!s) return;
+      let html = `
+        <div class="flex justify-between gap-2"><dt class="text-muted">Modus</dt><dd>${s.mode === 'pakete' ? 'Pakete High-End' : 'Bausteine'}</dd></div>
+        <div class="flex justify-between gap-2"><dt class="text-muted">Setup Liste</dt><dd class="font-mono">${fmtEur(s.setupList)}</dd></div>
+        <div class="flex justify-between gap-2"><dt class="text-muted">× Firma Setup ${s.firma.setup_factor}</dt><dd class="font-mono font-semibold">${fmtEur(s.setupNet)}</dd></div>
+        <div class="flex justify-between gap-2 pt-2 border-t border-border"><dt class="text-muted">Retainer Liste</dt><dd class="font-mono">${fmtEur(s.retList)}/Mo</dd></div>
+        <div class="flex justify-between gap-2"><dt class="text-muted">× Firma ${s.firma.retainer_factor} × Laufzeit ${s.lz.retainer_factor}</dt><dd class="font-mono font-semibold">${fmtEur(s.retNet)}/Mo</dd></div>`;
+      if (s.zusatzNet > 0) {
+        html += `<div class="flex justify-between gap-2 pt-2 border-t border-border"><dt class="text-muted">Zusatz (einmalig)</dt><dd class="font-mono">${fmtEur(s.zusatzNet)}</dd></div>`;
+      }
+      html += `
+        <div class="flex justify-between gap-2 pt-2 border-t border-border"><dt>Netto Start (Setup + 1. Mo.${s.zusatzNet ? ' + Zusatz' : ''})</dt><dd class="font-mono font-semibold">${fmtEur(s.firstMonthNet)}</dd></div>
+        <div class="flex justify-between gap-2 text-muted"><dt>zzgl. 19 % MwSt.</dt><dd class="font-mono">${fmtEur(s.vatFirst)}</dd></div>
+        <div class="flex justify-between gap-2 text-base"><dt class="font-semibold">Brutto Start</dt><dd class="font-mono font-bold text-gold">${fmtEur(s.firstMonthGross)}</dd></div>
+        <p class="text-[11px] text-muted pt-2 border-t border-border">
+          Ab Monat 2: ${fmtEur(s.retNet)} netto/Mo · ${s.months} Mo. Retainer ${fmtEur(s.contractRetNet)} ·
+          Vertrag gesamt ${fmtEur(s.contractTotalNet)} netto
+        </p>`;
+      if (s.mode === 'pakete' && s.retNet >= 3000) {
+        html += `<p class="text-[11px] text-gold pt-2">Hinweis: Ab Paket L Value-Based prüfen (z. B. 10 % vom messbaren Mehrumsatz), falls &gt; ${fmtEur(3000)}/Mo.</p>`;
+      }
+      document.getElementById('kalk-summary').innerHTML = html;
+    }
+
+    async function copyKalkOffer() {
+      const s = calcKalk();
+      const msg = document.getElementById('kalk-copy-msg');
+      if (!s) return;
+      const setupLines = s.setupItems.map(i => `  · ${i.label}: ${fmtEur(i.price_eur)}`).join('\n') || '  · –';
+      const retLines = s.retItems.map(i => `  · ${i.label}: ${fmtEur(i.price_eur)}/Mo`).join('\n') || '  · –';
+      const zusatzLines = (s.zusatzItems || []).map(z => `  · ${z.label} × ${z.qty}: ${fmtEur(z.line)}`).join('\n');
+      const text = [
+        'WebSchmiede – Angebotskalkulation (intern)',
+        `Modus: ${s.mode === 'pakete' ? 'High-End Pakete' : 'Bausteine modular'}`,
+        `Kundentyp: ${s.firma.label}`,
+        `Laufzeit: ${s.lz.label}`,
+        '',
+        'Setup:',
+        setupLines,
+        `Setup nach Firmenfaktor (${s.firma.setup_factor}): ${fmtEur(s.setupNet)} netto`,
+        '',
+        'Retainer / Monat:',
+        retLines,
+        `Retainer nach Firma (${s.firma.retainer_factor}) + Laufzeit (${s.lz.retainer_factor}): ${fmtEur(s.retNet)} netto/Mo`,
+        zusatzLines ? '\nZusatz:\n' + zusatzLines + `\nZusatz nach Faktor: ${fmtEur(s.zusatzNet)} netto` : '',
+        '',
+        `Start netto: ${fmtEur(s.firstMonthNet)}`,
+        `Start brutto (zzgl. 19 % MwSt.): ${fmtEur(s.firstMonthGross)}`,
+        `Vertrag ${s.months} Monate gesamt: ${fmtEur(s.contractTotalNet)} netto`,
+        '',
+        'Alle Preise netto, zzgl. gesetzlicher MwSt.',
+        s.mode === 'pakete' && s.retNet >= 3000
+          ? 'Hinweis: Value-Based Pricing prüfen, falls messbarer Mehrwert > Paket L.'
+          : '',
+      ].filter(Boolean).join('\n');
+      try {
+        await navigator.clipboard.writeText(text);
+        if (msg) { msg.textContent = 'Kopiert.'; msg.classList.remove('hidden'); }
+      } catch {
+        if (msg) { msg.textContent = 'Kopieren fehlgeschlagen.'; msg.classList.remove('hidden'); }
+      }
+    }
+
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = s || '';
+      return d.innerHTML;
+    }
+
+    (function bootAuth() {
+      const params = new URLSearchParams(location.search);
+      if (params.get('reset')) {
+        document.getElementById('login-form').classList.add('hidden');
+        document.getElementById('forgot-form').classList.add('hidden');
+        document.getElementById('reset-form').classList.remove('hidden');
+        return;
+      }
+      if (AgencyAuth.getToken()) {
+        fetch('/api/agency/kunden', { headers: hdr(), credentials: 'same-origin' })
+          .then(r => r.ok ? showApp() : AgencyAuth.clear())
+          .catch(() => AgencyAuth.clear());
+      }
+    })();
+  </script>
+</body>
+</html>

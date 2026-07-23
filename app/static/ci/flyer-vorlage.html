@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Flyer, Webschmiede</title>
+  <link rel="stylesheet" href="webschmiede-ci.css">
+  <style>
+    .flyer-front {
+      min-height: 240mm;
+      background: #fff;
+      border: 2px solid var(--ws-orange);
+      border-radius: var(--ws-radius-lg);
+      padding: 24px;
+    }
+    .flyer-front .logo { height: 56mm; margin-bottom: 16px; }
+    .flyer-front h2 { font-size: 22pt; font-weight: 700; color: var(--ws-ink); line-height: 1.15; margin: 12px 0; }
+    .flyer-front .tag { color: var(--ws-orange); font-size: 9pt; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+    .flyer-problems { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .flyer-problems div {
+      background: var(--ws-orange-soft); border: 1px solid #FFD4B8; border-radius: var(--ws-radius);
+      padding: 12px; font-size: 10pt; font-weight: 600; color: var(--ws-orange-dark); text-align: center;
+    }
+    .flip-hint { text-align: center; font-size: 9pt; color: var(--ws-ink-muted); margin: 12px 0; font-style: italic; }
+    .solution-head { font-size: 18pt; font-weight: 700; color: var(--ws-orange); margin-bottom: 8px; }
+  </style>
+</head>
+<body class="ws-doc">
+<button class="ws-print-btn ws-no-print" onclick="window.print()">Als PDF speichern (2 Seiten)</button>
+
+<div class="ws-page">
+  <p class="flip-hint ws-no-print">Seite 1 = Probleme · Seite 2 = Lösung, beidseitig drucken</p>
+
+  <div class="flyer-front">
+    <img class="logo" src="webschmiede-logo.png" alt="WebSchmiede">
+    <p class="tag">Systeme für lokale Betriebe. Klartext statt Agentur-Sprech.</p>
+    <h2 class="ws-editable" contenteditable="true">Zu wenig Zeit für<br>den eigentlichen Job?</h2>
+
+    <div class="flyer-problems ws-editable" contenteditable="true">
+      <div>Telefon<br>ohne Ende?</div>
+      <div>In Google<br>kaum zu finden?</div>
+      <div>Papierkram<br>nach Feierabend?</div>
+      <div>Anfragen<br>vergessen?</div>
+    </div>
+
+    <p style="text-align:center;font-size:11pt;color:var(--ws-orange);margin:20px 0;font-weight:700;">
+      Ihre Marke. Ihre Kunden. Ihr System.
+    </p>
+
+    <div class="ws-pipeline">
+      <span>Anfrage</span><span>Termin</span><span>Erledigt</span><span>Ruhe</span>
+    </div>
+    <p style="text-align:center;font-size:10pt;color:var(--ws-ink-muted);margin-top:24px;">↻ Umdrehen für die Lösung</p>
+  </div>
+
+  <div class="ws-page-break"></div>
+
+  <div style="padding-top:8mm;">
+    <div class="ws-doc-header" style="margin-bottom:16px;">
+      <div class="ws-brand-lockup">
+        <img src="webschmiede-logo.png" alt="">
+        <div>
+          <div class="ws-brand-name">Der Digitale Handwerksmeister</div>
+          <div class="ws-brand-tagline">Christian Kummetat</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="ws-editable" contenteditable="true" style="margin-bottom:14px;color:#444;">
+      Website, Bestell- oder Terminportal, Admin und SMS aus einer Hand.
+      Keine fremden Portale, die mitverdienen. Google-Eintrag in Ordnung.
+    </p>
+
+    <p class="ws-gain ws-editable" contenteditable="true">
+      <strong>Kurz:</strong> Weniger Telefon, weniger Zettel, mehr Überblick.
+    </p>
+
+    <h2 class="ws-h2">Was Sie bekommen</h2>
+    <ul class="ws-checklist ws-editable" contenteditable="true">
+      <li>Automatisiertes Business Management System</li>
+      <li>Zentrale Omnichannel-Inbox</li>
+      <li>KI-Follow-Ups &amp; Terminierung</li>
+      <li>Social Media &amp; Meta/Google Ads</li>
+      <li>Modernes CRM &amp; Live-Dashboards</li>
+      <li>Smarte Workflows &amp; Automation</li>
+    </ul>
+
+    <div class="ws-box-accent" style="margin-top:20px;text-align:center;">
+      <p class="solution-head">Kostenloses Erstgespräch</p>
+      <p style="font-size:10pt;color:#555;">www.digitalehandwerkskunst.de</p>
+      <p style="font-size:11pt;margin-top:8px;font-weight:700;color:var(--ws-orange);">+49 177 8011350</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

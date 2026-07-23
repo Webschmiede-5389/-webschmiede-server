@@ -1,0 +1,25 @@
+---
+description: Fact- und UX-Gate Pflicht bevor etwas als fertig/live gilt
+alwaysApply: true
+---
+
+# UX- + Fact-Gate (Webschmiede)
+
+Bevor du Christian (oder einem Kunden) sagst, etwas sei **fertig, live, deployed oder schau mal hier**:
+
+1. **Fakten:** keine erfundenen Texte/Preise/Features; Auftragstreue
+2. **Links & Buttons:** echte Ziele, klarer CTA, auf Mobile erreichbar
+3. **Design:** CI (Dunkel+Gold oder Kunden-CI), Kontrast, Abstände, keine zerschnittenen Elemente
+4. **Responsive:** Handy ~390px ohne Horizontal-Scroll, Touch-Ziele groß genug
+5. **Sinn:** ein klarer nächster Schritt, Flow für Gast/Kunde verständlich
+6. **Funktion:** Happy Path getestet; nach Deploy Live-URL, nicht nur lokal
+
+## Werkzeuge
+
+- Telegram/Nils: `ux check https://…` oder Heuristik im Modul `nils_ux_gate.py`
+- Shipcheck für HTTP-Erreichbarkeit bleibt Pflicht bei Live-Links (`.cursor/rules/shipcheck.mdc`)
+- Bei UI-Arbeit: Browser/DevTools Mobile-Ansicht oder echter Phone-Check
+
+## Regel
+
+Offene Gate-Punkte = **nicht** „fertig“ nennen. Lieber: was noch fehlt + nächster Fix.

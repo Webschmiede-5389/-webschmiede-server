@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Akquise Freigabe – Webschmiede</title>
+  <link href="https://fonts.bunny.net/css?family=inter:400,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0e0b08; --gold:#C9A84C; --card:#15120d; --line:#2a2a2a; --muted:#888; }
+    body { margin:0; font-family:Inter,sans-serif; background:var(--bg); color:#fff; padding:20px; }
+    h1 { color:var(--gold); font-size:1.3rem; }
+    .meta { color:var(--muted); margin-bottom:16px; font-size:13px; }
+    input { padding:10px 12px; border-radius:8px; border:1px solid var(--line); background:#111; color:#fff; width:220px; }
+    button { cursor:pointer; border:0; border-radius:8px; padding:8px 12px; font-weight:600; }
+    .load { background:var(--gold); color:#000; margin-left:8px; }
+    .row { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; margin:10px 0; }
+    .row h3 { margin:0 0 6px; font-size:1rem; }
+    .muted { color:var(--muted); font-size:12px; line-height:1.45; }
+    .acts { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .ok { background:#2ecc71; color:#000; }
+    .later { background:#C9A84C; color:#000; }
+    .skip { background:#444; color:#fff; }
+    .script { margin-top:8px; font-size:12px; color:#ccc; border-left:3px solid var(--gold); padding-left:10px; }
+    a { color:var(--gold); }
+  </style>
+</head>
+<body>
+  <h1>Akquise Freigabe</h1>
+  <p class="meta">Nur A/B mit Kauf-Signal. Du gibst frei, dann anrufen. Kein Auto-Kontakt.</p>
+  <div>
+    <input id="pw" type="password" placeholder="Agency-Passwort" autocomplete="current-password">
+    <button class="load" id="btnLoad" type="button">Laden</button>
+  </div>
+  <p class="meta" id="status">Passwort eingeben.</p>
+  <div id="list"></div>
+  <p class="meta"><a href="/agency-hub.html">← Agency Hub</a></p>
+<script src="/agency-auth.js"></script>
+<script>
+const list = document.getElementById('list');
+const status = document.getElementById('status');
+const pw = document.getElementById('pw');
+function headers() { return AgencyAuth.headers(); }
+async function load() {
+  status.textContent = 'Lade…';
+  list.innerHTML = '';
+  try {
+    if (!AgencyAuth.getToken() && pw.value.trim()) {
+      await AgencyAuth.login('', pw.value.trim());
+    }
+    const [q, a] = await Promise.all([
+      fetch('/api/agency/akquise/queue', { headers: headers(), credentials: 'same-origin' }),
+      fetch('/api/agency/akquise/approvals', { headers: headers(), credentials: 'same-origin' }),
+    ]);
+    if (!q.ok) throw new Error('Auth/Queue HTTP ' + q.status);
+    const queue = await q.json();
+    const appr = a.ok ? await a.json() : { items: [] };
+    const decided = new Set((appr.items || []).map(i => i.key + ':' + i.status));
+    const items = queue.items || [];
+    status.textContent = items.length + ' in Queue · Entscheidungen: ' + (appr.items || []).length;
+    list.innerHTML = items.map(it => {
+      const done = (appr.items || []).find(x => x.key === it.key);
+      const badge = done ? ` · Status: ${done.status}` : '';
+      return `<div class="row" data-key="${esc(it.key)}">
+        <h3>${esc(it.name)} <span class="muted">[${esc(it.budget_tier || '')}] ${esc(it.vertical || '')}${badge}</span></h3>
+        <div class="muted">${esc(it.address || '')} · ${esc(it.phone || 'kein Tel')}</div>
+        <div class="muted"><b>Kauf:</b> ${esc(it.buy_summary || '–')}</div>
+        <div class="muted"><b>Add-on:</b> ${esc(it.addon_pitch || '–')}</div>
+        <div class="muted"><b>ROI:</b> ${esc(it.roi_label || '–')}</div>
+        <div class="script">${esc(it.call_script || '')}</div>
+        <div class="acts">
+          <button class="ok" type="button" data-st="approve">Anrufen (freigeben)</button>
+          <button class="later" type="button" data-st="call_later">Später (+3 Tage)</button>
+          <button class="skip" type="button" data-st="skip">Skip</button>
+        </div>
+      </div>`;
+    }).join('') || '<p class="muted">Keine kaufbereiten Leads in den Reports. Nightly abwarten.</p>';
+  } catch (e) {
+    status.textContent = 'Fehler: ' + e.message;
+  }
+}
+function esc(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+list.addEventListener('click', async (ev) => {
+  const btn = ev.target.closest('button[data-st]');
+  if (!btn) return;
+  const row = btn.closest('.row');
+  const key = row.getAttribute('data-key');
+  const name = row.querySelector('h3')?.childNodes[0]?.textContent?.trim() || '';
+  const st = btn.getAttribute('data-st');
+  const body = {
+    key, status: st, name,
+    phone: '', note: '',
+    buy_summary: '', addon_pitch: '', call_script: '', roi_label: ''
+  };
+  // pull from muted lines roughly
+  const muted = [...row.querySelectorAll('.muted')].map(n => n.textContent);
+  body.buy_summary = (muted.find(t => t.startsWith('Kauf:')) || '').replace(/^Kauf:\s*/, '');
+  body.addon_pitch = (muted.find(t => t.startsWith('Add-on:')) || '').replace(/^Add-on:\s*/, '');
+  body.roi_label = (muted.find(t => t.startsWith('ROI:')) || '').replace(/^ROI:\s*/, '');
+  body.call_script = row.querySelector('.script')?.textContent || '';
+  body.phone = (muted[0] || '').split('·').pop()?.trim() || '';
+  btn.disabled = true;
+  try {
+    const r = await fetch('/api/agency/akquise/approvals', {
+      method: 'POST', headers: headers(), body: JSON.stringify(body)
+    });
+    const j = await r.json();
+    if (!r.ok || !j.ok) throw new Error(j.error || ('HTTP ' + r.status));
+    status.textContent = 'Gespeichert: ' + st + ' · ' + name;
+    await load();
+  } catch (e) {
+    status.textContent = 'Speichern fehlgeschlagen: ' + e.message;
+    btn.disabled = false;
+  }
+});
+document.getElementById('btnLoad').onclick = load;
+pw.addEventListener('keydown', e => { if (e.key === 'Enter') load(); });
+</script>
+</body>
+</html>

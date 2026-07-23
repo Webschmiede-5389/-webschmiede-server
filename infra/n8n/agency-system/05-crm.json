@@ -1,0 +1,117 @@
+{
+  "name": "Agency 05 – CRM Follow-Up",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 10 * * *"
+            }
+          ]
+        }
+      },
+      "id": "05-cron",
+      "name": "Zeitplan",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/cron/followups",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.CRON_SECRET}}"
+            },
+            {
+              "name": "X-Agency-Password",
+              "value": "={{$env.AGENCY_ADMIN_PASSWORD}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body || $json || {}) }}"
+      },
+      "id": "05-http",
+      "name": "Agency API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json;\nreturn [{ json: { ok: true, workflow: 'crm', note: \"Bestehend: workflow-followups.json + workflow-akquise-reminders.json\", result: j } }];"
+      },
+      "id": "05-pack",
+      "name": "Ergebnis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Zeitplan": {
+      "main": [
+        [
+          {
+            "node": "Agency API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agency API": {
+      "main": [
+        [
+          {
+            "node": "Ergebnis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "notes": "Bestehend: workflow-followups.json + workflow-akquise-reminders.json"
+  },
+  "tags": [
+    {
+      "name": "agency"
+    },
+    {
+      "name": "system-13"
+    },
+    {
+      "name": "crm"
+    }
+  ]
+}

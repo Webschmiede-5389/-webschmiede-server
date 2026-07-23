@@ -1,0 +1,55 @@
+{
+  "name": "Agency – B2B Baustoff Pilot (optional n8n)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b2b-baustoff",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "bb-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "b2b-baustoff"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; const body=j.body||j; const t=(body.type||body.use_case||'').toLowerCase();\nconst base=(body.api_base||'https://digitalehandwerkskunst.de');\nreturn [{json:{ok:true,note:'Portal rechnet lokal unter /api/b2b/baustoff/*. Dieser Hook ist fuer spaeter Mail-Inbox/ERP.',type:t,hint:base+'/api/b2b/baustoff/pilot'}}];"
+      },
+      "id": "bb-norm",
+      "name": "Hinweis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "bb-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [500, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Hinweis", "type": "main", "index": 0 }]]
+    },
+    "Hinweis": {
+      "main": [[{ "node": "Antwort", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "notes": "Optional. Live-Logik im Flask-Portal. Kein Auto-Mail an Kunden."
+  },
+  "tags": [{ "name": "agency" }, { "name": "b2b" }, { "name": "baustoff" }]
+}

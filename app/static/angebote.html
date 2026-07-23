@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pakete · Webschmiede</title>
+  <meta name="description" content="Pakete nach Branche · Preis auf Anfrage · Webschmiede Digitale Handwerkskunst">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/png" href="/webschmiede-logo.png">
+  <style>
+    :root {
+      --orange: #FF6600;
+      --orange-soft: #FFF4ED;
+      --orange-border: #FFD4B8;
+      --ink: #1A1A1A;
+      --muted: #666;
+      --border: #E8E8E8;
+      --bg: #F5F5F5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    html.cdn-loaded body {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    html.cdn-essential [class^="fa-"],
+    html.cdn-essential [class*=" fa-"] { display: none !important; }
+    a { color: var(--orange); text-decoration: none; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px 96px; }
+
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: #fff; border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--ink); min-width: 0;
+    }
+    .brand img {
+      height: 48px; width: 48px; object-fit: contain;
+      flex-shrink: 0;
+    }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+    .brand-text .name { font-weight: 700; font-size: 1.125rem; }
+    .brand-text .tag { font-weight: 500; font-size: .75rem; color: var(--orange); }
+    .topbar-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .btn-back {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 10px;
+      border: 1px solid var(--border); background: #fff; color: var(--ink);
+    }
+    .btn-back:hover { border-color: var(--orange); color: var(--orange); }
+    @media (max-width: 480px) {
+      .brand img { height: 40px; width: 40px; }
+      .brand-text .name { font-size: 1rem; }
+      .brand-text .tag { font-size: .6875rem; }
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 16px; border-radius: 10px; font-size: .8125rem; font-weight: 600;
+      border: 1px solid var(--border); background: #fff; color: var(--ink); cursor: pointer;
+    }
+    .btn-primary { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .btn-block { width: 100%; }
+
+    .page-head { padding: 24px 0 8px; }
+    .page-head .label {
+      font-size: .6875rem; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--orange); margin-bottom: 8px;
+    }
+    .page-head h1 { font-size: 1.375rem; font-weight: 700; line-height: 1.3; margin-bottom: 6px; }
+    .page-head p { font-size: .875rem; color: var(--muted); }
+
+    .tabs {
+      display: flex; gap: 6px; overflow-x: auto; padding: 16px 0;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;
+      min-width: 72px; padding: 12px 10px; border-radius: 14px;
+      border: 1px solid var(--border); background: #fff; cursor: pointer;
+      font-size: .6875rem; font-weight: 600; color: var(--muted); transition: .15s;
+    }
+    .tab i { font-size: 1.125rem; color: var(--orange); }
+    .tab.active {
+      background: var(--orange-soft); border-color: var(--orange-border);
+      color: var(--ink); box-shadow: 0 2px 8px rgba(255,102,0,.08);
+    }
+
+    .industry-hero {
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 24px 20px; margin-bottom: 20px; text-align: center;
+    }
+    .industry-hero .icon-lg {
+      width: 56px; height: 56px; margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--orange-soft); border: 1px solid var(--orange-border);
+      border-radius: 16px; font-size: 1.375rem; color: var(--orange);
+    }
+    .industry-hero .sub {
+      font-size: .6875rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--orange); margin-bottom: 8px;
+    }
+    .industry-hero h2 { font-size: 1.25rem; font-weight: 700; line-height: 1.35; margin-bottom: 10px; }
+    .industry-hero .intro { font-size: .875rem; color: var(--muted); max-width: 36em; margin: 0 auto; }
+
+    .section { margin-bottom: 24px; }
+    .section-head {
+      font-size: .6875rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+    }
+
+    .benefit-list { display: flex; flex-direction: column; gap: 10px; }
+    .benefit {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+    }
+    .benefit i { color: var(--orange); margin-top: 2px; font-size: .875rem; flex-shrink: 0; }
+    .benefit span { font-size: .875rem; line-height: 1.45; }
+
+    .auto-list {
+      background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 8px 0;
+    }
+    .auto-list li {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 18px; font-size: .8125rem; color: var(--ink);
+      border-bottom: 1px solid var(--border); list-style: none;
+    }
+    .auto-list li:last-child { border-bottom: none; }
+    .auto-list li i { width: 18px; text-align: center; color: var(--orange); font-size: .75rem; }
+
+    .proof {
+      margin-top: 16px; font-size: .8125rem; color: var(--muted);
+      text-align: center; padding: 12px; background: var(--orange-soft);
+      border-radius: 10px; border: 1px solid var(--orange-border);
+    }
+
+    .pkg-stack { display: flex; flex-direction: column; gap: 16px; }
+    .pkg {
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 20px; position: relative;
+    }
+    .pkg.is-rec { border-color: var(--orange); box-shadow: 0 4px 24px rgba(255,102,0,.1); }
+    .pkg-rec {
+      position: absolute; top: 16px; right: 16px;
+      font-size: .625rem; font-weight: 700; text-transform: uppercase;
+      background: var(--orange); color: #fff; padding: 4px 10px; border-radius: 99px;
+    }
+    .pkg-step {
+      font-size: .625rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+    }
+    .pkg-name { font-size: 1.125rem; font-weight: 700; margin-bottom: 2px; }
+    .pkg-tag { font-size: .8125rem; color: var(--orange); font-weight: 500; margin-bottom: 16px; }
+    .pkg-price { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .pkg-price .eur { font-size: 1.75rem; font-weight: 800; letter-spacing: -.02em; }
+    .pkg-price .eur-note { font-size: .75rem; font-weight: 500; color: var(--muted); margin-left: 4px; }
+    .pkg-price .mo { font-size: .8125rem; color: var(--muted); margin-top: 4px; }
+    .pkg-features { list-style: none; margin-bottom: 16px; }
+    .pkg-features li {
+      font-size: .8125rem; color: var(--muted); padding: 5px 0 5px 1.25em;
+      text-indent: -1.25em; line-height: 1.45;
+    }
+    .pkg-features li::before { content: "✓ "; color: var(--orange); font-weight: 700; }
+
+    .legal-note {
+      font-size: .75rem; color: var(--muted); text-align: center;
+      margin-top: 8px; line-height: 1.5;
+    }
+
+    .service-block {
+      background: #fff; border: 2px solid var(--orange-border); border-radius: 16px;
+      padding: 24px 20px; scroll-margin-top: 80px;
+    }
+    .service-block .service-icon {
+      width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+      background: var(--orange-soft); border-radius: 12px; color: var(--orange);
+      font-size: 1.125rem; margin-bottom: 12px;
+    }
+    .service-block h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 6px; }
+    .service-block .service-intro { font-size: .875rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+    .service-price { margin-bottom: 16px; }
+    .service-price .eur { font-size: 1.5rem; font-weight: 800; }
+    .service-price .mo { font-size: .8125rem; color: var(--muted); }
+    .service-note { font-size: .75rem; color: var(--muted); margin-bottom: 16px; }
+    .alltag-steps { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+    .alltag-step {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--bg); border-radius: 12px; padding: 12px 14px;
+    }
+    .alltag-step .when {
+      flex-shrink: 0; font-size: .625rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--orange); min-width: 5.5rem; padding-top: 2px;
+    }
+    .alltag-step .text { font-size: .8125rem; line-height: 1.45; }
+    .service-disclaimer {
+      font-size: .75rem; color: var(--muted); font-style: italic;
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+    }
+    .pain-list { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+    .pain-item {
+      font-size: .8125rem; color: var(--muted); padding: 10px 12px;
+      background: #fff7ed; border-left: 3px solid var(--orange); border-radius: 0 8px 8px 0;
+      line-height: 1.45;
+    }
+    .pkg-prose { font-size: .875rem; color: var(--muted); margin: 12px 0 0; line-height: 1.55; }
+    .pkg-prose .label { display: block; font-size: .7rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink); margin-bottom: 4px; }
+    .pkg-complexity { font-size: .625rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--orange); margin-bottom: 4px; }
+
+    .sticky-cta {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+      background: #fff; border-top: 1px solid var(--border);
+      padding: 12px 16px; display: flex; gap: 10px;
+      box-shadow: 0 -4px 24px rgba(0,0,0,.06);
+    }
+    .sticky-cta .btn { flex: 1; padding: 13px; }
+
+    .loading { text-align: center; padding: 64px 16px; color: var(--muted); }
+    footer { text-align: center; font-size: .6875rem; color: var(--muted); padding: 32px 16px 16px; line-height: 1.6; }
+    footer a { color: var(--orange); text-decoration: underline; text-underline-offset: 2px; }
+    footer a:hover { color: var(--ink); }
+    footer button.linkish {
+      background: none; border: 0; padding: 0; color: var(--orange);
+      font: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer;
+    }
+
+    .consent-bar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 100;
+      background: #fff; border-top: 1px solid var(--border);
+      box-shadow: 0 -8px 32px rgba(0,0,0,.08);
+      padding: 16px; display: none;
+    }
+    .consent-bar.show { display: block; }
+    .consent-inner {
+      max-width: 720px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .consent-inner { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+    }
+    .consent-inner h2 { font-size: .875rem; font-weight: 700; color: var(--ink); margin: 0; }
+    .consent-inner p { font-size: .75rem; color: var(--muted); line-height: 1.5; margin: 4px 0 0; }
+    .consent-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+    @media print {
+      .no-print { display: none !important; }
+      .sticky-cta { display: none !important; }
+      body { background: #fff; }
+      .wrap { max-width: 100%; padding: 0; }
+      .pkg { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar no-print">
+  <div style="display:flex;align-items:center;gap:10px;min-width:0">
+    <a href="/" class="btn-back" aria-label="Zurück zur Startseite" title="Zurück zur Startseite">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <a href="/" class="brand">
+      <img src="/webschmiede-logo.png" alt="WebSchmiede Logo">
+      <span class="brand-text">
+        <span class="name">WebSchmiede</span>
+        <span class="tag">Digitale Handwerkskunst</span>
+      </span>
+    </a>
+  </div>
+  <div class="topbar-actions">
+    <button type="button" class="btn" onclick="window.print()" title="Angebot drucken" aria-label="Angebot drucken">
+      <i class="fa-solid fa-print"></i>
+    </button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-head no-print">
+    <p class="label">Pakete</p>
+    <h1>Pakete nach Branche</h1>
+    <p>Leistungen klar · Preis auf Anfrage · Stand <span id="catalog-date"></span></p>
+  </div>
+
+  <div id="industry-tabs" class="tabs no-print" role="tablist"></div>
+  <div id="content"><p class="loading">Lade Pakete…</p></div>
+</div>
+
+<div class="sticky-cta no-print">
+  <a id="cta-call" href="tel:+491778011350" class="btn"><i class="fa-solid fa-phone"></i> Anrufen</a>
+  <a id="cta-wa" href="https://wa.me/491778011350" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+</div>
+
+<footer class="no-print">
+  WebSchmiede · Digitale Handwerkskunst · Christian Kummetat · Mechernich<br>
+  Meinertzhagener Str. 16, 53894 Mechernich · info@digitalehandwerkskunst.de<br>
+  <a href="/impressum">Impressum</a> · <a href="/datenschutz">Datenschutz</a>
+  · <button type="button" class="linkish" id="consent-reset">Cookie-/CDN-Einstellungen</button>
+</footer>
+
+<div id="consent-bar" class="consent-bar no-print" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-desc">
+  <div class="consent-inner">
+    <div>
+      <h2 id="consent-title">Externe Inhalte (Schriftarten &amp; Icons)</h2>
+      <p id="consent-desc">
+        Zur einheitlichen Darstellung laden wir Schriftarten von Bunny Fonts (EU) und Icons von
+        cdnjs/Cloudflare. Dabei wird Ihre IP-Adresse übermittelt. Ohne Einwilligung nutzen wir
+        System-Schriftarten. <a href="/datenschutz">Datenschutz</a>
+      </p>
+    </div>
+    <div class="consent-actions">
+      <button type="button" class="btn" id="consent-essential">Nur notwendig</button>
+      <button type="button" class="btn btn-primary" id="consent-accept">Akzeptieren</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY = 'ws_cdn_consent';
+  var bar = document.getElementById('consent-bar');
+
+  function loadCdn() {
+    if (!document.getElementById('ws-bunny-fonts')) {
+      var pre = document.createElement('link');
+      pre.rel = 'preconnect';
+      pre.href = 'https://fonts.bunny.net';
+      document.head.appendChild(pre);
+      var f = document.createElement('link');
+      f.id = 'ws-bunny-fonts';
+      f.rel = 'stylesheet';
+      f.href = 'https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap';
+      document.head.appendChild(f);
+    }
+    if (!document.getElementById('ws-font-awesome')) {
+      var fa = document.createElement('link');
+      fa.id = 'ws-font-awesome';
+      fa.rel = 'stylesheet';
+      fa.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css';
+      fa.crossOrigin = 'anonymous';
+      document.head.appendChild(fa);
+    }
+    document.documentElement.classList.add('cdn-loaded');
+    document.documentElement.classList.remove('cdn-essential');
+  }
+
+  function essential() {
+    document.documentElement.classList.add('cdn-essential');
+    document.documentElement.classList.remove('cdn-loaded');
+  }
+
+  function choose(v) {
+    try { localStorage.setItem(KEY, v); } catch (e) {}
+    if (v === 'accepted') loadCdn();
+    else essential();
+    bar.classList.remove('show');
+  }
+
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch (e) {}
+  if (stored === 'accepted') loadCdn();
+  else if (stored === 'essential') essential();
+  else bar.classList.add('show');
+
+  document.getElementById('consent-accept').addEventListener('click', function () { choose('accepted'); });
+  document.getElementById('consent-essential').addEventListener('click', function () { choose('essential'); });
+  document.getElementById('consent-reset').addEventListener('click', function () {
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    location.reload();
+  });
+})();
+</script>
+
+<script>
+(function () {
+  const params = new URLSearchParams(location.search);
+  let catalog = null;
+  let activeId = params.get('branche') || params.get('industry') || 'gastro';
+  const TIER_NUM = { fundament: 1, system: 2, automatik: 3, komplett: 4 };
+
+  function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+  }
+
+  function waText(ind, pkg) {
+    const line = pkg
+      ? `Hallo Christian, ich interessiere mich für das Paket „${pkg.name}" (${ind.label}). Können Sie mir einen Preis nennen?`
+      : `Hallo Christian, ich interessiere mich für ein System (${ind.label}). Können wir kurz sprechen?`;
+    return 'https://wa.me/491778011350?text=' + encodeURIComponent(line);
+  }
+
+  function waServicePkg(svc, pkg, ind) {
+    const line = `Hallo Christian, ich interessiere mich für „${pkg.name}" (Buchhaltungs-Automation, ${ind.label}). Können Sie mir einen Preis nennen?`;
+    return 'https://wa.me/491778011350?text=' + encodeURIComponent(line);
+  }
+
+  function renderServiceBlock(ind) {
+    const svc = (catalog.services || []).find(s => s.id === 'buchhaltung');
+    if (!svc) return '';
+    const industries = svc.for_industries || [];
+    if (industries.length && !industries.includes(ind.id)) return '';
+
+    const pains = (svc.pains || []).map(p => `<div class="pain-item">${esc(p)}</div>`).join('');
+    const alltag = (svc.alltag || []).map(step => `
+      <div class="alltag-step">
+        <span class="when">${esc(step.when)}</span>
+        <span class="text">${esc(step.text)}</span>
+      </div>`).join('');
+
+    const pkgs = (svc.packages || []).map(pkg => {
+      const tierLabel = catalog.tier_labels[pkg.tier] || pkg.complexity || pkg.tier;
+      return `<article class="pkg ${pkg.highlight ? 'is-rec' : ''}">
+        ${pkg.highlight ? '<span class="pkg-rec">Sweetspot</span>' : ''}
+        <p class="pkg-complexity">${esc(pkg.complexity || tierLabel)}</p>
+        <h3 class="pkg-name">${esc(pkg.name)}</h3>
+        <p class="pkg-tag">${esc(pkg.tagline)}</p>
+        <p class="pkg-prose"><span class="label">Problem</span>${esc(pkg.problem || pkg.pain || '')}</p>
+        <p class="pkg-prose"><span class="label">Lösung</span>${esc(pkg.solution || '')}</p>
+        <div class="pkg-price">
+          <div><span class="eur">Preis auf Anfrage</span><span class="eur-note">Setup &amp; Monat im Gespräch</span></div>
+        </div>
+        <ul class="pkg-features">${(pkg.features || []).map(f => `<li>${esc(f)}</li>`).join('')}</ul>
+        <a href="${waServicePkg(svc, pkg, ind)}" target="_blank" rel="noopener" class="btn btn-primary btn-block no-print">
+          <i class="fa-brands fa-whatsapp"></i> Preis anfragen
+        </a>
+      </article>`;
+    }).join('');
+
+    return `
+      <section class="section" id="buchhaltung">
+        <p class="section-head">Zusatz-Service · Buchhaltung</p>
+        <div class="service-block" style="margin-bottom:20px;border-width:1px">
+          <div class="service-icon"><i class="fa-solid ${esc(svc.icon || 'fa-file-invoice')}"></i></div>
+          <h3>${esc(svc.name)}</h3>
+          <p class="service-intro"><strong>${esc(svc.headline)}</strong> ${esc(svc.intro)}</p>
+          ${svc.note ? `<p class="service-note">${esc(svc.note)}</p>` : ''}
+          ${pains ? `<p class="section-head" style="margin-top:12px">Kennen Sie das?</p><div class="pain-list">${pains}</div>` : ''}
+        </div>
+        <p class="section-head">Drei Komplexitätsstufen</p>
+        <div class="pkg-stack">${pkgs}</div>
+        <p class="section-head" style="margin-top:20px">So läuft der Alltag</p>
+        <div class="alltag-steps">${alltag}</div>
+        ${svc.not_included ? `<p class="service-disclaimer">${esc(svc.not_included)}</p>` : ''}
+      </section>`;
+  }
+
+  function benefitsOf(ind) {
+    return ind.benefits || ind.pains || [];
+  }
+
+  function renderTabs() {
+    const el = document.getElementById('industry-tabs');
+    el.innerHTML = catalog.industries.map(ind => {
+      const short = ind.label.split('&')[0].trim().split(' ')[0];
+      return `<button type="button" class="tab ${ind.id === activeId ? 'active' : ''}" data-id="${esc(ind.id)}" role="tab" aria-label="${esc(ind.label)}">
+        <i class="fa-solid ${esc(ind.icon)}"></i>
+        <span>${esc(short)}</span>
+      </button>`;
+    }).join('');
+    el.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeId = btn.dataset.id;
+        history.replaceState(null, '', '?branche=' + activeId);
+        renderTabs();
+        renderIndustry();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  }
+
+  function renderIndustry() {
+    const ind = catalog.industries.find(i => i.id === activeId) || catalog.industries[0];
+    if (!ind) return;
+    activeId = ind.id;
+
+    const benefits = benefitsOf(ind).map(b => `
+      <div class="benefit"><i class="fa-solid fa-circle-check"></i><span>${esc(b)}</span></div>`).join('');
+
+    const autos = ind.automations.map(a => `
+      <li><i class="fa-solid fa-bolt"></i>${esc(a)}</li>`).join('');
+
+    const pkgs = ind.packages.map(pkg => {
+      const step = TIER_NUM[pkg.tier] || '';
+      const tierLabel = catalog.tier_labels[pkg.tier] || pkg.tier;
+      return `<article class="pkg ${pkg.highlight ? 'is-rec' : ''}">
+        ${pkg.highlight ? '<span class="pkg-rec">Empfohlen</span>' : ''}
+        <p class="pkg-step">Stufe ${step} · ${esc(tierLabel)}</p>
+        <h3 class="pkg-name">${esc(pkg.name)}</h3>
+        <p class="pkg-tag">${esc(pkg.tagline)}</p>
+        <div class="pkg-price">
+          <div><span class="eur">Preis auf Anfrage</span><span class="eur-note">Setup &amp; Monat im Gespräch</span></div>
+        </div>
+        <ul class="pkg-features">${pkg.features.map(f => `<li>${esc(f)}</li>`).join('')}</ul>
+        <a href="${waText(ind, pkg)}" target="_blank" rel="noopener" class="btn btn-primary btn-block no-print">
+          <i class="fa-brands fa-whatsapp"></i> Preis anfragen
+        </a>
+      </article>`;
+    }).join('');
+
+    document.getElementById('content').innerHTML = `
+      <section class="industry-hero">
+        <div class="icon-lg"><i class="fa-solid ${esc(ind.icon)}"></i></div>
+        <p class="sub">${esc(ind.short)}</p>
+        <h2>${esc(ind.headline)}</h2>
+        <p class="intro">${esc(ind.intro)}</p>
+        ${ind.proof ? `<p class="proof"><i class="fa-solid fa-circle-check"></i> ${esc(ind.proof.label)}</p>` : ''}
+      </section>
+
+      <section class="section">
+        <p class="section-head">Kurz gesagt</p>
+        <div class="benefit-list">${benefits}</div>
+      </section>
+
+      <section class="section">
+        <p class="section-head">Das übernimmt das System</p>
+        <ul class="auto-list">${autos}</ul>
+      </section>
+
+      <section class="section">
+        <p class="section-head">Pakete</p>
+        <div class="pkg-stack">${pkgs}</div>
+        <p class="legal-note">Setup einmalig · Monatlich, nach 12 Monaten kündbar · Preis und Umfang im Gespräch</p>
+      </section>
+
+      ${renderServiceBlock(ind)}`;
+
+    document.title = `${ind.label} · Pakete · Webschmiede`;
+  }
+
+  fetch('/angebote.json')
+    .then(r => r.json())
+    .then(data => {
+      catalog = data;
+      document.getElementById('catalog-date').textContent = data.updated || '–';
+      if (data.contact) {
+        document.getElementById('cta-call').href = data.contact.phone_link || '#';
+        document.getElementById('cta-wa').href = data.contact.whatsapp || '#';
+      }
+      if (!catalog.industries.some(i => i.id === activeId)) activeId = catalog.industries[0].id;
+      renderTabs();
+      renderIndustry();
+      if (location.hash === '#buchhaltung') {
+        setTimeout(() => document.getElementById('buchhaltung')?.scrollIntoView({ behavior: 'smooth' }), 300);
+      }
+    })
+    .catch(() => {
+      document.getElementById('content').innerHTML = '<p class="loading" style="color:#c00">Katalog konnte nicht geladen werden.</p>';
+    });
+})();
+</script>
+</body>
+</html>

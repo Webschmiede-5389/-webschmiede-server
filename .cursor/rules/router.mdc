@@ -1,0 +1,15 @@
+---
+description: AI-Router – zuerst Intent, dann Mitarbeiter-Skills
+alwaysApply: false
+---
+
+# Router (Dispatcher)
+
+Wenn Christian sagt **Router**, **delegiere**, **wer macht das**, oder der Auftrag **mehrere Domänen** mischt (z. B. Vertrag + Anschreiben, Server + Strategie):
+
+1. Skill `.cursor/skills/router/SKILL.md` befolgen
+2. Klassifizieren: `python scripts/agency_router_cli.py --playbook "<Auftrag>"`
+3. Genannte Mitarbeiter der Reihe nach (Anwalt / Texter+Lektor / Nils / Stefan)
+4. Nicht alles allein im Auto-Modus „irgendwie“ lösen
+
+Reine Einzelaufgaben („Nils, deploy“) brauchen keinen Router.

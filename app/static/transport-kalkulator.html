@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FF6600">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="TourMeter – Lkw-Transportkosten kalkulieren. Diesel, Maut, Standzeit, Marge.">
+  <link rel="icon" href="/tourmeter-mark.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/tourmeter-mark.svg">
+  <link rel="manifest" href="/transport-kalkulator.webmanifest">
+  <title>TourMeter · Transportkalkulation</title>
+  <link href="https://fonts.bunny.net/css?family=sora:600;700;800|dm-sans:400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6600;
+      --orange-hot: #E55A00;
+      --orange-soft: #FFF4ED;
+      --ink: #1A1A1A;
+      --muted: #667085;
+      --border: #E8E8E8;
+      --bg: #F7F7F8;
+      --panel: #ffffff;
+      --ok: #15803d;
+      --steel: #F2F4F7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.45;
+      background-image:
+        radial-gradient(ellipse 90% 40% at 50% -5%, rgba(255,102,0,.12), transparent 55%),
+        linear-gradient(180deg, #fff 0%, var(--bg) 28%);
+    }
+    a { color: var(--orange); }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 0 14px 64px; }
+
+    .hero {
+      position: relative;
+      margin: 0 -14px 18px;
+      padding: 26px 18px 20px;
+      overflow: hidden;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero::before {
+      content: "";
+      position: absolute; inset: auto 0 0 0; height: 8px;
+      background: repeating-linear-gradient(
+        90deg,
+        #1a1a1a 0 22px,
+        #1a1a1a 22px 28px,
+        transparent 28px 40px,
+        var(--orange) 40px 62px,
+        transparent 62px 74px
+      );
+      animation: road-scroll 14s linear infinite;
+    }
+    @keyframes road-scroll {
+      from { background-position: 0 0; }
+      to { background-position: 148px 0; }
+    }
+    .hero-inner {
+      max-width: 920px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end;
+    }
+    @media (max-width: 700px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .truck-art { order: -1; justify-self: end; width: min(220px, 70vw); }
+    }
+
+    .tm-logo {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-bottom: 14px; text-decoration: none; color: inherit;
+    }
+    .tm-logo .mark {
+      width: 44px; height: 44px; flex: 0 0 auto;
+    }
+    .tm-logo .word {
+      font-family: Sora, system-ui, sans-serif;
+      font-weight: 800; font-size: 1.35rem; letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .tm-logo .word span { color: var(--orange); }
+    .tm-logo .by {
+      display: block; margin-top: 3px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.68rem; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .hero .tag {
+      font-family: Sora, system-ui, sans-serif;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--orange);
+    }
+    .hero h1 {
+      font-family: Sora, system-ui, sans-serif;
+      font-size: clamp(1.55rem, 4.5vw, 2.1rem);
+      font-weight: 700; letter-spacing: -0.03em; line-height: 1.1;
+      max-width: 16ch; margin-top: 4px;
+    }
+    .hero .sub {
+      margin-top: 10px; color: var(--muted); font-size: 0.95rem; max-width: 38ch;
+    }
+    .truck-art {
+      width: min(260px, 40vw); height: auto;
+      filter: drop-shadow(0 10px 18px rgba(26,26,26,.12));
+      animation: truck-idle 3.2s ease-in-out infinite;
+    }
+    @keyframes truck-idle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    .fleet-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 12px; padding: 6px 10px; border-radius: 999px;
+      background: var(--orange-soft); border: 1px solid #FFD4B8;
+      color: var(--orange); font-size: 0.7rem; font-weight: 700;
+      font-family: Sora, system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    .banner {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--orange-soft); border: 1px solid #FFD4B8; border-radius: 12px;
+      padding: 12px 14px; font-size: 0.84rem; margin-bottom: 14px; color: #5c3a1e;
+    }
+    .banner .ico {
+      flex: 0 0 auto; width: 36px; height: 36px; border-radius: 10px;
+      background: #fff; color: var(--orange); border: 1px solid #FFD4B8;
+      display: grid; place-items: center; font-size: 1.05rem;
+    }
+    .tabs {
+      display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;
+      padding: 4px; background: #fff; border-radius: 12px; border: 1px solid var(--border);
+    }
+    .tabs button {
+      border: 0; background: transparent; border-radius: 9px; color: var(--muted);
+      padding: 10px 14px; font: inherit; font-size: 0.84rem; font-weight: 600; cursor: pointer;
+      font-family: Sora, system-ui, sans-serif;
+    }
+    .tabs button.active { background: var(--orange); color: #fff; }
+    .panel {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px; margin-bottom: 12px;
+      box-shadow: 0 2px 10px rgba(26,26,26,.03);
+    }
+    .panel h2 {
+      font-family: Sora, system-ui, sans-serif;
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--orange); margin-bottom: 12px; font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel h2::before {
+      content: ""; width: 16px; height: 3px; border-radius: 2px; background: var(--orange);
+    }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+    label.field { display: block; font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
+    label.field span { display: block; margin-bottom: 4px; font-weight: 600; color: #344054; }
+    input, select, textarea {
+      width: 100%; padding: 11px 12px; border: 1px solid var(--border);
+      border-radius: 10px; font: inherit; font-size: 0.92rem;
+      background: #fff; color: var(--ink);
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid #ffd4b8; border-color: var(--orange);
+    }
+    .row-stop {
+      border: 1px solid var(--border); border-radius: 12px; padding: 12px;
+      margin-bottom: 8px; background: var(--steel);
+      border-left: 3px solid var(--orange);
+    }
+    .row-stop .head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px; font-size: 0.78rem; font-weight: 700;
+      font-family: Sora, system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 16px; border-radius: 10px; font: inherit; font-size: 0.88rem;
+      font-weight: 600; border: 1px solid var(--border); background: #fff; cursor: pointer;
+      color: var(--ink); font-family: Sora, system-ui, sans-serif;
+    }
+    .btn:hover { border-color: var(--orange); color: var(--orange); }
+    .btn-primary {
+      background: var(--orange); color: #fff; border-color: var(--orange);
+      box-shadow: 0 6px 16px rgba(255,102,0,.22);
+    }
+    .btn-primary:hover { background: var(--orange-hot); color: #fff; }
+    .btn-ghost { background: transparent; }
+    .btn-danger { color: #b91c1c; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .check {
+      display: flex; align-items: center; gap: 8px; font-size: 0.88rem; margin: 8px 0;
+    }
+    .check input { width: auto; accent-color: var(--orange); }
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px;
+      margin-bottom: 12px;
+    }
+    .kpi {
+      background: var(--orange-soft); border: 1px solid #FFD4B8;
+      border-radius: 12px; padding: 14px 12px; text-align: center;
+    }
+    .kpi strong {
+      display: block; font-size: 1.35rem; color: var(--ink);
+      font-family: Sora, system-ui, sans-serif; font-weight: 700;
+    }
+    .kpi span { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .kpi.big {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #ff7a1a 0%, #ff6600 100%);
+      border: 0; color: #fff;
+    }
+    .kpi.big strong { color: #fff; font-size: 1.9rem; }
+    .kpi.big span { color: rgba(255,255,255,.9); }
+    table.break { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    table.break th, table.break td {
+      text-align: left; padding: 10px 4px; border-bottom: 1px solid var(--border);
+    }
+    table.break th {
+      color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      font-family: Sora, system-ui, sans-serif;
+    }
+    table.break td:last-child, table.break th:last-child {
+      text-align: right; font-variant-numeric: tabular-nums;
+      font-family: Sora, system-ui, sans-serif; font-weight: 600;
+    }
+    .muted { color: var(--muted); font-size: 0.8rem; }
+    .err { color: #b91c1c; font-size: 0.85rem; margin-top: 8px; }
+    .ok { color: var(--ok); font-size: 0.85rem; margin-top: 8px; }
+    .hidden { display: none !important; }
+    footer {
+      text-align: center; font-size: 0.75rem; color: var(--muted); margin-top: 24px;
+    }
+    #copyBox {
+      width: 100%; min-height: 140px; font-size: 0.82rem; font-family: ui-monospace, monospace;
+      background: var(--steel);
+    }
+    .hint { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+    .list-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 12px;
+      margin-bottom: 8px; background: var(--steel);
+      display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap;
+    }
+    .list-card strong { font-family: Sora, system-ui, sans-serif; font-size: 0.9rem; }
+    .fuel-status { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+    @media print {
+      body { background: #fff !important; }
+      .tabs, .banner, .actions, .btn, footer, .no-print { display: none !important; }
+      .hero { border: 0; padding: 0 0 12px; margin: 0 0 12px; }
+      .truck-art, .fleet-chip { display: none !important; }
+      .panel { box-shadow: none; break-inside: avoid; }
+      #result { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <a class="tm-logo" href="/transport-kalkulator" aria-label="TourMeter">
+          <svg class="mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#FF6600"/>
+            <rect x="8" y="24" width="28" height="18" rx="3" fill="#fff"/>
+            <path d="M36 28h10c3 0 5.5 2.2 6 5.2L53 42H36V28z" fill="#1A1A1A"/>
+            <rect x="40" y="30" width="8" height="6" rx="1" fill="#9fd7ff"/>
+            <circle cx="16" cy="44" r="5" fill="#1A1A1A"/>
+            <circle cx="16" cy="44" r="2" fill="#FF6600"/>
+            <circle cx="30" cy="44" r="5" fill="#1A1A1A"/>
+            <circle cx="30" cy="44" r="2" fill="#FF6600"/>
+            <circle cx="48" cy="44" r="5" fill="#1A1A1A"/>
+            <circle cx="48" cy="44" r="2" fill="#FF6600"/>
+          </svg>
+          <div>
+            <div class="word">Tour<span>Meter</span></div>
+            <span class="by">by Webschmiede</span>
+          </div>
+        </a>
+        <p class="tag">Lkw · Paletten · Pilot</p>
+        <h1>Transport sauber kalkulieren</h1>
+        <p class="sub">Diesel, Maut, Standzeit und Marge für deine Tour. Entwurf zum Gegenlesen, kein Autopilot.</p>
+        <span class="fleet-chip">Fleet Desk</span>
+      </div>
+      <svg class="truck-art" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="cab" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ff8a33"/>
+            <stop offset="100%" stop-color="#ff6600"/>
+          </linearGradient>
+          <linearGradient id="box" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#4a5568"/>
+            <stop offset="100%" stop-color="#2d3748"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="160" cy="142" rx="110" ry="8" fill="rgba(26,26,26,.1)"/>
+        <rect x="28" y="58" width="168" height="58" rx="6" fill="url(#box)"/>
+        <rect x="40" y="68" width="28" height="20" rx="2" fill="#1a202c" opacity=".55"/>
+        <rect x="78" y="68" width="28" height="20" rx="2" fill="#1a202c" opacity=".55"/>
+        <rect x="116" y="68" width="28" height="20" rx="2" fill="#1a202c" opacity=".55"/>
+        <rect x="154" y="68" width="28" height="20" rx="2" fill="#1a202c" opacity=".55"/>
+        <path d="M196 70 h52 c10 0 18 8 20 18 l8 28 h-80 z" fill="url(#cab)"/>
+        <path d="M214 78 h28 c6 0 10 4 11 9 l3 11 h-48 z" fill="#cfefff"/>
+        <rect x="248" y="98" width="10" height="8" rx="1" fill="#ffe08a"/>
+        <circle cx="70" cy="122" r="18" fill="#1a1a1a" stroke="#cbd5e1" stroke-width="3"/>
+        <circle cx="70" cy="122" r="7" fill="#64748b"/>
+        <circle cx="160" cy="122" r="18" fill="#1a1a1a" stroke="#cbd5e1" stroke-width="3"/>
+        <circle cx="160" cy="122" r="7" fill="#64748b"/>
+        <circle cx="250" cy="122" r="18" fill="#1a1a1a" stroke="#cbd5e1" stroke-width="3"/>
+        <circle cx="250" cy="122" r="7" fill="#64748b"/>
+        <rect x="20" y="108" width="14" height="8" rx="2" fill="#ff6600"/>
+      </svg>
+    </div>
+  </header>
+
+  <div class="banner">
+    <div class="ico" aria-hidden="true">⛽</div>
+    <div>
+      Diesel, Maut und Stundensatz stellst du unter „Lkw-Kosten“ selbst ein.
+      Speichert auf diesem Gerät. Ergebnis ist ein Vorschlag zum Gegenlesen.
+    </div>
+  </div>
+
+  <div class="tabs no-print">
+    <button type="button" class="active" data-tab="calc">Tour kalkulieren</button>
+    <button type="button" data-tab="customers">Kunden</button>
+    <button type="button" data-tab="history">Verlauf</button>
+    <button type="button" data-tab="settings">Lkw-Kosten</button>
+    <button type="button" data-tab="help">Kurz erklärt</button>
+  </div>
+
+
+
+  <!-- KALKULATION -->
+  <section id="tab-calc">
+    <div class="panel">
+      <h2>Tour / Stationen</h2>
+      <div class="grid2">
+        <label class="field"><span>Kunde / Referenz</span>
+          <input id="customer" placeholder="z. B. Müller GmbH">
+        </label>
+        <label class="field"><span>Marge %</span>
+          <input id="marginOverride" type="number" step="0.1" placeholder="leer = Standard aus Einstellungen">
+        </label>
+      </div>
+      <label class="check">
+        <input type="checkbox" id="fixedOrder"> Reihenfolge der Stationen beibehalten (wie vom Kunden)
+      </label>
+      <label class="field"><span>Start (Betrieb)</span>
+        <input id="startAddress" placeholder="Adresse in Krefeld">
+      </label>
+      <div id="stops"></div>
+      <div class="actions">
+        <button type="button" class="btn" id="addStop">+ Station</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Strecke · km &amp; Zeit</h2>
+      <label class="check">
+        <input type="checkbox" id="manualKm" checked> Kilometer selbst eintragen (empfohlen zum Start)
+      </label>
+      <div id="manualBlock" class="grid2">
+        <label class="field"><span>Gesamt km (hin + Stationen + zurück)</span>
+          <input id="totalKm" type="number" step="0.1" min="0" value="120">
+        </label>
+        <label class="field"><span>Davon mautpflichtig km (leer = Fallback)</span>
+          <input id="tollKm" type="number" step="0.1" min="0" placeholder="leer → Gesamt − Fallback">
+        </label>
+      </div>
+      <div id="autoBlock" class="hidden">
+        <p class="hint">Adressen werden grob über OpenStreetMap geroutet (Pkw-Strecke). Zeit danach mit deinem Lkw-Schnitt.</p>
+        <div class="actions">
+          <button type="button" class="btn" id="btnRoute">Strecke aus Adressen holen</button>
+        </div>
+        <p id="routeMsg" class="muted"></p>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <label class="field"><span>Fahrzeit h (leer = aus km ÷ Schnitt)</span>
+          <input id="driveHoursOverride" type="number" step="0.01" min="0" placeholder="auto">
+        </label>
+        <label class="field"><span>Standzeit gesamt h (leer = aus Stationen)</span>
+          <input id="standOverride" type="number" step="0.01" min="0" placeholder="auto">
+        </label>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Optional: Paletten-Umlage</h2>
+      <div class="grid2">
+        <label class="field"><span>Anzahl Paletten</span>
+          <input id="palletCount" type="number" step="1" min="0" value="">
+        </label>
+        <label class="field"><span>Basispreis € / Palette (Verkauf)</span>
+          <input id="palletBase" type="number" step="0.01" min="0" value="">
+        </label>
+        <label class="field"><span>Max. Einkauf € / Palette</span>
+          <input id="palletBuy" type="number" step="0.01" min="0" value="">
+        </label>
+      </div>
+    </div>
+
+    <div class="actions" style="margin-bottom:12px">
+      <button type="button" class="btn btn-primary" id="btnCalc">Kalkulieren</button>
+      <button type="button" class="btn" id="btnSaveCustomer">Als Kunde speichern</button>
+      <button type="button" class="btn" id="btnResetTour">Tour leeren</button>
+    </div>
+    <p id="calcErr" class="err hidden"></p>
+
+    <div id="result" class="panel hidden">
+      <h2>Kostenblatt (Entwurf)</h2>
+      <div class="kpi-row" id="kpis"></div>
+      <table class="break" id="breakTable"></table>
+      <p class="muted no-print" style="margin:12px 0 8px">Text zum Kopieren / in die Mail:</p>
+      <textarea id="copyBox" readonly class="no-print"></textarea>
+      <div class="actions no-print">
+        <button type="button" class="btn btn-primary" id="btnCopy">Text kopieren</button>
+        <button type="button" class="btn" id="btnPrint">PDF / Drucken</button>
+      </div>
+      <p id="copyMsg" class="ok hidden">Kopiert.</p>
+    </div>
+  </section>
+
+  <section id="tab-customers" class="hidden">
+    <div class="panel">
+      <h2>Kundenvorlagen</h2>
+      <p class="muted" style="margin-bottom:10px">Marge und Notiz pro Kunde. Beim Laden wird die Marge in die Tour übernommen.</p>
+      <div id="customerList"></div>
+      <p id="customerEmpty" class="muted">Noch keine Kunden gespeichert. Nach einer Kalkulation „Als Kunde speichern“.</p>
+    </div>
+  </section>
+
+  <section id="tab-history" class="hidden">
+    <div class="panel">
+      <h2>Letzte Kalkulationen</h2>
+      <div id="historyList"></div>
+      <p id="historyEmpty" class="muted">Noch kein Verlauf.</p>
+      <div class="actions">
+        <button type="button" class="btn" id="btnClearHistory">Verlauf löschen</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- EINSTELLUNGEN -->
+  <section id="tab-settings" class="hidden">
+    <div class="panel">
+      <h2>Betrieb &amp; Route</h2>
+      <div class="grid2">
+        <label class="field"><span>Standard-Startadresse</span>
+          <input id="s_start" data-key="startDefault">
+        </label>
+        <label class="field"><span>Lkw-Schnitt km/h</span>
+          <input id="s_speed" type="number" step="1" data-key="avgSpeedKmh">
+        </label>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Spritpreise (automatisch)</h2>
+      <p class="muted" style="margin-bottom:10px">
+        Täglich beim Öffnen (wenn älter als 20 Std.) und per Knopf.
+        Quelle: Tankerkoenig (Tankstellen um den Startpunkt).
+      </p>
+      <div class="grid2">
+        <label class="field"><span>Kraftstoff</span>
+          <select data-key="fuelType">
+            <option value="diesel">Diesel</option>
+            <option value="e5">Benzin Super E5</option>
+            <option value="e10">Benzin E10</option>
+          </select>
+        </label>
+        <label class="field"><span>Auswahl</span>
+          <select data-key="fuelMode">
+            <option value="cheapest">Günstigster im Umkreis</option>
+            <option value="avg5">Mittel der 5 günstigsten</option>
+            <option value="average">Durchschnitt aller</option>
+          </select>
+        </label>
+        <label class="field"><span>Umkreis km (max. 25)</span>
+          <input type="number" step="1" min="1" max="25" data-key="fuelRadiusKm">
+        </label>
+        <label class="field"><span>Ort Lat (Krefeld)</span>
+          <input type="number" step="0.0001" data-key="fuelLat">
+        </label>
+        <label class="field"><span>Ort Lng</span>
+          <input type="number" step="0.0001" data-key="fuelLng">
+        </label>
+        <label class="check" style="margin-top:28px">
+          <input type="checkbox" id="fuelAutoDaily" data-key-bool="fuelAutoDaily"> Täglich automatisch aktualisieren
+        </label>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="btnFetchFuel">Spritpreis jetzt laden</button>
+      </div>
+      <p id="fuelMsg" class="fuel-status"></p>
+    </div>
+    <div class="panel">
+      <h2>Lkw-Parameter (selbst pflegen)</h2>
+      <div class="grid2">
+        <label class="field"><span>Leasing € / km</span>
+          <input type="number" step="0.01" data-key="leasingPerKm">
+        </label>
+        <label class="field"><span>Diesel / Sprit € / Liter</span>
+          <input type="number" step="0.001" data-key="dieselPerLiter" id="dieselPerLiterInput">
+        </label>
+        <label class="field"><span>Verbrauch Liter / 100 km</span>
+          <input type="number" step="0.1" data-key="litersPer100km">
+        </label>
+        <label class="field"><span>Maut € / km (mautpflichtig)</span>
+          <input type="number" step="0.001" data-key="tollPerKm">
+        </label>
+        <label class="field"><span>Maut-Fallback: km abziehen von Gesamt</span>
+          <input type="number" step="1" data-key="tollFallbackSubtractKm">
+        </label>
+        <label class="field"><span>Fahrer + Verwaltung € / Stunde</span>
+          <input type="number" step="0.1" data-key="hourlyRate">
+        </label>
+        <label class="field"><span>Standzeit eigener Betrieb h</span>
+          <input type="number" step="0.05" data-key="standOwnH">
+        </label>
+        <label class="field"><span>Standzeit Fremdbetrieb h</span>
+          <input type="number" step="0.05" data-key="standForeignH">
+        </label>
+        <label class="field"><span>Standard-Marge %</span>
+          <input type="number" step="0.1" data-key="marginPct">
+        </label>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="btnSaveSettings">Einstellungen speichern</button>
+        <button type="button" class="btn" id="btnDefaults">Defaults wiederherstellen</button>
+      </div>
+      <p id="settingsMsg" class="ok hidden">Gespeichert auf diesem Gerät.</p>
+    </div>
+  </section>
+
+  <section id="tab-help" class="hidden">
+    <div class="panel">
+      <h2>So gedacht</h2>
+      <p class="muted" style="margin-bottom:10px">
+        Start in Krefeld, Stationen anfahren, zurück. Kosten aus km, Zeit, Stand, Diesel, Maut, Leasing.
+        Marge drauf. Optional Transport auf Palettenpreis umlegen.
+      </p>
+      <p class="muted" style="margin-bottom:10px">
+        Diesel kannst du manuell setzen oder unter Lkw-Kosten automatisch von Tankstellen laden (Tankerkoenig).
+        Maut-km leer lassen → Fallback: Gesamtkilometer minus den Wert unter Einstellungen (Standard 10 km).
+      </p>
+      <p class="muted">
+        Pilot für MbP Service. Produkt: TourMeter by Webschmiede. Feedback an Christian.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    TourMeter · by Webschmiede ·
+    <a href="/impressum">Impressum</a> ·
+    <a href="/datenschutz">Datenschutz</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'ws_transport_calc_v1';
+  const CUSTOMERS_KEY = 'ws_tourmeter_customers_v1';
+  const HISTORY_KEY = 'ws_tourmeter_history_v1';
+
+  const DEFAULTS = {
+    startDefault: 'Krefeld',
+    avgSpeedKmh: 65,
+    leasingPerKm: 0.34,
+    dieselPerLiter: 1.55,
+    litersPer100km: 30,
+    tollPerKm: 0.20,
+    tollFallbackSubtractKm: 10,
+    hourlyRate: 50,
+    standOwnH: 0.5,
+    standForeignH: 1.75,
+    marginPct: 30,
+    fuelType: 'diesel',
+    fuelMode: 'cheapest',
+    fuelRadiusKm: 20,
+    fuelLat: 51.3387,
+    fuelLng: 6.5642,
+    fuelAutoDaily: true,
+    fuelUpdatedAt: '',
+    fuelLabel: '',
+  };
+
+  function loadSettings() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { ...DEFAULTS };
+      return { ...DEFAULTS, ...JSON.parse(raw) };
+    } catch {
+      return { ...DEFAULTS };
+    }
+  }
+
+  function saveSettings(s) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+  }
+
+  let settings = loadSettings();
+  let stopId = 0;
+  let lastCalc = null;
+
+  const $ = (id) => document.getElementById(id);
+
+  function loadCustomers() {
+    try { return JSON.parse(localStorage.getItem(CUSTOMERS_KEY) || '[]'); }
+    catch { return []; }
+  }
+  function saveCustomers(list) {
+    localStorage.setItem(CUSTOMERS_KEY, JSON.stringify(list.slice(0, 80)));
+  }
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+    catch { return []; }
+  }
+  function saveHistory(list) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 40)));
+  }
+
+  function money(n) {
+    return (Math.round(n * 100) / 100).toLocaleString('de-DE', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }) + ' €';
+  }
+
+  function num(v, fallback = 0) {
+    const n = parseFloat(String(v).replace(',', '.'));
+    return Number.isFinite(n) ? n : fallback;
+  }
+
+  function bindSettingsForm() {
+    document.querySelectorAll('#tab-settings [data-key]').forEach((el) => {
+      const k = el.getAttribute('data-key');
+      if (el.tagName === 'SELECT') el.value = settings[k] || DEFAULTS[k];
+      else el.value = settings[k];
+    });
+    const auto = $('fuelAutoDaily');
+    if (auto) auto.checked = settings.fuelAutoDaily !== false;
+    $('startAddress').value = settings.startDefault || 'Krefeld';
+    updateFuelStatus();
+  }
+
+  function readSettingsForm() {
+    const next = { ...settings };
+    document.querySelectorAll('#tab-settings [data-key]').forEach((el) => {
+      const k = el.getAttribute('data-key');
+      if (el.tagName === 'SELECT') next[k] = el.value;
+      else if (el.type === 'number') next[k] = num(el.value, DEFAULTS[k]);
+      else next[k] = el.value.trim();
+    });
+    next.fuelAutoDaily = !!($('fuelAutoDaily') && $('fuelAutoDaily').checked);
+    return next;
+  }
+
+  function updateFuelStatus() {
+    const el = $('fuelMsg');
+    if (!el) return;
+    if (settings.fuelUpdatedAt) {
+      const when = new Date(settings.fuelUpdatedAt);
+      el.textContent =
+        'Zuletzt: ' +
+        (settings.fuelLabel || settings.fuelType) +
+        ' ' +
+        Number(settings.dieselPerLiter).toLocaleString('de-DE', { minimumFractionDigits: 3 }) +
+        ' €/L · ' +
+        when.toLocaleString('de-DE');
+    } else {
+      el.textContent = 'Noch kein automatischer Preis geladen.';
+    }
+  }
+
+  async function fetchFuel(force) {
+    const el = $('fuelMsg');
+    if (el) el.textContent = 'Lade Spritpreise …';
+    const q = new URLSearchParams({
+      type: settings.fuelType || 'diesel',
+      mode: settings.fuelMode || 'cheapest',
+      rad: String(settings.fuelRadiusKm || 20),
+      lat: String(settings.fuelLat || 51.3387),
+      lng: String(settings.fuelLng || 6.5642),
+    });
+    try {
+      const res = await fetch('/api/tourmeter/fuel?' + q.toString());
+      const data = await res.json();
+      if (!data.ok) {
+        if (el) {
+          el.textContent = data.error || 'Spritpreis nicht geladen';
+          el.classList.add('err');
+          el.classList.remove('ok');
+        }
+        return false;
+      }
+      settings.dieselPerLiter = data.price;
+      settings.fuelUpdatedAt = new Date().toISOString();
+      settings.fuelLabel =
+        (data.fuel_type || 'diesel') + ' · ' + (data.mode_label || data.mode);
+      saveSettings(settings);
+      bindSettingsForm();
+      if (el) {
+        el.classList.remove('err');
+        el.classList.add('ok');
+        el.textContent =
+          'Aktuell: ' +
+          data.price.toLocaleString('de-DE', { minimumFractionDigits: 3 }) +
+          ' €/L (' +
+          data.mode_label +
+          ', ' +
+          data.count +
+          ' Stationen)';
+      }
+      return true;
+    } catch (e) {
+      if (el) el.textContent = 'Netzwerkfehler: ' + (e.message || e);
+      return false;
+    }
+  }
+
+  async function maybeAutoFuel() {
+    if (settings.fuelAutoDaily === false) return;
+    const last = settings.fuelUpdatedAt ? Date.parse(settings.fuelUpdatedAt) : 0;
+    const ageH = (Date.now() - last) / 3600000;
+    if (!last || ageH >= 20) {
+      await fetchFuel(false);
+    } else {
+      updateFuelStatus();
+    }
+  }
+
+  function renderCustomers() {
+    const list = loadCustomers();
+    const box = $('customerList');
+    const empty = $('customerEmpty');
+    box.innerHTML = '';
+    empty.classList.toggle('hidden', list.length > 0);
+    list.forEach((c, idx) => {
+      const row = document.createElement('div');
+      row.className = 'list-card';
+      row.innerHTML =
+        '<div><strong></strong><div class="muted"></div></div>' +
+        '<div class="actions" style="margin:0"></div>';
+      row.querySelector('strong').textContent = c.name;
+      row.querySelector('.muted').textContent =
+        'Marge ' + c.marginPct + ' %' + (c.note ? ' · ' + c.note : '');
+      const actions = row.querySelector('.actions');
+      const loadBtn = document.createElement('button');
+      loadBtn.type = 'button';
+      loadBtn.className = 'btn btn-primary';
+      loadBtn.textContent = 'Laden';
+      loadBtn.addEventListener('click', () => {
+        $('customer').value = c.name;
+        $('marginOverride').value = c.marginPct;
+        document.querySelector('.tabs button[data-tab="calc"]').click();
+      });
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'btn btn-danger';
+      delBtn.textContent = 'Löschen';
+      delBtn.addEventListener('click', () => {
+        const next = loadCustomers().filter((_, i) => i !== idx);
+        saveCustomers(next);
+        renderCustomers();
+      });
+      actions.appendChild(loadBtn);
+      actions.appendChild(delBtn);
+      box.appendChild(row);
+    });
+  }
+
+  function renderHistory() {
+    const list = loadHistory();
+    const box = $('historyList');
+    const empty = $('historyEmpty');
+    box.innerHTML = '';
+    empty.classList.toggle('hidden', list.length > 0);
+    list.forEach((h) => {
+      const row = document.createElement('div');
+      row.className = 'list-card';
+      row.innerHTML = '<div><strong></strong><div class="muted"></div></div>';
+      row.querySelector('strong').textContent =
+        h.customer + ' · ' + Number(h.price).toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' €';
+      row.querySelector('.muted').textContent =
+        new Date(h.at).toLocaleString('de-DE') +
+        ' · ' +
+        h.km +
+        ' km · Marge ' +
+        h.marginPct +
+        ' %';
+      box.appendChild(row);
+    });
+  }
+
+  function addStop(data = {}) {
+    stopId += 1;
+    const id = stopId;
+    const wrap = document.createElement('div');
+    wrap.className = 'row-stop';
+    wrap.dataset.id = String(id);
+    wrap.innerHTML = `
+      <div class="head">
+        <span>Station ${id}</span>
+        <button type="button" class="btn btn-ghost btn-danger btn-rm">Entfernen</button>
+      </div>
+      <div class="grid2">
+        <label class="field"><span>Ort / Adresse</span>
+          <input class="st-addr" value="${(data.address || '').replace(/"/g, '&quot;')}" placeholder="Ort oder Adresse">
+        </label>
+        <label class="field"><span>Betrieb</span>
+          <select class="st-type">
+            <option value="foreign"${data.type !== 'own' ? ' selected' : ''}>Fremdbetrieb</option>
+            <option value="own"${data.type === 'own' ? ' selected' : ''}>Eigener Betrieb</option>
+          </select>
+        </label>
+      </div>`;
+    wrap.querySelector('.btn-rm').addEventListener('click', () => {
+      wrap.remove();
+      renumberStops();
+    });
+    $('stops').appendChild(wrap);
+  }
+
+  function renumberStops() {
+    [...$('stops').children].forEach((el, i) => {
+      el.querySelector('.head span').textContent = 'Station ' + (i + 1);
+    });
+  }
+
+  function getStops() {
+    return [...$('stops').children].map((el) => ({
+      address: el.querySelector('.st-addr').value.trim(),
+      type: el.querySelector('.st-type').value,
+    }));
+  }
+
+  function standHours(stops) {
+    return stops.reduce((sum, s) => {
+      return sum + (s.type === 'own' ? settings.standOwnH : settings.standForeignH);
+    }, 0);
+  }
+
+  function calc() {
+    $('calcErr').classList.add('hidden');
+    const stops = getStops();
+    if (!stops.length) {
+      $('calcErr').textContent = 'Mindestens eine Station anlegen.';
+      $('calcErr').classList.remove('hidden');
+      return;
+    }
+
+    const totalKm = num($('totalKm').value, NaN);
+    if (!Number.isFinite(totalKm) || totalKm <= 0) {
+      $('calcErr').textContent = 'Gesamt-Kilometer eintragen (oder Strecke aus Adressen holen).';
+      $('calcErr').classList.remove('hidden');
+      return;
+    }
+
+    let tollKm = $('tollKm').value.trim() === '' ? null : num($('tollKm').value, NaN);
+    if (tollKm === null || !Number.isFinite(tollKm)) {
+      tollKm = Math.max(0, totalKm - settings.tollFallbackSubtractKm);
+    }
+    tollKm = Math.min(tollKm, totalKm);
+
+    const driveHOverride = $('driveHoursOverride').value.trim();
+    const driveH = driveHOverride === ''
+      ? totalKm / Math.max(1, settings.avgSpeedKmh)
+      : num(driveHOverride, 0);
+
+    const standHOverride = $('standOverride').value.trim();
+    const standH = standHOverride === '' ? standHours(stops) : num(standHOverride, 0);
+    const timeH = driveH + standH;
+
+    const leasing = totalKm * settings.leasingPerKm;
+    const diesel = (totalKm / 100) * settings.litersPer100km * settings.dieselPerLiter;
+    const toll = tollKm * settings.tollPerKm;
+    const labor = timeH * settings.hourlyRate;
+    const cost = leasing + diesel + toll + labor;
+
+    let marginPct = $('marginOverride').value.trim() === ''
+      ? settings.marginPct
+      : num($('marginOverride').value, settings.marginPct);
+    const margin = cost * (marginPct / 100);
+    const price = cost + margin;
+
+    const palletCount = num($('palletCount').value, 0);
+    const palletBase = num($('palletBase').value, 0);
+    const palletBuy = num($('palletBuy').value, 0);
+    let perPalletTransport = null;
+    let sellWithTransport = null;
+    let buyNet = null;
+    if (palletCount > 0) {
+      perPalletTransport = price / palletCount;
+      if (palletBase > 0) sellWithTransport = palletBase + perPalletTransport;
+      if (palletBuy > 0) buyNet = palletBuy - perPalletTransport;
+    }
+
+    const customer = $('customer').value.trim() || 'ohne Kundenname';
+    const start = $('startAddress').value.trim() || settings.startDefault;
+
+    $('kpis').innerHTML = `
+      <div class="kpi"><strong>${totalKm.toLocaleString('de-DE', { maximumFractionDigits: 1 })}</strong><span>km gesamt</span></div>
+      <div class="kpi"><strong>${timeH.toLocaleString('de-DE', { maximumFractionDigits: 2 })} h</strong><span>Fahr + Stand</span></div>
+      <div class="kpi"><strong>${money(cost)}</strong><span>Kosten</span></div>
+      <div class="kpi big"><strong>${money(price)}</strong><span>Preis inkl. ${marginPct} % Marge (Entwurf)</span></div>
+    `;
+
+    const rows = [
+      ['Leasing (' + settings.leasingPerKm.toLocaleString('de-DE') + ' €/km × ' + totalKm + ')', leasing],
+      ['Diesel (' + settings.litersPer100km + ' L/100 × ' + settings.dieselPerLiter.toLocaleString('de-DE') + ' €)', diesel],
+      ['Maut (' + tollKm.toLocaleString('de-DE', { maximumFractionDigits: 1 }) + ' km × ' + settings.tollPerKm.toLocaleString('de-DE') + ' €)', toll],
+      ['Fahrer/Verwaltung (' + timeH.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' h × ' + settings.hourlyRate + ' €)', labor],
+      ['Summe Kosten', cost],
+      ['Marge ' + marginPct + ' %', margin],
+      ['Preis Entwurf', price],
+    ];
+    if (perPalletTransport != null) {
+      rows.push(['Transportanteil / Palette', perPalletTransport]);
+      if (sellWithTransport != null) rows.push(['Verkaufspreis Palette inkl. Transport', sellWithTransport]);
+      if (buyNet != null) rows.push(['Max. Einkauf Palette nach Transport', buyNet]);
+    }
+
+    $('breakTable').innerHTML =
+      '<thead><tr><th>Position</th><th>Betrag</th></tr></thead><tbody>' +
+      rows.map((r) => '<tr><td>' + r[0] + '</td><td>' + money(r[1]) + '</td></tr>').join('') +
+      '</tbody>';
+
+    const stopLines = stops.map((s, i) =>
+      (i + 1) + '. ' + (s.address || 'ohne Ort') + ' (' + (s.type === 'own' ? 'eigen' : 'fremd') + ')'
+    ).join('\n');
+
+    const text = [
+      'TourMeter Kalkulation (Entwurf)',
+      'Kunde: ' + customer,
+      'Start: ' + start,
+      'Stationen:',
+      stopLines,
+      'Reihenfolge fix: ' + ($('fixedOrder').checked ? 'ja' : 'nein / optimierbar'),
+      '',
+      'km: ' + totalKm.toLocaleString('de-DE', { maximumFractionDigits: 1 }) +
+        ' | mautpflichtig: ' + tollKm.toLocaleString('de-DE', { maximumFractionDigits: 1 }),
+      'Fahrzeit: ' + driveH.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' h (Schnitt ' + settings.avgSpeedKmh + ' km/h)',
+      'Standzeit: ' + standH.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' h',
+      'Kosten: ' + money(cost),
+      'Marge: ' + marginPct + ' % → ' + money(margin),
+      'Preis Entwurf: ' + money(price),
+      perPalletTransport != null ? ('Transport / Palette: ' + money(perPalletTransport)) : '',
+      sellWithTransport != null ? ('Palette Verkauf inkl. Transport: ' + money(sellWithTransport)) : '',
+      buyNet != null ? ('Palette Einkauf nach Transport: ' + money(buyNet)) : '',
+      '',
+      'Bitte gegenlesen. Kein automatischer Versand.',
+    ].filter(Boolean).join('\n');
+
+    $('copyBox').value = text;
+    lastCalc = {
+      customer,
+      marginPct,
+      price,
+      km: totalKm,
+      text,
+      at: new Date().toISOString(),
+    };
+    const hist = loadHistory();
+    hist.unshift({
+      customer,
+      marginPct,
+      price,
+      km: totalKm,
+      at: lastCalc.at,
+    });
+    saveHistory(hist);
+    $('result').classList.remove('hidden');
+    $('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function geocode(q) {
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q);
+    const res = await fetch(url, {
+      headers: { Accept: 'application/json', 'Accept-Language': 'de' },
+    });
+    if (!res.ok) throw new Error('Geocoding fehlgeschlagen');
+    const data = await res.json();
+    if (!data.length) throw new Error('Adresse nicht gefunden: ' + q);
+    return { lon: data[0].lon, lat: data[0].lat, label: data[0].display_name };
+  }
+
+  async function routeKm(points) {
+    // points: [{lon,lat}, ...]
+    const path = points.map((p) => p.lon + ',' + p.lat).join(';');
+    const url = 'https://router.project-osrm.org/route/v1/driving/' + path + '?overview=false';
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Routing fehlgeschlagen');
+    const data = await res.json();
+    if (data.code !== 'Ok' || !data.routes || !data.routes[0]) throw new Error('Keine Route');
+    return data.routes[0].distance / 1000;
+  }
+
+  function haversineKm(a, b) {
+    const R = 6371;
+    const toRad = (d) => (d * Math.PI) / 180;
+    const dLat = toRad(num(b.lat) - num(a.lat));
+    const dLon = toRad(num(b.lon) - num(a.lon));
+    const lat1 = toRad(num(a.lat));
+    const lat2 = toRad(num(b.lat));
+    const h =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+  }
+
+  function nearestNeighborOrder(start, geos) {
+    const left = geos.slice();
+    const order = [];
+    let cur = start;
+    while (left.length) {
+      let bestI = 0;
+      let bestD = Infinity;
+      left.forEach((g, i) => {
+        const d = haversineKm(cur, g);
+        if (d < bestD) {
+          bestD = d;
+          bestI = i;
+        }
+      });
+      cur = left.splice(bestI, 1)[0];
+      order.push(cur);
+    }
+    return order;
+  }
+
+  async function fetchRouteFromAddresses() {
+    const msg = $('routeMsg');
+    msg.textContent = 'Adressen werden geladen …';
+    try {
+      const startQ = $('startAddress').value.trim() || settings.startDefault;
+      const stops = getStops();
+      if (!stops.length || stops.some((s) => !s.address)) {
+        throw new Error('Alle Stationen brauchen eine Adresse.');
+      }
+      const start = await geocode(startQ);
+      await new Promise((r) => setTimeout(r, 1100));
+      const geos = [];
+      for (const s of stops) {
+        geos.push(await geocode(s.address));
+        await new Promise((r) => setTimeout(r, 1100));
+      }
+
+      const ordered = $('fixedOrder').checked
+        ? geos
+        : nearestNeighborOrder(start, geos);
+      const pts = [start].concat(ordered).concat([start]);
+      const bestKm = await routeKm(pts);
+
+      $('totalKm').value = (Math.round(bestKm * 10) / 10).toFixed(1);
+      $('tollKm').value = '';
+      msg.textContent =
+        'Gerundet ' +
+        bestKm.toFixed(1) +
+        ' km inkl. Rückfahrt (OSM/OSRM, Pkw-Netz' +
+        ($('fixedOrder').checked ? ', feste Reihenfolge' : ', grob optimiert') +
+        '). Bitte prüfen und ggf. manuell anpassen.';
+      $('manualKm').checked = true;
+      syncKmMode();
+    } catch (e) {
+      msg.textContent = e.message || String(e);
+    }
+  }
+
+  function syncKmMode() {
+    const manual = $('manualKm').checked;
+    $('manualBlock').classList.toggle('hidden', !manual);
+    $('autoBlock').classList.toggle('hidden', manual);
+  }
+
+  // Tabs
+  document.querySelectorAll('.tabs button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tabs button').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      const t = btn.getAttribute('data-tab');
+      $('tab-calc').classList.toggle('hidden', t !== 'calc');
+      $('tab-customers').classList.toggle('hidden', t !== 'customers');
+      $('tab-history').classList.toggle('hidden', t !== 'history');
+      $('tab-settings').classList.toggle('hidden', t !== 'settings');
+      $('tab-help').classList.toggle('hidden', t !== 'help');
+      if (t === 'customers') renderCustomers();
+      if (t === 'history') renderHistory();
+    });
+  });
+
+  $('addStop').addEventListener('click', () => addStop());
+  $('btnCalc').addEventListener('click', calc);
+  $('btnRoute').addEventListener('click', fetchRouteFromAddresses);
+  $('manualKm').addEventListener('change', syncKmMode);
+  $('btnResetTour').addEventListener('click', () => {
+    $('customer').value = '';
+    $('marginOverride').value = '';
+    $('fixedOrder').checked = false;
+    $('totalKm').value = '';
+    $('tollKm').value = '';
+    $('driveHoursOverride').value = '';
+    $('standOverride').value = '';
+    $('palletCount').value = '';
+    $('palletBase').value = '';
+    $('palletBuy').value = '';
+    $('stops').innerHTML = '';
+    addStop();
+    addStop();
+    $('result').classList.add('hidden');
+    lastCalc = null;
+  });
+  $('btnCopy').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText($('copyBox').value);
+      $('copyMsg').classList.remove('hidden');
+      setTimeout(() => $('copyMsg').classList.add('hidden'), 2000);
+    } catch {
+      $('copyBox').select();
+    }
+  });
+  $('btnPrint').addEventListener('click', () => window.print());
+  $('btnSaveCustomer').addEventListener('click', () => {
+    const name = ($('customer').value || '').trim();
+    if (!name) {
+      $('calcErr').textContent = 'Kundenname eintragen, dann speichern.';
+      $('calcErr').classList.remove('hidden');
+      return;
+    }
+    $('calcErr').classList.add('hidden');
+    const marginPct =
+      $('marginOverride').value.trim() === ''
+        ? settings.marginPct
+        : num($('marginOverride').value, settings.marginPct);
+    const list = loadCustomers().filter((c) => c.name.toLowerCase() !== name.toLowerCase());
+    list.unshift({ name, marginPct, note: '', at: new Date().toISOString() });
+    saveCustomers(list);
+    renderCustomers();
+    alert('Kunde gespeichert: ' + name + ' (Marge ' + marginPct + ' %)');
+  });
+  $('btnClearHistory').addEventListener('click', () => {
+    saveHistory([]);
+    renderHistory();
+  });
+  $('btnFetchFuel').addEventListener('click', async () => {
+    settings = readSettingsForm();
+    saveSettings(settings);
+    await fetchFuel(true);
+  });
+  $('btnSaveSettings').addEventListener('click', () => {
+    settings = readSettingsForm();
+    saveSettings(settings);
+    $('startAddress').value = settings.startDefault;
+    $('settingsMsg').classList.remove('hidden');
+    setTimeout(() => $('settingsMsg').classList.add('hidden'), 2500);
+  });
+  $('btnDefaults').addEventListener('click', () => {
+    settings = { ...DEFAULTS };
+    saveSettings(settings);
+    bindSettingsForm();
+    $('settingsMsg').classList.remove('hidden');
+  });
+
+  bindSettingsForm();
+  addStop({ address: '', type: 'foreign' });
+  addStop({ address: '', type: 'foreign' });
+  syncKmMode();
+  maybeAutoFuel();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/transport-kalkulator-sw.js').catch(() => {});
+  }
+})();
+</script>
+</body>
+</html>

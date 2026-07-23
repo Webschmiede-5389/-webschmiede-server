@@ -1,0 +1,17 @@
+---
+description: Google Business Profil – kein Passwort; Manager oder OAuth; Onboarding-Felder
+alwaysApply: true
+---
+
+# Google Business / Bewertungen
+
+## Regel
+
+- **Nie** Google-Passwort vom Kunden verlangen oder speichern.
+- Zugang: Manager-Einladung (schnell) oder später OAuth „Mit Google verbinden“.
+- Onboarding: Bewertungslink + Inhaber-Mail + Haken Manager-Einladung.
+- Auto-Antworten mit Keywords: erst nach API/OAuth. Bis dahin manuell über Manager-Zugang.
+
+## Doku
+
+`docs/agency/google-business-onboarding.md`

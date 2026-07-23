@@ -1,0 +1,49 @@
+{
+  "center": {
+    "name": "Mechernich",
+    "lat": 50.5997,
+    "lon": 6.6500,
+    "address": "53894 Mechernich, DE"
+  },
+  "centers": [
+    {
+      "name": "Mechernich",
+      "lat": 50.5997,
+      "lon": 6.6500,
+      "address": "53894 Mechernich, DE"
+    },
+    {
+      "name": "Euskirchen",
+      "lat": 50.6606,
+      "lon": 6.7872,
+      "address": "53879 Euskirchen, DE"
+    }
+  ],
+  "radius_km": 22,
+  "user_agent": "Webschmiede-Akquise/1.0 (local business research; +491778011350)",
+  "impressum_paths": ["/impressum", "/imprint", "/legal", "/kontakt", "/contact", "/datenschutz"],
+  "crawl": {
+    "all_websites": true,
+    "max_workers": 8,
+    "request_timeout": 14,
+    "max_subpages": 5,
+    "html_max_bytes": 180000
+  },
+  "google_places": {
+    "enabled": true,
+    "details": true,
+    "find_place": true
+  },
+  "meta_ads": {
+    "enabled": true,
+    "max_checks": 35
+  },
+  "register": {
+    "enabled": true,
+    "max_checks": 20
+  },
+  "directories": {
+    "enabled": true,
+    "sources": ["gelbeseiten"]
+  }
+}

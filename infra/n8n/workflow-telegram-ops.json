@@ -1,0 +1,72 @@
+{
+  "name": "Agency – Telegram Ops Bridge",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "telegram-ops",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "tg-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "telegram-ops"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; const body=j.body||j; const message=(body.message||body.text||'').toString().trim(); const force=(body.force_agent||body.agent||'').toString().trim(); if(!message) return [{json:{ok:false,error:'message fehlt'}}]; return [{json:{message, force_agent: force || undefined, source:'n8n-telegram', dispatch:true, commander:!!body.commander}}];"
+      },
+      "id": "tg-norm",
+      "name": "Normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/brain",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Content-Type", "value": "application/json"},
+            {"name": "X-Cron-Secret", "value": "={{$env.CRON_SECRET}}"},
+            {"name": "X-Agency-Password", "value": "={{$env.AGENCY_ADMIN_PASSWORD}}"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"timeout": 180000}
+      },
+      "id": "tg-brain",
+      "name": "Brain API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "tg-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [720, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": {"main": [[{"node": "Normalisieren", "type": "main", "index": 0}]]},
+    "Normalisieren": {"main": [[{"node": "Brain API", "type": "main", "index": 0}]]},
+    "Brain API": {"main": [[{"node": "Antwort", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "meta": {"templateCredsSetupCompleted": true},
+  "tags": [{"name": "agency"}, {"name": "telegram"}]
+}

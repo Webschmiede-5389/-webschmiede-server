@@ -1,0 +1,109 @@
+{
+  "name": "Agency – WhatsApp Template Outbound (Skizze)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "wa-outbound-agency",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wa-wh-1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "wa-outbound-agency"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.to || $json.to}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "wa-if-1",
+      "name": "Hat Empfänger?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/whatsapp/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Agency-Key",
+              "value": "={{$env.AGENCY_API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"kunde_id\": \"{{$json.body.kunde_id || $json.kunde_id || ''}}\",\n  \"to\": \"{{$json.body.to || $json.to}}\",\n  \"template\": \"{{$json.body.template || $json.template || 'hello_world'}}\",\n  \"language\": \"{{$json.body.language || 'de'}}\"\n}",
+        "options": {}
+      },
+      "id": "wa-http-1",
+      "name": "Meta via Agency API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, -40]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, forwarded: true, result: $json } }}",
+        "options": {}
+      },
+      "id": "wa-resp-1",
+      "name": "OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [700, -40]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: false, error: 'to fehlt' } }}",
+        "options": {}
+      },
+      "id": "wa-resp-2",
+      "name": "Fehler",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [460, 120]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Hat Empfänger?", "type": "main", "index": 0 }]]
+    },
+    "Hat Empfänger?": {
+      "main": [
+        [{ "node": "Meta via Agency API", "type": "main", "index": 0 }],
+        [{ "node": "Fehler", "type": "main", "index": 0 }]
+      ]
+    },
+    "Meta via Agency API": {
+      "main": [[{ "node": "OK", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Skizze: Template-WA über Agency-API. Erst aktivieren wenn WHATSAPP_* live und AGENCY_API_KEY in n8n gesetzt. Auth-Header ggf. an echtes Agency-Auth anpassen."
+  }
+}

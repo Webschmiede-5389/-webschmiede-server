@@ -1,0 +1,109 @@
+/**
+ * Webschmiede CI — Orange & Weiß (Christian Kummetat)
+ * Nur Inter — kein Playfair / kein Snack-House-Gold
+ */
+@import url('https://fonts.bunny.net/css?family=inter:400;500;600;700&display=swap');
+
+:root {
+  --ws-orange: #FF6600;
+  --ws-orange-dark: #E55A00;
+  --ws-orange-soft: #FFF4ED;
+  --ws-white: #FFFFFF;
+  --ws-ink: #1A1A1A;
+  --ws-ink-muted: #666666;
+  --ws-border: #E8E8E8;
+  --ws-paper-accent: #FAFAFA;
+  --ws-problem: #DC2626;
+  --ws-problem-bg: #FEF2F2;
+  --ws-success: #16A34A;
+  --ws-success-bg: #F0FDF4;
+  --ws-radius: 10px;
+  --ws-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --ws-font: 'Inter', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.ws-doc {
+  font-family: var(--ws-font);
+  font-size: 11pt;
+  color: var(--ws-ink);
+  background: #F0F0F0;
+  line-height: 1.55;
+}
+
+.ws-page {
+  max-width: 210mm;
+  margin: 20px auto;
+  background: var(--ws-white);
+  padding: 18mm 20mm;
+  box-shadow: var(--ws-shadow);
+}
+
+@media print {
+  .ws-no-print { display: none !important; }
+  .ws-doc { background: #fff; }
+  .ws-page { margin: 0; box-shadow: none; padding: 12mm 15mm; }
+  .ws-page-break { page-break-before: always; }
+}
+
+.ws-print-btn {
+  position: fixed; bottom: 16px; right: 16px; z-index: 100;
+  background: var(--ws-orange); color: #fff; border: none;
+  padding: 12px 22px; border-radius: var(--ws-radius);
+  font-weight: 700; font-family: var(--ws-font); cursor: pointer;
+}
+
+.ws-doc-header {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;
+  margin-bottom: 28px; padding-bottom: 18px; border-bottom: 3px solid var(--ws-orange);
+}
+
+.ws-brand-lockup { display: flex; align-items: center; gap: 14px; }
+.ws-brand-lockup img { height: 52px; width: auto; object-fit: contain; flex-shrink: 0; }
+.ws-brand-name { font-size: 16pt; font-weight: 700; color: var(--ws-ink); line-height: 1.1; }
+.ws-brand-tagline { font-size: 8pt; color: var(--ws-ink-muted); margin-top: 3px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+.ws-doc-meta { text-align: right; font-size: 10pt; color: var(--ws-ink-muted); line-height: 1.7; }
+.ws-h1 { font-size: 16pt; font-weight: 700; color: var(--ws-ink); margin: 20px 0 14px; }
+.ws-h2 { font-size: 13pt; font-weight: 700; color: var(--ws-ink); margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--ws-orange-soft); }
+.ws-label { font-size: 8pt; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ws-ink-muted); margin-bottom: 8px; }
+
+.ws-box { background: var(--ws-paper-accent); border: 1px solid var(--ws-border); border-radius: var(--ws-radius); padding: 14px 16px; margin-bottom: 16px; }
+.ws-box-accent { background: var(--ws-orange-soft); border: 1px solid #FFD4B8; }
+.ws-editable:focus { outline: 2px solid var(--ws-orange); outline-offset: 2px; border-radius: 3px; }
+
+.ws-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10pt; }
+.ws-table th { background: var(--ws-orange); color: #fff; text-align: left; padding: 10px 12px; font-weight: 600; font-size: 9pt; }
+.ws-table td { padding: 10px 12px; border-bottom: 1px solid var(--ws-border); vertical-align: top; }
+.ws-table .num { text-align: right; white-space: nowrap; }
+.ws-table tr:nth-child(even) td { background: #FAFAFA; }
+
+.ws-totals { margin-left: auto; width: 280px; margin-top: 12px; }
+.ws-totals td { padding: 6px 0; font-size: 10.5pt; }
+.ws-totals td:last-child { text-align: right; font-weight: 600; }
+.ws-totals .grand td { font-size: 13pt; color: var(--ws-orange-dark); border-top: 2px solid var(--ws-border); padding-top: 10px; }
+
+.ws-problem { background: var(--ws-problem-bg); border-left: 4px solid var(--ws-problem); padding: 10px 14px; margin: 10px 0; font-size: 10.5pt; }
+.ws-gain { background: var(--ws-success-bg); border-left: 4px solid var(--ws-success); padding: 10px 14px; margin: 10px 0; font-size: 10.5pt; }
+
+.ws-pipeline { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 16px 0; }
+.ws-pipeline span { background: var(--ws-orange-soft); color: var(--ws-orange-dark); padding: 8px 14px; border-radius: 99px; font-size: 8pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border: 1px solid #FFD4B8; }
+
+.ws-doc-footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--ws-border); text-align: center; font-size: 8pt; color: var(--ws-ink-muted); }
+.ws-legal { margin-top: 20px; padding: 12px 14px; background: var(--ws-paper-accent); border-radius: var(--ws-radius); font-size: 9pt; color: var(--ws-ink-muted); line-height: 1.6; }
+.ws-pay { margin-top: 16px; font-size: 10pt; color: #444; line-height: 1.7; }
+.ws-total-big { text-align: right; font-size: 14pt; font-weight: 700; color: var(--ws-orange-dark); margin: 16px 0; }
+.ws-quote { font-style: italic; color: #555; border-left: 3px solid var(--ws-orange); padding: 8px 14px; margin: 12px 0; background: var(--ws-orange-soft); font-size: 10.5pt; }
+
+.ws-checklist { list-style: none; padding: 0; }
+.ws-checklist li { padding: 6px 0 6px 24px; position: relative; font-size: 10pt; color: #444; }
+.ws-checklist li::before { content: '✓'; position: absolute; left: 0; color: var(--ws-orange); font-weight: 700; }
+
+.ws-cover { text-align: center; padding: 20mm 0 14mm; border-bottom: 3px solid var(--ws-orange); margin-bottom: 10mm; }
+.ws-cover-badge { display: inline-block; background: var(--ws-orange); color: #fff; font-weight: 700; font-size: 10pt; padding: 6px 16px; border-radius: 20px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 16px; }
+.ws-cover h1 { font-size: 24pt; font-weight: 700; color: var(--ws-ink); margin-bottom: 6px; }
+.ws-cover .sub { color: var(--ws-ink-muted); font-size: 12pt; }
+
+/* Legacy aliases */
+.ws-box-gold { background: var(--ws-orange-soft); border: 1px solid #FFD4B8; }

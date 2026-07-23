@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><title>Angebot Webschmiede</title>
+<style>
+body { font-family: DejaVu Sans, Arial, sans-serif; font-size: 11px; color: #1a1a1a; line-height: 1.4; }
+h1 { font-size: 18px; margin: 0 0 4px; }
+h2 { font-size: 13px; margin: 14px 0 6px; border-bottom: 1px solid #e8e4dc; padding-bottom: 3px; }
+.muted { color: #666; font-size: 10px; }
+.bar { height: 4px; background: #C9A84C; margin-bottom: 12px; }
+.box { border: 1px solid #e8e4dc; background: #faf8f4; padding: 10px 12px; margin: 8px 0; border-radius: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+th { background: #1a1712; color: #e8c76a; text-align: left; padding: 6px 8px; font-size: 10px; }
+td { padding: 6px 8px; border-bottom: 1px solid #eee; vertical-align: top; }
+.num { text-align: right; white-space: nowrap; }
+ul { margin: 4px 0 8px 16px; padding: 0; }
+.siggrid { width: 100%; margin-top: 20px; }
+.siggrid td { width: 50%; vertical-align: top; border: 0; padding: 8px 12px 0 0; }
+.small { font-size: 9px; color: #555; }
+@media print {
+  h1, h2, h3, .box, .siggrid, table, ol, ul { break-inside: avoid; page-break-inside: avoid; }
+  .siggrid { break-before: avoid-page; page-break-before: avoid; }
+  p { orphans: 3; widows: 3; }
+}
+</style></head><body>
+<div class="bar"></div>
+
+<h1>Angebot</h1>
+<p class="muted">Webschmiede · Digitale Handwerkskunst · Christian Kummetat<br>
+Meinertzhagener Str. 16 · 53894 Mechernich · info@digitalehandwerkskunst.de · 0177 8011350<br>
+USt-IdNr. DE370109681 · nur B2B</p>
+
+<p>Nr. <text-field name="Angebotsnummer" role="Webschmiede" required="true" style="width: 120px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="AN-2026-"></text-field>
+&nbsp; Datum <date-field name="Angebotsdatum" role="Webschmiede" required="true" style="width: 110px; height: 18px; display: inline-block; margin-bottom: -3px;"></date-field>
+&nbsp; Gültig bis <date-field name="Gueltig bis" role="Webschmiede" required="true" style="width: 110px; height: 18px; display: inline-block; margin-bottom: -3px;"></date-field></p>
+
+<div class="box">
+<strong>Angebot für</strong><br>
+Firma: <text-field name="Firma" role="Kunde" required="true" style="width: 280px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field><br>
+Vertreten durch: <text-field name="Vertreter" role="Kunde" required="true" style="width: 220px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field>
+Funktion: <text-field name="Funktion" role="Kunde" required="false" style="width: 120px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field><br>
+Straße: <text-field name="Strasse" role="Kunde" required="true" style="width: 280px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field><br>
+PLZ Ort: <text-field name="PLZ Ort" role="Kunde" required="true" style="width: 200px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field><br>
+E-Mail: <text-field name="Email" role="Kunde" required="true" style="width: 220px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field>
+Telefon: <text-field name="Telefon" role="Kunde" required="true" style="width: 140px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field><br>
+USt-IdNr.: <text-field name="USt-Id" role="Kunde" required="false" style="width: 160px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;"></text-field>
+</div>
+
+<div class="box">
+Branche: <text-field name="Branche" role="Webschmiede" required="false" style="width: 160px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="Gastro"></text-field>
+Ziel: <text-field name="Ziel" role="Webschmiede" required="false" style="width: 260px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="Online-Bestellen"></text-field>
+</div>
+
+<h2>Leistung</h2>
+<table>
+<tr><th>Pos.</th><th>Beschreibung</th><th class="num">Betrag netto</th></tr>
+<tr>
+  <td>1</td>
+  <td><strong>Setup / Einrichtung</strong><br>
+  Paket: <text-field name="Paket" role="Webschmiede" required="true" style="width: 260px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="Gastro · Bestell-System"></text-field><br>
+  Enthalten: <text-field name="Enthalten" role="Webschmiede" required="true" style="width: 400px; height: 36px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="Website mobil & schnell; Speisekarte; Google Maps; eigene Bestellseite (/bestellen); Admin für Küche; Zu/Auf + Wartezeit; Hosting in Deutschland"></text-field><br>
+  Nicht enthalten: <text-field name="Nicht enthalten" role="Webschmiede" required="false" style="width: 360px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="Druck, Ads-Budget, Rechtsberatung, SMS-Kontingent (nach Verbrauch)"></text-field>
+  </td>
+  <td class="num"><text-field name="Setup Preis" role="Webschmiede" required="true" style="width: 90px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="998,00 €"></text-field></td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><strong>Monatlicher Betrieb</strong> (ab Go-Live)<br>
+  Hosting/Betrieb, Support im Rahmen, Updates nach Absprache<br>
+  Laufzeit: <text-field name="Laufzeit" role="Webschmiede" required="true" style="width: 80px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="12 Monate"></text-field> ,
+  danach kündbar mit <text-field name="Kuendigungsfrist" role="Webschmiede" required="true" style="width: 70px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="1 Monat"></text-field> Frist
+  </td>
+  <td class="num"><text-field name="Monat Preis" role="Webschmiede" required="true" style="width: 110px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="298,00 € / Monat"></text-field></td>
+</tr>
+</table>
+
+<p><strong>Setup gesamt netto:</strong> <text-field name="Setup Summe" role="Webschmiede" required="true" style="width: 90px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="998,00 €"></text-field><br>
+<strong>Monat netto:</strong> <text-field name="Monat Summe" role="Webschmiede" required="true" style="width: 110px; height: 18px; display: inline-block; margin-bottom: -3px; border-bottom: 1px solid #ccc;" default="298,00 € / Monat"></text-field><br>
+<span class="muted">zzgl. gesetzlicher Umsatzsteuer · Fremdkosten (SMS, Voice, Domains) separat</span></p>
+
+<h2>Wichtig</h2>
+<ul>
+<li>Nur Gewerbetreibende (B2B).</li>
+<li>Verbindlich mit unterschriebenem Auftrag und AGB.</li>
+<li>Bei personenbezogenen Daten zusätzlich AVV.</li>
+<li>Angebot freibleibend bis zur Auftragsbestätigung.</li>
+</ul>
+
+<table class="siggrid"><tr>
+<td>
+  Ort/Datum Kunde <date-field name="Datum Kunde Angebot" role="Kunde" required="true" style="width: 110px; height: 18px; display: inline-block; margin-bottom: -3px;"></date-field><br>
+  <signature-field name="Unterschrift Kunde Angebot" role="Kunde" required="true" style="width: 220px; height: 70px; display: inline-block; border: 1px dashed #bbb;"></signature-field><br>
+  <span class="small">Annahme Angebot (optional)</span>
+</td>
+<td>
+  Ort/Datum Webschmiede <date-field name="Datum Webschmiede Angebot" role="Webschmiede" required="true" style="width: 110px; height: 18px; display: inline-block; margin-bottom: -3px;"></date-field><br>
+  <signature-field name="Unterschrift Webschmiede Angebot" role="Webschmiede" required="true" style="width: 220px; height: 70px; display: inline-block; border: 1px dashed #bbb;"></signature-field><br>
+  <span class="small">Christian Kummetat</span>
+</td>
+</tr></table>
+
+</body></html>

@@ -1,0 +1,71 @@
+{
+  "name": "Agency – Workorders Bridge",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-workorders",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wo-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "agency-workorders"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; const body=j.body||j; const message=(body.message||body.text||'').toString().trim(); if(!message) return [{json:{ok:false,error:'message fehlt'}}]; return [{json:{message}}];"
+      },
+      "id": "wo-norm",
+      "name": "Normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/workorders",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Content-Type", "value": "application/json"},
+            {"name": "X-Agency-Password", "value": "={{$env.AGENCY_ADMIN_PASSWORD}}"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"timeout": 120000}
+      },
+      "id": "wo-api",
+      "name": "Workorders API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "wo-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [720, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": {"main": [[{"node": "Normalisieren", "type": "main", "index": 0}]]},
+    "Normalisieren": {"main": [[{"node": "Workorders API", "type": "main", "index": 0}]]},
+    "Workorders API": {"main": [[{"node": "Antwort", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "meta": {"templateCredsSetupCompleted": true},
+  "tags": [{"name": "agency"}, {"name": "workorders"}]
+}

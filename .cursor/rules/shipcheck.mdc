@@ -1,0 +1,28 @@
+---
+description: Freigabe-Check Pflicht vor Links/Dashboards an Christian
+alwaysApply: true
+---
+
+# Freigabe-Check (Shipcheck)
+
+Bevor du Christian **Links, Dashboards, Agency-Setup-URLs oder „schau mal hier“** schickst:
+
+1. `python scripts/shipcheck_cli.py "https://…"`  
+   oder `POST /api/agency/shipcheck` mit `{ "text": "…" }` / `{ "urls": ["…"] }`
+2. Nur bei `"ship": true` den Link nennen.
+3. Bei `"ship": false`: erst fixen, erneut prüfen, dann schicken.
+
+## Gilt für
+
+- WhatsApp-Go-Live-Links, Agency-Setup, B2B-Portal, Kunden-URLs
+- Neue Dashboards nach Deploy
+- Alles mit `https://` in der Antwort an Christian
+
+## Ausnahme
+
+- Reine Dateipfade im Repo (kein http)
+- Explizit „ohne Check“ von Christian
+
+## Ehrlichkeit
+
+Totelinks und 404s sind verboten. Lieber eine Minute Check als Christian klickt ins Leere.

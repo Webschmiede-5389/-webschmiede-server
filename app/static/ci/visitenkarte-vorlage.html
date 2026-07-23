@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Visitenkarte, Webschmiede</title>
+  <link rel="stylesheet" href="webschmiede-ci.css">
+  <style>
+    body { background: #ccc; padding: 24px; }
+    .vc-wrap { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; align-items: flex-start; }
+    .vc-label { text-align: center; font: 600 9pt/1.4 var(--ws-font); color: #555; margin-bottom: 8px; }
+
+    /* 85 × 55 mm */
+    .vc-card {
+      width: 85mm;
+      height: 55mm;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,.15);
+      font-family: var(--ws-font);
+    }
+
+    /* ── VORDERSEITE (1:1 aus deiner PDF) ── */
+    .vc-front { background: #fff; }
+
+    .vc-front .vc-orange {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 38%;
+      background: var(--ws-orange);
+    }
+
+    .vc-front .vc-logo {
+      position: absolute;
+      top: 3mm; left: 3mm;
+      height: 11mm;
+      width: auto;
+    }
+
+    .vc-front .vc-bubble {
+      position: absolute;
+      top: 2mm; left: 50%;
+      transform: translateX(-42%);
+      max-width: 52mm;
+      background: var(--ws-orange);
+      color: #fff;
+      font-size: 5.2pt;
+      line-height: 1.35;
+      padding: 2mm 2.5mm;
+      border-radius: 3mm;
+      text-align: center;
+      font-weight: 500;
+    }
+    .vc-front .vc-bubble em { font-style: italic; font-weight: 400; display: block; margin-top: 1mm; }
+
+    .vc-front .vc-photo {
+      position: absolute;
+      left: 3mm;
+      bottom: 10mm;
+      width: 22mm;
+      height: 22mm;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+      z-index: 2;
+    }
+
+    .vc-front .vc-person {
+      position: absolute;
+      top: 16mm;
+      left: 28mm;
+      right: 3mm;
+      z-index: 1;
+    }
+    .vc-front .vc-person h1 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--ws-ink);
+      line-height: 1.1;
+    }
+    .vc-front .vc-person p {
+      font-size: 7pt;
+      color: var(--ws-ink);
+      margin-top: 1mm;
+    }
+
+    .vc-front .vc-brand-line {
+      position: absolute;
+      left: 28mm;
+      bottom: 14mm;
+      right: 3mm;
+      font-size: 6.5pt;
+      font-weight: 700;
+      color: #fff;
+      z-index: 2;
+    }
+
+    .vc-front .vc-contacts {
+      position: absolute;
+      left: 28mm;
+      bottom: 5.5mm;
+      right: 3mm;
+      font-size: 5.8pt;
+      color: #fff;
+      line-height: 1.55;
+      z-index: 2;
+    }
+    .vc-front .vc-contacts span { white-space: nowrap; }
+
+    .vc-front .vc-footer {
+      position: absolute;
+      left: 2mm; right: 2mm; bottom: 1mm;
+      font-size: 4pt;
+      color: rgba(255,255,255,.85);
+      text-align: center;
+      line-height: 1.3;
+      z-index: 2;
+    }
+
+    /* ── RÜCKSEITE ── */
+    .vc-back {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4mm 4mm 3mm;
+    }
+    .vc-back .vc-logo-back { height: 12mm; width: auto; margin-top: 1mm; }
+    .vc-back .vc-qr { width: 28mm; height: 28mm; object-fit: contain; }
+    .vc-back .vc-pipeline {
+      font-size: 4.2pt;
+      color: #888;
+      text-align: center;
+      line-height: 1.45;
+      max-width: 100%;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .vc-card { box-shadow: none; page-break-inside: avoid; margin: 0; }
+      .vc-wrap { gap: 0; }
+    }
+  </style>
+</head>
+<body>
+<button class="ws-print-btn ws-no-print" onclick="window.print()">Als PDF speichern</button>
+
+<div class="vc-wrap">
+  <div>
+    <p class="vc-label">Vorderseite</p>
+    <div class="vc-card vc-front">
+      <img class="vc-logo" src="webschmiede-logo.png" alt="WebSchmiede">
+      <div class="vc-bubble ws-editable" contenteditable="true">
+        Keine Zeit mehr für die wichtigen Dinge?
+        <em>„Ich baue Systeme die entlasten“</em>
+      </div>
+      <img class="vc-photo" src="christian-kummetat.jpg" alt="Christian Kummetat">
+      <div class="vc-person ws-editable" contenteditable="true">
+        <h1>Christian Kummetat</h1>
+        <p>Digitalerhandwerksmeister</p>
+      </div>
+      <div class="vc-orange"></div>
+      <div class="vc-brand-line ws-editable" contenteditable="true">Webschmiede-Digitalehandwerkskunst</div>
+      <div class="vc-contacts ws-editable" contenteditable="true">
+        <span>☎ + 49 177 80 11 350</span><br>
+        <span>✉ info@digitalehandwerkskunst.de</span><br>
+        <span>🌐 www.digitalehandwerkskunst.de</span>
+      </div>
+      <div class="vc-footer ws-editable" contenteditable="true">
+        Webschmiede-Digitale Handwerkskunst | Meinertzhagener Str. 16 | 53894 Mechernich | USt-IdNr.: DE370109681
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="vc-label">Rückseite</p>
+    <div class="vc-card vc-back">
+      <img class="vc-logo-back" src="webschmiede-logo.png" alt="WebSchmiede">
+      <img class="vc-qr" src="vc-qr.png" alt="QR digitalehandwerkskunst.de">
+      <p class="vc-pipeline ws-editable" contenteditable="true">
+        Automatisiertes Business Management System | Verwaltet | Beantwortet | Qualifiziert | Terminiert | Entlastet
+      </p>
+    </div>
+  </div>
+</div>
+
+<p class="ws-no-print" style="text-align:center;font-size:9pt;color:#666;margin-top:20px;font-family:var(--ws-font);">
+  85 × 55 mm · beidseitig drucken · 1:1 aus deiner Original-PDF
+</p>
+</body>
+</html>

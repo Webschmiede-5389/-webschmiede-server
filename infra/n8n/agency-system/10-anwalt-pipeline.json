@@ -1,0 +1,160 @@
+{
+  "name": "Agency 10 – Anwalt 3-Stufen Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-10-anwalt-pipeline",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a10-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "agency-10-anwalt-pipeline"
+    },
+    {
+      "parameters": {
+        "jsCode": "const b=($input.first().json.body)||$input.first().json||{}; return [{json:{ firma:b.firma||b.company||'Kunde', kontakt:b.kontakt||'', leistungen:b.leistungen||b.scope||'', budget:b.budget||b.preis||'', zero_retention:b.zero_retention!==false, brief:b.brief||b.message||b.text||'' }}];"
+      },
+      "id": "a10-norm",
+      "name": "Eingabe normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [200, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/anwalt/stage/1",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{$env.CRON_SECRET}}" },
+            { "name": "X-Agency-Password", "value": "={{$env.AGENCY_ADMIN_PASSWORD}}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "a10-s1",
+      "name": "Stufe 1 Vertrags-Architekt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [420, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev=$input.first().json; const base=$('Eingabe normalisieren').first().json; return [{json:{...base, document: prev.document||prev.markdown||''}}];"
+      },
+      "id": "a10-m12",
+      "name": "Merge Stufe1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [640, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/anwalt/stage/2",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{$env.CRON_SECRET}}" },
+            { "name": "X-Agency-Password", "value": "={{$env.AGENCY_ADMIN_PASSWORD}}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "a10-s2",
+      "name": "Stufe 2 Compliance-Waechter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [860, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev=$input.first().json; const base=$('Eingabe normalisieren').first().json; return [{json:{...base, document: prev.document||''}}];"
+      },
+      "id": "a10-m23",
+      "name": "Merge Stufe2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1080, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/anwalt/stage/3",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{$env.CRON_SECRET}}" },
+            { "name": "X-Agency-Password", "value": "={{$env.AGENCY_ADMIN_PASSWORD}}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "a10-s3",
+      "name": "Stufe 3 Endkontrolle",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1300, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const s3=$input.first().json; const s2=$('Stufe 2 Compliance-Waechter').first().json; return [{json:{ ok:true, workflow:'anwalt-3-stufen', ampel:s3.ampel, findings:s3.findings, protokoll:s3.protokoll, document:s2.document||s3.document, disclaimer:s3.disclaimer||'KI-Vorpruefung', auto_send:false, rechtskraft:false, note:'Kein Auto-PDF an Kunden. DocuSeal manuell. Kein Helsinki. Optional: ein Call /api/agency/anwalt/pipeline statt 3 Nodes.' }}];"
+      },
+      "id": "a10-pack",
+      "name": "Ergebnis packen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1520, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "a10-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1740, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Eingabe normalisieren", "type": "main", "index": 0 }]] },
+    "Eingabe normalisieren": { "main": [[{ "node": "Stufe 1 Vertrags-Architekt", "type": "main", "index": 0 }]] },
+    "Stufe 1 Vertrags-Architekt": { "main": [[{ "node": "Merge Stufe1", "type": "main", "index": 0 }]] },
+    "Merge Stufe1": { "main": [[{ "node": "Stufe 2 Compliance-Waechter", "type": "main", "index": 0 }]] },
+    "Stufe 2 Compliance-Waechter": { "main": [[{ "node": "Merge Stufe2", "type": "main", "index": 0 }]] },
+    "Merge Stufe2": { "main": [[{ "node": "Stufe 3 Endkontrolle", "type": "main", "index": 0 }]] },
+    "Stufe 3 Endkontrolle": { "main": [[{ "node": "Ergebnis packen", "type": "main", "index": 0 }]] },
+    "Ergebnis packen": { "main": [[{ "node": "Antwort", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "notes": "3-Stufen Anwalt. Ruft Agency-API (deterministisch). Keine Claude/GPT-Nodes ohne OK. Standort Nuernberg. Kein Auto-Send."
+  },
+  "tags": [
+    { "name": "agency" },
+    { "name": "system-13" },
+    { "name": "anwalt" }
+  ]
+}

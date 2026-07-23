@@ -1,0 +1,149 @@
+{
+  "name": "Agency – AI Router (Dispatcher)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agency-router",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "rt-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "agency-router"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nconst body = j.body || j;\nconst message = (body.message || body.text || body.payload || j.message || '').toString().trim();\nif (!message) {\n  return [{ json: { ok: false, error: 'message fehlt' } }];\n}\nconst tenant = (body.kunde_id || body.tenant_id || body.tenant || 'AGENCY').toString();\nreturn [{ json: { message, source: body.source || 'n8n-webhook', kunde_id: tenant, redact: true } }];"
+      },
+      "id": "rt-norm",
+      "name": "Nachricht normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/router",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.CRON_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: $json.message, source: $json.source, kunde_id: $json.kunde_id, redact: true }) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "rt-http",
+      "name": "Flask Router API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $input.first().json;\nconst agents = r.mitarbeiter || r.target_agents || [];\nreturn [{\n  json: {\n    ok: !!r.ok,\n    tenant_id: r.tenant_id || 'AGENCY',\n    mitarbeiter: agents,\n    target_agents: agents,\n    prioritaet: r.prioritaet || 'normal',\n    payload: r.payload || '',\n    ziel: r.ziel || '',\n    context: r.context || '',\n    playbook: r.playbook || '',\n    cursor_briefings: r.cursor_briefings || [],\n    security: r.security || {},\n    audit_id: r.audit_id || null,\n    pii_flags: r.pii_flags || {},\n    dispatches: agents.map(a => ({ agent: a, status: 'routed', next: 'Cursor Skill oder Sub-Workflow' })),\n    note: 'PII in Response redigiert. Kein Klartext-Logging von Kundendaten in n8n noetig. Hosting: Nuernberg.'\n  }\n}];"
+      },
+      "id": "rt-pack",
+      "name": "Dispatch-Plan packen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "rt-resp",
+      "name": "Webhook Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        960,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Nachricht normalisieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nachricht normalisieren": {
+      "main": [
+        [
+          {
+            "node": "Flask Router API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flask Router API": {
+      "main": [
+        [
+          {
+            "node": "Dispatch-Plan packen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dispatch-Plan packen": {
+      "main": [
+        [
+          {
+            "node": "Webhook Antwort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "notes": "Import → n8n Env CRON_SECRET = Server-Wert → aktivieren. POST /webhook/agency-router {\"message\":\"...\"}"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "id": "baustoff",
+  "name": "Baustoffhandel & B2B-Fachhandel",
+  "discovery": {
+    "type": "overpass",
+    "amenities": [],
+    "crafts": [],
+    "shops": [
+      "trade",
+      "hardware",
+      "doityourself",
+      "building_materials"
+    ],
+    "office_tags": [
+      "company"
+    ]
+  },
+  "google_places_type": "hardware_store",
+  "delivery_platforms": [],
+  "order_keywords": [
+    "bestellen",
+    "preisliste",
+    "lieferservice",
+    "abholung",
+    "fachhandel",
+    "handwerker",
+    "konto eröffnen",
+    "grosshandel"
+  ],
+  "job_keywords": [
+    "stellenangebot",
+    "innendienst",
+    "vertrieb",
+    "lagerist",
+    "fahrer",
+    "wir suchen"
+  ],
+  "subpages": [
+    "/sortiment",
+    "/leistungen",
+    "/lieferung",
+    "/karriere",
+    "/jobs",
+    "/kontakt",
+    "/standorte"
+  ],
+  "priority_amenities": [],
+  "reference_client": {
+    "id": "WS-AGENCY",
+    "name": "Webschmiede Digitale Handwerkskunst",
+    "pitch": "Standort-Pilot: WhatsApp-Bestellung, Preislisten-Abgleich, Reklamation vorsortieren"
+  },
+  "local_wins": [
+    "WhatsApp-Bestellentwurf statt Abtippen im ERP",
+    "Morgen-Briefing Preislisten (Ausreisser >5%)",
+    "Reklamationen vorsortiert mit Auftragsnr-Vorschlag",
+    "Hosting Nuernberg, Pilot 30 Tage risikobegrenzt"
+  ],
+  "offers": {
+    "standard": {
+      "name": "Standort-Pilot Baustoff",
+      "setup": "3500–6500 € einmalig (Pilot)",
+      "monthly": "nach Pilot / Standort",
+      "includes": [
+        "WA-Bestellparse + Freigabe-Queue",
+        "CSV Preislisten-Vergleich",
+        "Reklamations-Vorsortierung",
+        "Zero-Retention Option"
+      ]
+    },
+    "local": {
+      "name": "Demo ohne Meta",
+      "setup": "0 €",
+      "monthly": "0 €",
+      "includes": [
+        "Portal-Demo /api/b2b/baustoff/*",
+        "Zwei Beispiel-CSV vergleichen",
+        "Gespräch mit Niederlassungsleiter"
+      ]
+    },
+    "premium": {
+      "name": "Standort + ERP-Anbindung",
+      "setup": "nach Aufwand",
+      "monthly": "ab 298 €/Mo",
+      "includes": [
+        "Bestands-API / Export",
+        "WhatsApp Business live",
+        "n8n Einkaufs-Postfach"
+      ]
+    }
+  },
+  "intents": {
+    "entlastung": {
+      "label": "Innendienst entlasten",
+      "want": "WhatsApp und Excel fressen Verkaufszeit",
+      "approach": "Pilot: 5 Stammhandwerker + Preislisten-Morgenbriefing",
+      "when": "default"
+    },
+    "leads": {
+      "label": "Schneller liefern",
+      "want": "Handwerker warten auf Rueckruf",
+      "approach": "Bestellentwurf in Sekunden, Freigabe ein Klick",
+      "when": "no_order_signals"
+    },
+    "standard": {
+      "label": "Baustoff Digital",
+      "want": "Keine Standardsoftware, sondern digitale Mitarbeiter",
+      "approach": "30-Tage Pilot, abschalten wenn kein Effekt",
+      "when": "default"
+    }
+  }
+}

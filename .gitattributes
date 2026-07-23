@@ -1,0 +1,2 @@
+# Shell-Skripte immer LF (Windows-CRLF bricht bash set -o pipefail)
+*.sh text eol=lf

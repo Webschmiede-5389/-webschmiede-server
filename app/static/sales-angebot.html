@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ihre Einschätzung · Webschmiede</title>
+  <link rel="icon" href="/ci/webschmiede-logo-mark.png" />
+  <link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600|libre-baskerville:600" rel="stylesheet" />
+  <style>
+    :root { --bg:#0e0b08; --panel:#1a1510; --ink:#f3efe6; --muted:#9a9080; --gold:#C9A84C; --line:#2a241c; --ok:#3d9a6a; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:"DM Sans",system-ui,sans-serif;
+      background:radial-gradient(1100px 520px at 15% -8%, #2a1f12 0%, var(--bg) 55%); color:var(--ink); }
+    .wrap { max-width:680px; margin:0 auto; padding:28px 18px 70px; }
+    header { display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+    header img { height:36px; }
+    h1 { font-family:"Libre Baskerville",Georgia,serif; font-size:1.4rem; margin:0; }
+    .sub { color:var(--muted); margin-top:4px; }
+    .panel { background:color-mix(in srgb,var(--panel) 92%,black); border:1px solid var(--line); border-radius:16px; padding:22px; margin-bottom:14px; }
+    .gold { color:var(--gold); }
+    ul { margin:8px 0 0; padding-left:1.1rem; color:var(--muted); }
+    .btn { display:inline-block; margin-top:16px; border:0; border-radius:10px; background:var(--gold); color:#1a1408; font-weight:600; padding:12px 18px; cursor:pointer; font:inherit; text-decoration:none; }
+    .msg { margin-top:12px; color:var(--muted); }
+    .msg.ok { color:var(--ok); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="/ci/webschmiede-logo.png" alt="Webschmiede" />
+      <div>
+        <h1 id="title">Einschätzung</h1>
+        <div class="sub" id="sub">Webschmiede</div>
+      </div>
+    </header>
+    <div class="panel" id="body">Laden…</div>
+    <div class="msg" id="msg"></div>
+  </div>
+  <script>
+    const qs = new URLSearchParams(location.search);
+    const dealId = qs.get("d") || "";
+    const wantAccept = qs.get("accept") === "1";
+
+    async function load() {
+      const res = await fetch("/api/sales/deals/" + encodeURIComponent(dealId) + "/public");
+      const d = await res.json();
+      if (!res.ok) { document.getElementById("body").textContent = d.error || "Dieser Link ist ungueltig oder abgelaufen."; return; }
+      document.getElementById("title").textContent = d.firma || "Einschätzung";
+      document.getElementById("sub").textContent = (d.offer && d.offer.name) || "Webschmiede";
+      const o = d.offer || {};
+      const pains = (o.pains || []).map(p => `<li><strong style="color:#f3efe6">${esc(p.label)}</strong><br>${esc(p.solution)}</li>`).join("");
+      const obs = (o.observations || []).map(x => `<li>${esc(x)}</li>`).join("");
+      const wu = (o.wuensche || "").trim();
+      const wuBlock = wu ? `<p style="margin-top:14px"><strong class="gold">Ihre Hinweise</strong></p><p style="color:#9a9080">${esc(wu)}</p>` : "";
+      let price = "";
+      if (o.with_prices || d.price_setup_eur) {
+        price = `<p class="gold" style="font-size:1.2rem;margin:14px 0;">Setup ${d.price_setup_eur || o.setup_eur} € · Monat ${d.price_monthly_eur || o.monthly_eur} €</p>`;
+      } else if (d.status === "awaiting_freigabe_pain") {
+        price = `<p style="color:#9a9080">Die Einschätzung wird gerade geprüft und kommt gleich per E-Mail.</p>`;
+      } else {
+        price = `<p style="color:#9a9080">${esc(o.price_note || "Preise folgen im nächsten Schritt.")}</p>`;
+      }
+      let cta = "";
+      if (d.checkout_url) {
+        cta = `<a class="btn" href="${d.checkout_url}">Jetzt bezahlen</a>`;
+      } else if (d.price_setup_eur || o.with_prices) {
+        cta = `<button class="btn" id="btnAccept" type="button">Passt, weiter zur Bestellung</button>`;
+      } else if (d.status === "awaiting_freigabe_pain") {
+        cta = `<p class="msg">Noch einen Moment. Christian schaut sich den Entwurf an.</p>`;
+      } else {
+        cta = `<p class="msg">Wenn das passt, melden Sie sich kurz bei Christian. Dann kommt das Angebot mit Zahlen.</p>`;
+      }
+      document.getElementById("body").innerHTML = `
+        <p>${esc(o.value_promise || "")}</p>
+        ${price}
+        ${wuBlock}
+        <p><strong class="gold">Was wir sehen</strong></p>
+        <ul>${pains || "<li>–</li>"}</ul>
+        <p style="margin-top:14px"><strong class="gold">Beobachtungen</strong></p>
+        <ul>${obs || "<li>–</li>"}</ul>
+        <p style="margin-top:14px;color:#9a9080;font-size:0.85rem">${esc(o.not_included || "")}</p>
+        ${cta}
+      `;
+      const btn = document.getElementById("btnAccept");
+      if (btn) btn.onclick = accept;
+      if (wantAccept && (d.price_setup_eur || o.with_prices) && !d.checkout_url) accept();
+    }
+
+    async function accept() {
+      const msg = document.getElementById("msg");
+      msg.textContent = "Bestellung wird vorbereitet…";
+      const res = await fetch("/api/sales/deals/" + encodeURIComponent(dealId) + "/accept", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: "{}",
+      });
+      const data = await res.json();
+      if (!res.ok) { msg.textContent = data.error || "Fehler"; msg.className = "msg"; return; }
+      if (data.checkout_url) {
+        msg.textContent = "Weiter zur Zahlung…";
+        msg.className = "msg ok";
+        location.href = data.checkout_url;
+      } else {
+        msg.textContent = data.error || "Checkout noch nicht bereit. Christian setzt den Preis.";
+      }
+    }
+
+    function esc(s){ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+    load().catch(e => { document.getElementById("body").textContent = e.message; });
+  </script>
+</body>
+</html>

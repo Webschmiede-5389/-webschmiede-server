@@ -1,0 +1,55 @@
+{
+  "name": "Agency – B2B Wholesale Calc (optional n8n)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b2b-wholesale",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b2b-wh",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "b2b-wholesale"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; const body=j.body||j; const jobId=body.job_id||(body.job&&body.job.id); if(!jobId) return [{json:{ok:false,error:'job_id fehlt'}}]; return [{json:{job_id:jobId, note:'Portal rechnet lokal; dieser Workflow ist Hook fuer spaeter Keepa/n8n-Logik. Callback optional.'}}];"
+      },
+      "id": "b2b-norm",
+      "name": "Job lesen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "b2b-resp",
+      "name": "Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [480, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Job lesen", "type": "main", "index": 0 }]]
+    },
+    "Job lesen": {
+      "main": [[{ "node": "Antwort", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "notes": "Optional. Portal laeuft lokal ohne diesen Workflow. Env B2B_WHOLESALE_WEBHOOK setzen wenn aktiv."
+  },
+  "tags": [{ "name": "agency" }, { "name": "b2b" }]
+}

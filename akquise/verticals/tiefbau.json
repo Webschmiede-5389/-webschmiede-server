@@ -1,0 +1,117 @@
+{
+  "id": "tiefbau",
+  "name": "Tiefbau / Straßen- und Erdbau",
+  "discovery": {
+    "type": "overpass",
+    "amenities": [],
+    "crafts": ["builder"],
+    "shops": ["trade"],
+    "office_tags": ["company", "engineer"],
+    "name_hints": [
+      "tiefbau",
+      "straßenbau",
+      "strassenbau",
+      "kanalbau",
+      "erdbau",
+      "leitungsbau",
+      "asphalt"
+    ],
+    "noisy_crafts": ["builder"],
+    "name_regex": "Tiefbau|Straßenbau|Strassenbau|Kanalbau|Erdbau|Leitungsbau"
+  },
+  "google_places_type": "general_contractor",
+  "delivery_platforms": [],
+  "order_keywords": [
+    "angebot anfordern",
+    "kostenvoranschlag",
+    "termin",
+    "anfrage",
+    "kontaktformular",
+    "projektanfrage"
+  ],
+  "job_keywords": [
+    "tiefbauer",
+    "straßenbauer",
+    "geselle",
+    "azubi",
+    "stellenangebot",
+    "jobs",
+    "mitarbeiter",
+    "maschinist"
+  ],
+  "subpages": ["/leistungen", "/referenzen", "/projekte", "/karriere", "/jobs", "/kontakt"],
+  "priority_amenities": [],
+  "reference_client": {
+    "id": "WS-AGENCY",
+    "name": "Webschmiede Digitale Handwerkskunst",
+    "pitch": "Website, Anfrage-Automatisierung, Google-Sichtbarkeit für Handwerk vor Ort"
+  },
+  "local_wins": [
+    "Google Business Profil prüfen",
+    "WhatsApp-Anfrage-Link auf die Seite",
+    "Maschinen/Fuhrpark + Referenzen zeigen"
+  ],
+  "offers": {
+    "standard": {
+      "name": "Tiefbau Digital",
+      "setup": "1980–7200 € einmalig",
+      "monthly": "98 €/Mo",
+      "includes": [
+        "Website mit Leistungsseiten",
+        "Anfrageformular → CRM + Mail",
+        "Google Maps sichtbar in der Region",
+        "Projektgalerie"
+      ]
+    },
+    "starter": {
+      "name": "Website + Anfrage",
+      "setup": "998–3160 € einmalig",
+      "monthly": "58 €/Mo",
+      "includes": ["One-Page oder 3 Seiten", "Kontaktformular", "Logo-Entwurf in 24h"]
+    },
+    "local": {
+      "name": "Lokal starten (0 €)",
+      "setup": "0 €",
+      "monthly": "0 €",
+      "includes": ["Google-Check kostenlos", "WhatsApp-Rückruf-Link", "Später Website wenn Auftragslage passt"]
+    },
+    "premium": {
+      "name": "Tiefbau + Automation",
+      "setup": "3600 €+",
+      "monthly": "158 €/Mo",
+      "includes": ["Anfrage → CRM → SMS-Bestätigung", "Bewertungs-Funnel nach Auftrag", "Monatsreport"]
+    }
+  },
+  "intents": {
+    "digital_neu": {
+      "label": "Digital starten",
+      "want": "Kaum Web-Auftritt, Aufträge nur über Empfehlung",
+      "approach": "Website + Maps, bevor die Konkurrenz online alle Anfragen wegnimmt",
+      "when": "no_website_or_social"
+    },
+    "leads": {
+      "label": "Mehr Anfragen",
+      "want": "Kein klares Online-Anfrage-System",
+      "approach": "Formular + WhatsApp, keine verlorene Anfrage",
+      "when": "no_order_signals"
+    },
+    "entlastung": {
+      "label": "Personal & Büro",
+      "want": "Sucht Leute, Chef steckt im Büro fest",
+      "approach": "Anfragen automatisch vorqualifizieren",
+      "when": "job_signals"
+    },
+    "vertrauen": {
+      "label": "Google schwach",
+      "want": "Nachbar wirkt online stärker",
+      "approach": "Bewertungen + Referenzfotos systematisch",
+      "when": "trust_issue"
+    },
+    "standard": {
+      "label": "Tiefbau Digital",
+      "want": "Nachholbedarf online",
+      "approach": "Kostenloses Erstgespräch, Logo in 24h",
+      "when": "default"
+    }
+  }
+}

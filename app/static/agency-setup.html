@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/ci/webschmiede-logo-mark.png">
+  <title>Agency Setup – Webschmiede</title>
+  <meta name="robots" content="noindex, nofollow">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.bunny.net/css?family=inter:400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { background: #F5F5F5; color: #1A1A1A; font-family: Inter, sans-serif; }
+    input, select { background: #fff; border: 1px solid #E0E0E0; border-radius: 8px; padding: 10px 12px; width: 100%; color: #1A1A1A; font-size: 14px; }
+    input:focus { outline: none; border-color: #FF6600; }
+    .panel { background: #fff; border: 1px solid #E8E8E8; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    .btn-gold { background: #FF6600; color: #fff; font-weight: 600; }
+    .btn-gold:hover { background: #E55A00; }
+    .badge-ok { background: #2ecc71; color: #000; font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; }
+    .badge-no { background: #444; color: #ccc; font-size: 10px; padding: 2px 8px; border-radius: 99px; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div id="login-screen" class="min-h-screen flex items-center justify-center px-4">
+    <div class="panel p-8 w-full max-w-sm text-center">
+      <img src="/ci/webschmiede-logo-mark.png" alt="" class="h-20 w-20 mx-auto mb-3 object-contain" aria-hidden="true">
+      <p class="text-xl font-bold text-[#1A1A1A] leading-tight">WebSchmiede</p>
+      <p class="text-sm font-medium text-[#FF6600] mb-4">Digitale Handwerkskunst</p>
+      <h1 class="text-sm font-semibold mb-2 text-[#666]">Agency Setup</h1>
+      <p class="text-[#888] text-xs mb-6">E-Mail, Stripe, API-Keys. Alles auf dem Server</p>
+      <input type="password" id="login-pw" class="mb-4" placeholder="Agency-Passwort" onkeydown="if(event.key==='Enter')doLogin()">
+      <button onclick="doLogin()" class="btn-gold w-full py-2.5 rounded-lg text-sm">Anmelden</button>
+      <p id="login-err" class="text-red-400 text-xs mt-3 hidden"></p>
+    </div>
+  </div>
+
+  <div id="app" class="hidden max-w-2xl mx-auto px-4 py-8">
+    <header class="flex flex-wrap items-center justify-between gap-4 mb-6">
+      <div class="flex items-center gap-3">
+        <img src="/ci/webschmiede-logo-mark.png" alt="" class="h-12 w-12 object-contain" aria-hidden="true">
+        <div>
+          <p class="text-sm font-bold text-[#1A1A1A]">WebSchmiede</p>
+          <p class="text-xs font-medium text-[#FF6600]">Digitale Handwerkskunst</p>
+          <h1 class="text-2xl font-bold mt-1">Setup-Portal</h1>
+          <p class="text-[#888] text-sm mt-1">Speichert in <code class="text-[#FF6600]">deploy.secrets.local</code> auf dem Server</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <a href="/agency" class="text-sm text-[#888] hover:text-[#FF6600] px-3 py-2 border border-[#E8E8E8] rounded-lg">Seminare</a>
+        <button onclick="logout()" class="text-sm text-[#888] px-3 py-2">Abmelden</button>
+      </div>
+    </header>
+
+    <div id="status-bar" class="panel p-3 mb-4 flex flex-wrap gap-3 text-xs"></div>
+
+    <div class="panel p-5 mb-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <p class="text-[#888] text-xs">Nur ausgefüllte Felder werden gespeichert. Leer = unverändert.</p>
+        <button type="button" onclick="presetIonos()" class="text-xs px-3 py-1.5 rounded-lg border border-[#FF6600] text-[#FF6600]">IONOS-Vorlage</button>
+      </div>
+      <div id="key-form" class="space-y-6"></div>
+      <div class="flex flex-wrap gap-3 mt-6 pt-4 border-t border-[#E8E8E8]">
+        <button onclick="saveKeys()" class="btn-gold px-5 py-2.5 rounded-lg text-sm"><i class="fa-solid fa-floppy-disk"></i> Auf Server speichern</button>
+        <button onclick="testSmtp()" class="text-sm px-4 py-2.5 rounded-lg border border-[#E8E8E8] text-[#666] hover:border-[#FF6600]">Test-E-Mail</button>
+        <button onclick="testStripe()" class="text-sm px-4 py-2.5 rounded-lg border border-[#E8E8E8] text-[#666] hover:border-[#FF6600]">Stripe testen</button>
+        <button onclick="testGoogle()" class="text-sm px-4 py-2.5 rounded-lg border border-[#E8E8E8] text-[#666] hover:border-[#FF6600]">Google Places</button>
+        <button onclick="testCloudflare()" class="text-sm px-4 py-2.5 rounded-lg border border-[#E8E8E8] text-[#666] hover:border-[#FF6600]">Cloudflare testen</button>
+        <button onclick="testHetzner()" class="text-sm px-4 py-2.5 rounded-lg border border-[#E8E8E8] text-[#666] hover:border-[#FF6600]">Hetzner testen</button>
+        <button onclick="testIonos()" class="text-sm px-4 py-2.5 rounded-lg border border-[#E8E8E8] text-[#666] hover:border-[#FF6600]">IONOS DNS testen</button>
+        <button onclick="testSms()" class="text-sm px-4 py-2.5 rounded-lg border border-[#E8E8E8] text-[#666] hover:border-[#FF6600]">SMS testen</button>
+        <button onclick="testWhatsapp()" class="text-sm px-4 py-2.5 rounded-lg border border-[#E8E8E8] text-[#666] hover:border-[#FF6600]">WhatsApp (Meta)</button>
+        <button onclick="testDocuseal()" class="text-sm px-4 py-2.5 rounded-lg border border-[#E8E8E8] text-[#666] hover:border-[#FF6600]">DocuSeal testen</button>
+      </div>
+      <p id="msg" class="text-sm mt-4 hidden"></p>
+    </div>
+
+    <div class="panel p-4 text-xs text-[#666] space-y-2">
+      <p><strong class="text-[#888]">Was du hier einträgst:</strong> IONOS-E-Mail · Gruppe <strong>Domains (IONOS)</strong> (API Präfix + Secret) · Stripe · Google · Cloudflare · Hetzner · <strong>SMS (seven.io) + WhatsApp (Meta)</strong> als GHL-Ersatz.</p>
+      <p><strong class="text-[#888]">Nicht hier:</strong> <code>SERVER_PASSWORD</code> (SSH). Bleibt lokal in deiner <code>deploy.secrets.local</code>.</p>
+      <p>Webhook WhatsApp (Agentur): <code class="text-[#FF6600]">https://digitalehandwerkskunst.de/api/whatsapp/webhook</code> · Verify-Token wie oben. Nicht die Kunden-Domain.</p>
+      <p>Nach dem Speichern kannst du im Chat sagen: „Sende Onboarding-Mail an SHY001“, Jarvis nutzt diese Daten.</p>
+    </div>
+  </div>
+
+  <script src="/agency-auth.js"></script>
+  <script>
+    let items = [];
+    let groups = [];
+
+    function getPw() { return AgencyAuth.getToken(); }
+    function hdr() { return AgencyAuth.headers(); }
+
+    async function apiFetch(url, opts = {}) {
+      let r;
+      try {
+        r = await fetch(url, { ...opts, headers: { ...hdr(), ...(opts.headers || {}) } });
+      } catch (e) {
+        throw new Error('Netzwerk: Server nicht erreichbar. Kurz warten oder API prüfen.');
+      }
+      let data = {};
+      const ct = r.headers.get('content-type') || '';
+      if (ct.includes('application/json')) {
+        try { data = await r.json(); } catch (_) { data = {}; }
+      } else {
+        const text = await r.text();
+        if (text) data = { error: text.slice(0, 200) };
+      }
+      if (r.status === 401 || r.status === 403) {
+        const err = new Error('pw');
+        err.data = data;
+        throw err;
+      }
+      if (!r.ok) {
+        const err = new Error(data.error || data.hint || `HTTP ${r.status}`);
+        err.data = data;
+        err.status = r.status;
+        throw err;
+      }
+      return data;
+    }
+
+    function setBusy(busy) {
+      document.querySelectorAll('button').forEach(b => { b.disabled = busy; });
+    }
+
+    function showApp() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      loadKeys();
+    }
+
+    async function doLogin() {
+      const pw = document.getElementById('login-pw').value;
+      const err = document.getElementById('login-err');
+      err.classList.add('hidden');
+      if (!pw.trim()) {
+        err.textContent = 'Bitte Passwort eingeben.';
+        err.classList.remove('hidden');
+        return;
+      }
+      setBusy(true);
+      try {
+        await AgencyAuth.login('', pw);
+        await apiFetch('/api/agency/secrets');
+        showApp();
+      } catch (e) {
+        AgencyAuth.clear();
+        err.textContent = e.message === 'pw'
+          ? (e.data?.hint || 'Passwort falsch oder nicht auf dem Server gesetzt.')
+          : (e.message || 'Anmeldung fehlgeschlagen');
+        err.classList.remove('hidden');
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function logout() { await AgencyAuth.logout(); location.reload(); }
+
+    function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+    function showMsg(text, ok) {
+      const el = document.getElementById('msg');
+      el.textContent = text;
+      el.className = 'text-sm mt-4 ' + (ok ? 'text-green-400' : 'text-red-400');
+      el.classList.remove('hidden');
+    }
+
+    function presetIonos() {
+      document.querySelectorAll('#key-form input[data-key]').forEach(inp => {
+        if (inp.dataset.key === 'AGENCY_SMTP_HOST') inp.value = 'smtp.ionos.de';
+        if (inp.dataset.key === 'AGENCY_SMTP_PORT') inp.value = '587';
+      });
+      showMsg('IONOS SMTP-Vorlage eingefügt. User, Passwort und Absender noch ausfüllen.', true);
+    }
+
+    function renderStatus(data) {
+      const bar = document.getElementById('status-bar');
+      const dot = (ok) => ok ? 'text-green-600' : 'text-[#888]';
+      bar.innerHTML = `
+        <span class="${dot(data.smtp_configured)}"><i class="fa-solid fa-envelope"></i> E-Mail ${data.smtp_configured ? 'OK' : 'offen'}</span>
+        <span class="${dot(data.stripe_configured)}"><i class="fa-brands fa-stripe"></i> Stripe ${data.stripe_configured ? 'OK' : 'offen'}</span>
+        <span class="${dot(data.google_places_configured)}"><i class="fa-brands fa-google"></i> Places ${data.google_places_configured ? 'OK' : 'offen'}</span>
+        <span class="${dot(data.cloudflare_configured)}"><i class="fa-solid fa-globe"></i> Cloudflare ${data.cloudflare_configured ? 'OK' : 'offen'}</span>
+        <span class="${dot(data.hetzner_configured)}"><i class="fa-solid fa-server"></i> Hetzner ${data.hetzner_configured ? 'OK' : 'offen'}</span>
+        <span class="${dot(data.docuseal_configured)}"><i class="fa-solid fa-file-signature"></i> DocuSeal ${data.docuseal_configured ? 'OK' : 'offen'}</span>
+        <span class="${dot(data.agency_login_configured)}"><i class="fa-solid fa-key"></i> Login ${data.agency_login_configured ? 'OK' : 'offen'}</span>
+        <span class="text-[#555] truncate">${esc(data.path)}</span>`;
+    }
+
+    async function loadKeys() {
+      setBusy(true);
+      try {
+        const data = await apiFetch('/api/agency/secrets');
+        items = data.items || [];
+        groups = data.groups || [...new Set(items.map(i => i.group))];
+        renderStatus(data);
+        const form = document.getElementById('key-form');
+        form.innerHTML = groups.map(g => {
+          const groupItems = items.filter(i => i.group === g);
+          return `<div>
+            <h2 class="text-[#FF6600] text-xs uppercase tracking-widest mb-3 mt-2">${esc(g)}</h2>
+            <div class="space-y-4">${groupItems.map(it => {
+              const type = it.input === 'password' ? 'password' : (it.input === 'email' ? 'email' : 'text');
+              const badge = it.set
+                ? (type === 'password' ? `<span class="badge-ok">gesetzt ${esc(it.masked)}</span>` : `<span class="badge-ok">${esc(it.display || it.masked)}</span>`)
+                : '<span class="badge-no">leer</span>';
+              return `<div>
+                <div class="flex items-center justify-between mb-1 flex-wrap gap-2">
+                  <label class="text-sm font-medium">${esc(it.label)}</label>${badge}
+                </div>
+                <p class="text-[#666] text-xs mb-2">${esc(it.hint)}</p>
+                <input type="${type}" data-key="${esc(it.key)}" placeholder="${esc(it.placeholder || '')}" autocomplete="off">
+              </div>`;
+            }).join('')}</div></div>`;
+        }).join('');
+      } catch (e) {
+        showMsg(e.message || 'Laden fehlgeschlagen', false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function saveKeys() {
+      const body = {};
+      document.querySelectorAll('#key-form input[data-key]').forEach(inp => {
+        if (inp.value.trim()) body[inp.dataset.key] = inp.value.trim();
+      });
+      if (!Object.keys(body).length) { showMsg('Bitte mindestens ein Feld ausfüllen.', false); return; }
+      setBusy(true);
+      try {
+        const data = await apiFetch('/api/agency/secrets', { method: 'PUT', body: JSON.stringify(body) });
+        document.querySelectorAll('#key-form input[type=password]').forEach(i => { i.value = ''; });
+        const extra = data.env_synced?.length ? ` (auch in .env: ${data.env_synced.join(', ')})` : '';
+        showMsg(data.changed?.length ? `Gespeichert: ${data.changed.join(', ')}${extra}` : (data.message || 'OK'), true);
+        await loadKeys();
+      } catch (e) {
+        showMsg(e.message || 'Speichern fehlgeschlagen', false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function testSmtp() {
+      setBusy(true);
+      showMsg('Sende Test-Mail…', true);
+      try {
+        const data = await apiFetch('/api/agency/secrets/test/smtp', { method: 'POST', body: '{}' });
+        showMsg(data.ok ? data.message : (data.error || 'Fehler'), !!data.ok);
+      } catch (e) {
+        showMsg(e.message, false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function testStripe() {
+      setBusy(true);
+      showMsg('Teste Stripe…', true);
+      try {
+        const data = await apiFetch('/api/agency/secrets/test/stripe', { method: 'POST' });
+        showMsg(data.ok ? data.message : (data.error || 'Fehler'), !!data.ok);
+      } catch (e) {
+        showMsg(e.message, false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function testGoogle() {
+      setBusy(true);
+      showMsg('Teste Google Places…', true);
+      try {
+        const data = await apiFetch('/api/agency/secrets/test/google_places', { method: 'POST' });
+        showMsg(data.ok ? data.message : (data.error || 'Fehler'), !!data.ok);
+      } catch (e) {
+        showMsg(e.message, false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function testCloudflare() {
+      setBusy(true);
+      showMsg('Teste Cloudflare…', true);
+      try {
+        const data = await apiFetch('/api/agency/secrets/test/cloudflare', { method: 'POST' });
+        showMsg(data.ok ? data.message : (data.error || 'Fehler'), !!data.ok);
+      } catch (e) {
+        showMsg(e.message, false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function testHetzner() {
+      setBusy(true);
+      showMsg('Teste Hetzner Cloud…', true);
+      try {
+        const data = await apiFetch('/api/agency/secrets/test/hetzner', { method: 'POST' });
+        showMsg(data.ok ? data.message : (data.error || 'Fehler'), !!data.ok);
+      } catch (e) {
+        showMsg(e.message, false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function testIonos() {
+      setBusy(true);
+      showMsg('Teste IONOS DNS API…', true);
+      try {
+        const data = await apiFetch('/api/agency/secrets/test/ionos', { method: 'POST' });
+        showMsg(data.ok ? data.message : (data.error || 'Fehler'), !!data.ok);
+      } catch (e) {
+        showMsg(e.message, false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function testSms() {
+      setBusy(true);
+      showMsg('Sende Test-SMS an OWNER_PHONE…', true);
+      try {
+        const data = await apiFetch('/api/agency/secrets/test/sms', { method: 'POST', body: '{}' });
+        showMsg(data.ok ? (data.message || 'SMS OK') : (data.error || 'Fehler'), !!data.ok);
+      } catch (e) {
+        showMsg(e.message, false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function testWhatsapp() {
+      setBusy(true);
+      showMsg('Prüfe Meta WhatsApp (Phone Number ID)…', true);
+      try {
+        const data = await apiFetch('/api/agency/secrets/test/whatsapp', { method: 'POST', body: '{}' });
+        let msg = data.ok ? (data.message || 'WhatsApp OK') : (data.error || 'Fehler');
+        if (data.hint) msg += ' · ' + data.hint;
+        showMsg(msg, !!data.ok);
+      } catch (e) {
+        showMsg(e.message, false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function testDocuseal() {
+      setBusy(true);
+      showMsg('Teste DocuSeal API (X-Auth-Token)…', true);
+      try {
+        const data = await apiFetch('/api/agency/secrets/test/docuseal', { method: 'POST' });
+        showMsg(data.ok ? (data.message || 'DocuSeal OK') : (data.error || 'Fehler'), !!data.ok);
+      } catch (e) {
+        showMsg(e.message, false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    if (AgencyAuth.getToken()) {
+      apiFetch('/api/agency/secrets').then(() => showApp()).catch(() => AgencyAuth.clear());
+    }
+  </script>
+</body>
+</html>

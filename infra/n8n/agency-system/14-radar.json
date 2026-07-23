@@ -1,0 +1,106 @@
+{
+  "name": "Agency 14 – Radar Wochen-Scan",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * 5"
+            }
+          ]
+        }
+      },
+      "id": "rad-cron",
+      "name": "Woechentlich",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/radar/scan",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.CRON_SECRET}}"
+            },
+            {
+              "name": "X-Agency-Password",
+              "value": "={{$env.AGENCY_ADMIN_PASSWORD}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ live: true }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "rad-http",
+      "name": "Radar Scan API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j=$input.first().json; return [{ json: { ok: !!j.ok, path: j.path, pending: (j.pending_installs||[]).length, note: 'Report liegt im Repo/Server unter docs/agency/reports/. Kein Auto-Install.' } }];"
+      },
+      "id": "rad-pack",
+      "name": "Pack",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Woechentlich": {
+      "main": [
+        [
+          {
+            "node": "Radar Scan API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Radar Scan API": {
+      "main": [
+        [
+          {
+            "node": "Pack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "notes": "Freitag 07:00 live. Backup web-Cron 07:05. Kein Auto-Install."
+  }
+}

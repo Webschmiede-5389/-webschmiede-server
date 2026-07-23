@@ -8,10 +8,12 @@ This repo is the **agency infrastructure** for Webschmiede (Digital Craftsmanshi
 python jarvis.py kunden          # list clients
 python jarvis.py kunde SHY001    # client details
 python jarvis.py neu             # new client wizard
-python deploy.py                 # deploy to server
+python deploy.py                 # deploy to server (needs deploy.secrets.local)
 python setup_crm_env.py          # CRM/SMS env on server
 python setup_n8n.py              # n8n automation hub on server
 ```
+
+**GitHub:** Repo initialized locally. Push: see `docs/GITHUB.md`. Secrets in `deploy.secrets.local` (gitignored).
 
 ## n8n (Automation Hub)
 
@@ -47,13 +49,24 @@ python setup_n8n.py              # n8n automation hub on server
 2. **No GHL** for new features – extend own CRM/SMS.
 3. **DSGVO:** Bunny Fonts, no tracking, document third parties in `datenschutz.html`.
 4. **Deploy:** Always run `deploy.py` after static/backend changes; verify `snack-api` active.
-5. **Design:** Match existing dark/gold Snack House style; avoid generic AI aesthetics.
+5. **Design:** Match existing dark/gold Snack House style; avoid generic AI aesthetics. Agency wordmark: only freigestelltes `/ci/webschmiede-logo.png` (see `docs/agency/ci/BRAND.md`).
 6. **Scope:** Minimal diffs; don't refactor unrelated code.
+7. **Ton:** Kunden-Texte und Mails menschlich, kein KI-Marketing — siehe `.cursor/rules/menschlicher-ton.mdc`.
+8. **Betriebssicherheit:** Alles muss 24/7 zuverlässig laufen — Fehler früh erkennen, auto-reparieren, Inhaber informieren. Kunde ist nie First-Line-Support. Siehe `.cursor/rules/betriebssicherheit.mdc` (Smoke-Tests, Watchdog, klare Fehlermeldungen, kein stilles Scheitern).
+9. **Gedächtnis:** Beschlüsse und aktueller Fokus in `docs/memory/` schreiben. Bei Chat-Überlast Handoff füllen und neuen Chat vorschlagen (Rule `wissen-und-chats.mdc`).
+9. **Nils:** Ops-Mitarbeiter (KI), unter Stefan. Regel `.cursor/rules/nils.mdc`, Skill `.cursor/skills/nils/`, Handbuch `docs/agency/nils.md`.
+10. **Stefan:** Betriebsleiter (KI). Tempo und Priorität. Regel `.cursor/rules/stefan.mdc`, Sheet `docs/agency/stefan.md`.
 
 ## Cursor skill
 
 Full playbook for future projects: personal skill **`webschmiede-os`**  
 (`~/.cursor/skills/webschmiede-os/SKILL.md` + `reference.md`)
+
+**Multi-project workflow:** see `docs/webschmiede-workspace.md` (which folder, which chat, GitHub).
+
+**Direction (start here):** `docs/DIRECTION.md` — folder map, commands, customer lifecycle, onboarding mail.
+
+**Agency invoices (no sevDesk yet):** `docs/agency/rechnung-vorlage.html` · `docs/agency/angebot-vorlage.html`
 
 ## Status (July 2026)
 
@@ -64,16 +77,17 @@ Full playbook for future projects: personal skill **`webschmiede-os`**
 - GHL disabled on server
 - DSGVO pages, security headers, favicons
 - Agency CLI + kunden.json
+- **Stellenplan / Team-Radar:** `docs/agency/mitarbeiter-stellenplan.md`, `docs/agency/trend-scout.md`
 
 ### Planned
 - Agency browser dashboard (jarvis web UI)
 - PWA, loyalty, review funnel, WhatsApp promo control
 - **Product vision (hub + niches):** see [`docs/webschmiede-vision.md`](docs/webschmiede-vision.md)
-  - Sales wizard + forecast portal
-  - Acquisition scanner (Akquise-Krieger) per vertical
-  - Industry landings (`/gastro`, `/dach`, …) + separate Instagram per niche
-  - Auto-onboarding after Stripe
-  - Instagram post pipeline (approval queue)
-  - FlyRuwe-style hub: one webschmiede.de, many industry spokes
-  - **Trend Scout:** global market scan → knowledge DB → weekly DE-fit reports → niche recommendations
-  - **Social Pipeline (German Golf Guide):** n8n + Meta API — copy, design, schedule IG/FB; own comments only; no auto-engagement on third-party profiles — see vision doc
+ - Sales wizard + forecast portal
+ - Acquisition scanner (Akquise-Krieger) per vertical
+ - Industry landings (`/gastro`, `/dach`, …) + separate Instagram per niche
+ - Auto-onboarding after Stripe
+ - Instagram post pipeline (approval queue)
+ - FlyRuwe-style hub: one webschmiede.de, many industry spokes
+ - **Trend Scout:** weekly DE-fit reports → niche recommendations (`docs/agency/trend-scout.md`)
+ - **Social Pipeline (German Golf Guide):** n8n + Meta API — copy, design, schedule IG/FB; own comments only; no auto-engagement on third-party profiles — see vision doc

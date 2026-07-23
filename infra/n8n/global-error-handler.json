@@ -1,0 +1,79 @@
+{
+  "name": "Webschmiede – Global Error Handler",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const e = $input.first().json;\nconst workflow = e.workflow?.name || e.workflowName || 'Unbekannt';\nconst executionId = e.execution?.id || e.executionId || '–';\nconst ts = e.execution?.startedAt || new Date().toISOString();\nconst errMsg = (e.execution?.error?.message || e.error?.message || JSON.stringify(e)).slice(0, 1200);\nconst node = e.execution?.lastNodeExecuted || e.lastNodeExecuted || '–';\nconst text = `🚨 n8n Fehler\\n\\nWorkflow: ${workflow}\\nExecution: ${executionId}\\nZeit: ${ts}\\nNode: ${node}\\n\\nFehler:\\n${errMsg}`;\nconst brain = `[n8n Fehler] Workflow ${workflow}, Execution ${executionId}, Node ${node}. ${errMsg.slice(0, 400)}. Nils: prüfen und fixen.`;\nreturn [{ json: { text, brain_message: brain, workflow, executionId, timestamp: ts, errorMessage: errMsg, node } }];"
+      },
+      "id": "format-error",
+      "name": "Fehler formatieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: ($env.TELEGRAM_NILS_CHAT_ID || $env.TELEGRAM_OWNER_CHAT_ID || $env.TELEGRAM_ADMIN_CHAT_ID), text: $json.text, disable_web_page_preview: true }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "telegram-nils",
+      "name": "Telegram Nils",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 0],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://digitalehandwerkskunst.de/api/agency/brain",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Cron-Secret", "value": "={{ $env.CRON_SECRET }}" },
+            { "name": "X-Agency-Password", "value": "={{ $env.AGENCY_ADMIN_PASSWORD }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: $('Fehler formatieren').item.json.brain_message, force_agent: 'nils', dispatch: true, source: 'n8n-error' }) }}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "brain-nils",
+      "name": "Brain Nils",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 0],
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [[{ "node": "Fehler formatieren", "type": "main", "index": 0 }]]
+    },
+    "Fehler formatieren": {
+      "main": [[{ "node": "Telegram Nils", "type": "main", "index": 0 }]]
+    },
+    "Telegram Nils": {
+      "main": [[{ "node": "Brain Nils", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1", "errorWorkflow": "" },
+  "meta": {
+    "description": "Fehler an Nils (Telegram + Brain). Settings: Error Workflow zuweisen."
+  },
+  "tags": [{ "name": "webschmiede" }, { "name": "devops" }, { "name": "nils" }]
+}

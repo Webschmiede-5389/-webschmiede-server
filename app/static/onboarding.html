@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/ci/webschmiede-logo-mark.png">
+  <title>Onboarding · Webschmiede</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --orange: #FF6600;
+      --orange-soft: #FFF4ED;
+      --ink: #1A1A1A;
+      --muted: #666;
+      --border: #E8E8E8;
+      --bg: #F5F5F5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--ink); font-family: Inter, system-ui, sans-serif; min-height: 100vh; }
+    a { color: var(--orange); text-decoration: none; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 28px 16px 56px; }
+    .hero {
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 24px 22px; margin-bottom: 22px; box-shadow: 0 2px 12px rgba(0,0,0,.04);
+    }
+    .hero-top { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+    .hero-top img { height: 48px; width: auto; }
+    .tag { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); }
+    h1 { font-size: clamp(1.35rem, 4vw, 1.85rem); font-weight: 700; line-height: 1.2; }
+    .sub { color: var(--muted); font-size: 0.92rem; margin-top: 8px; line-height: 1.5; }
+    .progress-wrap { margin-top: 18px; }
+    .progress-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
+    .progress-track { height: 8px; background: #EEEEEE; border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--orange); border-radius: 99px; transition: width .4s ease; }
+    .paid {
+      display: none; margin-bottom: 16px; padding: 14px 16px; border-radius: 12px;
+      background: #ECFDF5; border: 1px solid #A7F3D0; color: #166534; font-size: 0.9rem;
+    }
+    .paid.show { display: block; }
+    .section-title {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 12px;
+    }
+    .panel {
+      background: #fff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 18px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.03);
+    }
+    .link-card {
+      display: flex; align-items: center; gap: 14px; color: inherit; transition: border-color .15s, transform .15s;
+    }
+    .link-card:hover { border-color: var(--orange); transform: translateY(-1px); }
+    .link-card.hot { border-color: #FFD4B8; background: linear-gradient(180deg, #fff, var(--orange-soft)); }
+    .icon-box {
+      width: 42px; height: 42px; border-radius: 10px; background: var(--orange-soft);
+      color: var(--orange); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .chip {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 99px;
+    }
+    .chip-kunde { background: #ECFDF5; color: #15803d; }
+    .chip-ws { background: var(--orange-soft); color: var(--orange); }
+    .chip-gem { background: #EFF6FF; color: #2563EB; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px;
+      font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border); background: #fff; color: var(--ink);
+      cursor: pointer;
+    }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .btn-primary { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .btn-primary:hover:not(:disabled) { background: #E55A00; }
+    .domain-row {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .domain-row:last-child { border-bottom: 0; }
+    .domain-name { font-weight: 600; font-size: 0.92rem; flex: 1; min-width: 160px; word-break: break-all; }
+    .badge {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 99px;
+    }
+    .badge-free { background: #ECFDF5; color: #15803d; }
+    .badge-taken { background: #FEF2F2; color: #B91C1C; }
+    .badge-unk { background: #F3F4F6; color: #6B7280; }
+    .badge-sel { background: var(--orange-soft); color: var(--orange); }
+    .wish-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .wish-row input {
+      flex: 1; min-width: 180px; padding: 10px 12px; border: 1px solid var(--border);
+      border-radius: 10px; font-size: 0.9rem; font-family: inherit;
+    }
+    .wish-row input:focus { outline: 2px solid #FFD4B8; border-color: var(--orange); }
+    .msg { font-size: 0.82rem; line-height: 1.45; margin-top: 10px; }
+    .msg-ok { color: #15803d; }
+    .msg-err { color: #B91C1C; }
+    .msg-info { color: var(--muted); }
+    .suggest-list { margin: 8px 0 0; padding-left: 18px; font-size: 0.85rem; color: var(--ink); }
+    .task-head { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+    .task-head p { font-weight: 600; font-size: 0.92rem; flex: 1; }
+    .task-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.45; margin: 0 0 8px 1.5rem; }
+    .task-help { font-size: 0.75rem; color: #888; font-style: italic; margin: 0 0 10px 1.5rem; }
+    .task-actions { margin-left: 1.5rem; display: flex; flex-wrap: wrap; gap: 8px; }
+    .done-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.85rem; }
+    @media (max-width: 560px) { .done-grid { grid-template-columns: 1fr; } }
+    .support { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+    .support strong { color: var(--ink); }
+    footer { text-align: center; font-size: 0.72rem; color: var(--muted); margin-top: 28px; }
+    .center-box { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div id="loading" class="center-box"><p style="color:var(--muted)">Onboarding wird geladen …</p></div>
+
+  <div id="err" class="hidden center-box">
+    <div class="panel" style="max-width:420px;text-align:center;margin:0;">
+      <img src="/ci/webschmiede-logo.png" alt="WebSchmiede" style="height:40px;margin-bottom:12px;">
+      <p class="tag" style="margin-bottom:8px;">WebSchmiede</p>
+      <h1 style="font-size:1.25rem;margin-bottom:8px;">Link ungültig</h1>
+      <p class="sub">In der URL muss die Projekt-ID stehen, z.&nbsp;B. <code>?k=SHY001</code>. Sonst melde dich kurz bei uns.</p>
+    </div>
+  </div>
+
+  <div id="app" class="hidden wrap">
+    <div id="paid-banner" class="paid">
+      <strong>Zahlung erhalten.</strong> Willkommen. Admin-Zugang steht in der Mail. Unten die nächsten Schritte.
+    </div>
+
+    <header class="hero">
+      <div class="hero-top">
+        <img src="/ci/webschmiede-logo.png" alt="WebSchmiede" style="height:64px;width:auto;">
+        <div>
+          <p class="tag">Onboarding</p>
+          <p style="font-size:0.78rem;color:var(--muted);margin-top:2px;">WebSchmiede · Digitale Handwerkskunst</p>
+        </div>
+      </div>
+      <h1 id="shop-name">–</h1>
+      <p class="sub" id="shop-sub">–</p>
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span>Go-Live Fortschritt</span>
+          <span id="prog-label">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+      </div>
+    </header>
+
+    <p class="section-title">Ihre Links</p>
+    <div id="links"></div>
+
+    <p class="section-title" style="margin-top:22px;">Ihre Domain</p>
+    <p class="sub" style="margin:-4px 0 12px;font-size:0.8rem;">
+      Wählen Sie eine freie Adresse. Oder tragen Sie eine Wunschdomain ein. Wir prüfen, ob sie frei ist.
+    </p>
+    <div class="panel" id="domain-panel">
+      <div id="domain-selected" class="hidden" style="margin-bottom:12px;padding:12px;border-radius:10px;background:var(--orange-soft);border:1px solid #FFD4B8;">
+        <p style="font-size:0.78rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.06em;">Gewählt</p>
+        <p id="domain-selected-name" style="font-weight:700;font-size:1.05rem;margin-top:4px;">–</p>
+        <p id="domain-selected-note" class="msg msg-info" style="margin-top:6px;"></p>
+      </div>
+      <div id="domain-options"><p class="msg msg-info">Domain-Vorschläge werden geladen …</p></div>
+      <p style="font-weight:600;font-size:0.85rem;margin-top:16px;">Wunschdomain prüfen</p>
+      <div class="wish-row">
+        <input id="wish-input" type="text" placeholder="z. B. snackhouse-yassine.de" autocomplete="off" spellcheck="false">
+        <button type="button" class="btn" id="wish-btn">Prüfen</button>
+      </div>
+      <div id="wish-result"></div>
+    </div>
+
+    <p class="section-title" style="margin-top:22px;">Google Unternehmensprofil</p>
+    <p class="sub" style="margin:-4px 0 12px;font-size:0.8rem;">
+      Bewertungslink und Zugang für WebSchmiede. Bitte kein Google-Passwort an uns schicken.
+    </p>
+    <div class="panel" id="google-panel">
+      <p id="google-status" class="msg msg-info" style="margin-top:0;">Status wird geladen …</p>
+      <p id="google-howto" class="msg msg-info"></p>
+      <label style="display:block;font-size:0.78rem;font-weight:600;margin:12px 0 6px;">Bewertungslink (https://…)</label>
+      <input id="google-review-url" type="url" placeholder="https://g.page/r/… oder maps.app.goo.gl/…"
+             style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.9rem;font-family:inherit;">
+      <label style="display:block;font-size:0.78rem;font-weight:600;margin:12px 0 6px;">E-Mail Ihres Google-Kontos (Inhaber)</label>
+      <input id="google-owner-email" type="email" placeholder="name@gmail.com"
+             style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.9rem;font-family:inherit;">
+      <label style="display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:0.85rem;color:var(--ink);cursor:pointer;">
+        <input id="google-manager" type="checkbox" style="margin-top:3px;">
+        <span>Ich habe WebSchmiede als <strong>Manager</strong> im Google Unternehmensprofil eingeladen
+          (<span id="google-manager-mail">info@digitalehandwerkskunst.de</span>).</span>
+      </label>
+      <p class="msg msg-info" style="margin-top:10px;">
+        Später kommt der Button „Mit Google verbinden“. Dann melden Sie sich bei Google an, wir speichern nur Tokens.
+        Auto-Antworten auf Bewertungen mit lokalen Keywords schalten wir danach.
+      </p>
+      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
+        <button type="button" class="btn btn-primary" id="google-save-btn">Speichern</button>
+      </div>
+      <div id="google-save-result"></div>
+    </div>
+
+    <p class="section-title" style="margin-top:22px;">WhatsApp Business</p>
+    <p class="sub" style="margin:-4px 0 12px;font-size:0.8rem;">
+      Optional. Ihre Business-Nummer für Gäste-Nachrichten. Verbindung läuft über Meta, nicht über unsere Agentur-Nummer.
+    </p>
+    <div class="panel" id="whatsapp-panel">
+      <p id="wa-status" class="msg msg-info" style="margin-top:0;">Status wird geladen …</p>
+      <p id="wa-hint" class="msg msg-info"></p>
+      <div id="wa-connect-area" style="display:none;margin-top:12px;">
+        <button type="button" class="btn btn-primary" id="wa-connect-btn">WhatsApp mit Meta verbinden</button>
+      </div>
+      <details style="margin-top:14px;font-size:0.85rem;color:var(--muted);">
+        <summary style="cursor:pointer;font-weight:600;color:var(--ink);">Manuell (falls Meta-Popup nicht lädt)</summary>
+        <label style="display:block;font-size:0.78rem;font-weight:600;margin:12px 0 6px;">Phone Number ID</label>
+        <input id="wa-phone-id" type="text" placeholder="aus Meta API-Setup"
+          style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;">
+        <label style="display:block;font-size:0.78rem;font-weight:600;margin:12px 0 6px;">WABA ID (optional)</label>
+        <input id="wa-waba-id" type="text" placeholder="WhatsApp Business Account ID"
+          style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;">
+        <label style="display:block;font-size:0.78rem;font-weight:600;margin:12px 0 6px;">OAuth-Code (nach Meta-Flow)</label>
+        <input id="wa-oauth-code" type="text" placeholder="kurzer Code von Meta"
+          style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;">
+        <div style="margin-top:12px;">
+          <button type="button" class="btn btn-ghost" id="wa-manual-btn">Manuell speichern</button>
+        </div>
+      </details>
+      <div id="wa-save-result" style="margin-top:10px;"></div>
+    </div>
+
+    <p class="section-title" style="margin-top:22px;">Nächste Schritte</p>
+    <p class="sub" style="margin:-4px 0 12px;font-size:0.8rem;">Was Sie machen, was wir machen, bis alles läuft.</p>
+    <div id="tasks"></div>
+
+    <p class="section-title" style="margin-top:22px;">Bereits eingerichtet</p>
+    <div class="panel">
+      <div class="done-grid" id="delivered"></div>
+    </div>
+
+    <div class="panel support">
+      <p style="font-weight:600;color:var(--ink);margin-bottom:6px;">Support</p>
+      <p id="support-hint">Admin-Passwort bekommen Sie separat, nicht über dieses Portal.</p>
+      <p style="margin-top:10px;">Christian Kummetat · +49 177 8011350 · info@digitalehandwerkskunst.de</p>
+      <p style="margin-top:8px;">Projekt <strong id="proj-id">–</strong> · Status <strong id="proj-status">–</strong></p>
+    </div>
+
+    <footer>Webschmiede CI · Orange &amp; Weiß</footer>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const kid = (params.get('k') || params.get('id') || '').toUpperCase().trim();
+    if (params.get('paid') === '1') {
+      document.getElementById('paid-banner')?.classList.add('show');
+    }
+
+    let domainState = { options: [], selected: '', status: 'open' };
+
+    function ownerTag(o) {
+      if (o === 'kunde') return '<span class="chip chip-kunde">Sie</span>';
+      if (o === 'webschmiede') return '<span class="chip chip-ws">Webschmiede</span>';
+      return '<span class="chip chip-gem">Gemeinsam</span>';
+    }
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function statusBadge(opt) {
+      if (domainState.selected && opt.domain === domainState.selected) {
+        return '<span class="badge badge-sel">Gewählt</span>';
+      }
+      if (opt.available === true) return '<span class="badge badge-free">Frei</span>';
+      if (opt.available === false) return '<span class="badge badge-taken">Belegt</span>';
+      return '<span class="badge badge-unk">Unklar</span>';
+    }
+
+    function renderDomain() {
+      const box = document.getElementById('domain-options');
+      const selWrap = document.getElementById('domain-selected');
+      const selName = document.getElementById('domain-selected-name');
+      const selNote = document.getElementById('domain-selected-note');
+      if (domainState.selected) {
+        selWrap.classList.remove('hidden');
+        selName.textContent = domainState.selected;
+        selNote.textContent = domainState.status_note
+          || 'Auswahl gespeichert. Wir richten Domain und HTTPS ein.';
+      } else {
+        selWrap.classList.add('hidden');
+      }
+      const opts = domainState.options || [];
+      if (!opts.length) {
+        box.innerHTML = '<p class="msg msg-info">Keine Vorschläge hinterlegt. Nutzen Sie das Wunschdomain-Feld.</p>';
+        return;
+      }
+      box.innerHTML = opts.map(o => {
+        const free = o.available === true;
+        const chosen = domainState.selected && o.domain === domainState.selected;
+        const btn = free && !domainState.selected
+          ? `<button type="button" class="btn btn-primary" data-select="${esc(o.domain)}">Diese wählen</button>`
+          : (chosen ? '<span class="badge badge-sel">Aktiv</span>' : '');
+        return `<div class="domain-row">
+          <div class="domain-name">${esc(o.domain)}</div>
+          ${statusBadge(o)}
+          ${btn}
+        </div>`;
+      }).join('');
+      box.querySelectorAll('[data-select]').forEach(btn => {
+        btn.addEventListener('click', () => selectDomain(btn.getAttribute('data-select'), btn));
+      });
+    }
+
+    async function selectDomain(domain, btn) {
+      if (!kid || !domain) return;
+      if (btn) { btn.disabled = true; btn.textContent = 'Speichern …'; }
+      try {
+        const r = await fetch('/api/onboarding/' + encodeURIComponent(kid) + '/domains/select', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ domain })
+        });
+        const d = await r.json();
+        if (!r.ok || !d.ok) {
+          const sug = (d.suggestions || []).map(s => s.domain).filter(Boolean);
+          let msg = d.error || d.check?.message || 'Auswahl fehlgeschlagen.';
+          if (sug.length) msg += ' Vorschläge: ' + sug.join(', ');
+          alert(msg);
+          if (btn) { btn.disabled = false; btn.textContent = 'Diese wählen'; }
+          return;
+        }
+        domainState.selected = d.domain;
+        domainState.status = d.purchase?.status || 'pending_agency';
+        domainState.status_note = d.purchase?.message || '';
+        if (Array.isArray(domainState.options)) {
+          domainState.options = domainState.options.map(o =>
+            o.domain === d.domain ? { ...o, available: true } : o
+          );
+        }
+        renderDomain();
+      } catch (e) {
+        alert('Netzwerkfehler beim Speichern. Bitte nochmal versuchen.');
+        if (btn) { btn.disabled = false; btn.textContent = 'Diese wählen'; }
+      }
+    }
+
+    async function checkWish() {
+      const input = document.getElementById('wish-input');
+      const out = document.getElementById('wish-result');
+      const btn = document.getElementById('wish-btn');
+      const domain = (input.value || '').trim();
+      if (!domain) {
+        out.innerHTML = '<p class="msg msg-err">Bitte eine Domain eingeben.</p>';
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Prüfe …';
+      out.innerHTML = '<p class="msg msg-info">Wird geprüft …</p>';
+      try {
+        const r = await fetch('/api/onboarding/' + encodeURIComponent(kid) + '/domains/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ domain })
+        });
+        const d = await r.json();
+        const c = d.check || {};
+        if (!d.ok && c.status === 'invalid') {
+          out.innerHTML = '<p class="msg msg-err">' + esc(c.message || d.error || 'Ungültig') + '</p>';
+          return;
+        }
+        if (c.available === true) {
+          out.innerHTML = `
+            <p class="msg msg-ok">${esc(c.message || (c.domain + ' ist frei.'))}</p>
+            <button type="button" class="btn btn-primary" style="margin-top:8px;" id="wish-select-btn">
+              ${esc(c.domain)} wählen
+            </button>`;
+          document.getElementById('wish-select-btn')?.addEventListener('click', (ev) => {
+            selectDomain(c.domain, ev.currentTarget);
+          });
+        } else if (c.available === false) {
+          const sug = d.suggestions || [];
+          const list = sug.length
+            ? '<ul class="suggest-list">' + sug.map(s => '<li>' + esc(s.domain) + '</li>').join('') + '</ul>'
+            : '';
+          const mailNote = d.mail?.sent
+            ? '<p class="msg msg-info">Wir haben Ihnen eine Mail mit Alternativen geschickt.</p>'
+            : '';
+          out.innerHTML = `
+            <p class="msg msg-err">${esc(c.message || 'Nicht frei.')}</p>
+            ${list}
+            ${mailNote}`;
+          // refresh options so free alts show
+          try {
+            const r2 = await fetch('/api/onboarding/' + encodeURIComponent(kid) + '/domains');
+            if (r2.ok) {
+              const d2 = await r2.json();
+              domainState.options = d2.options || domainState.options;
+              renderDomain();
+            }
+          } catch (_) {}
+        } else {
+          out.innerHTML = '<p class="msg msg-info">' + esc(c.message || 'Verfügbarkeit unklar.') + '</p>';
+        }
+      } catch (e) {
+        out.innerHTML = '<p class="msg msg-err">Prüfung fehlgeschlagen. Bitte später nochmal.</p>';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Prüfen';
+      }
+    }
+
+    let waCfg = null;
+    let waSession = { phone_number_id: '', waba_id: '' };
+
+    window.addEventListener('message', (event) => {
+      if (!event.origin || !event.origin.includes('facebook.com')) return;
+      try {
+        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+        if (data && data.type === 'WA_EMBEDDED_SIGNUP' && data.data) {
+          waSession.phone_number_id = data.data.phone_number_id || waSession.phone_number_id;
+          waSession.waba_id = data.data.waba_id || waSession.waba_id;
+        }
+      } catch (_) {}
+    });
+
+    async function completeWhatsapp(code) {
+      const out = document.getElementById('wa-save-result');
+      const phoneId = (waSession.phone_number_id || document.getElementById('wa-phone-id').value || '').trim();
+      const wabaId = (waSession.waba_id || document.getElementById('wa-waba-id').value || '').trim();
+      if (!code || !phoneId) {
+        out.innerHTML = '<p class="msg msg-err">Code und Phone Number ID fehlen.</p>';
+        return;
+      }
+      out.innerHTML = '<p class="msg msg-info">Speichere Verbindung …</p>';
+      try {
+        const r = await fetch('/api/onboarding/' + encodeURIComponent(kid) + '/whatsapp/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, phone_number_id: phoneId, waba_id: wabaId })
+        });
+        const d = await r.json();
+        if (!r.ok || !d.ok) {
+          out.innerHTML = '<p class="msg msg-err">' + esc(d.error || 'Speichern fehlgeschlagen') + '</p>';
+          return;
+        }
+        out.innerHTML = '<p class="msg msg-ok">' + esc(d.message || 'WhatsApp verbunden.') + '</p>';
+        document.getElementById('wa-status').textContent =
+          'Verbunden' + (d.business_phone ? ' · ' + d.business_phone : '');
+      } catch (e) {
+        out.innerHTML = '<p class="msg msg-err">Netzwerkfehler.</p>';
+      }
+    }
+
+    function launchWaSignup() {
+      if (!waCfg || !waCfg.app_id) return;
+      if (typeof FB === 'undefined') {
+        document.getElementById('wa-save-result').innerHTML =
+          '<p class="msg msg-err">Meta SDK nicht geladen. Seite neu laden oder manuell eintragen.</p>';
+        return;
+      }
+      const opts = {
+        response_type: 'code',
+        override_default_response_type: true,
+        extras: { version: 'v3' }
+      };
+      if (waCfg.embedded_config_id) opts.config_id = waCfg.embedded_config_id;
+      FB.login(function (response) {
+        if (response.authResponse && response.authResponse.code) {
+          completeWhatsapp(response.authResponse.code);
+        } else {
+          document.getElementById('wa-save-result').innerHTML =
+            '<p class="msg msg-err">Meta-Flow abgebrochen oder abgelehnt.</p>';
+        }
+      }, opts);
+    }
+
+    async function initWhatsapp(d) {
+      const wa = d.whatsapp || {};
+      const st = document.getElementById('wa-status');
+      const hint = document.getElementById('wa-hint');
+      if (wa.phone_number_id) {
+        st.textContent = 'Verbunden · Phone ID ' + wa.phone_number_id +
+          (wa.business_phone ? ' · ' + wa.business_phone : '');
+        hint.textContent = 'Nummer ist angebunden. Änderungen nur über Meta Business oder Christian.';
+        return;
+      }
+      st.textContent = 'Noch nicht verbunden.';
+      try {
+        const r = await fetch('/api/onboarding/' + encodeURIComponent(kid) + '/whatsapp/config');
+        waCfg = await r.json();
+          if (waCfg.ok && waCfg.app_id) {
+          hint.textContent = (waCfg.hint || '') +
+            ' Hinweis: Beim Verbinden wird das Meta/Facebook-SDK geladen. Dabei kann Ihre IP an Meta übertragen werden.';
+          document.getElementById('wa-connect-area').style.display = 'block';
+          if (!window._fbSdk) {
+            window._fbSdk = true;
+            window.fbAsyncInit = function () {
+              FB.init({ appId: waCfg.app_id, cookie: true, xfbml: false, version: 'v21.0' });
+            };
+            const s = document.createElement('script');
+            s.async = true;
+            s.defer = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://connect.facebook.net/de_DE/sdk.js';
+            document.body.appendChild(s);
+          }
+          document.getElementById('wa-connect-btn').onclick = launchWaSignup;
+        } else {
+          hint.textContent = (waCfg.hint || 'Meta App ID fehlt noch bei Webschmiede.') +
+            ' Bis dahin: Phone Number ID + Code manuell unten eintragen.';
+        }
+      } catch (e) {
+        hint.textContent = 'Konfiguration konnte nicht geladen werden.';
+      }
+      document.getElementById('wa-manual-btn').onclick = () => {
+        completeWhatsapp(document.getElementById('wa-oauth-code').value.trim());
+      };
+    }
+
+    async function saveGoogle() {
+      const btn = document.getElementById('google-save-btn');
+      const out = document.getElementById('google-save-result');
+      btn.disabled = true;
+      btn.textContent = 'Speichern …';
+      out.innerHTML = '';
+      try {
+        const r = await fetch('/api/onboarding/' + encodeURIComponent(kid) + '/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            review_url: document.getElementById('google-review-url').value.trim(),
+            owner_email: document.getElementById('google-owner-email').value.trim(),
+            manager_invited: document.getElementById('google-manager').checked
+          })
+        });
+        const d = await r.json();
+        if (!r.ok || !d.ok) {
+          out.innerHTML = '<p class="msg msg-err">' + esc(d.error || 'Speichern fehlgeschlagen') + '</p>';
+          return;
+        }
+        const g = d.google || {};
+        out.innerHTML = '<p class="msg msg-ok">Gespeichert. Status: ' + esc(g.status || '') +
+          (d.mail && d.mail.sent ? ' · Christian wurde informiert.' : '') + '</p>';
+        document.getElementById('google-status').textContent =
+          ({
+            open: 'Noch offen: Bewertungslink und Manager-Einladung.',
+            review_url_set: 'Bewertungslink ist da. Manager-Einladung an WebSchmiede fehlt noch.',
+            manager_invited: 'Manager-Einladung markiert. Wir prüfen den Zugang.',
+            oauth_connected: 'Google ist per Freigabe verbunden.'
+          })[g.status] || ('Status: ' + (g.status || ''));
+      } catch (e) {
+        out.innerHTML = '<p class="msg msg-err">Netzwerkfehler. Bitte nochmal versuchen.</p>';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Speichern';
+      }
+    }
+
+    async function load() {
+      if (!kid) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('err').classList.remove('hidden');
+        return;
+      }
+      try {
+        const r = await fetch('/api/onboarding/' + encodeURIComponent(kid));
+        if (!r.ok) throw new Error('404');
+        const d = await r.json();
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        document.title = 'Onboarding · ' + d.name;
+        document.getElementById('shop-name').textContent = d.name;
+        const who = d.inhaber ? ('Hallo ' + d.inhaber + '.') : 'Hallo.';
+        document.getElementById('shop-sub').textContent = who + ' Hier liegen Links, Checkliste und Fortschritt an einem Ort.';
+        document.getElementById('prog-label').textContent = d.progress.percent + '% (' + d.progress.done + '/' + d.progress.total + ')';
+        document.getElementById('prog-bar').style.width = d.progress.percent + '%';
+        document.getElementById('proj-id').textContent = d.id;
+        document.getElementById('proj-status').textContent = d.status || '–';
+        document.getElementById('support-hint').textContent = d.support?.hint || '';
+
+        document.getElementById('links').innerHTML = (d.links || []).map(l => `
+          <a href="${esc(l.url)}" ${l.download ? '' : 'target="_blank" rel="noopener"'} class="panel link-card ${l.highlight ? 'hot' : ''}${l.download ? ' hot' : ''}">
+            <span class="icon-box"><i class="fa-solid ${esc(l.icon || 'fa-link')}"></i></span>
+            <div style="flex:1;min-width:0;">
+              <p style="font-weight:600;font-size:0.92rem;">${esc(l.label)}</p>
+              <p style="font-size:0.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(l.desc)}</p>
+            </div>
+            <i class="fa-solid ${l.download ? 'fa-download' : 'fa-arrow-up-right-from-square'}" style="color:#999;font-size:0.75rem;"></i>
+          </a>`).join('');
+
+        domainState = {
+          options: (d.domain && d.domain.options) || [],
+          selected: (d.domain && d.domain.selected) || '',
+          status: (d.domain && d.domain.status) || 'open',
+          status_note: ''
+        };
+        if (d.domain && d.domain.wish) {
+          document.getElementById('wish-input').value = d.domain.wish;
+        }
+        renderDomain();
+        document.getElementById('wish-btn').addEventListener('click', checkWish);
+        document.getElementById('wish-input').addEventListener('keydown', (ev) => {
+          if (ev.key === 'Enter') { ev.preventDefault(); checkWish(); }
+        });
+
+        const gb = d.google_business || {};
+        const stMap = {
+          open: 'Noch offen: Bewertungslink und Manager-Einladung.',
+          review_url_set: 'Bewertungslink ist da. Manager-Einladung an WebSchmiede fehlt noch.',
+          manager_invited: 'Manager-Einladung markiert. Wir prüfen den Zugang.',
+          oauth_connected: 'Google ist per Freigabe verbunden.'
+        };
+        document.getElementById('google-status').textContent = stMap[gb.status] || ('Status: ' + (gb.status || 'offen'));
+        document.getElementById('google-howto').innerHTML =
+          esc((gb.howto && gb.howto.review_link) || '') +
+          (gb.howto && gb.howto.manager
+            ? '<br><br>' + esc(gb.howto.manager)
+            : '');
+        document.getElementById('google-review-url').value = gb.review_url || d.google_review_url || '';
+        document.getElementById('google-owner-email').value = gb.owner_email || (d.kontakt && d.kontakt.email) || '';
+        document.getElementById('google-manager').checked = !!gb.manager_invited;
+        if (gb.agency_manager_email) {
+          document.getElementById('google-manager-mail').textContent = gb.agency_manager_email;
+        }
+        document.getElementById('google-save-btn').addEventListener('click', saveGoogle);
+        await initWhatsapp(d);
+
+        document.getElementById('tasks').innerHTML = (d.tasks || []).map(t => `
+          <div class="panel" style="${t.done ? 'opacity:.72;' : ''}">
+            <div class="task-head">
+              <i class="fa-solid ${t.done ? 'fa-circle-check' : 'fa-circle'}" style="color:${t.done ? '#16a34a' : '#ccc'};margin-top:3px;"></i>
+              <p>${esc(t.label)}</p>
+              ${ownerTag(t.owner)}
+            </div>
+            <p class="task-desc">${esc(t.desc)}</p>
+            ${t.help ? '<p class="task-help">' + esc(t.help) + '</p>' : ''}
+            <div class="task-actions">
+              ${t.action_url ? '<a class="btn btn-primary" href="' + esc(t.action_url) + '">Öffnen</a>' : ''}
+              ${t.link ? '<a class="btn" href="' + esc(t.link) + '" target="_blank" rel="noopener">' + esc(t.link_label || 'Link') + '</a>' : ''}
+            </div>
+          </div>`).join('');
+
+        document.getElementById('delivered').innerHTML = (d.delivered || []).map(x => `
+          <div style="display:flex;gap:8px;align-items:center;">
+            <i class="fa-solid ${x.done ? 'fa-check' : 'fa-minus'}" style="color:${x.done ? '#16a34a' : '#bbb'};font-size:0.75rem;"></i>
+            <span style="${x.done ? '' : 'color:#999'}">${esc(x.label)}</span>
+          </div>`).join('');
+      } catch (e) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('err').classList.remove('hidden');
+      }
+    }
+    load();
+  </script>
+</body>
+</html>

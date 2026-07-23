@@ -1,0 +1,77 @@
+{
+  "secrets": {
+    "WHATSAPP_ACCESS_TOKEN": {
+      "set": false
+    },
+    "WHATSAPP_PHONE_NUMBER_ID": {
+      "set": false
+    },
+    "WHATSAPP_VERIFY_TOKEN": {
+      "set": true,
+      "len": 18,
+      "src": ".env"
+    },
+    "WHATSAPP_DISPLAY_PHONE": {
+      "set": false
+    },
+    "WHATSAPP_BUSINESS_ACCOUNT_ID": {
+      "set": false
+    },
+    "META_APP_ID": {
+      "set": false
+    },
+    "META_APP_SECRET": {
+      "set": false
+    },
+    "META_EMBEDDED_CONFIG_ID": {
+      "set": false
+    },
+    "SMS_API_KEY": {
+      "set": false
+    },
+    "SMS_ENABLED": {
+      "set": true,
+      "len": 5,
+      "src": ".env"
+    },
+    "SMS_SENDER": {
+      "set": true,
+      "len": 10,
+      "src": ".env"
+    },
+    "OWNER_PHONE": {
+      "set": true,
+      "len": 14,
+      "src": ".env"
+    },
+    "AGENCY_OWNER_EMAIL": {
+      "set": true,
+      "len": 30,
+      "src": ".env"
+    }
+  },
+  "health": {
+    "service": "snack-house-order-api",
+    "status": "ok"
+  },
+  "messaging": {
+    "ok": false,
+    "whatsapp": {
+      "configured": false,
+      "enabled": false,
+      "verify_token_set": true,
+      "phone_number_id_set": false,
+      "display_phone": "",
+      "webhook_path": "/api/whatsapp/webhook"
+    },
+    "sms": {
+      "configured": false,
+      "enabled": false
+    },
+    "tenants": 0
+  },
+  "webhook_verify": {
+    "ok": true,
+    "body": "ws_probe_ok"
+  }
+}

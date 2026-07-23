@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aufträge · Webschmiede</title>
+  <link rel="icon" type="image/png" href="/ci/webschmiede-logo-mark.png">
+  <link href="https://fonts.bunny.net/css?family=dm-sans:400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0e0b08; --panel:#17130f; --gold:#C9A84C; --ink:#f5f0e8; --muted:#a39888; --border:#3a3228; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:"DM Sans",system-ui,sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+    .wrap { max-width:880px; margin:0 auto; padding:24px 16px 64px; }
+    h1 { font-size:1.4rem; font-weight:700; margin:0 0 8px; }
+    p.sub { color:var(--muted); margin:0 0 20px; }
+    .card { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:12px; }
+    .meta { color:var(--muted); font-size:.85rem; margin-bottom:6px; }
+    .title { font-weight:600; margin-bottom:6px; }
+    .body { white-space:pre-wrap; font-size:.95rem; color:#e8e0d4; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    button, .btn { background:var(--gold); color:#1a1408; border:0; border-radius:8px; padding:8px 12px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-block; }
+    button.ghost { background:transparent; color:var(--gold); border:1px solid var(--border); }
+    input, textarea { width:100%; background:#0e0b08; border:1px solid var(--border); color:var(--ink); border-radius:8px; padding:10px; margin:6px 0 12px; }
+    #login { max-width:360px; margin:80px auto; }
+    .ok { color:#86efac; } .bad { color:#fca5a5; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:.75rem; border:1px solid var(--border); color:var(--gold); }
+  </style>
+</head>
+<body>
+  <div id="login" class="card">
+    <h1>Aufträge</h1>
+    <p class="sub">Agency-Passwort</p>
+    <input id="pw" type="password" placeholder="Passwort" autocomplete="current-password">
+    <button id="go">Öffnen</button>
+    <p id="loginErr" class="bad"></p>
+  </div>
+  <div id="app" class="wrap" style="display:none">
+    <h1>Aufträge</h1>
+    <p class="sub">Telegram-Befehle landen hier. Kunden-JSON-Änderungen werden direkt umgesetzt. Website/Design → Cursor-Handoff.</p>
+    <div class="card">
+      <div class="title">Neuer Auftrag (Freitext)</div>
+      <textarea id="msg" rows="3" placeholder="SHY001 Tisch-Promo auf Erste Bestellung 10% Rabatt"></textarea>
+      <button id="create">Anlegen / Umsetzen</button>
+      <p id="createOut" class="meta"></p>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <button class="ghost" data-filter="">Alle</button>
+      <button class="ghost" data-filter="open">Offen</button>
+      <button class="ghost" data-filter="done">Erledigt</button>
+      <button class="ghost" id="reload">Neu laden</button>
+    </div>
+    <div id="list"></div>
+  </div>
+  <script src="/agency-auth.js"></script>
+<script>
+    let filter = '';
+    const pw = () => AgencyAuth.getToken();
+    async function api(path, opts={}) {
+      const r = await fetch(path, {
+        ...opts,
+        credentials: 'same-origin',
+        headers: {
+          ...AgencyAuth.headers(),
+          ...(opts.headers||{})
+        }
+      });
+      const data = await r.json().catch(()=>({}));
+      if (!r.ok) throw new Error(data.error || r.statusText);
+      return data;
+    }
+    async function load() {
+      const q = filter ? `?status=${encodeURIComponent(filter)}` : '';
+      const data = await api('/api/agency/workorders' + q);
+      const el = document.getElementById('list');
+      const orders = data.orders || [];
+      if (!orders.length) { el.innerHTML = '<p class="meta">Keine Aufträge.</p>'; return; }
+      el.innerHTML = orders.map(o => `
+        <div class="card">
+          <div class="meta"><span class="badge">${o.status||''}</span> · ${o.id} · ${o.kunde_id||'–'} · ${o.kind||''}</div>
+          <div class="title">${escapeHtml(o.title||'')}</div>
+          <div class="body">${escapeHtml(o.body||'')}</div>
+          <div class="row">
+            ${o.status!=='done' ? `<button data-exec="${o.id}">Umsetzen</button>` : ''}
+            ${o.status!=='done' ? `<button class="ghost" data-done="${o.id}">Erledigt</button>` : ''}
+          </div>
+        </div>`).join('');
+      el.querySelectorAll('[data-exec]').forEach(b => b.onclick = () => act(b.dataset.exec, 'execute'));
+      el.querySelectorAll('[data-done]').forEach(b => b.onclick = () => act(b.dataset.done, 'done'));
+    }
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+    async function act(id, kind) {
+      try {
+        await api(`/api/agency/workorders/${id}/${kind}`, { method:'POST', body:'{}' });
+        await load();
+      } catch(e) { alert(e.message); }
+    }
+    document.getElementById('go').onclick = async () => {
+      try {
+        await AgencyAuth.login('', document.getElementById('pw').value);
+        await api('/api/agency/workorders');
+        document.getElementById('login').style.display='none';
+        document.getElementById('app').style.display='block';
+        await load();
+      } catch(e) {
+        document.getElementById('loginErr').textContent = e.message || 'Login fehlgeschlagen';
+        AgencyAuth.clear();
+      }
+    };
+    document.getElementById('create').onclick = async () => {
+      const message = document.getElementById('msg').value.trim();
+      if (!message) return;
+      try {
+        const r = await api('/api/agency/workorders', { method:'POST', body: JSON.stringify({ message }) });
+        document.getElementById('createOut').textContent = r.reply || (r.executed ? 'Umgesetzt' : 'Angelegt');
+        document.getElementById('msg').value = '';
+        await load();
+      } catch(e) { document.getElementById('createOut').textContent = e.message; }
+    };
+    document.querySelectorAll('[data-filter]').forEach(b => b.onclick = () => { filter = b.dataset.filter; load(); });
+    document.getElementById('reload').onclick = () => load();
+    if (AgencyAuth.getToken()) {
+      api('/api/agency/workorders').then(() => {
+        document.getElementById('login').style.display='none';
+        document.getElementById('app').style.display='block';
+        load();
+      }).catch(()=>AgencyAuth.clear());
+    }
+  </script>
+</body>
+</html>

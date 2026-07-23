@@ -1,0 +1,30 @@
+---
+description: Voice Agents – Demo bei uns, Produktion Retell; Stimmen und Branchenpacks.
+alwaysApply: true
+---
+
+# Voice Agents (Webschmiede)
+
+## Modell
+
+- **Demo / Akquise:** eigener Stack oder günstiger Web-Call. Interessenten dürfen testen, ohne teure Retell-Minuten.
+- **Produktion (zahlende Kunden):** Retell AI (`RETELL_API_KEY` in `/agency-setup`).
+- Voice bleibt **optional**, nicht Pflicht in jedem Portal-Paket.
+
+## Stimmen
+
+- Agentur-Demo: Clone **Webschmiede Christian** (mit Erlaubnis / eigene Aufnahme).
+- Kunden: optional eigener Clone nur mit Zustimmung (z. B. WhatsApp-Sprachnachricht).
+- Keine Stimmen von Retell/ElevenLabs „kopieren“ zum Selbsthosten.
+
+## Technik
+
+- Key: `RETELL_API_KEY`
+- Meta Demo: `agency/retell_demo.json`
+- Branchenwissen: `knowledge/packs/`
+- Nach dem Anruf: n8n / SMS / CRM wie üblich
+- Nummern/Server kostenpflichtig: nur nach ausdrücklichem OK von Christian
+
+## Doku
+
+`docs/agency/voice-agents.md`

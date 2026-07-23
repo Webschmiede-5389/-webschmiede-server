@@ -83,7 +83,7 @@ print(json.dumps(out, ensure_ascii=False, indent=2))
 '''
 
 client = paramiko.SSHClient()
-ssh_connect(client)
+ssh_connect(client, role="web")
 sftp = client.open_sftp()
 with sftp.file("/tmp/shy001_golive_check.py", "w") as f:
     f.write(CHECKS)

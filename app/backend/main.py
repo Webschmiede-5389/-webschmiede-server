@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, g, after_this_request, Response
 from flask_cors import CORS
+from werkzeug.middleware.proxy_fix import ProxyFix
 import requests as req
 import os, sqlite3, json, smtplib, datetime, secrets, re
 from email.mime.text import MIMEText
@@ -28,9 +29,12 @@ import agency_anwalt as agency_anwalt_svc
 import agency_scout as agency_scout_svc
 import agency_commander as agency_commander_svc
 import agency_leads as agency_leads_svc
+import meta_leads as meta_leads_svc
 import agency_akquise as agency_akquise_svc
 import jobs as jobs_svc
 import integrations as integrations_svc
+import shop_status as shop_status_svc
+import order_portal as order_portal_svc
 import agency_metrics as agency_metrics_svc
 import agency_ops as agency_ops_svc
 import messaging as messaging_svc
@@ -53,6 +57,11 @@ import agency_shipcheck as agency_shipcheck_svc
 import ops_guardian as ops_guardian_svc
 import jay_voice as jay_voice_svc
 import auth_users as auth_svc
+import customer_auth as ca_svc
+import student_offers as so_svc
+import analytics_events as ae_svc
+import operational_alerts as oa_svc
+import order_priority as prio_svc
 import hmac as _hmac
 
 load_dotenv()
@@ -60,6 +69,8 @@ load_dotenv()
 PORTAL_MODE = (os.getenv("PORTAL_MODE", "gastro") or "gastro").strip().lower()
 
 app = Flask(__name__)
+# Nginx + Cloudflare: 1 Proxy-Hop vertrauen, damit request.remote_addr die echte Client-IP enthält
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 # ── CORS: nur eigene Domain erlaubt ──────────────────────────────────────────
 def _cors_origins():
@@ -84,6 +95,17 @@ def _cors_origins():
 
 
 CORS(app, origins=_cors_origins(), supports_credentials=False)
+
+# ── Phase A Blueprint ─────────────────────────────────────────────────────────
+import phase_a_blueprint as _phase_a_mod
+from phase_a_blueprint import phase_a_bp as _phase_a_bp
+
+# Direkter Verweis auf dieses Modul, damit der Blueprint unter gunicorn (wo main
+# kein __main__ ist) trotzdem get_db, _settings_map usw. findet.
+import sys as _sys
+_phase_a_mod._main = _sys.modules[__name__]
+
+app.register_blueprint(_phase_a_bp)
 
 GHL_TOKEN       = os.getenv("GHL_TOKEN", "")
 GHL_LOC_ID      = os.getenv("GHL_LOC_ID", "")
@@ -134,7 +156,7 @@ CRON_SECRET     = os.getenv("CRON_SECRET", "")
 GOOGLE_REVIEW_URL = os.getenv("GOOGLE_REVIEW_URL", "")
 N8N_ORDER_WEBHOOK = os.getenv("N8N_ORDER_WEBHOOK", "")
 KUNDE_ID          = (os.getenv("KUNDE_ID", "") or "").strip().upper()
-WHATSAPP_VERIFY_TOKEN = os.getenv("WHATSAPP_VERIFY_TOKEN", "webschmiede-verify")
+WHATSAPP_VERIFY_TOKEN = (os.getenv("WHATSAPP_VERIFY_TOKEN") or "").strip()
 WHATSAPP_ACCESS_TOKEN = os.getenv("WHATSAPP_ACCESS_TOKEN", "")
 WHATSAPP_PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "")
 KUNDEN_DIR      = os.getenv("KUNDEN_DIR", os.path.join(os.path.dirname(__file__), "..", "kunden"))
@@ -187,6 +209,16 @@ def rate_limit(key: str, max_calls: int, window_s: int) -> bool:
     _rate[key].append(now)
     return False
 
+
+def get_real_ip() -> str:
+    """Echte Client-IP: CF-Connecting-IP > X-Real-IP > remote_addr."""
+    return (
+        request.headers.get("CF-Connecting-IP")
+        or request.headers.get("X-Real-IP")
+        or request.remote_addr
+        or "unknown"
+    )
+
 # ── Security-Response-Header ──────────────────────────────────────────────────
 @app.after_request
 def set_security_headers(response):
@@ -211,7 +243,9 @@ def validate_order(data: dict) -> str | None:
     if len(data.get("lastName","")) > 50:
         return "Nachname zu lang"
     phone = data.get("phone","").strip()
-    if phone and not _PHONE_RE.match(phone):
+    if not phone:
+        return "Telefonnummer fehlt"
+    if not _PHONE_RE.match(phone):
         return "Ungültige Telefonnummer"
     email = data.get("email","").strip()
     if email and not _EMAIL_RE.match(email):
@@ -478,6 +512,24 @@ def init_db():
         seminar_svc.init_schema(db)
         agency_metrics_svc.ensure_schema(db)
         auth_svc.ensure_schema(db)
+        ca_svc.ensure_schema(db)
+        so_svc.init_schema(db)
+        ae_svc.init_schema(db)
+        oa_svc.init_schema(db)
+        # Orders-Tabelle um Verzögerungs-Felder erweitern
+        for col, typ in [
+            ("delay_minutes", "INTEGER"),
+            ("expected_ready_at", "TEXT"),
+            ("delay_reason", "TEXT"),
+            ("production_started_at", "TEXT"),
+            # Unveränderlicher Original-Wunschtermin (niemals aktualisieren nach Erstellung)
+            ("original_requested_ready_at", "TEXT"),
+        ]:
+            try:
+                db.execute(f"ALTER TABLE orders ADD COLUMN {col} {typ}")
+            except Exception:
+                pass
+        db.commit()
         try:
             expected_agency = agency_secret_svc.resolve_agency_admin_password(AGENCY_ADMIN_PASSWORD)
             auth_svc.seed_bootstrap_users(
@@ -632,6 +684,287 @@ def send_status_email(order, new_status):
     except Exception as e:
         app.logger.warning(f"Status-E-Mail Fehler: {e}")
 
+
+def _smtp_send(to: str, subject: str, html: str):
+    """Hilfs-Funktion: Email via SMTP versenden. Wirft Exception bei Fehler."""
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"]    = SMTP_FROM
+    msg["To"]      = to
+    msg.attach(MIMEText(html, "html"))
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as s:
+        s.starttls()
+        s.login(SMTP_USER, SMTP_PASS)
+        s.sendmail(SMTP_FROM, to, msg.as_string())
+
+
+def _email_wrapper(shop_name: str, content_html: str) -> str:
+    """Snack-House-Branded Email-Hülle. Dunkel, Gold, sauber."""
+    return f"""<!DOCTYPE html>
+<html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#0a0806;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0806;padding:32px 0;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#111008;border-radius:16px;overflow:hidden;border:1px solid #2a2318;">
+        <!-- HEADER -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#0f0d0a,#1a1410);padding:28px 32px;border-bottom:1px solid #2a2318;text-align:center;">
+            <div style="font-size:22px;font-weight:900;color:#C9A84C;letter-spacing:.02em;">{shop_name}</div>
+            <div style="font-size:11px;color:#555;margin-top:4px;letter-spacing:.08em;">Dr.-Felix-Gerhardus-Str. 7 · 53894 Mechernich</div>
+          </td>
+        </tr>
+        <!-- CONTENT -->
+        <tr>
+          <td style="padding:28px 32px;">
+            {content_html}
+          </td>
+        </tr>
+        <!-- FOOTER -->
+        <tr>
+          <td style="background:#0e0b08;padding:20px 32px;border-top:1px solid #1e1a14;text-align:center;">
+            <p style="margin:0;font-size:11px;color:#444;">Fragen? <a href="tel:024433088966" style="color:#C9A84C;text-decoration:none;">02443-3088966</a></p>
+            <p style="margin:6px 0 0;font-size:10px;color:#333;">Mittwoch: Ruhetag · Online bestellen: <a href="https://snackhouse-yassine.de/bestellen" style="color:#555;text-decoration:none;">snackhouse-yassine.de</a></p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>"""
+
+
+def send_welcome_email(order: dict):
+    """Willkommens-Email für Erstkunden."""
+    if not SMTP_HOST or not SMTP_USER or not order.get("email"):
+        return
+    name = order.get("first_name") or "Gast"
+    try:
+        content = f"""
+            <h2 style="color:#C9A84C;margin:0 0 16px;font-size:20px;">Schoen, dass du da bist! {name}</h2>
+            <p style="color:#ccc;font-size:15px;line-height:1.6;margin:0 0 20px;">
+              Willkommen bei <strong style="color:#fff;">Snack House Yassine</strong> &mdash; dem Treffpunkt fuer echtes Mechernicher Street Food.<br>
+              Deine erste Bestellung ist bei uns eingegangen und wir freuen uns riesig.
+            </p>
+            <div style="background:#1a1410;border-radius:10px;padding:20px;margin:0 0 20px;border-left:3px solid #C9A84C;">
+              <p style="color:#C9A84C;font-weight:700;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;">Deine Bestellung</p>
+              <p style="color:#fff;margin:0;font-size:15px;">Nr. <strong>{order["order_number"]}</strong> &middot; <strong style="color:#C9A84C;">{order["total"]:.2f} &euro;</strong></p>
+            </div>
+            <div style="background:#0d1a0d;border:1px solid #1a3a1a;border-radius:10px;padding:18px 20px;margin:0 0 20px;">
+              <p style="color:#22c55e;font-weight:700;margin:0 0 6px;font-size:13px;">Wusstest du?</p>
+              <p style="color:#aaa;margin:0;font-size:13px;line-height:1.5;">
+                Mit jedem Kauf sammelst du Treuepunkte. <strong style="color:#C9A84C;">10 Stempel = 1 Gratis-Ayran.</strong><br>
+                Einfach beim naechsten Mal Nummer angeben &mdash; wir merken uns das.
+              </p>
+            </div>
+            <p style="color:#888;font-size:13px;margin:0;">
+              Guten Hunger &mdash; und bis zum naechsten Mal!<br>
+              <span style="color:#C9A84C;font-weight:700;">Dein Snack House Team</span>
+            </p>"""
+        html = _email_wrapper(SHOP_NAME, content)
+        _smtp_send(order["email"], f"Willkommen bei {SHOP_NAME}!", html)
+        app.logger.info(f"Welcome-Email: {order['email']}")
+    except Exception as e:
+        app.logger.warning(f"Welcome-Email Fehler: {e}")
+
+
+def send_loyalty_email(order: dict, stamps_collected: int, stamps_needed: int = 10):
+    """Loyalty-Meilenstein Email (z.B. 8 von 10 Stempeln)."""
+    if not SMTP_HOST or not SMTP_USER or not order.get("email"):
+        return
+    name = order.get("first_name") or "du"
+    remaining = stamps_needed - stamps_collected
+    try:
+        content = f"""
+            <h2 style="color:#C9A84C;margin:0 0 16px;font-size:20px;">Noch {remaining} bis zum Gratis-Ayran!</h2>
+            <p style="color:#ccc;font-size:15px;line-height:1.6;margin:0 0 20px;">
+              Hey {name}! Du bist fast da &mdash; nur noch <strong style="color:#C9A84C;">{remaining} Bestellung(en)</strong> und du bekommst deinen <strong style="color:#fff;">hausgemachten Gratis-Ayran</strong>.
+            </p>
+            <div style="text-align:center;margin:0 0 24px;">
+              <div style="display:inline-block;background:#1a1410;border:2px solid #C9A84C;border-radius:12px;padding:20px 32px;">
+                <div style="font-size:36px;font-weight:900;color:#C9A84C;">{stamps_collected} / {stamps_needed}</div>
+                <div style="font-size:12px;color:#888;margin-top:4px;">Stempel gesammelt</div>
+              </div>
+            </div>
+            <p style="color:#888;font-size:13px;margin:0 0 20px;text-align:center;">
+              Beim naechsten Besuch einfach Telefonnummer angeben &mdash; wir pruefen sofort deinen Stand.
+            </p>
+            <div style="text-align:center;">
+              <a href="https://snackhouse-yassine.de/bestellen" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;font-weight:800;font-size:14px;padding:14px 28px;border-radius:10px;text-decoration:none;letter-spacing:.02em;">Jetzt bestellen</a>
+            </div>"""
+        html = _email_wrapper(SHOP_NAME, content)
+        _smtp_send(order["email"], f"Noch {remaining} bis zum Gratis-Ayran! – {SHOP_NAME}", html)
+        app.logger.info(f"Loyalty-Email: {order['email']} ({stamps_collected}/{stamps_needed})")
+    except Exception as e:
+        app.logger.warning(f"Loyalty-Email Fehler: {e}")
+
+
+def send_vip_email(contact: dict):
+    """VIP-Anerkennungs-Email fuer treue Stammkunden."""
+    if not SMTP_HOST or not SMTP_USER or not contact.get("email"):
+        return
+    name = contact.get("first_name") or "Gast"
+    try:
+        content = f"""
+            <div style="text-align:center;margin:0 0 24px;">
+              <div style="font-size:32px;">&#11088;</div>
+              <h2 style="color:#C9A84C;margin:8px 0 0;font-size:20px;">Nur fuer unsere besten Kunden</h2>
+            </div>
+            <p style="color:#ccc;font-size:15px;line-height:1.6;margin:0 0 20px;">
+              Hey {name}! Du gehoerst zu den treuesten Gaesten von <strong style="color:#fff;">Snack House Yassine</strong> &mdash; und das wollten wir dir einfach mal sagen.
+            </p>
+            <div style="background:#1a1410;border-radius:10px;padding:20px;margin:0 0 20px;border:1px solid #C9A84C44;">
+              <p style="color:#C9A84C;font-weight:700;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;">Dein VIP-Status</p>
+              <p style="color:#aaa;font-size:13px;margin:0;line-height:1.5;">
+                Du hast schon <strong style="color:#fff;">{contact.get('total_orders', 0)} Bestellungen</strong> aufgegeben und insgesamt <strong style="color:#C9A84C;">{contact.get('total_spent', 0):.2f} &euro;</strong> bei uns ausgegeben. Danke!
+              </p>
+            </div>
+            <p style="color:#aaa;font-size:14px;line-height:1.6;margin:0 0 20px;">
+              Als kleines Dankeschoen: Sag beim naechsten Besuch einfach <strong style="color:#C9A84C;">"VIP"</strong> &mdash; und wir ueberraschen dich.
+            </p>
+            <div style="text-align:center;">
+              <a href="https://snackhouse-yassine.de/bestellen" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;font-weight:800;font-size:14px;padding:14px 28px;border-radius:10px;text-decoration:none;">Jetzt bestellen</a>
+            </div>"""
+        html = _email_wrapper(SHOP_NAME, content)
+        _smtp_send(contact["email"], f"Du bist VIP! – {SHOP_NAME}", html)
+        app.logger.info(f"VIP-Email: {contact['email']}")
+    except Exception as e:
+        app.logger.warning(f"VIP-Email Fehler: {e}")
+
+
+def send_review_email(order: dict, review_url: str):
+    """Review-Anfrage Email nach abgeschlossener Bestellung."""
+    if not SMTP_HOST or not SMTP_USER or not order.get("email"):
+        return
+    name = order.get("first_name") or "du"
+    try:
+        content = f"""
+            <h2 style="color:#C9A84C;margin:0 0 16px;font-size:20px;">War alles gut, {name}?</h2>
+            <p style="color:#ccc;font-size:15px;line-height:1.6;margin:0 0 20px;">
+              Wir hoffen, deine Bestellung hat dir geschmeckt! Wenn du einen Moment Zeit hast &mdash; eine kurze Bewertung hilft uns enorm.
+            </p>
+            <div style="text-align:center;margin:24px 0;">
+              <a href="{review_url}" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;font-weight:800;font-size:15px;padding:16px 36px;border-radius:12px;text-decoration:none;letter-spacing:.02em;">&#11088; Jetzt bewerten &mdash; 1 Klick</a>
+            </div>
+            <p style="color:#555;font-size:12px;text-align:center;margin:0;">
+              Kein Aufwand, grosse Wirkung. Du wirst direkt zu Google weitergeleitet.
+            </p>
+            <div style="margin-top:24px;padding-top:20px;border-top:1px solid #2a2318;">
+              <p style="color:#444;font-size:11px;text-align:center;margin:0;">
+                Du erhaeltst diese Email, weil du bei {SHOP_NAME} bestellt hast.<br>
+                Bestellnummer: {order.get("order_number", "")}
+              </p>
+            </div>"""
+        html = _email_wrapper(SHOP_NAME, content)
+        _smtp_send(order["email"], f"War alles gut? Kurze Bewertung fuer {SHOP_NAME}", html)
+        app.logger.info(f"Review-Email: {order['email']}")
+    except Exception as e:
+        app.logger.warning(f"Review-Email Fehler: {e}")
+
+
+def send_winback_email(contact: dict, days: int = 30):
+    """Win-back Email fuer inaktive Kunden (30d oder 60d)."""
+    if not SMTP_HOST or not SMTP_USER or not contact.get("email"):
+        return
+    name = contact.get("first_name") or "du"
+    is_60 = days >= 60
+    try:
+        if is_60:
+            subject = f"Letzte Chance: Dein Shawarma wartet – {SHOP_NAME}"
+            heading = f"Noch da, {name}?"
+            teaser = "Du warst schon eine Weile nicht mehr bei uns &mdash; und wir vermissen dich ehrlich gesagt."
+            offer_html = """
+              <div style="background:#1a1410;border:1px solid #C9A84C44;border-radius:10px;padding:20px;margin:20px 0;text-align:center;">
+                <p style="color:#C9A84C;font-weight:700;font-size:14px;margin:0 0 8px;">Komm zurueck &mdash; wir machen dir ein Angebot</p>
+                <p style="color:#aaa;font-size:13px;margin:0;">Sag beim naechsten Mal einfach <strong style="color:#fff;">"ICH BIN ZURUECK"</strong> &mdash; und wir ueberraschen dich.</p>
+              </div>"""
+        else:
+            subject = f"Dein Lieblings-Shawarma vermisst dich – {SHOP_NAME}"
+            heading = f"Lange nicht gesehen, {name}!"
+            teaser = "Dein Lieblingsessen wartet auf dich. Es ist schon eine Weile her seit deiner letzten Bestellung &mdash; wir wuerden uns freuen, dich wieder zu sehen."
+            offer_html = ""
+
+        content = f"""
+            <h2 style="color:#C9A84C;margin:0 0 16px;font-size:20px;">{heading}</h2>
+            <p style="color:#ccc;font-size:15px;line-height:1.6;margin:0 0 20px;">{teaser}</p>
+            {offer_html}
+            <div style="background:#0d1a0d;border-left:3px solid #22c55e;border-radius:0 8px 8px 0;padding:16px 20px;margin:0 0 24px;">
+              <p style="color:#22c55e;font-weight:700;font-size:13px;margin:0 0 6px;">Was auf dich wartet:</p>
+              <ul style="color:#aaa;font-size:13px;margin:0;padding-left:16px;line-height:1.8;">
+                <li>Frisch zubereiteter Shawarma nach Hausrezept</li>
+                <li>Knusprige Drehspiess-Pizza aus dem echten Ofen</li>
+                <li>Hausgemachter Ayran &mdash; 2 &euro;</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <a href="https://snackhouse-yassine.de/bestellen" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;font-weight:800;font-size:14px;padding:14px 32px;border-radius:10px;text-decoration:none;">Jetzt online bestellen</a>
+            </div>
+            <p style="color:#444;font-size:12px;text-align:center;margin-top:20px;">Abholung oder Lieferung &middot; Mechernich &middot; Di-So ab 11 Uhr</p>"""
+        html = _email_wrapper(SHOP_NAME, content)
+        _smtp_send(contact["email"], subject, html)
+        app.logger.info(f"Winback-{days}d-Email: {contact['email']}")
+    except Exception as e:
+        app.logger.warning(f"Winback-Email Fehler ({days}d): {e}")
+
+
+def send_weekly_report_email(db) -> bool:
+    """Woechentlicher Umsatz-Report an den Agency-Owner."""
+    if not SMTP_HOST or not SMTP_USER:
+        return False
+    to = AGENCY_OWNER_EMAIL
+    if not to:
+        return False
+    try:
+        seven_days_ago = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d")
+        rows = db.execute(
+            "SELECT * FROM orders WHERE created_at >= ? AND status != 'storniert'",
+            (seven_days_ago + " 00:00:00",),
+        ).fetchall()
+        total_revenue = sum(dict(r)["total"] for r in rows)
+        order_count = len(rows)
+        item_counts: dict = {}
+        for r in rows:
+            o = dict(r)
+            for item in json.loads(o.get("items") or "[]"):
+                n = item.get("name", "").split(" [")[0].strip()
+                item_counts[n] = item_counts.get(n, 0) + item.get("qty", 1)
+        top3 = sorted(item_counts.items(), key=lambda x: x[1], reverse=True)[:3]
+        top3_html = "".join(
+            f"<li style='color:#ccc;margin-bottom:4px;'><strong style='color:#C9A84C;'>{n}</strong> &mdash; {q}x</li>"
+            for n, q in top3
+        )
+        new_contacts = db.execute(
+            "SELECT COUNT(*) FROM contacts WHERE created_at >= ?",
+            (seven_days_ago + " 00:00:00",),
+        ).fetchone()[0]
+        content = f"""
+            <h2 style="color:#C9A84C;margin:0 0 4px;font-size:18px;">Wochen-Report</h2>
+            <p style="color:#555;font-size:12px;margin:0 0 24px;">Letzte 7 Tage &mdash; {SHOP_NAME}</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+              <div style="flex:1;min-width:120px;background:#1a1410;border-radius:10px;padding:16px;text-align:center;border:1px solid #2a2318;">
+                <div style="font-size:24px;font-weight:900;color:#C9A84C;">{total_revenue:.0f} &euro;</div>
+                <div style="font-size:11px;color:#555;margin-top:4px;">Umsatz</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:#1a1410;border-radius:10px;padding:16px;text-align:center;border:1px solid #2a2318;">
+                <div style="font-size:24px;font-weight:900;color:#fff;">{order_count}</div>
+                <div style="font-size:11px;color:#555;margin-top:4px;">Bestellungen</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:#1a1410;border-radius:10px;padding:16px;text-align:center;border:1px solid #2a2318;">
+                <div style="font-size:24px;font-weight:900;color:#22c55e;">{new_contacts}</div>
+                <div style="font-size:11px;color:#555;margin-top:4px;">Neue Kunden</div>
+              </div>
+            </div>
+            <p style="color:#C9A84C;font-weight:700;font-size:13px;margin:0 0 8px;">Top-Artikel:</p>
+            <ul style="margin:0 0 20px;padding-left:16px;">{top3_html}</ul>
+            <p style="color:#444;font-size:12px;margin:0;">
+              Fuer mehr Details: <a href="https://snackhouse-yassine.de/admin" style="color:#C9A84C;">Admin-Dashboard</a>
+            </p>"""
+        html = _email_wrapper(SHOP_NAME, content)
+        _smtp_send(to, f"Wochen-Report {SHOP_NAME} – {datetime.datetime.now().strftime('%d.%m.%Y')}", html)
+        return True
+    except Exception as e:
+        app.logger.warning(f"Weekly-Report-Email Fehler: {e}")
+        return False
+
+
 # ── CRM & SMS (Webschmiede – GHL-Ersatz) ─────────────────────────────────────
 
 def log_message(db, phone: str, channel: str, template: str, body: str, status: str, order_number: str = ""):
@@ -749,6 +1082,43 @@ def automate_order_created(db, order: dict, is_new: bool):
             f"Fragen? {SHOP_PHONE}"
         ), "customer_order_received", order["order_number"])
 
+    # Welcome-Email fuer Erstkunden (Email als primaerer Kanal)
+    if is_new and order.get("email"):
+        send_welcome_email(order)
+
+    # Loyalty-Meilenstein pruefen (8 von 10 Stempeln)
+    if order.get("email") and order.get("phone"):
+        try:
+            phone_norm = normalize_phone(order["phone"])
+            loyalty_row = db.execute(
+                "SELECT stamps FROM loyalty WHERE phone=?", (phone_norm,)
+            ).fetchone()
+            if loyalty_row:
+                stamps = loyalty_row["stamps"] if hasattr(loyalty_row, 'keys') else loyalty_row[0]
+                if stamps in (8, 9):
+                    send_loyalty_email(order, stamps_collected=stamps, stamps_needed=10)
+        except Exception:
+            pass
+
+    # VIP-Check: >10 Bestellungen ODER >150 EUR Gesamt
+    if order.get("email") and order.get("phone"):
+        try:
+            phone_norm = normalize_phone(order["phone"])
+            contact_row = db.execute(
+                "SELECT * FROM contacts WHERE phone=?", (phone_norm,)
+            ).fetchone()
+            if contact_row:
+                c = dict(contact_row)
+                is_vip = c.get("total_orders", 0) >= 10 or c.get("total_spent", 0) >= 150
+                tags = json.loads(c.get("tags") or "[]")
+                if is_vip and "vip" not in tags:
+                    tags.append("vip")
+                    db.execute("UPDATE contacts SET tags=? WHERE phone=?",
+                               (json.dumps(tags, ensure_ascii=False), phone_norm))
+                    send_vip_email(c)
+        except Exception:
+            pass
+
 def resolve_n8n_order_webhook() -> str:
     if N8N_ORDER_WEBHOOK:
         return N8N_ORDER_WEBHOOK
@@ -811,6 +1181,33 @@ def automate_status_changed(db, order: dict, new_status: str):
     except Exception as e:
         app.logger.warning(f"push status: {e}")
 
+    # ── Stempelkarte: Stempel bei 'fertig' vergeben (neue Kunden-Accounts) ────
+    if new_status == "fertig":
+        cid = order.get("customer_account_id")
+        if cid:
+            try:
+                items = order.get("items") or []
+                if isinstance(items, str):
+                    import json as _json
+                    items = _json.loads(items)
+                subtotal = sum(
+                    float(it.get("price") or 0) * int(it.get("qty") or 0)
+                    for it in items
+                    if not it.get("free") and not it.get("loyalty")
+                )
+                result = ca_svc.earn_stamp(
+                    db,
+                    int(cid),
+                    order.get("order_number", ""),
+                    delivery_type=order.get("delivery_type", ""),
+                    order_subtotal=subtotal,
+                )
+                app.logger.info(
+                    f"Stempel: order={order.get('order_number')} cid={cid} result={result}"
+                )
+            except Exception as e:
+                app.logger.warning(f"earn_stamp error: {e}")
+
 def get_setting(db, key: str, default: str = "") -> str:
     row = db.execute("SELECT value FROM settings WHERE key=?", (key,)).fetchone()
     return row["value"] if row and row["value"] is not None else default
@@ -828,61 +1225,122 @@ def already_sent_template(db, phone: str, template: str, within_days: int = 90) 
     return row is not None
 
 def run_followups(db) -> dict:
-    """Tägliche Follow-ups: Google-Review (3 Tage nach fertig) + Win-back (30 Tage inaktiv)."""
-    review_days  = int(get_setting(db, "review_days", "3") or "3")
+    """Tägliche Follow-ups: Google-Review (nach X Tagen) + Win-back (30d / 60d inaktiv).
+    Primaerer Kanal: Email (wenn verfuegbar). Fallback: SMS."""
+    review_days  = int(get_setting(db, "review_days", "2") or "2")
     winback_days = int(get_setting(db, "winback_days", "30") or "30")
     review_url   = get_setting(db, "google_review_url", "") or GOOGLE_REVIEW_URL
-    stats = {"reviews_sent": 0, "winbacks_sent": 0, "errors": 0}
+    stats = {"reviews_sent": 0, "winbacks_sent": 0, "winbacks_60d": 0, "errors": 0}
 
     # ── Review: Bestellung abgeschlossen vor X Tagen ───────────────────────
     if review_url:
         rows = db.execute(
-            """SELECT * FROM orders
-               WHERE status='fertig' AND review_sent=0 AND phone != ''
-               AND completed_at IS NOT NULL
-               AND completed_at <= datetime('now', ?)""",
+            """SELECT o.*, c.email AS contact_email FROM orders o
+               LEFT JOIN contacts c ON c.phone = o.phone
+               WHERE o.status='fertig' AND o.review_sent=0
+               AND (o.phone != '' OR o.email != '')
+               AND o.completed_at IS NOT NULL
+               AND o.completed_at <= datetime('now', ?)""",
             (f"-{review_days} days",),
         ).fetchall()
         for r in rows:
             o = dict(r)
-            if already_sent_template(db, o["phone"], "review_request", within_days=365):
+            email_addr = o.get("email") or o.get("contact_email") or ""
+            phone_addr = o.get("phone") or ""
+            if already_sent_template(db, phone_addr or email_addr, "review_request", within_days=365):
                 db.execute("UPDATE orders SET review_sent=1 WHERE order_number=?", (o["order_number"],))
                 continue
-            name = o.get("first_name") or "du"
-            msg = (
-                f"Hallo {name}! Hat dir deine Bestellung bei {SHOP_NAME} geschmeckt?\n"
-                f"Wir würden uns über eine kurze Google-Bewertung freuen:\n{review_url}\n"
-                f"Danke! – {SHOP_NAME}"
-            )
-            if send_sms(db, o["phone"], msg, "review_request", o["order_number"]):
+            sent = False
+            # Email bevorzugen
+            if email_addr:
+                try:
+                    send_review_email(o, review_url)
+                    log_message(db, phone_addr or email_addr, "email", "review_request",
+                                f"Review-Email an {email_addr}", "sent", o["order_number"])
+                    sent = True
+                except Exception as e:
+                    app.logger.warning(f"Review-Email Fehler: {e}")
+            # SMS als Fallback
+            if not sent and phone_addr:
+                name = o.get("first_name") or "du"
+                msg = (
+                    f"Hallo {name}! Hat dir deine Bestellung bei {SHOP_NAME} geschmeckt?\n"
+                    f"Kurze Bewertung: {review_url}\nDanke! – {SHOP_NAME}"
+                )
+                sent = send_sms(db, phone_addr, msg, "review_request", o["order_number"])
+            if sent:
                 db.execute("UPDATE orders SET review_sent=1 WHERE order_number=?", (o["order_number"],))
                 stats["reviews_sent"] += 1
             else:
                 stats["errors"] += 1
     db.commit()
 
-    # ── Win-back: Kunde seit X Tagen inaktiv ───────────────────────────────
-    contacts = db.execute(
+    # ── Win-back 30 Tage ───────────────────────────────────────────────────
+    contacts_30 = db.execute(
         """SELECT * FROM contacts
-           WHERE phone != '' AND total_orders >= 1
-           AND last_order_at IS NOT NULL
-           AND last_order_at <= datetime('now', ?)""",
+           WHERE total_orders >= 1 AND last_order_at IS NOT NULL
+           AND last_order_at <= datetime('now', ?)
+           AND last_order_at > datetime('now', '-60 days')""",
         (f"-{winback_days} days",),
     ).fetchall()
-    for c in contacts:
+    for c in contacts_30:
         c = dict(c)
-        if already_sent_template(db, c["phone"], "winback_30d", within_days=90):
+        if already_sent_template(db, c["phone"] or c.get("email", ""), "winback_30d", within_days=90):
             continue
-        name = c.get("first_name") or "du"
-        msg = (
-            f"Hallo {name}! Wir vermissen dich bei {SHOP_NAME}.\n"
-            f"Komm vorbei oder bestelle online – wir freuen uns auf dich!\n"
-            f"{SHOP_PHONE}"
-        )
-        if send_sms(db, c["phone"], msg, "winback_30d", ""):
+        sent = False
+        if c.get("email"):
+            try:
+                send_winback_email(c, days=30)
+                log_message(db, c["phone"] or c["email"], "email", "winback_30d",
+                            f"Winback-30d-Email an {c['email']}", "sent", "")
+                sent = True
+            except Exception as e:
+                app.logger.warning(f"Winback-30d-Email: {e}")
+        if not sent and c.get("phone"):
+            name = c.get("first_name") or "du"
+            msg = (
+                f"Hallo {name}! Wir vermissen dich bei {SHOP_NAME}.\n"
+                f"Komm vorbei oder bestelle: {ORDER_PORTAL_URL}\n– {SHOP_PHONE}"
+            )
+            sent = send_sms(db, c["phone"], msg, "winback_30d", "")
+        if sent:
             stats["winbacks_sent"] += 1
         else:
             stats["errors"] += 1
+
+    # ── Win-back 60 Tage (staerkeres Angebot) ─────────────────────────────
+    contacts_60 = db.execute(
+        """SELECT * FROM contacts
+           WHERE total_orders >= 1 AND last_order_at IS NOT NULL
+           AND last_order_at <= datetime('now', '-60 days')""",
+        (),
+    ).fetchall()
+    for c in contacts_60:
+        c = dict(c)
+        if already_sent_template(db, c["phone"] or c.get("email", ""), "winback_60d", within_days=120):
+            continue
+        sent = False
+        if c.get("email"):
+            try:
+                send_winback_email(c, days=60)
+                log_message(db, c["phone"] or c["email"], "email", "winback_60d",
+                            f"Winback-60d-Email an {c['email']}", "sent", "")
+                sent = True
+            except Exception as e:
+                app.logger.warning(f"Winback-60d-Email: {e}")
+        if not sent and c.get("phone"):
+            name = c.get("first_name") or "du"
+            msg = (
+                f"Letzte Chance, {name}! Meld dich nochmal bei uns.\n"
+                f"Sag einfach 'ICH BIN ZURUECK' und wir ueberraschen dich!\n"
+                f"{ORDER_PORTAL_URL}"
+            )
+            sent = send_sms(db, c["phone"], msg, "winback_60d", "")
+        if sent:
+            stats["winbacks_60d"] += 1
+        else:
+            stats["errors"] += 1
+
     db.commit()
     return stats
 
@@ -1048,12 +1506,26 @@ def list_promos():
     rows = db.execute("SELECT * FROM promos ORDER BY id DESC LIMIT 20").fetchall()
     return jsonify([dict(r) for r in rows])
 
+def _settings_map(db) -> dict:
+    rows = db.execute("SELECT key, value FROM settings").fetchall()
+    return {r["key"]: r["value"] for r in rows}
+
+
+def _current_shop_status(db=None):
+    """SoT: Tenant-JSON + DB-Settings → ein Status (Europe/Berlin)."""
+    if db is None:
+        db = get_db()
+    settings = _settings_map(db)
+    kid = KUNDE_ID or "SHY001"
+    kunde = integrations_svc.load_kunde_json(kid)
+    return shop_status_svc.compute_shop_status(kunde=kunde, settings=settings)
+
+
 # ── Öffentlich: Settings abrufen ───────────────────────────────────────────
 @app.get("/api/settings")
 def get_settings():
     db = get_db()
-    rows = db.execute("SELECT key, value FROM settings").fetchall()
-    s = {r["key"]: r["value"] for r in rows}
+    s = _settings_map(db)
     ov_rows = db.execute("SELECT * FROM menu_overrides").fetchall()
     overrides = {}
     for r in ov_rows:
@@ -1066,12 +1538,82 @@ def get_settings():
             "desc": row.get("desc"),
             "image_url": row.get("image_url"),
         }
+    status = _current_shop_status(db)
     return jsonify({
         "online":        s.get("online","1") == "1",
         "wait_pickup":   int(s.get("wait_pickup","20")),
         "wait_delivery": int(s.get("wait_delivery","40")),
         "offline_msg":   s.get("offline_msg","Wir sind gleich zurück!"),
         "overrides":     overrides,
+        # Kompatibilitäts-Felder aus SoT (Clients sollen /api/shop-status nutzen)
+        "store_open":    status.get("store_open"),
+        "accept_orders": status.get("accept_orders"),
+        "timezone":      status.get("timezone"),
+        "label":         status.get("label"),
+    })
+
+
+@app.get("/api/shop-status")
+def get_shop_status():
+    """Einzige serverseitige Ampel: Öffnung, Pause, Abholung, Lieferung, Vorbestellung."""
+    status = _current_shop_status()
+    status["phone"] = SHOP_PHONE
+    status["shopName"] = SHOP_NAME
+    return jsonify(status)
+
+
+@app.get("/api/order-options")
+def get_order_options():
+    """Zeitfenster, Zahlungsarten, Gebühren für Abholung/Lieferung."""
+    order_type = (request.args.get("type") or "pickup").strip().lower()
+    try:
+        subtotal = float(request.args.get("subtotal") or 0)
+    except ValueError:
+        subtotal = 0.0
+    status = _current_shop_status()
+    return jsonify(order_portal_svc.build_order_options(status, order_type=order_type, subtotal=subtotal))
+
+
+@app.post("/api/delivery-check")
+def delivery_check():
+    data = request.get_json(force=True) or {}
+    kid = KUNDE_ID or "SHY001"
+    kunde = integrations_svc.load_kunde_json(kid)
+    loc = shop_status_svc.load_location_config(kunde)
+    result = order_portal_svc.check_delivery_zone(
+        plz=data.get("plz") or "",
+        city=data.get("city") or "",
+        street=data.get("street") or "",
+        zones=loc.get("delivery_zones") or [],
+    )
+    return jsonify(result)
+
+
+@app.get("/api/order-status/<order_number>")
+def public_order_status(order_number: str):
+    """Öffentlicher Bestellstatus nur mit Bestellnummer (kein Auth)."""
+    nr = (order_number or "").strip()
+    if not nr or len(nr) > 40:
+        return jsonify({"error": "Ungültige Bestellnummer"}), 400
+    db = get_db()
+    row = db.execute(
+        "SELECT order_number, status, delivery_type, wunschzeit, total, created_at, first_name FROM orders WHERE order_number=?",
+        (nr,),
+    ).fetchone()
+    if not row:
+        return jsonify({"error": "Bestellung nicht gefunden"}), 404
+    o = dict(row)
+    pub = order_portal_svc.public_status(o.get("status"))
+    return jsonify({
+        "orderNumber": o["order_number"],
+        "status": pub,
+        "deliveryType": o.get("delivery_type"),
+        "wunschzeit": o.get("wunschzeit") or "",
+        "total": o.get("total"),
+        "createdAt": o.get("created_at"),
+        "firstName": (o.get("first_name") or "")[:1] + "…" if o.get("first_name") else "",
+        "phone": SHOP_PHONE,
+        "shopName": SHOP_NAME,
     })
 
 # ── Admin: Settings speichern ──────────────────────────────────────────────
@@ -1214,6 +1756,303 @@ def report_month():
         return jsonify(jobs_svc.month_report(db, year=year, month=month))
     import bookkeeping as bk
     return jsonify(bk.month_report(db, year=year, month=month))
+
+
+@app.get("/api/admin/analytics")
+@require_admin
+def admin_analytics():
+    """Umfassendes Analytics-Dashboard fuer das Admin-Panel."""
+    db = get_db()
+    days = request.args.get("days", 30, type=int)
+    if days not in (7, 14, 30, 60, 90):
+        days = 30
+    since = (datetime.datetime.now() - datetime.timedelta(days=days)).strftime("%Y-%m-%d") + " 00:00:00"
+
+    # ── Umsatz & Volumen ───────────────────────────────────────────────────
+    orders = [dict(r) for r in db.execute(
+        "SELECT * FROM orders WHERE created_at >= ? AND status != 'storniert'", (since,)
+    ).fetchall()]
+    total_revenue = sum(o["total"] for o in orders)
+    order_count = len(orders)
+    avg_order = round(total_revenue / order_count, 2) if order_count else 0
+    delivery_count = sum(1 for o in orders if o.get("delivery_type") == "lieferung")
+    pickup_count = order_count - delivery_count
+
+    # ── Vorperiode zum Vergleich ───────────────────────────────────────────
+    prev_since = (datetime.datetime.now() - datetime.timedelta(days=days * 2)).strftime("%Y-%m-%d") + " 00:00:00"
+    prev_orders = db.execute(
+        "SELECT COUNT(*), SUM(total) FROM orders WHERE created_at >= ? AND created_at < ? AND status != 'storniert'",
+        (prev_since, since),
+    ).fetchone()
+    prev_count = prev_orders[0] or 0
+    prev_revenue = float(prev_orders[1] or 0)
+
+    # ── Tagesumsatz (letzten 14 Tage) ─────────────────────────────────────
+    daily_rows = db.execute(
+        """SELECT DATE(created_at) AS day, COUNT(*) AS cnt, SUM(total) AS rev
+           FROM orders WHERE created_at >= ? AND status != 'storniert'
+           GROUP BY day ORDER BY day""",
+        ((datetime.datetime.now() - datetime.timedelta(days=14)).strftime("%Y-%m-%d") + " 00:00:00",),
+    ).fetchall()
+    daily = [{"day": r["day"], "orders": r["cnt"], "revenue": round(r["rev"] or 0, 2)} for r in daily_rows]
+
+    # ── Peak-Stunden ───────────────────────────────────────────────────────
+    hours_rows = db.execute(
+        """SELECT CAST(strftime('%H', created_at) AS INTEGER) AS hour, COUNT(*) AS cnt
+           FROM orders WHERE created_at >= ? AND status != 'storniert'
+           GROUP BY hour ORDER BY cnt DESC""",
+        (since,),
+    ).fetchall()
+    peak_hours = [{"hour": r["hour"], "orders": r["cnt"]} for r in hours_rows[:8]]
+
+    # ── Top-Items ──────────────────────────────────────────────────────────
+    item_counts: dict = {}
+    item_revenue: dict = {}
+    for o in orders:
+        for item in json.loads(o.get("items") or "[]"):
+            n = item.get("name", "").split(" [")[0].strip()
+            q = item.get("qty", 1)
+            p = item.get("price", 0)
+            item_counts[n] = item_counts.get(n, 0) + q
+            item_revenue[n] = item_revenue.get(n, 0) + q * p
+    top_items = sorted(item_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+    top_items_data = [{"name": n, "qty": q, "revenue": round(item_revenue.get(n, 0), 2)} for n, q in top_items]
+
+    # ── Kunden-Segmente ────────────────────────────────────────────────────
+    now_iso = datetime.datetime.now().isoformat()
+    contacts_all = [dict(r) for r in db.execute("SELECT * FROM contacts").fetchall()]
+    segments = {"champion": 0, "loyal": 0, "at_risk": 0, "lost": 0, "new": 0}
+    top_customers = []
+    at_risk_contacts = []
+    for c in contacts_all:
+        lo = c.get("last_order_at") or ""
+        total_o = c.get("total_orders", 0) or 0
+        total_s = float(c.get("total_spent") or 0)
+        try:
+            days_inactive = (datetime.datetime.now() - datetime.datetime.fromisoformat(lo)).days if lo else 999
+        except Exception:
+            days_inactive = 999
+        if total_o >= 5 and days_inactive <= 14:
+            segments["champion"] += 1
+        elif 3 <= total_o < 5:
+            segments["loyal"] += 1
+        elif days_inactive > 60:
+            segments["lost"] += 1
+        elif days_inactive > 30:
+            segments["at_risk"] += 1
+            at_risk_contacts.append({"name": f"{c.get('first_name','')} {c.get('last_name','')}".strip(),
+                                     "phone": c.get("phone", ""), "days_inactive": days_inactive,
+                                     "total_orders": total_o, "total_spent": total_s})
+        elif total_o == 1:
+            segments["new"] += 1
+        top_customers.append({"name": f"{c.get('first_name','')} {c.get('last_name','')}".strip(),
+                               "phone": c.get("phone", ""), "total_orders": total_o,
+                               "total_spent": total_s, "days_inactive": days_inactive})
+    top_customers.sort(key=lambda x: x["total_spent"], reverse=True)
+    at_risk_contacts.sort(key=lambda x: x["days_inactive"], reverse=True)
+
+    # ── CLV (Customer Lifetime Value) Durchschnitt ─────────────────────────
+    clv = round(sum(c.get("total_spent") or 0 for c in contacts_all) / len(contacts_all), 2) if contacts_all else 0
+
+    # ── Neue vs. wiederkehrende Kunden (im Zeitraum) ───────────────────────
+    new_customers = db.execute(
+        "SELECT COUNT(*) FROM contacts WHERE created_at >= ?", (since,)
+    ).fetchone()[0]
+
+    return jsonify({
+        "period_days": days,
+        "revenue": {"total": round(total_revenue, 2), "prev": round(prev_revenue, 2),
+                    "avg_order": avg_order},
+        "orders": {"total": order_count, "prev": prev_count,
+                   "delivery": delivery_count, "pickup": pickup_count},
+        "customers": {"total": len(contacts_all), "new_in_period": new_customers,
+                      "avg_clv": clv},
+        "daily": daily,
+        "peak_hours": peak_hours,
+        "top_items": top_items_data,
+        "segments": segments,
+        "top_customers": top_customers[:10],
+        "at_risk": at_risk_contacts[:10],
+    })
+
+
+@app.post("/api/cron/weekly-report")
+def cron_weekly_report():
+    """Woechentlicher Umsatz-Report an den Agency-Owner. CRON_SECRET erforderlich."""
+    secret = request.headers.get("X-Cron-Secret", "") or request.args.get("secret", "")
+    if not CRON_SECRET or secret != CRON_SECRET:
+        return jsonify({"error": "Unauthorized"}), 401
+    db = get_db()
+    ok = send_weekly_report_email(db)
+    return jsonify({"success": ok})
+
+
+def send_upsell_email(contact: dict, upsell_type: str, context: dict | None = None):
+    """Upsell-Email basierend auf Bestellhistorie."""
+    if not SMTP_HOST or not SMTP_USER or not contact.get("email"):
+        return False
+    name = contact.get("first_name") or "du"
+    ctx = context or {}
+    try:
+        if upsell_type == "try_drehspiess":
+            subject = f"Hast du unsere Drehspiess-Pizza schon probiert? – {SHOP_NAME}"
+            content = f"""
+                <h2 style="color:#C9A84C;margin:0 0 16px;font-size:20px;">Hey {name}, kennst du das schon?</h2>
+                <p style="color:#ccc;font-size:15px;line-height:1.6;margin:0 0 20px;">
+                  Du bist ein Burger-Fan &mdash; das wissen wir. Aber hast du unsere
+                  <strong style="color:#fff;">Drehspiess-Pizza</strong> schon probiert?
+                  Frisch belegt, im echten Steinofen. Vielen unserer Burger-Stammkunden ist sie sofort zur neuen Lieblings-Pizza geworden.
+                </p>
+                <div style="background:#1a1410;border-radius:10px;padding:20px;margin:0 0 24px;border-left:3px solid #C9A84C;">
+                  <p style="color:#C9A84C;font-weight:700;font-size:14px;margin:0 0 8px;">Drehspiess-Pizza ab {ctx.get('price','8,90 EUR')}</p>
+                  <p style="color:#aaa;font-size:13px;margin:0;">Geheimrezept, hausgemachte Sauce, frische Zutaten. Einmal probiert, immer wieder bestellt.</p>
+                </div>
+                <div style="text-align:center;">
+                  <a href="https://snackhouse-yassine.de/bestellen" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;font-weight:800;font-size:14px;padding:14px 32px;border-radius:10px;text-decoration:none;">Jetzt ausprobieren</a>
+                </div>"""
+        elif upsell_type == "add_ayran":
+            subject = f"Dein Essen + Ayran = perfekte Kombo – {SHOP_NAME}"
+            content = f"""
+                <h2 style="color:#C9A84C;margin:0 0 16px;font-size:20px;">Noch etwas zum Trinken, {name}?</h2>
+                <p style="color:#ccc;font-size:15px;line-height:1.6;margin:0 0 20px;">
+                  Unser <strong style="color:#fff;">hausgemachter Ayran</strong> ist die perfekte Begleitung zu Shawarma und Doner.
+                  Frisch, cremig, authentisch &mdash; und nur <strong style="color:#C9A84C;">2 EUR</strong>.
+                </p>
+                <div style="background:#1a1410;border-radius:10px;padding:20px;margin:0 0 24px;text-align:center;">
+                  <div style="font-size:36px;margin-bottom:8px;">&#129371;</div>
+                  <p style="color:#C9A84C;font-weight:700;font-size:16px;margin:0;">Hausgemachter Ayran &ndash; 2 EUR</p>
+                  <p style="color:#555;font-size:12px;margin:8px 0 0;">Einfach bei deiner naechsten Bestellung dazu kommen lassen</p>
+                </div>
+                <div style="text-align:center;">
+                  <a href="https://snackhouse-yassine.de/bestellen" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;font-weight:800;font-size:14px;padding:14px 32px;border-radius:10px;text-decoration:none;">Jetzt bestellen</a>
+                </div>"""
+        elif upsell_type == "loyalty_reminder":
+            stamps = ctx.get("stamps", 0)
+            remaining = max(1, 10 - stamps)
+            subject = f"Noch {remaining} bis zum Gratis-Ayran! – {SHOP_NAME}"
+            content = f"""
+                <h2 style="color:#C9A84C;margin:0 0 16px;font-size:20px;">Du bist fast da, {name}!</h2>
+                <p style="color:#ccc;font-size:15px;line-height:1.6;margin:0 0 20px;">
+                  Noch <strong style="color:#C9A84C;">{remaining} Bestellung(en)</strong> und du bekommst deinen
+                  <strong style="color:#fff;">hausgemachten Gratis-Ayran</strong>.
+                  Das schaffst du!
+                </p>
+                <div style="text-align:center;margin:24px 0;">
+                  <div style="display:inline-block;background:#1a1410;border:2px solid #C9A84C;border-radius:12px;padding:20px 40px;">
+                    <div style="font-size:32px;font-weight:900;color:#C9A84C;">{stamps} / 10</div>
+                    <div style="font-size:12px;color:#888;margin-top:4px;">Stempel</div>
+                  </div>
+                </div>
+                <div style="text-align:center;">
+                  <a href="https://snackhouse-yassine.de/bestellen" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;font-weight:800;font-size:14px;padding:14px 32px;border-radius:10px;text-decoration:none;">Jetzt bestellen</a>
+                </div>"""
+        else:
+            return False
+
+        html = _email_wrapper(SHOP_NAME, content)
+        _smtp_send(contact["email"], subject, html)
+        return True
+    except Exception as e:
+        app.logger.warning(f"Upsell-Email ({upsell_type}) Fehler: {e}")
+        return False
+
+
+def run_upsell_emails(db) -> dict:
+    """Sendet Upsell-Emails basierend auf Bestellhistorie.
+    - Burger-Stammkunden: Drehspiess-Empfehlung
+    - Keine-Getraenk-Kunden: Ayran-Tipp
+    - Loyalty-Reminder (8-9 Stempel, inaktiv >7 Tage)
+    Aufgerufen via /api/cron/upsell oder manuell.
+    """
+    stats = {"try_drehspiess": 0, "add_ayran": 0, "loyalty_reminder": 0, "errors": 0}
+
+    contacts = [dict(r) for r in db.execute(
+        "SELECT * FROM contacts WHERE email != '' AND total_orders >= 2"
+    ).fetchall()]
+
+    for c in contacts:
+        if not c.get("email"):
+            continue
+
+        # Burger-Stammkunden → Drehspiess probieren?
+        if not already_sent_template(db, c["phone"] or c["email"], "upsell_drehspiess", within_days=180):
+            phone = c.get("phone") or ""
+            orders = db.execute(
+                "SELECT items FROM orders WHERE phone=? AND status != 'storniert' ORDER BY created_at DESC LIMIT 10",
+                (phone,),
+            ).fetchall()
+            burger_count = sum(
+                1 for o in orders
+                for item in json.loads(dict(o).get("items") or "[]")
+                if "burger" in item.get("name", "").lower()
+            )
+            drehspiess_count = sum(
+                1 for o in orders
+                for item in json.loads(dict(o).get("items") or "[]")
+                if "drehspiess" in item.get("name", "").lower() or "pizza" in item.get("name", "").lower()
+            )
+            if burger_count >= 2 and drehspiess_count == 0:
+                if send_upsell_email(c, "try_drehspiess"):
+                    log_message(db, c["phone"] or c["email"], "email", "upsell_drehspiess",
+                                "Drehspiess-Upsell", "sent", "")
+                    stats["try_drehspiess"] += 1
+                else:
+                    stats["errors"] += 1
+
+        # Keine-Getraenk-Kunden → Ayran vorschlagen
+        if not already_sent_template(db, c["phone"] or c["email"], "upsell_ayran", within_days=180):
+            phone = c.get("phone") or ""
+            orders = db.execute(
+                "SELECT items FROM orders WHERE phone=? AND status != 'storniert' ORDER BY created_at DESC LIMIT 15",
+                (phone,),
+            ).fetchall()
+            getraenk_count = sum(
+                1 for o in orders
+                for item in json.loads(dict(o).get("items") or "[]")
+                if any(g in item.get("name", "").lower() for g in ["ayran", "cola", "fanta", "wasser", "getraenk", "drink"])
+            )
+            if c.get("total_orders", 0) >= 3 and getraenk_count == 0:
+                if send_upsell_email(c, "add_ayran"):
+                    log_message(db, c["phone"] or c["email"], "email", "upsell_ayran",
+                                "Ayran-Upsell", "sent", "")
+                    stats["add_ayran"] += 1
+                else:
+                    stats["errors"] += 1
+
+        # Loyalty-Reminder: 8-9 Stempel, seit >7 Tagen nicht bestellt
+        if c.get("phone") and not already_sent_template(db, c["phone"] or c["email"], "upsell_loyalty_reminder", within_days=30):
+            loyalty_row = db.execute(
+                "SELECT stamps FROM loyalty WHERE phone=?", (c["phone"],)
+            ).fetchone()
+            if loyalty_row:
+                stamps = loyalty_row[0] if not hasattr(loyalty_row, 'keys') else loyalty_row["stamps"]
+                try:
+                    days_inactive = (
+                        datetime.datetime.now() - datetime.datetime.fromisoformat(c.get("last_order_at") or "")
+                    ).days if c.get("last_order_at") else 0
+                except Exception:
+                    days_inactive = 0
+                if stamps in (8, 9) and days_inactive >= 7:
+                    if send_upsell_email(c, "loyalty_reminder", {"stamps": stamps}):
+                        log_message(db, c["phone"] or c["email"], "email", "upsell_loyalty_reminder",
+                                    f"Loyalty-Reminder {stamps}/10", "sent", "")
+                        stats["loyalty_reminder"] += 1
+                    else:
+                        stats["errors"] += 1
+
+    db.commit()
+    return stats
+
+
+@app.post("/api/cron/upsell")
+def cron_upsell():
+    """Upsell-Emails basierend auf Bestellhistorie. CRON_SECRET erforderlich."""
+    secret = request.headers.get("X-Cron-Secret", "") or request.args.get("secret", "")
+    if not CRON_SECRET or secret != CRON_SECRET:
+        return jsonify({"error": "Unauthorized"}), 401
+    db = get_db()
+    stats = run_upsell_emails(db)
+    return jsonify({"success": True, **stats})
 
 
 @app.get("/api/admin/export/orders.csv")
@@ -1400,6 +2239,56 @@ def create_order():
         return jsonify({"error": err}), 400
 
     db = get_db()
+    status = _current_shop_status(db)
+    status_err = shop_status_svc.assert_orders_accepted(
+        status, delivery_type=data.get("deliveryType") or ""
+    )
+    if status_err:
+        return jsonify({"error": status_err, "shop_status": status}), 403
+
+    # Strukturierte Lieferadresse zusammenbauen + Zone prüfen
+    if (data.get("deliveryType") or "") == "lieferung":
+        street = (data.get("street") or "").strip()
+        house = (data.get("houseNumber") or data.get("house_number") or "").strip()
+        plz = (data.get("plz") or "").strip()
+        city = (data.get("city") or "").strip()
+        floor = (data.get("floor") or "").strip()
+        doorbell = (data.get("doorbell") or "").strip()
+        if street and house and plz and city:
+            addr_parts = [f"{street} {house}", f"{plz} {city}"]
+            if floor:
+                addr_parts.append(f"Etage {floor}")
+            if doorbell:
+                addr_parts.append(f"Klingel: {doorbell}")
+            data["address"] = ", ".join(addr_parts)
+        zone = order_portal_svc.check_delivery_zone(
+            plz=plz or "",
+            city=city or (data.get("address") or ""),
+            street=street or (data.get("address") or ""),
+            zones=(status.get("delivery_zones") or []),
+        )
+        if not zone.get("ok"):
+            return jsonify({"error": zone.get("message") or "Außerhalb des Liefergebiets"}), 400
+
+    # Zahlungs-Mindestbetrag serverseitig
+    try:
+        items_sub = sum(
+            float(it.get("price") or 0) * int(it.get("qty") or 0)
+            for it in (data.get("items") or [])
+            if not it.get("free") and not it.get("loyalty")
+        )
+    except (TypeError, ValueError):
+        items_sub = 0.0
+    pays = order_portal_svc.payment_options(
+        items_sub, status.get("payment") or {}, delivery=(data.get("deliveryType") == "lieferung")
+    )
+    pay_id = data.get("payMethod")
+    pay_meta = next((p for p in pays if p["id"] == pay_id), None)
+    if not pay_meta or not pay_meta.get("enabled"):
+        return jsonify({
+            "error": (pay_meta or {}).get("reason") or "Zahlungsart nicht verfügbar",
+        }), 400
+
     price_err = validate_order_prices(db, data)
     if price_err:
         return jsonify({"error": price_err}), 400
@@ -1425,14 +2314,30 @@ def create_order():
     if promo:
         promo_label = promo.get("title") or promo.get("description") or ""
 
+    # Eingeloggten Kunden ermitteln (optional)
+    _ca_token = (
+        request.headers.get("X-Customer-Token", "")
+        or request.cookies.get("customer_session", "")
+    )
+    _ca_sess = ca_svc.get_session(db, _ca_token) if _ca_token else None
+    _ca_id = int(_ca_sess["customer_id"]) if _ca_sess else None
+
+    # original_requested_ready_at: wird bei Bestellerstellung aus wunschzeit berechnet
+    # und danach NIEMALS aktualisiert – dient der historischen Auswertung
+    _orig_ready = prio_svc._parse_wunschzeit(order.get("wunschzeit"))
+    _orig_ready_iso = _orig_ready.isoformat() if _orig_ready else None
+
     db.execute("""INSERT OR IGNORE INTO orders
-        (order_number,first_name,last_name,phone,email,address,delivery_type,pay_method,items,total,wunschzeit,notes,promo_applied,contact_id)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+        (order_number,first_name,last_name,phone,email,address,delivery_type,pay_method,
+         items,total,wunschzeit,notes,promo_applied,contact_id,customer_account_id,
+         original_requested_ready_at)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         (order["order_number"], order["first_name"], order["last_name"],
          order["phone"], order["email"], order["address"],
          order["delivery_type"], order["pay_method"],
          json.dumps(order["items"], ensure_ascii=False),
-         order["total"], order["wunschzeit"], order["notes"], promo_label, None)
+         order["total"], order["wunschzeit"], order["notes"], promo_label, None, _ca_id,
+         _orig_ready_iso)
     )
 
     contact_id, is_new = upsert_contact(db, order)
@@ -1449,6 +2354,10 @@ def create_order():
         db, category="order", action="created", status="ok",
         kunde_id=KUNDE_ID or "", detail=order["order_number"],
     )
+    # Analytics Event: Bestellung abgeschlossen
+    ae_svc.track_order_completed(db, order, customer_id=_ca_id)
+    # Operational Alert auflösen falls Pause-Alert existiert
+    oa_svc.resolve_by_order(db, order["order_number"])
     automate_order_created(db, order, is_new)
     notify_order_webhook(order)
     if KUNDE_ID:
@@ -1660,13 +2569,19 @@ def agency_2fa_confirm():
 @require_admin
 def admin_orders():
     db = get_db()
-    rows = db.execute("SELECT * FROM orders ORDER BY created_at DESC LIMIT 100").fetchall()
+    s = _settings_map(db)
+    wait_pickup = int(s.get("wait_pickup", "20") or 20)
+
+    rows = db.execute("SELECT * FROM orders ORDER BY created_at DESC LIMIT 200").fetchall()
     orders = []
     for r in rows:
         o = dict(r)
-        o["items"] = json.loads(o["items"] or "[]")
+        o["items"] = json.loads(o.get("items") or "[]")
         orders.append(o)
-    return jsonify(orders)
+
+    # Prioritäts-Sortierung: abgeschlossene/stornierte nach unten, Rest nach Dringlichkeit
+    sorted_orders = prio_svc.sort_orders(orders, wait_pickup_minutes=wait_pickup)
+    return jsonify(sorted_orders)
 
 @app.post("/api/admin/orders/<order_number>/status")
 @require_admin
@@ -1691,9 +2606,23 @@ def update_status(order_number):
     if row:
         order = dict(row)
         order["items"] = json.loads(order["items"] or "[]")
+        cid = order.get("customer_account_id")
         if order.get("email"):
             send_status_email(order, new_status)
         automate_status_changed(db, order, new_status)
+        # Analytics + Alerts
+        if new_status == "storniert":
+            ae_svc.track_order_cancelled(db, order, customer_id=cid)
+        if new_status == "zubereitung":
+            db.execute("UPDATE orders SET production_started_at=COALESCE(production_started_at, datetime('now')) WHERE order_number=?", (order_number,))
+            db.commit()
+            oa_svc.resolve_by_order(db, order_number, "unconfirmed_order")
+        if new_status in ("fertig", "abholbereit"):
+            # Pünktlichkeit bestimmen: War die Fertigstellung rechtzeitig?
+            wz = order.get("wunschzeit") or ""
+            on_time = True  # Default: als pünktlich werten
+            ae_svc.track_order_ready(db, order, on_time=on_time)
+            oa_svc.resolve_by_order(db, order_number)
 
     return jsonify({"success": True, "status": new_status})
 
@@ -1885,7 +2814,14 @@ def whatsapp_verify():
     mode = request.args.get("hub.mode")
     token = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
-    if mode == "subscribe" and token == WHATSAPP_VERIFY_TOKEN:
+    expected = wa_webhook_svc.verify_token_configured()
+    if not expected:
+        app.logger.error("WhatsApp webhook: WHATSAPP_VERIFY_TOKEN fehlt")
+        return jsonify({
+            "error": "WHATSAPP_VERIFY_TOKEN ist nicht gesetzt. "
+                     "Bitte in der Server-.env konfigurieren (kein Default)."
+        }), 503
+    if mode == "subscribe" and token == expected:
         return challenge or "", 200
     return "Forbidden", 403
 
@@ -1893,8 +2829,15 @@ def whatsapp_verify():
 def whatsapp_incoming():
     raw = request.get_data()
     sig = request.headers.get("X-Hub-Signature-256")
-    if wa_webhook_svc.app_secret() and not wa_webhook_svc.verify_signature(raw, sig):
-        app.logger.warning("WhatsApp webhook: Signatur ungültig")
+    if not wa_webhook_svc.app_secret() and not wa_webhook_svc.insecure_no_secret_allowed():
+        app.logger.error("WhatsApp webhook: META_APP_SECRET fehlt (fail-closed)")
+        return jsonify({
+            "error": "META_APP_SECRET ist nicht gesetzt. "
+                     "Produktion: Secret setzen. "
+                     "Nur Dev: WHATSAPP_WEBHOOK_INSECURE_NO_SECRET=1"
+        }), 503
+    if not wa_webhook_svc.verify_signature(raw, sig):
+        app.logger.warning("WhatsApp webhook: Signatur ungültig oder fehlend")
         return "Forbidden", 403
     payload = request.get_json(force=True, silent=True) or {}
     db = get_db()
@@ -4206,6 +5149,167 @@ def agency_lead_convert(lead_id: int):
         return jsonify({"error": str(e)}), 400
 
 
+def _meta_leads_db_factory():
+    """Eigene Connection für Background-Worker (kein Flask-g)."""
+    db = sqlite3.connect(DB_PATH, timeout=30)
+    db.row_factory = sqlite3.Row
+    return db
+
+
+@app.get("/api/meta-leads/webhook")
+def meta_leads_webhook_verify():
+    """Meta Lead Ads Webhook-Verifikation (hub.challenge)."""
+    mode = request.args.get("hub.mode")
+    token = request.args.get("hub.verify_token")
+    challenge = request.args.get("hub.challenge")
+    expected = meta_leads_svc.verify_token_configured()
+    if not expected:
+        app.logger.error("meta_leads: META_LEAD_VERIFY_TOKEN fehlt")
+        return jsonify({"error": "META_LEAD_VERIFY_TOKEN nicht gesetzt"}), 503
+    if mode == "subscribe" and token == expected:
+        return challenge or "", 200
+    return "Forbidden", 403
+
+
+@app.post("/api/meta-leads/webhook")
+def meta_leads_webhook_post():
+    """leadgen-Events: sofort HTTP 200, Verarbeitung/Notify im Background."""
+    raw = request.get_data()
+    sig = request.headers.get("X-Hub-Signature-256")
+    if not meta_leads_svc.app_secret() and not meta_leads_svc.insecure_no_secret_allowed():
+        app.logger.error("meta_leads: META_LEAD_APP_SECRET/META_APP_SECRET fehlt")
+        return jsonify({"error": "Meta App Secret nicht gesetzt"}), 503
+    if not meta_leads_svc.verify_signature(raw, sig):
+        app.logger.warning("meta_leads: Signatur ungültig")
+        return "Forbidden", 403
+    payload = request.get_json(force=True, silent=True) or {}
+    try:
+        db = get_db()
+        result = meta_leads_svc.handle_webhook_post(
+            db, payload, get_db=_meta_leads_db_factory
+        )
+        return jsonify(result), 200
+    except Exception:
+        app.logger.exception("meta_leads webhook")
+        # Meta soll nicht endlos retten – soft ACK
+        return jsonify({"ok": True, "queued": False, "error": "internal"}), 200
+
+
+@app.get("/api/meta-leads")
+@require_agency_admin
+def meta_leads_list_api():
+    db = get_db()
+    tenant = (request.args.get("tenant_id") or "").strip().upper() or None
+    status = request.args.get("status") or None
+    return jsonify({
+        "leads": meta_leads_svc.list_leads(db, tenant_id=tenant, status=status),
+    })
+
+
+@app.get("/api/meta-leads/config")
+@require_agency_admin
+def meta_leads_config_get():
+    kid = (request.args.get("tenant_id") or KUNDE_ID or "").strip().upper()
+    if not kid:
+        return jsonify({"error": "tenant_id fehlt"}), 400
+    cfg = meta_leads_svc.get_config_by_tenant(get_db(), kid)
+    return jsonify(cfg or {})
+
+
+@app.put("/api/meta-leads/config")
+@require_agency_admin
+def meta_leads_config_put():
+    data = request.get_json(silent=True) or {}
+    try:
+        return jsonify(meta_leads_svc.upsert_tenant_config(get_db(), data))
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        app.logger.exception("meta_leads config")
+        return jsonify({"error": str(e)[:200]}), 500
+
+
+@app.get("/api/meta-leads/<int:lead_id>")
+@require_agency_admin
+def meta_leads_detail_api(lead_id: int):
+    lead = meta_leads_svc.get_lead(get_db(), lead_id)
+    if not lead:
+        return jsonify({"error": "Lead nicht gefunden"}), 404
+    return jsonify(lead)
+
+
+@app.patch("/api/meta-leads/<int:lead_id>")
+@require_agency_admin
+def meta_leads_update_api(lead_id: int):
+    data = request.get_json(silent=True) or {}
+    try:
+        return jsonify(meta_leads_svc.update_lead(
+            get_db(), lead_id, data, changed_by="agency_api",
+        ))
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@app.post("/api/cron/meta-leads-sync")
+def cron_meta_leads_sync():
+    """Täglicher Abgleich + Retry fälliger Jobs. Header X-Cron-Secret."""
+    secret = request.headers.get("X-Cron-Secret", "") or request.args.get("secret", "")
+    if not CRON_SECRET or secret != CRON_SECRET:
+        return jsonify({"error": "Unauthorized"}), 401
+    try:
+        return jsonify(meta_leads_svc.cron_sync_missing(
+            get_db(), get_db=_meta_leads_db_factory,
+        ))
+    except Exception as e:
+        app.logger.exception("meta_leads cron")
+        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+
+
+@app.get("/agency/meta-leads")
+@require_agency_admin
+def agency_meta_leads_dashboard():
+    db = get_db()
+    tenant = (request.args.get("tenant_id") or "").strip().upper()
+    status = request.args.get("status") or None
+    leads = meta_leads_svc.list_leads(
+        db, tenant_id=tenant or None, status=status, limit=200,
+    )
+    return Response(
+        meta_leads_svc.render_dashboard_html(leads, tenant_filter=tenant),
+        mimetype="text/html; charset=utf-8",
+    )
+
+
+@app.get("/agency/meta-leads/<int:lead_id>")
+@require_agency_admin
+def agency_meta_lead_detail(lead_id: int):
+    lead = meta_leads_svc.get_lead(get_db(), lead_id)
+    if not lead:
+        return "Lead nicht gefunden", 404
+    return Response(
+        meta_leads_svc.render_lead_detail_html(lead),
+        mimetype="text/html; charset=utf-8",
+    )
+
+
+@app.post("/agency/meta-leads/<int:lead_id>/update")
+@require_agency_admin
+def agency_meta_lead_update_form(lead_id: int):
+    data = {
+        "status": request.form.get("status"),
+        "notes": request.form.get("notes"),
+        "assignee": request.form.get("assignee"),
+    }
+    try:
+        meta_leads_svc.update_lead(get_db(), lead_id, data, changed_by="agency_ui")
+    except ValueError as e:
+        return str(e), 400
+    return Response(
+        status=303,
+        headers={"Location": f"/agency/meta-leads/{lead_id}"},
+    )
+
+
 @app.get("/api/agency/akquise/approvals")
 @require_agency_admin
 def agency_akquise_approvals_list():
@@ -4383,6 +5487,931 @@ def stripe_webhook():
     except Exception as e:
         return jsonify({"error": str(e)[:200]}), 500
 
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# KUNDENKONTO – Auth + Stempelkarte
+# ═══════════════════════════════════════════════════════════════════════════════
+
+CUSTOMER_SESSION_COOKIE = "customer_session"
+
+
+def _get_customer_session():
+    """Gibt (customer_id, session_dict) zurück oder (None, None)."""
+    token = (
+        request.headers.get("X-Customer-Token", "")
+        or request.cookies.get(CUSTOMER_SESSION_COOKIE, "")
+    )
+    if not token:
+        return None, None
+    db = get_db()
+    sess = ca_svc.get_session(db, token)
+    if not sess:
+        return None, None
+    return int(sess["customer_id"]), sess
+
+
+def _require_customer(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        cid, sess = _get_customer_session()
+        if not cid:
+            return jsonify({"error": "Nicht eingeloggt"}), 401
+        g.customer_id = cid
+        g.customer_session = sess
+        return f(*args, **kwargs)
+    return decorated
+
+
+def _set_customer_cookie(resp, token: str):
+    ttl = ca_svc.CUSTOMER_SESSION_TTL
+    resp.set_cookie(
+        CUSTOMER_SESSION_COOKIE,
+        token,
+        max_age=ttl,
+        httponly=True,
+        secure=True,
+        samesite="Strict",
+        path="/",
+    )
+    return resp
+
+
+def _clear_customer_cookie(resp):
+    resp.set_cookie(
+        CUSTOMER_SESSION_COOKIE,
+        "",
+        max_age=0,
+        httponly=True,
+        secure=True,
+        samesite="Strict",
+        path="/",
+    )
+    return resp
+
+
+# ── Registrierung ──────────────────────────────────────────────────────────────
+@app.post("/api/customer/register")
+def customer_register():
+    ip = get_real_ip()
+    if rate_limit(f"creg:{ip}", max_calls=5, window_s=3600):
+        return jsonify({"error": "Zu viele Versuche. Bitte warte eine Stunde."}), 429
+
+    data = request.get_json(force=True) or {}
+    pw = data.get("password") or ""
+    pw2 = data.get("password2") or data.get("passwordConfirm") or ""
+    if pw != pw2:
+        return jsonify({"error": "Passwörter stimmen nicht überein"}), 400
+
+    db = get_db()
+    result = ca_svc.register(
+        db,
+        email=data.get("email") or "",
+        password=pw,
+        display_name=data.get("display_name") or data.get("firstName") or "",
+        phone=data.get("phone") or "",
+        marketing_consent=bool(data.get("marketing_consent")),
+    )
+    if not result["ok"]:
+        return jsonify({"error": result["error"]}), 400
+
+    customer = result["customer"]
+    token = ca_svc.create_session(db, customer["id"])
+
+    # E-Mail-Verifizierung senden – nur wenn SMTP konfiguriert ist.
+    # Ohne SMTP wird der Account sofort als verifiziert markiert,
+    # da eine Verifizierung ohne E-Mail-Versand keinen Sinn ergibt.
+    verify_token = result.get("verify_token")
+    if verify_token and SMTP_HOST:
+        try:
+            verify_url = f"{PUBLIC_BASE_URL}/konto?verify={verify_token}"
+            _send_customer_email(
+                customer["email"],
+                f"Bitte bestätige deine E-Mail – {SHOP_NAME}",
+                f"""<p>Hallo {customer['display_name']},</p>
+<p>klicke auf den Link, um deine E-Mail-Adresse zu bestätigen:</p>
+<p><a href="{verify_url}">{verify_url}</a></p>
+<p>Der Link ist 24 Stunden gültig.</p>
+<p>– {SHOP_NAME}</p>""",
+            )
+        except Exception as e:
+            app.logger.warning(f"verify-email send: {e}")
+    elif verify_token and not SMTP_HOST:
+        # Kein SMTP → Account direkt verifizieren
+        db.execute(
+            "UPDATE customer_accounts SET email_verified=1, email_verify_token=NULL WHERE id=?",
+            (customer["id"],),
+        )
+        db.commit()
+        customer["email_verified"] = True
+
+    resp = jsonify({"success": True, "customer": customer})
+    return _set_customer_cookie(resp, token)
+
+
+# ── Login ──────────────────────────────────────────────────────────────────────
+@app.post("/api/customer/login")
+def customer_login():
+    ip = get_real_ip()
+    if rate_limit(f"clogin:{ip}", max_calls=10, window_s=300):
+        return jsonify({"error": "Zu viele Versuche. Bitte warte 5 Minuten."}), 429
+
+    data = request.get_json(force=True) or {}
+    db = get_db()
+    result = ca_svc.login(db, email=data.get("email") or "", password=data.get("password") or "")
+    if not result["ok"]:
+        return jsonify({"error": result["error"]}), 401
+
+    customer = result["customer"]
+    token = ca_svc.create_session(db, customer["id"])
+    resp = jsonify({"success": True, "customer": customer})
+    return _set_customer_cookie(resp, token)
+
+
+# ── Logout ─────────────────────────────────────────────────────────────────────
+@app.post("/api/customer/logout")
+def customer_logout():
+    token = request.cookies.get(CUSTOMER_SESSION_COOKIE, "")
+    if token:
+        ca_svc.destroy_session(get_db(), token)
+    resp = jsonify({"success": True})
+    return _clear_customer_cookie(resp)
+
+
+# ── Profil: GET ────────────────────────────────────────────────────────────────
+@app.get("/api/customer/me")
+@_require_customer
+def customer_me():
+    db = get_db()
+    cid = g.customer_id
+    customer = ca_svc.get_customer_by_id(db, cid)
+    if not customer:
+        return jsonify({"error": "Konto nicht gefunden"}), 404
+    stamp_info = ca_svc.get_stamp_info(db, cid)
+    return jsonify({
+        "customer": ca_svc._public_customer(customer),
+        "stamp_info": stamp_info,
+    })
+
+
+# ── Profil: PATCH ──────────────────────────────────────────────────────────────
+@app.patch("/api/customer/me")
+@_require_customer
+def customer_update_me():
+    data = request.get_json(force=True) or {}
+    db = get_db()
+    result = ca_svc.update_profile(
+        db,
+        g.customer_id,
+        display_name=data.get("display_name"),
+        phone=data.get("phone"),
+        marketing_consent=data.get("marketing_consent"),
+    )
+    if not result["ok"]:
+        return jsonify({"error": result["error"]}), 400
+    return jsonify({"success": True, "customer": result["customer"]})
+
+
+# ── Passwort ändern ────────────────────────────────────────────────────────────
+@app.post("/api/customer/change-password")
+@_require_customer
+def customer_change_password():
+    data = request.get_json(force=True) or {}
+    old_pw = data.get("old_password") or ""
+    new_pw = data.get("new_password") or ""
+    if len(new_pw) < ca_svc.MIN_PASSWORD_LEN:
+        return jsonify({"error": f"Neues Passwort mindestens {ca_svc.MIN_PASSWORD_LEN} Zeichen"}), 400
+    db = get_db()
+    customer = ca_svc.get_customer_by_id(db, g.customer_id)
+    if not customer:
+        return jsonify({"error": "Konto nicht gefunden"}), 404
+    from werkzeug.security import check_password_hash, generate_password_hash
+    if not check_password_hash(customer["password_hash"], old_pw):
+        return jsonify({"error": "Aktuelles Passwort falsch"}), 400
+    from werkzeug.security import generate_password_hash
+    db.execute(
+        "UPDATE customer_accounts SET password_hash = ?, updated_at = ? WHERE id = ?",
+        (generate_password_hash(new_pw), __import__("time").time(), g.customer_id),
+    )
+    db.commit()
+    return jsonify({"success": True})
+
+
+# ── Stempelkarte-Status ────────────────────────────────────────────────────────
+@app.get("/api/customer/stamps")
+@_require_customer
+def customer_stamps():
+    db = get_db()
+    info = ca_svc.get_stamp_info(db, g.customer_id)
+    return jsonify(info)
+
+
+# ── Stempel-Vorschau für Checkout ──────────────────────────────────────────────
+@app.get("/api/customer/stamp-preview")
+@_require_customer
+def customer_stamp_preview():
+    """Zeigt dem eingeloggten Kunden im Checkout seinen Stempelstand + ob diese Bestellung Punkte gibt."""
+    try:
+        subtotal = float(request.args.get("subtotal") or 0)
+    except ValueError:
+        subtotal = 0.0
+    delivery_type = (request.args.get("delivery_type") or "abholung").lower()
+    db = get_db()
+    info = ca_svc.get_stamp_info(db, g.customer_id)
+    cfg = ca_svc.get_loyalty_settings(db)
+    will_earn = (
+        subtotal >= cfg["min_value"]
+        and (delivery_type != "lieferung" or cfg["delivery_eligible"])
+        and (delivery_type != "abholung" or cfg["pickup_eligible"])
+    )
+    missing = max(0.0, cfg["min_value"] - subtotal)
+    return jsonify({
+        **info,
+        "will_earn": will_earn,
+        "subtotal": subtotal,
+        "min_value": cfg["min_value"],
+        "missing_for_stamp": round(missing, 2),
+    })
+
+
+# ── Gutschein-Validierung (öffentlich mit Customer-Session) ───────────────────
+@app.post("/api/customer/coupon/validate")
+@_require_customer
+def customer_coupon_validate():
+    data = request.get_json(force=True) or {}
+    code = (data.get("code") or "").strip().upper()
+    try:
+        subtotal = float(data.get("subtotal") or 0)
+    except ValueError:
+        subtotal = 0.0
+    if not code:
+        return jsonify({"ok": False, "error": "Kein Code angegeben"}), 400
+    db = get_db()
+    result = ca_svc.validate_coupon(db, code, g.customer_id, subtotal)
+    if not result["ok"]:
+        return jsonify(result), 400
+    coupon = result["coupon"]
+    return jsonify({
+        "ok": True,
+        "code": coupon["code"],
+        "type": coupon["type"],
+        "value": coupon["value"],
+        "discount": result["discount"],
+        "valid_until": coupon.get("valid_until"),
+    })
+
+
+# ── Gutschein einlösen (beim Bestellen) ───────────────────────────────────────
+@app.post("/api/customer/coupon/redeem")
+@_require_customer
+def customer_coupon_redeem():
+    data = request.get_json(force=True) or {}
+    code = (data.get("code") or "").strip().upper()
+    order_number = (data.get("order_number") or "").strip()
+    try:
+        subtotal = float(data.get("subtotal") or 0)
+    except ValueError:
+        subtotal = 0.0
+    if not code or not order_number:
+        return jsonify({"ok": False, "error": "Code und Bestellnummer erforderlich"}), 400
+    db = get_db()
+    # Sicherstellen, dass die Bestellung dem eingeloggten Kunden gehört
+    order_row = db.execute(
+        "SELECT customer_account_id FROM orders WHERE order_number = ? LIMIT 1",
+        (order_number,),
+    ).fetchone()
+    if not order_row or order_row["customer_account_id"] != g.customer_id:
+        return jsonify({"ok": False, "error": "Bestellung nicht gefunden"}), 403
+    result = ca_svc.redeem_coupon(db, code, g.customer_id, order_number, subtotal)
+    if not result["ok"]:
+        return jsonify(result), 400
+    return jsonify(result)
+
+
+# ── Bestellhistorie ────────────────────────────────────────────────────────────
+@app.get("/api/customer/orders")
+@_require_customer
+def customer_orders():
+    db = get_db()
+    orders = ca_svc.get_customer_orders(db, g.customer_id)
+    # items_parsed zurückgeben, items-JSON entfernen
+    for o in orders:
+        o.pop("items", None)
+    return jsonify(orders)
+
+
+# ── Verfügbare Gutscheine ──────────────────────────────────────────────────────
+@app.get("/api/customer/coupons")
+@_require_customer
+def customer_coupons():
+    db = get_db()
+    coupons = ca_svc.get_available_coupons(db, g.customer_id)
+    return jsonify(coupons)
+
+
+# ── Passwort-Reset (anfordern) ────────────────────────────────────────────────
+@app.post("/api/customer/password-reset-request")
+def customer_pw_reset_request():
+    ip = get_real_ip()
+    if rate_limit(f"pwreset:{ip}", max_calls=5, window_s=3600):
+        return jsonify({"success": True})  # Immer gleiche Antwort
+    data = request.get_json(force=True) or {}
+    email = (data.get("email") or "").strip().lower()
+    db = get_db()
+    result = ca_svc.request_password_reset(db, email)
+    if result.get("found") and result.get("token") and SMTP_HOST:
+        try:
+            reset_url = f"{PUBLIC_BASE_URL}/konto?reset={result['token']}"
+            _send_customer_email(
+                result["email"],
+                f"Passwort zurücksetzen – {SHOP_NAME}",
+                f"""<p>Hallo,</p>
+<p>du hast einen Passwort-Reset für dein Konto bei {SHOP_NAME} angefordert.</p>
+<p><a href="{reset_url}">Jetzt Passwort zurücksetzen</a></p>
+<p>Dieser Link ist 1 Stunde gültig. Falls du diesen Link nicht angefordert hast, ignoriere diese E-Mail.</p>
+<p>– {SHOP_NAME}</p>""",
+            )
+        except Exception as e:
+            app.logger.warning(f"pw-reset mail: {e}")
+    return jsonify({"success": True})
+
+
+# ── Passwort-Reset (abschließen) ───────────────────────────────────────────────
+@app.post("/api/customer/password-reset-complete")
+def customer_pw_reset_complete():
+    data = request.get_json(force=True) or {}
+    token = (data.get("token") or "").strip()
+    new_pw = data.get("password") or ""
+    new_pw2 = data.get("password2") or data.get("passwordConfirm") or ""
+    if new_pw != new_pw2:
+        return jsonify({"error": "Passwörter stimmen nicht überein"}), 400
+    db = get_db()
+    result = ca_svc.complete_password_reset(db, token, new_pw)
+    if not result["ok"]:
+        return jsonify({"error": result["error"]}), 400
+    return jsonify({"success": True})
+
+
+# ── E-Mail-Verifizierung ───────────────────────────────────────────────────────
+@app.get("/api/customer/verify-email")
+def customer_verify_email():
+    token = (request.args.get("token") or "").strip()
+    if not token:
+        return jsonify({"ok": False, "error": "Token fehlt"}), 400
+    result = ca_svc.verify_email(get_db(), token)
+    if not result["ok"]:
+        return jsonify(result), 400
+    return jsonify({"ok": True})
+
+
+# ── Gastbestellung mit Konto verknüpfen ───────────────────────────────────────
+@app.post("/api/customer/link-order")
+@_require_customer
+def customer_link_order():
+    data = request.get_json(force=True) or {}
+    order_number = (data.get("order_number") or "").strip()
+    verify_email_addr = (data.get("email") or "").strip()
+    verify_phone = (data.get("phone") or "").strip()
+    if not order_number:
+        return jsonify({"ok": False, "error": "Bestellnummer fehlt"}), 400
+    db = get_db()
+    result = ca_svc.link_guest_order(
+        db,
+        g.customer_id,
+        order_number,
+        verify_email=verify_email_addr,
+        verify_phone=verify_phone,
+    )
+    if not result["ok"]:
+        return jsonify(result), 400
+    return jsonify(result)
+
+
+# ── Konto löschen ──────────────────────────────────────────────────────────────
+@app.delete("/api/customer/me")
+@_require_customer
+def customer_delete_account():
+    db = get_db()
+    token = request.cookies.get(CUSTOMER_SESSION_COOKIE, "")
+    ca_svc.delete_account(db, g.customer_id)
+    resp = jsonify({"success": True})
+    return _clear_customer_cookie(resp)
+
+
+# ── Datenexport (DSGVO) ────────────────────────────────────────────────────────
+@app.get("/api/customer/export")
+@_require_customer
+def customer_export():
+    db = get_db()
+    result = ca_svc.export_account_data(db, g.customer_id)
+    if not result["ok"]:
+        return jsonify(result), 404
+    return jsonify(result)
+
+
+# ── Admin: Loyalty2-Einstellungen ──────────────────────────────────────────────
+@app.get("/api/admin/loyalty2/settings")
+@require_admin
+def admin_loyalty2_get():
+    db = get_db()
+    cfg = ca_svc.get_loyalty_settings(db)
+    return jsonify(cfg)
+
+
+@app.post("/api/admin/loyalty2/settings")
+@require_admin
+def admin_loyalty2_save():
+    data = request.get_json(force=True) or {}
+    db = get_db()
+    field_map = {
+        "enabled":            ("loyalty2_enabled", lambda v: "1" if v else "0"),
+        "min_value":          ("loyalty2_min_value", lambda v: str(float(v))),
+        "stamps_needed":      ("loyalty2_stamps_needed", lambda v: str(max(2, int(v)))),
+        "reward_type":        ("loyalty2_reward_type", lambda v: "fixed" if v == "fixed" else "percent"),
+        "reward_value":       ("loyalty2_reward_value", lambda v: str(float(v))),
+        "reward_min_order":   ("loyalty2_reward_min_order", lambda v: str(float(v))),
+        "valid_days":         ("loyalty2_valid_days", lambda v: str(max(1, int(v)))),
+        "delivery_eligible":  ("loyalty2_delivery_eligible", lambda v: "1" if v else "0"),
+        "pickup_eligible":    ("loyalty2_pickup_eligible", lambda v: "1" if v else "0"),
+        "reward_title":       ("loyalty2_reward_title", lambda v: str(v)[:80]),
+    }
+    for k, (db_key, transform) in field_map.items():
+        if k in data:
+            try:
+                db.execute(
+                    "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)",
+                    (db_key, transform(data[k])),
+                )
+            except (ValueError, TypeError):
+                pass
+    db.commit()
+    return jsonify({"success": True, "settings": ca_svc.get_loyalty_settings(db)})
+
+
+# ── Admin: Kunden-Übersicht ────────────────────────────────────────────────────
+@app.get("/api/admin/customers")
+@require_admin
+def admin_customers():
+    db = get_db()
+    rows = db.execute(
+        """
+        SELECT ca.id, ca.email, ca.display_name, ca.phone,
+               ca.email_verified, ca.created_at, ca.marketing_consent,
+               (SELECT COALESCE(SUM(ll.amount),0) FROM loyalty_ledger ll
+                WHERE ll.customer_id = ca.id AND ll.type='earn' AND ll.reversed_by IS NULL) AS stamps_total,
+               (SELECT COUNT(*) FROM orders o WHERE o.customer_account_id = ca.id) AS order_count
+        FROM customer_accounts ca
+        WHERE ca.deleted_at IS NULL
+        ORDER BY ca.created_at DESC
+        LIMIT 200
+        """
+    ).fetchall()
+    return jsonify([dict(r) for r in rows])
+
+
+# ── Admin: Manuelle Stempel-Korrektur ──────────────────────────────────────────
+@app.post("/api/admin/customers/<int:customer_id>/adjust-stamps")
+@require_admin
+def admin_adjust_stamps(customer_id):
+    data = request.get_json(force=True) or {}
+    amount = int(data.get("amount") or 0)
+    reason = (data.get("reason") or "Admin-Anpassung")[:200]
+    if amount == 0:
+        return jsonify({"error": "Betrag darf nicht 0 sein"}), 400
+    db = get_db()
+    import time as _t
+    db.execute(
+        """
+        INSERT INTO loyalty_ledger (customer_id, amount, type, reason, created_at)
+        VALUES (?,?,'adjust',?,?)
+        """,
+        (customer_id, amount, reason, _t.time()),
+    )
+    db.commit()
+    balance = ca_svc.get_stamp_balance(db, customer_id)
+    return jsonify({"success": True, "new_balance": balance})
+
+
+# ── Hilfsfunktion: Kunden-E-Mail senden ───────────────────────────────────────
+def _send_customer_email(to: str, subject: str, html_body: str) -> None:
+    if not SMTP_HOST or not to:
+        return
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = SMTP_FROM
+    msg["To"] = to
+    msg.attach(MIMEText(html_body, "html", "utf-8"))
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as s:
+        s.starttls()
+        if SMTP_USER:
+            s.login(SMTP_USER, SMTP_PASS)
+        s.sendmail(SMTP_FROM, [to], msg.as_string())
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SCHÜLERANGEBOTE API
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── Hilfsfunktionen ───────────────────────────────────────────────────────────
+def _get_admin_user_id() -> int | None:
+    """Liefert die user_id aus der aktuellen Admin-Session (falls vorhanden)."""
+    sess = getattr(g, "auth_session", None)
+    if sess:
+        return sess.get("user_id")
+    token = (
+        request.headers.get("X-Admin-Token", "")
+        or request.cookies.get("admin_session", "")
+    )
+    if token:
+        import auth_users as _au
+        db = get_db()
+        s = _au.get_session(db, token)
+        if s:
+            return s.get("user_id")
+    return None
+
+
+# ── Settings ──────────────────────────────────────────────────────────────────
+@app.get("/api/admin/student-offers/settings")
+@require_admin
+def so_get_settings():
+    db = get_db()
+    settings = so_svc.get_settings(db)
+    windows = so_svc.get_time_windows(db)
+    return jsonify({"settings": settings, "time_windows": windows})
+
+
+@app.post("/api/admin/student-offers/settings")
+@require_admin
+def so_save_settings():
+    data = request.get_json(force=True) or {}
+    db = get_db()
+    so_svc.save_settings(db, data.get("settings") or data)
+    if "time_windows" in data:
+        so_svc.save_time_windows(db, data["time_windows"])
+    return jsonify({"success": True, "settings": so_svc.get_settings(db)})
+
+
+# ── Schulen ───────────────────────────────────────────────────────────────────
+@app.get("/api/admin/student-offers/schools")
+@require_admin
+def so_list_schools():
+    db = get_db()
+    include_inactive = request.args.get("all", "0") == "1"
+    return jsonify(so_svc.get_schools(db, include_inactive=include_inactive))
+
+
+@app.post("/api/admin/student-offers/schools")
+@require_admin
+def so_add_school():
+    data = request.get_json(force=True) or {}
+    name = (data.get("name") or "").strip()
+    if not name:
+        return jsonify({"error": "Schulname fehlt"}), 400
+    db = get_db()
+    try:
+        school = so_svc.add_school(db, name, data.get("short_name"))
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    return jsonify({"success": True, "school": school}), 201
+
+
+@app.patch("/api/admin/student-offers/schools/<int:school_id>")
+@require_admin
+def so_update_school(school_id):
+    data = request.get_json(force=True) or {}
+    db = get_db()
+    result = so_svc.update_school(db, school_id, data)
+    if not result:
+        return jsonify({"error": "Schule nicht gefunden"}), 404
+    return jsonify({"success": True, "school": result})
+
+
+# ── Öffentliche Schulliste (für Bestellportal + Konto) ────────────────────────
+@app.get("/api/student-offers/schools")
+def so_public_schools():
+    db = get_db()
+    settings = so_svc.get_settings(db)
+    if not settings["enabled"]:
+        return jsonify([])
+    return jsonify(so_svc.get_schools(db, include_inactive=False))
+
+
+# ── Öffentliche Settings (für Bestellportal) ──────────────────────────────────
+@app.get("/api/student-offers/config")
+def so_public_config():
+    """Liefert öffentlich sichere Settings (ohne Admin-Only Felder)."""
+    db = get_db()
+    settings = so_svc.get_settings(db)
+    return jsonify({
+        "enabled": settings["enabled"],
+        "verification_required": settings["verification_required"],
+        "allow_first_order_pending": settings["allow_first_order_pending"],
+        "pickup_only": settings["pickup_only"],
+        "stack_coupons": settings["stack_coupons"],
+        "max_items_per_order": settings["max_items_per_order"],
+    })
+
+
+# ── Kundenstatus (Kunden-API) ─────────────────────────────────────────────────
+@app.get("/api/customer/student-status")
+def customer_student_status():
+    token = (
+        request.headers.get("X-Customer-Token", "")
+        or request.cookies.get("customer_session", "")
+    )
+    if not token:
+        return jsonify({"error": "Nicht eingeloggt"}), 401
+    db = get_db()
+    sess = ca_svc.get_session(db, token)
+    if not sess:
+        return jsonify({"error": "Nicht eingeloggt"}), 401
+    cid = int(sess["customer_id"])
+    status_row = so_svc.get_customer_status(db, cid)
+    settings = so_svc.get_settings(db)
+    eligible, reason = so_svc.is_eligible(db, cid)
+    return jsonify({
+        "student_status": so_svc.public_status_info(status_row),
+        "eligible": eligible,
+        "reason": reason,
+        "system_enabled": settings["enabled"],
+    })
+
+
+# ── Kundenstatus (Admin-API: Details) ────────────────────────────────────────
+@app.get("/api/admin/student-offers/customer/<int:customer_id>")
+@require_admin
+def so_get_customer_status(customer_id):
+    db = get_db()
+    status_row = so_svc.get_customer_status(db, customer_id)
+    audit = so_svc.get_audit_log(db, customer_id)
+    return jsonify({
+        "student_status": status_row,
+        "audit_log": audit,
+    })
+
+
+# ── Verifizierung durch Mitarbeiter ──────────────────────────────────────────
+@app.post("/api/admin/student-offers/customer/<int:customer_id>/verify")
+@require_admin
+def so_verify_customer(customer_id):
+    data = request.get_json(force=True) or {}
+    school_id = data.get("school_id")
+    if not school_id:
+        return jsonify({"error": "school_id fehlt"}), 400
+    valid_until = data.get("valid_until")
+    if not valid_until:
+        # Automatisch aus Settings berechnen
+        db = get_db()
+        valid_until = so_svc.compute_valid_until(db)
+    else:
+        import time as _t2
+        try:
+            valid_until = float(valid_until)
+        except (ValueError, TypeError):
+            return jsonify({"error": "Ungültiges Datum"}), 400
+
+    db = get_db()
+    emp_id = _get_admin_user_id()
+    order_number = data.get("order_number")
+    try:
+        result = so_svc.verify_customer(
+            db, customer_id, int(school_id), float(valid_until),
+            verified_by_user_id=emp_id or 0,
+            method=data.get("method", "visual_check"),
+            order_number=order_number,
+        )
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    return jsonify({"success": True, "student_status": result})
+
+
+@app.post("/api/admin/student-offers/customer/<int:customer_id>/reject")
+@require_admin
+def so_reject_customer(customer_id):
+    data = request.get_json(force=True) or {}
+    reason = (data.get("reason") or "Kein gültiger Nachweis")[:200]
+    db = get_db()
+    emp_id = _get_admin_user_id()
+    result = so_svc.reject_customer(
+        db, customer_id, emp_id or 0, reason,
+        order_number=data.get("order_number")
+    )
+    return jsonify({"success": True, "student_status": result})
+
+
+@app.post("/api/admin/student-offers/customer/<int:customer_id>/revoke")
+@require_admin
+def so_revoke_customer(customer_id):
+    data = request.get_json(force=True) or {}
+    reason = (data.get("reason") or "Widerrufen durch Admin")[:200]
+    db = get_db()
+    emp_id = _get_admin_user_id()
+    result = so_svc.revoke_customer(db, customer_id, emp_id or 0, reason)
+    return jsonify({"success": True, "student_status": result})
+
+
+@app.post("/api/admin/student-offers/customer/<int:customer_id>/block")
+@require_admin
+def so_block_customer(customer_id):
+    data = request.get_json(force=True) or {}
+    reason = (data.get("reason") or "Gesperrt durch Admin")[:200]
+    db = get_db()
+    emp_id = _get_admin_user_id()
+    result = so_svc.block_customer(db, customer_id, emp_id or 0, reason)
+    return jsonify({"success": True, "student_status": result})
+
+
+@app.post("/api/admin/student-offers/customer/<int:customer_id>/recheck")
+@require_admin
+def so_recheck_customer(customer_id):
+    data = request.get_json(force=True) or {}
+    reason = (data.get("reason") or "Erneute Prüfung erforderlich")[:200]
+    db = get_db()
+    emp_id = _get_admin_user_id()
+    result = so_svc.require_recheck(db, customer_id, emp_id or 0, reason)
+    return jsonify({"success": True, "student_status": result})
+
+
+# ── Bestellkarten mit Schülernachweis-Warnung ─────────────────────────────────
+@app.get("/api/admin/student-offers/pending-orders")
+@require_admin
+def so_pending_orders():
+    db = get_db()
+    return jsonify(so_svc.get_recent_pending_orders(db))
+
+
+# ── Preis auf Regulär setzen (Mitarbeiter-Aktion) ─────────────────────────────
+@app.post("/api/admin/student-offers/order/<order_number>/apply-regular-price")
+@require_admin
+def so_apply_regular_price(order_number):
+    import json as _j
+    db = get_db()
+    order = db.execute(
+        "SELECT * FROM orders WHERE order_number=?", (order_number,)
+    ).fetchone()
+    if not order:
+        return jsonify({"error": "Bestellung nicht gefunden"}), 404
+
+    if order["pay_method"] == "stripe":
+        return jsonify({
+            "error": "Bei Online-Zahlungen kann der Preis nicht nachträglich geändert werden."
+        }), 400
+
+    student_infos = so_svc.get_student_items_info(db)
+    try:
+        items = _j.loads(order["items"] or "[]")
+    except Exception:
+        return jsonify({"error": "Bestellartikel ungültig"}), 400
+
+    overrides = {r["item_id"]: dict(r) for r in db.execute("SELECT * FROM menu_overrides").fetchall()}
+    catalog_rows = db.execute("SELECT * FROM menu_overrides WHERE price IS NOT NULL").fetchall()
+
+    new_items = []
+    diff = 0.0
+    for it in items:
+        item_id = (it.get("id") or "").strip()
+        si = student_infos.get(item_id)
+        if not si:
+            new_items.append(it)
+            continue
+        ov = overrides.get(item_id) or {}
+        regular_price = ov.get("price")
+        if regular_price is None:
+            # Aus Katalog laden
+            from order_validation import _load_prices as _lp
+            cat = _lp()
+            prices = cat.get(item_id)
+            if prices:
+                regular_price = float(list(prices)[0])
+        if regular_price is None:
+            new_items.append(it)
+            continue
+        student_price = float(it.get("price") or 0)
+        new_it = dict(it)
+        new_it["price"] = float(regular_price)
+        new_it["_regular_price_applied"] = True
+        diff += (float(regular_price) - student_price) * int(it.get("qty") or 1)
+        new_items.append(new_it)
+
+    new_total = float(order["total"]) + diff
+    emp_id = _get_admin_user_id()
+    cid = order["customer_account_id"]
+    db.execute(
+        "UPDATE orders SET items=?, total=? WHERE order_number=?",
+        (_j.dumps(new_items, ensure_ascii=False), round(new_total, 2), order_number)
+    )
+    if cid:
+        so_svc._log_event(db, customer_id=int(cid), action="regular_price_applied",
+                          previous_status=None, new_status=None,
+                          employee_user_id=emp_id, order_number=order_number,
+                          reason=f"Preisdifferenz {diff:+.2f} €")
+    db.commit()
+    return jsonify({
+        "success": True,
+        "new_total": round(new_total, 2),
+        "price_diff": round(diff, 2),
+    })
+
+
+# ── Schülerpreise für Produkte (Produkteditor) ────────────────────────────────
+@app.patch("/api/admin/student-offers/product/<item_id>")
+@require_admin
+def so_update_product(item_id):
+    data = request.get_json(force=True) or {}
+    db = get_db()
+    existing = db.execute(
+        "SELECT * FROM menu_overrides WHERE item_id=?", (item_id,)
+    ).fetchone()
+
+    is_student = int(bool(data.get("is_student_offer", False)))
+    sp = data.get("student_price")
+    if sp is not None:
+        try:
+            sp = float(sp)
+            if sp < 0:
+                return jsonify({"error": "Schülerpreis darf nicht negativ sein"}), 400
+        except (ValueError, TypeError):
+            return jsonify({"error": "Ungültiger Schülerpreis"}), 400
+
+    requires_verified = int(bool(data.get("requires_verified_student", True)))
+    student_pickup_only = int(bool(data.get("student_pickup_only", False)))
+    max_per_order = data.get("student_max_per_order")
+    if max_per_order is not None:
+        try:
+            max_per_order = int(max_per_order)
+        except (ValueError, TypeError):
+            max_per_order = None
+
+    if existing:
+        db.execute(
+            """UPDATE menu_overrides
+               SET is_student_offer=?, student_price=?, requires_verified_student=?,
+                   student_pickup_only=?, student_max_per_order=?
+               WHERE item_id=?""",
+            (is_student, sp, requires_verified, student_pickup_only, max_per_order, item_id)
+        )
+    else:
+        db.execute(
+            """INSERT INTO menu_overrides
+               (item_id, available, is_student_offer, student_price, requires_verified_student,
+                student_pickup_only, student_max_per_order)
+               VALUES (?,1,?,?,?,?,?)""",
+            (item_id, is_student, sp, requires_verified, student_pickup_only, max_per_order)
+        )
+    db.commit()
+    row = db.execute("SELECT * FROM menu_overrides WHERE item_id=?", (item_id,)).fetchone()
+    return jsonify({"success": True, "product": dict(row) if row else {}})
+
+
+# ── Schülerangebots-Infos für Bestellportal ───────────────────────────────────
+@app.get("/api/student-offers/products")
+def so_public_products():
+    """Schülerpreise für Bestellportal (ohne Kundendaten)."""
+    db = get_db()
+    settings = so_svc.get_settings(db)
+    if not settings["enabled"]:
+        return jsonify({})
+    infos = so_svc.get_student_items_info(db)
+    # Nur öffentlich relevante Felder
+    pub = {}
+    for item_id, si in infos.items():
+        pub[item_id] = {
+            "is_student_offer": bool(si.get("is_student_offer")),
+            "student_price": si.get("student_price"),
+            "requires_verified_student": bool(si.get("requires_verified_student", 1)),
+            "student_pickup_only": bool(si.get("student_pickup_only")),
+        }
+    return jsonify(pub)
+
+
+# ── Eligibility-Check (für Bestellportal vor Order-Submit) ───────────────────
+@app.get("/api/customer/student-eligibility")
+def customer_student_eligibility():
+    """Prüft ob der eingeloggte Kunde für Schülerpreise berechtigt ist."""
+    token = (
+        request.headers.get("X-Customer-Token", "")
+        or request.cookies.get("customer_session", "")
+    )
+    db = get_db()
+    cid = None
+    if token:
+        sess = ca_svc.get_session(db, token)
+        if sess:
+            cid = int(sess["customer_id"])
+    delivery_type = request.args.get("delivery_type", "abholung")
+    eligible, reason = so_svc.is_eligible(db, cid, delivery_type)
+    settings = so_svc.get_settings(db)
+    return jsonify({
+        "eligible": eligible,
+        "reason": reason,
+        "system_enabled": settings["enabled"],
+        "logged_in": cid is not None,
+    })
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PHASE A: Endpunkte sind in phase_a_blueprint.py + registriert via app.register_blueprint()
+# ══════════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8000)

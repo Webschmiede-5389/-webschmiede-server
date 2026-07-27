@@ -1,5 +1,10 @@
 # GHL Automation Guide – Snack House Yassine
-**Wo einrichten:** GHL → Automation → Workflows → + New Workflow → Start from Scratch
+
+> **OBSOLET seit 2026-07 (Snack House GHL Cut).**  
+> Bestellungen und Kundendaten laufen über `webschmiede-server` (eigenes Portal + SMS/n8n).  
+> Diese Anleitung nur noch als historische Referenz — keine neuen Workflows in GHL einrichten.
+
+**Wo einrichten (historisch):** GHL → Automation → Workflows → + New Workflow → Start from Scratch
 
 ---
 

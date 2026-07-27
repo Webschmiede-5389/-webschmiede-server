@@ -179,6 +179,127 @@ def ensure_tables(db: sqlite3.Connection) -> None:
         CREATE INDEX IF NOT EXISTS idx_meta_jobs_status ON meta_lead_jobs(status);
         """
     )
+    for ddl in (
+        "ALTER TABLE meta_tenant_configs ADD COLUMN crm_tenant_slug TEXT",
+        "ALTER TABLE meta_leads ADD COLUMN crm_push_status TEXT DEFAULT 'pending'",
+        "ALTER TABLE meta_leads ADD COLUMN crm_push_error TEXT",
+        "ALTER TABLE meta_leads ADD COLUMN crm_contact_id INTEGER",
+    ):
+        try:
+            db.execute(ddl)
+        except sqlite3.OperationalError:
+            pass
+    db.commit()
+
+
+def crm_api_url() -> str:
+    return (os.getenv("CRM_API_URL") or "").rstrip("/")
+
+
+def crm_api_key() -> str:
+    return (os.getenv("CRM_API_KEY") or "").strip()
+
+
+def resolve_crm_tenant_slug(cfg: dict | None, tenant_id: str) -> str:
+    if cfg and (cfg.get("crm_tenant_slug") or "").strip():
+        return str(cfg["crm_tenant_slug"]).strip().lower()
+    env_map = (os.getenv("CRM_TENANT_SLUG") or "").strip().lower()
+    if env_map:
+        return env_map
+    return tenant_id.strip().lower()
+
+
+def push_lead_to_crm(db: sqlite3.Connection, meta_lead_id: str) -> dict:
+    """Push eines importierten Meta-Leads an FastAPI-CRM (/api/leads)."""
+    ensure_tables(db)
+    base = crm_api_url()
+    key = crm_api_key()
+    if not base or not key:
+        return {"ok": False, "skipped": True, "reason": "CRM_API_URL/CRM_API_KEY nicht gesetzt"}
+
+    row = db.execute(
+        "SELECT * FROM meta_leads WHERE meta_lead_id=?",
+        (meta_lead_id,),
+    ).fetchone()
+    if not row:
+        raise ValueError("Lead nicht gefunden")
+    lead = dict(row)
+    if lead.get("crm_push_status") == "sent" and lead.get("crm_contact_id"):
+        return {"ok": True, "duplicate": True, "id": lead.get("crm_contact_id")}
+
+    cfg = get_config_by_tenant(db, lead["tenant_id"])
+    slug = resolve_crm_tenant_slug(cfg, lead["tenant_id"])
+    try:
+        custom = json.loads(lead.get("custom_fields") or "{}")
+    except json.JSONDecodeError:
+        custom = {}
+
+    payload = {
+        "tenant_slug": slug,
+        "name": lead.get("full_name"),
+        "email": lead.get("email"),
+        "phone": lead.get("phone"),
+        "company": None,
+        "source": "meta",
+        "status": lead.get("status") or "neu",
+        "notes": lead.get("notes"),
+        "meta_lead_id": lead["meta_lead_id"],
+        "custom_fields": custom,
+    }
+    try:
+        r = requests.post(
+            f"{base}/api/leads",
+            json=payload,
+            headers={"X-Api-Key": key, "Content-Type": "application/json"},
+            timeout=15,
+        )
+        if r.status_code >= 400:
+            detail = f"CRM HTTP {r.status_code}"
+            db.execute(
+                """UPDATE meta_leads SET crm_push_status='failed', crm_push_error=?,
+                   updated_at=datetime('now') WHERE meta_lead_id=?""",
+                (detail[:500], meta_lead_id),
+            )
+            db.commit()
+            raise RuntimeError(detail)
+        data = r.json() if r.content else {}
+        contact_id = data.get("id")
+        db.execute(
+            """UPDATE meta_leads SET crm_push_status='sent', crm_push_error=NULL,
+               crm_contact_id=?, updated_at=datetime('now') WHERE meta_lead_id=?""",
+            (int(contact_id) if contact_id is not None else None, meta_lead_id),
+        )
+        db.commit()
+        return {"ok": True, "id": contact_id, "duplicate": bool(data.get("duplicate"))}
+    except requests.RequestException as e:
+        detail = str(e)[:500]
+        db.execute(
+            """UPDATE meta_leads SET crm_push_status='failed', crm_push_error=?,
+               updated_at=datetime('now') WHERE meta_lead_id=?""",
+            (detail, meta_lead_id),
+        )
+        db.commit()
+        raise RuntimeError(detail) from e
+
+
+def _ensure_crm_push_job(db: sqlite3.Connection, tenant_id: str, meta_lead_id: str) -> None:
+    existing = db.execute(
+        """SELECT id FROM meta_lead_jobs
+           WHERE meta_lead_id=? AND job_type='push_crm'
+           AND status IN ('pending','running','retrying') LIMIT 1""",
+        (meta_lead_id,),
+    ).fetchone()
+    if existing:
+        return
+    next_at = datetime.fromtimestamp(
+        time.time() + retry_delay_sec(), tz=timezone.utc
+    ).strftime("%Y-%m-%dT%H:%M:%SZ")
+    db.execute(
+        """INSERT INTO meta_lead_jobs
+           (tenant_id, meta_lead_id, job_type, status, max_retries, next_retry_at)
+           VALUES (?,?,?,?,?,?)""",
+        (tenant_id, meta_lead_id, "push_crm", "retrying", max_retries(), next_at),
+    )
     db.commit()
 
 
@@ -211,6 +332,7 @@ def upsert_tenant_config(db: sqlite3.Connection, data: dict) -> dict:
     if isinstance(form_ids, str):
         form_ids = json.loads(form_ids or "[]")
     notify_email = (data.get("notify_email") or "").strip() or None
+    crm_tenant_slug = (data.get("crm_tenant_slug") or "").strip().lower() or None
     version = (data.get("graph_api_version") or graph_api_version()).strip()
     active = 1 if data.get("active", True) else 0
     existing = get_config_by_tenant(db, tenant_id)
@@ -218,7 +340,8 @@ def upsert_tenant_config(db: sqlite3.Connection, data: dict) -> dict:
         db.execute(
             """UPDATE meta_tenant_configs SET
                page_id=?, form_ids=?, notify_email=?, graph_api_version=?,
-               access_token_env=?, active=?, updated_at=datetime('now')
+               access_token_env=?, active=?, crm_tenant_slug=?,
+               updated_at=datetime('now')
                WHERE tenant_id=?""",
             (
                 page_id,
@@ -227,6 +350,7 @@ def upsert_tenant_config(db: sqlite3.Connection, data: dict) -> dict:
                 version,
                 access_token_env,
                 active,
+                crm_tenant_slug,
                 tenant_id,
             ),
         )
@@ -234,8 +358,8 @@ def upsert_tenant_config(db: sqlite3.Connection, data: dict) -> dict:
         db.execute(
             """INSERT INTO meta_tenant_configs
                (tenant_id, page_id, form_ids, notify_email, graph_api_version,
-                access_token_env, active)
-               VALUES (?,?,?,?,?,?,?)""",
+                access_token_env, active, crm_tenant_slug)
+               VALUES (?,?,?,?,?,?,?,?)""",
             (
                 tenant_id,
                 page_id,
@@ -244,6 +368,7 @@ def upsert_tenant_config(db: sqlite3.Connection, data: dict) -> dict:
                 version,
                 access_token_env,
                 active,
+                crm_tenant_slug,
             ),
         )
     db.commit()
@@ -447,6 +572,10 @@ def process_job(db: sqlite3.Connection, job_id: int) -> None:
             _fetch_and_store(db, job)
         elif job["job_type"] == "send_email":
             _send_notify_for_lead(db, job["meta_lead_id"], job["tenant_id"])
+        elif job["job_type"] == "push_crm":
+            result = push_lead_to_crm(db, job["meta_lead_id"])
+            if result.get("skipped"):
+                log.info("crm push skipped: %s", result.get("reason"))
         else:
             raise ValueError(f"Unbekannter job_type: {job['job_type']}")
         db.execute(
@@ -547,6 +676,14 @@ def _fetch_and_store(db: sqlite3.Connection, job: dict) -> None:
             (int(lead_row["id"]), "graph_api", json.dumps(safe, ensure_ascii=False)),
         )
     db.commit()
+    # CRM-Push: Fehler blockieren den Import nicht – eigener Retry-Job
+    try:
+        result = push_lead_to_crm(db, lead_id)
+        if result.get("skipped"):
+            log.info("crm push skipped for %s: %s", lead_id, result.get("reason"))
+    except Exception as e:
+        log.warning("crm push failed for %s: %s", lead_id, e)
+        _ensure_crm_push_job(db, job["tenant_id"], lead_id)
     _send_notify_for_lead(db, lead_id, job["tenant_id"])
 
 

@@ -27,7 +27,9 @@ def main() -> int:
 
     # upload patch script
     import paramiko
-    from agency_config import ssh_connect
+
+    sys.path.insert(0, str(SERVER))
+    from agency_config import ssh_connect  # noqa: E402
 
     client = paramiko.SSHClient()
     ssh_connect(client, role="web")

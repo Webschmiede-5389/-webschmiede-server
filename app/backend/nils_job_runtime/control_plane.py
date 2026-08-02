@@ -576,17 +576,38 @@ def maybe_handle(
     except Exception:
         log.exception("control_plane_resume")
 
-    if _APPROVAL_YES.match(t):
+    # Prospect pilot: only strict confirm phrases (Ja / Anlegen / Bestätigen)
+    try:
+        from nils_job_runtime import crm_prospect_pilot as _ppilot
+
+        _prospect_confirm = _ppilot.is_confirm_text(t)
+    except Exception:
+        _prospect_confirm = bool(_APPROVAL_YES.match(t))
+
+    if _prospect_confirm or _APPROVAL_YES.match(t):
         active = store.get_single_active_for_chat(str(chat_id))
         if active and active.get("status") == "WAITING_FOR_APPROVAL":
             turn = tc.load(active)
             if turn and turn.get("intent") == tc.INTENT_CRM_PROSPECT_CREATE:
+                if not _prospect_confirm:
+                    return {
+                        "ok": False,
+                        "route": "control_prospect_confirm_rejected",
+                        "text": (
+                            "Für Interessenten bitte ausdrücklich bestätigen: "
+                            "Ja / Anlegen / Bestätigen / Ja, anlegen — sonst Abbrechen."
+                        ),
+                        "job": active,
+                        "stages": ["APPROVAL_CHECK"],
+                        "canary": canary_mode(),
+                    }
                 from nils_job_runtime import crm_prospect_exec
 
                 result = crm_prospect_exec.execute_prospect_create(
                     job=active,
                     turn=turn,
                     approval_granted=True,
+                    confirm_text=t,
                 )
                 text_out = promise_guard.sanitize_reply(
                     result.get("reply") or "", job=result.get("job")

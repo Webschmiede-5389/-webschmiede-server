@@ -26,6 +26,8 @@ os.environ["NILS_CAP_CRM_OFFER_PDF"] = "1"
 os.environ["NILS_CAP_CRM_PROSPECT_CREATE"] = "1"
 os.environ["NILS_CAP_EMAIL_SEND"] = "0"
 os.environ["NILS_CAP_N8N"] = "0"
+os.environ["NILS_PROSPECT_PILOT_STATE"] = str(Path(TMP) / "pilot-state.json")
+os.environ["NILS_PROSPECT_PILOT_AUDIT_DIR"] = str(Path(TMP) / "pilot-audit")
 os.environ["NILS_WORKER_LIVE_CAPABILITIES"] = (
     "crm.offer_read,crm.offer_pdf_send,crm.customer_read,crm.prospect_create"
 )

@@ -23,6 +23,9 @@ os.environ["NILS_CAP_CRM_OFFER_PDF"] = "1"
 os.environ["NILS_CAP_CRM_PROSPECT_CREATE"] = "1"
 os.environ["NILS_CAP_EMAIL_SEND"] = "0"
 os.environ["NILS_CAP_N8N"] = "0"
+os.environ["NILS_PROSPECT_PILOT_STATE"] = str(Path(TMP) / "pilot-state.json")
+os.environ["NILS_PROSPECT_PILOT_AUDIT_DIR"] = str(Path(TMP) / "pilot-audit")
+os.environ["NILS_PROSPECT_PILOT_MAX"] = "5"
 os.environ["NILS_WORKER_LIVE_CAPABILITIES"] = (
     "crm.offer_read,crm.offer_pdf_send,crm.customer_read,crm.prospect_create"
 )
@@ -98,9 +101,10 @@ def main() -> int:
     check(
         "asks_approval",
         (r.get("job") or {}).get("status") == "WAITING_FOR_APPROVAL"
-        and "freigabe" in (r.get("text") or "").lower()
+        and "ich würde folgenden interessenten" in (r.get("text") or "").lower()
         and "Müller Dach" in (r.get("text") or "")
-        and "Peter Müller" in (r.get("text") or ""),
+        and "Peter Müller" in (r.get("text") or "")
+        and "prospect" in (r.get("text") or "").lower(),
         f"status={(r.get('job') or {}).get('status')} text={(r.get('text') or '')[:200]}",
     )
 
@@ -153,11 +157,14 @@ def main() -> int:
 
     r = webhook("Leg Müller Dach GmbH mit Peter Müller an", mid=mid)
     mid += 1
-    r = webhook("ja", mid=mid)
-    mid += 1
+    txt_dup = (r.get("text") or "").lower()
+    if (r.get("job") or {}).get("status") == "WAITING_FOR_APPROVAL":
+        r = webhook("ja", mid=mid)
+        mid += 1
+        txt_dup = (r.get("text") or "").lower()
     check(
         "duplicate_no_second",
-        "gibt es schon" in (r.get("text") or "").lower(),
+        "bereits vorhanden" in txt_dup or "gibt es schon" in txt_dup,
         (r.get("text") or "")[:200],
     )
 

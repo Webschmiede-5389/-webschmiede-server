@@ -1,0 +1,32 @@
+# Preferred icon set for internal WebSchmiede apps: Font Awesome 6 (already in Cockpit).
+# Do not mix Material / Heroicons / emoji as primary nav icons.
+library: font-awesome
+version: "6.5"
+cdn: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+rules:
+  decorative_aria_hidden: true
+  no_emoji_as_nav: true
+  sizes: [16, 20, 24]
+
+icons:
+  dashboard: "fa-solid fa-gauge-high"
+  crm: "fa-solid fa-address-book"
+  companies: "fa-solid fa-building"
+  leads: "fa-solid fa-magnet"
+  contacts: "fa-solid fa-user-group"
+  phone: "fa-solid fa-phone"
+  calendar: "fa-solid fa-calendar"
+  mail: "fa-solid fa-envelope"
+  whatsapp: "fa-brands fa-whatsapp"
+  campaigns: "fa-solid fa-bullhorn"
+  content: "fa-solid fa-image"
+  automation: "fa-solid fa-diagram-project"
+  monitoring: "fa-solid fa-heart-pulse"
+  settings: "fa-solid fa-sliders"
+  external_link: "fa-solid fa-arrow-up-right-from-square"
+  preview: "fa-solid fa-eye"
+  tools: "fa-solid fa-wrench"
+  billing: "fa-solid fa-credit-card"
+  calculator: "fa-solid fa-calculator"
+  assistant: "fa-solid fa-robot"
+  logout: "fa-solid fa-right-from-bracket"

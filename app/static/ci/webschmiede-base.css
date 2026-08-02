@@ -1,0 +1,85 @@
+/**
+ * WebSchmiede base — scoped under .ws-app to avoid breaking legacy pages.
+ * Font: Inter via Bunny (bereits CI-Standard). Kein neuer Font-Anbieter.
+ */
+
+@import url("https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap");
+
+.ws-app,
+.ws-app *,
+.ws-app *::before,
+.ws-app *::after {
+  box-sizing: border-box;
+}
+
+.ws-app {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--ws-font-family);
+  font-size: var(--ws-font-size-md);
+  line-height: var(--ws-line-height-normal);
+  font-weight: var(--ws-font-weight-normal);
+  color: var(--ws-text-primary);
+  background: var(--ws-surface-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+.ws-app img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ws-app a {
+  color: var(--ws-text-link);
+  text-decoration: none;
+}
+.ws-app a:hover {
+  color: var(--ws-brand-primary-hover);
+  text-decoration: underline;
+}
+
+.ws-app h1,
+.ws-app h2,
+.ws-app h3,
+.ws-app h4 {
+  margin: 0 0 var(--ws-space-3);
+  color: var(--ws-text-primary);
+  line-height: var(--ws-line-height-tight);
+  font-weight: var(--ws-font-weight-bold);
+}
+.ws-app h1 { font-size: var(--ws-font-size-2xl); }
+.ws-app h2 { font-size: var(--ws-font-size-xl); }
+.ws-app h3 { font-size: var(--ws-font-size-lg); }
+.ws-app h4 { font-size: var(--ws-font-size-base); font-weight: var(--ws-font-weight-semibold); }
+
+.ws-app p {
+  margin: 0 0 var(--ws-space-3);
+}
+.ws-app .ws-muted,
+.ws-app .ws-help {
+  color: var(--ws-text-muted);
+  font-size: var(--ws-font-size-sm);
+}
+
+.ws-app :focus-visible {
+  outline: none;
+  box-shadow: var(--ws-focus-ring);
+}
+
+.ws-app ::selection {
+  background: var(--ws-brand-primary-soft);
+  color: var(--ws-text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-app *,
+  .ws-app *::before,
+  .ws-app *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

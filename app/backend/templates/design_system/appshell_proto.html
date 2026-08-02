@@ -1,0 +1,93 @@
+{% from "shared/ui/macros.html" import brand_lockup, environment_badge, button, page_header, tool_card %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{{ page_title }} · WebSchmiede</title>
+  <link rel="icon" type="image/png" href="/brand/webschmiede/favicon.png">
+  <link rel="stylesheet" href="/ci/webschmiede-app.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="ws-app">
+  <div class="ws-app-shell" id="ws-shell">
+    <div class="ws-drawer-backdrop" data-ws-drawer-backdrop></div>
+    <aside class="ws-sidebar" aria-label="Hauptnavigation">
+      <div class="ws-sidebar__brand">
+        {{ brand_lockup('compact') }}
+        <p class="ws-muted" style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:0.5rem 0 0;">Agency Prototyp</p>
+      </div>
+      <nav class="ws-sidebar__nav">
+        <p class="ws-nav-section">Übersicht</p>
+        <a class="ws-nav-item is-active" href="#" aria-current="page"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i> Dashboard</a>
+        <p class="ws-nav-section">CRM</p>
+        <a class="ws-nav-item" href="#"><i class="fa-solid fa-building" aria-hidden="true"></i> Unternehmen</a>
+        <a class="ws-nav-item" href="#"><i class="fa-solid fa-columns" aria-hidden="true"></i> Pipeline <span class="ws-nav-item__badge">3</span></a>
+        <p class="ws-nav-section">System</p>
+        <a class="ws-nav-item" href="/design-system"><i class="fa-solid fa-palette" aria-hidden="true"></i> Design System</a>
+        <a class="ws-nav-item" href="#"><i class="fa-solid fa-wrench" aria-hidden="true"></i> Werkzeuge</a>
+      </nav>
+      <div class="ws-sidebar__foot">
+        <div class="ws-muted ws-text-sm ws-mb-4">demo@webschmiede.local</div>
+        {{ button('Abmelden', 'subtle') }}
+      </div>
+    </aside>
+
+    <div class="ws-main-col">
+      <header class="ws-topbar">
+        <div class="ws-flex ws-items-center ws-gap-3">
+          <button type="button" class="ws-menu-toggle" data-ws-menu-toggle aria-expanded="false" aria-controls="ws-shell" aria-label="Menü öffnen">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+          </button>
+          <h1 class="ws-topbar__title">Dashboard</h1>
+        </div>
+        <div class="ws-flex ws-items-center ws-gap-2">
+          {{ environment_badge(env_label) }}
+          {{ button('Neue Aktion', 'primary') }}
+        </div>
+      </header>
+
+      <main class="ws-main-content">
+        <div class="ws-content-inner">
+          {{ page_header('Beispiel-Dashboard', 'Isolierter AppShell-Prototyp. Keine CRM-Migration.', 'Primäraktion', '#') }}
+
+          <div class="ws-grid-stats">
+            <div class="ws-card ws-stat-card"><div class="ws-stat-card__value">8</div><div class="ws-stat-card__label">Offen (Demo)</div></div>
+            <div class="ws-card ws-stat-card"><div class="ws-stat-card__value">2</div><div class="ws-stat-card__label">Heute (Demo)</div></div>
+            <div class="ws-card ws-stat-card"><div class="ws-stat-card__value">1</div><div class="ws-stat-card__label">Warnung (Demo)</div></div>
+            <div class="ws-card ws-stat-card"><div class="ws-stat-card__value">ok</div><div class="ws-stat-card__label">System (Demo)</div></div>
+          </div>
+
+          <div class="ws-card ws-mb-6">
+            <h2 style="margin-top:0;font-size:1rem;">Beispieltabelle</h2>
+            <div class="ws-table-wrap">
+              <table class="ws-table">
+                <thead><tr><th>Kunde</th><th>Stufe</th><th></th></tr></thead>
+                <tbody>
+                  <tr><td>Synthetik Bau GmbH</td><td><span class="ws-badge ws-badge--info">Discovery</span></td><td><button class="ws-btn ws-btn--subtle ws-btn--sm" type="button">Details</button></td></tr>
+                  <tr><td>Demo Gastro</td><td><span class="ws-badge ws-badge--brand">Angebot</span></td><td><button class="ws-btn ws-btn--subtle ws-btn--sm" type="button">Details</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <h2>Werkzeuge (Demo)</h2>
+          <div class="ws-grid-tools">
+            {{ tool_card('CRM', 'Noch nicht migriert', 'staging', 'PILOT_NEXT', '#', false, 'fa-solid fa-address-book') }}
+            {{ tool_card('Lead Creator', 'Registry später', 'local', 'PLANNED', '#', false, 'fa-solid fa-magnet') }}
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <nav class="ws-mobile-bar" aria-label="Mobile Navigation">
+      <a class="is-active" href="#"><i class="fa-solid fa-house" aria-hidden="true"></i> Home</a>
+      <a href="#"><i class="fa-solid fa-columns" aria-hidden="true"></i> Pipeline</a>
+      <a href="#"><i class="fa-solid fa-list-check" aria-hidden="true"></i> Tasks</a>
+      <a href="/design-system"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i> Mehr</a>
+    </nav>
+  </div>
+  <script src="/ci/webschmiede-ui.js"></script>
+</body>
+</html>

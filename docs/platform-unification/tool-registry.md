@@ -1,6 +1,15 @@
 # Tool Registry
 
-**Status:** Schema + Seed spezifiziert · Cockpit-UI „Werkzeuge“ noch nicht gebaut
+**Status:** Schema + Example YAML + Validator · Cockpit-UI „Werkzeuge“ noch nicht gebaut (SCHRITT 3)
+
+## Dateien
+
+- `config/platform_registry.example.yaml`  
+- `scripts/validate_platform_registry.py`  
+
+```bash
+python scripts/validate_platform_registry.py
+```
 
 ## Ziel
 

@@ -1,0 +1,12 @@
+# Known legacy design lint findings (path:kind or path).
+# New files under design-system / webschmiede-app* must stay clean.
+# Do not add new paths casually — prefer fixing instead.
+
+app/static/admin.html:legacy_gold
+app/static/order.html:legacy_gold
+app/static/index.html:legacy_gold
+app/static/konto.html:legacy_gold
+app/static/agency.html:legacy_gold
+app/static/sales-dashboard.html:legacy_gold
+app/static/_admin_preview.html:legacy_gold
+agency-web/src/pages/PreviewStudioPage.tsx:legacy_gold

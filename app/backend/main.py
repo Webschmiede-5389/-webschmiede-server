@@ -107,6 +107,11 @@ _phase_a_mod._main = _sys.modules[__name__]
 
 app.register_blueprint(_phase_a_bp)
 
+# Design System showcase / AppShell prototype — gated to local|staging|test (404 in production)
+from design_system import design_system_bp as _design_system_bp
+
+app.register_blueprint(_design_system_bp)
+
 GHL_TOKEN       = os.getenv("GHL_TOKEN", "")
 GHL_LOC_ID      = os.getenv("GHL_LOC_ID", "")
 GHL_PIPELINE_ID = os.getenv("GHL_PIPELINE_ID", "")

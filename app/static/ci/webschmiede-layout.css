@@ -1,0 +1,238 @@
+/**
+ * WebSchmiede layout — AppShell, sidebar, header, mobile drawer.
+ * Alle Klassen mit ws- Präfix. Orange nur für Active/Primary/Focus.
+ */
+
+.ws-app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--ws-surface-page);
+  color: var(--ws-text-primary);
+}
+
+.ws-sidebar {
+  width: var(--ws-sidebar-width);
+  flex-shrink: 0;
+  background: var(--ws-surface-sidebar);
+  border-right: 1px solid var(--ws-border-default);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: var(--ws-z-sidebar);
+}
+
+.ws-sidebar__brand {
+  padding: var(--ws-space-4);
+  border-bottom: 1px solid var(--ws-border-default);
+}
+
+.ws-sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ws-space-2) 0;
+}
+
+.ws-nav-section {
+  font-size: var(--ws-font-size-xs);
+  font-weight: var(--ws-font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+  padding: var(--ws-space-4) var(--ws-space-4) var(--ws-space-1);
+}
+
+.ws-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: calc(100% - 1rem);
+  margin: 0 var(--ws-space-2);
+  padding: 0.6rem 0.85rem;
+  border: none;
+  border-radius: var(--ws-radius-sm);
+  background: transparent;
+  color: var(--ws-text-secondary);
+  font: inherit;
+  font-size: var(--ws-font-size-sm);
+  font-weight: var(--ws-font-weight-medium);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--ws-transition-fast), color var(--ws-transition-fast);
+}
+.ws-nav-item:hover {
+  background: var(--ws-surface-muted);
+  color: var(--ws-text-primary);
+  text-decoration: none;
+}
+.ws-nav-item.is-active,
+.ws-nav-item[aria-current="page"] {
+  background: var(--ws-brand-primary-soft);
+  color: var(--ws-brand-primary);
+}
+.ws-nav-item__badge {
+  margin-left: auto;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 5px;
+  border-radius: var(--ws-radius-pill);
+  background: var(--ws-brand-primary);
+  color: var(--ws-brand-on-primary);
+  font-size: 10px;
+  font-weight: var(--ws-font-weight-bold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ws-sidebar__foot {
+  padding: var(--ws-space-3);
+  border-top: 1px solid var(--ws-border-default);
+}
+
+.ws-main-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ws-topbar {
+  height: var(--ws-header-height);
+  background: var(--ws-surface-header);
+  border-bottom: 1px solid var(--ws-border-default);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ws-space-3);
+  padding: 0 var(--ws-page-padding);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: var(--ws-z-header);
+}
+
+.ws-topbar__title {
+  margin: 0;
+  font-size: var(--ws-font-size-lg);
+  font-weight: var(--ws-font-weight-semibold);
+}
+
+.ws-main-content {
+  flex: 1;
+  overflow: auto;
+  padding: var(--ws-page-padding);
+}
+
+.ws-content-inner {
+  max-width: var(--ws-content-max-width);
+  margin: 0 auto;
+}
+
+.ws-menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--ws-border-default);
+  border-radius: var(--ws-radius-sm);
+  background: var(--ws-surface-card);
+  cursor: pointer;
+}
+
+.ws-drawer-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: calc(var(--ws-z-drawer) - 1);
+}
+.ws-app-shell.is-drawer-open .ws-drawer-backdrop {
+  display: block;
+}
+
+.ws-env-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--ws-radius-pill);
+  font-size: 10px;
+  font-weight: var(--ws-font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid var(--ws-border-default);
+  background: var(--ws-surface-muted);
+  color: var(--ws-text-muted);
+}
+.ws-env-badge--staging {
+  background: var(--ws-warning-soft);
+  border-color: #F59E0B;
+  color: var(--ws-warning);
+}
+.ws-env-badge--local {
+  background: var(--ws-info-soft);
+  border-color: var(--ws-info);
+  color: var(--ws-info);
+}
+.ws-env-badge--production {
+  background: var(--ws-success-soft);
+  border-color: var(--ws-success);
+  color: var(--ws-success);
+}
+
+.ws-mobile-bar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--ws-z-header);
+  background: var(--ws-surface-card);
+  border-top: 1px solid var(--ws-border-default);
+  padding: var(--ws-space-2) var(--ws-space-3);
+  gap: var(--ws-space-1);
+  justify-content: space-around;
+}
+.ws-mobile-bar a {
+  flex: 1;
+  text-align: center;
+  font-size: var(--ws-font-size-xs);
+  color: var(--ws-text-muted);
+  text-decoration: none;
+  padding: var(--ws-space-2);
+  border-radius: var(--ws-radius-sm);
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.ws-mobile-bar a.is-active {
+  color: var(--ws-brand-primary);
+  background: var(--ws-brand-primary-soft);
+}
+
+@media (max-width: 900px) {
+  .ws-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translateX(-105%);
+    transition: transform var(--ws-transition-normal);
+    box-shadow: var(--ws-shadow-overlay);
+  }
+  .ws-app-shell.is-drawer-open .ws-sidebar {
+    transform: translateX(0);
+  }
+  .ws-menu-toggle { display: inline-flex; }
+  .ws-main-content {
+    padding: var(--ws-mobile-page-padding);
+    padding-bottom: 5rem;
+  }
+  .ws-mobile-bar { display: flex; }
+}

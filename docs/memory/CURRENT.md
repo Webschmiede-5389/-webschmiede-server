@@ -4,7 +4,9 @@ Stand: 2026-08-02
 
 ## Jetzt
 
-**Platform Unification SCHRITT 1 (2026-08-02):** Read-only Inventur + Docs unter `docs/platform-unification/`. Urteil **INVENTORY_COMPLETE**. Designsystem/Pilot noch offen. Lead Creator = DHK Leads (`leads.digitalehandwerkskunst.de`). Kein Production-Deploy. → Topic `platform-unification.md`
+**Platform Unification SCHRITT 2 (2026-08-02):** Shared Design System ready — Tokens, AppShell-Lab `/design-system`, Brand-Manifest, Lint+Tests. **Keine** CRM-/Cockpit-Migration, kein Prod-Deploy. Urteil **DESIGN_SYSTEM_READY**. → `docs/platform-unification/step-2-report.md`
+
+**Platform Unification SCHRITT 1 (2026-08-02):** Read-only Inventur + Docs unter `docs/platform-unification/`. Urteil **INVENTORY_COMPLETE**. Lead Creator = DHK Leads. → Topic `platform-unification.md`
 
 **Nils Prospect Defaults PASS (2026-08-02):** Release `nils-entity-routing-9f90f42bdea6` live. Kein stilles DE/art6_1_f mehr. Canary ID16 country/legal NULL, outbound gesperrt, success_count=2/5. Caps unverändert isoliert. Urteil **LIMITED_PRODUCTION_PASS**. STOP. → Topic `nils-entity-routing.md`
 

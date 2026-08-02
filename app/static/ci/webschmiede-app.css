@@ -1,0 +1,13 @@
+/**
+ * WebSchmiede App Design System entrypoint (SCHRITT 2)
+ * Für interne Apps: <link rel="stylesheet" href="/ci/webschmiede-app.css">
+ * und Root mit class="ws-app" wrappen.
+ *
+ * Dokument-/Print-CI bleibt: webschmiede-ci.css (nicht löschen).
+ */
+
+@import url("./webschmiede-tokens.css");
+@import url("./webschmiede-base.css");
+@import url("./webschmiede-layout.css");
+@import url("./webschmiede-components.css");
+@import url("./webschmiede-utilities.css");

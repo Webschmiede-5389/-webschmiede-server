@@ -4,14 +4,11 @@
 
 ## Fakt
 
-- SCHRITT 1 Analyse abgeschlossen: `docs/platform-unification/`
-- Gate: **INVENTORY_COMPLETE**
-- Visuelle Referenz: Agency Cockpit (Orange `#FF6600`, hell)
-- CRM: schwarze Sidebar + „W“ — Priorität A Migration
-- Lead Creator gefunden: B2B-Kundenfänger → `https://leads.digitalehandwerkskunst.de`
-- Preview Studio: braunes Legacy-Gold in Cockpit + agency-web Duplikat
-- Bestehendes CI: `webschmiede-ci.css` + BRAND.md — erweitern, nicht parallel neu
+- SCHRITT 1: INVENTORY_COMPLETE  
+- SCHRITT 2: **DESIGN_SYSTEM_READY** — `webschmiede-app.css`, Brand-Manifest, `/design-system` Lab, Tests grün  
+- CRM/Preview/Leads **noch nicht** migriert  
+- Lead Creator = DHK Leads (`leads.digitalehandwerkskunst.de`)
 
 ## Nächster Schritt
 
-SCHRITT 2: Shared Tokens/AppShell (kein flächiger Umbau, kein Prod-Deploy)
+SCHRITT 3 Pilot: CRM Login + AppShell + Dashboard + Cockpit Werkzeuge (Staging, kein Prod-Cutover)

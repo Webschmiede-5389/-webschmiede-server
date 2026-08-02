@@ -1,6 +1,19 @@
 # Visual Test Plan
 
-**Status:** Plan — Screenshots/Automationen noch nicht in diesem Schritt erzeugt
+**Status:** Baselines für Design-System Lab vorhanden
+
+## Evidence
+
+| Screen | Datei |
+|--------|-------|
+| Design System Desktop | `evidence/baselines/design-system-desktop.png` |
+| AppShell Desktop | `evidence/baselines/appshell-desktop.png` |
+| Agency Login Preflight | `evidence/preflight/agency-cockpit-login.png` |
+| CRM Login Preflight | `evidence/preflight/crm-login.png` |
+
+Viewports Soll: 390 / 768 / 1440 — Desktop committed; Mobile in SCHRITT 3 mit CRM-Pilot.
+
+Baseline-Updates nur bewusst (kein Auto-Overwrite).
 
 ## Referenzscreens je App (Priorität A)
 

@@ -1,50 +1,26 @@
 # New Project Guidelines
 
-Neue **interne** Anwendungen starten standardmäßig mit Agency Design System.
+Neue **interne** Anwendungen starten mit dem Shared Design System (SCHRITT 2).
 
 ## Pflicht
 
-- [ ] WebSchmiede-Logo (`/ci/webschmiede-logo-mark.png` oder Wortmarke)  
-- [ ] Unterzeile Digitale Handwerkskunst  
-- [ ] Design Tokens aus `webschmiede-app.css` / Tailwind Preset (nach SCHRITT 2)  
-- [ ] AppShell + Navigation  
-- [ ] Login-Layout (LoginCard)  
-- [ ] Fehler- / Empty- / Loading-States  
-- [ ] Responsive Grundstruktur  
+- [ ] Assets aus `/brand/webschmiede/` (Manifest)  
+- [ ] CSS: `/ci/webschmiede-app.css`  
+- [ ] Root-Wrapper `class="ws-app"`  
+- [ ] BrandLockup Macro / Markup  
+- [ ] AppShell-Pattern (oder Showcase als Vorlage)  
 - [ ] EnvironmentBadge  
-- [ ] Eintrag in Tool-Registry  
-- [ ] Keine hardcodierten Farben außerhalb Tokens  
-- [ ] Keine duplizierten Logo-Dateien  
+- [ ] Icons laut `config/ui_icons.yaml` (Font Awesome 6)  
+- [ ] Eintrag in Tool Registry (Beispiel: `config/platform_registry.example.yaml`)  
+- [ ] Keine hart codierten Markenfarben (`#FF6600` nur über Tokens)  
+- [ ] Keine Logo-Duplikate außerhalb `/brand/webschmiede` bzw. `/ci` Quelle  
+- [ ] Kein `#C9A84C` / `#E8600A` in Agency-Shells  
+- [ ] `python scripts/design_lint.py` grün für neue Dateien  
 
-## Stack-Wahl
+## Lab
 
-| Bedarf | Stack |
-|--------|-------|
-| Internes CRUD / HTMX | FastAPI/Flask + Jinja wie CRM |
-| Marketing | agency-web React |
-| Kleines Tool | Static HTML + shared CSS |
-| Automation UI | Vendor + ToolCard |
+`/design-system` und `/design-system/appshell` nur mit `APP_ENV=local|staging|test`.
 
 ## Kundenportale
 
-Branding nur über Tenant-Config ([customer-branding.md](./customer-branding.md)).
-
-## Lint / Review
-
-Vor Merge prüfen:
-
-1. Kein `#C9A84C` in AGENCY_INTERNAL Shells  
-2. Kein generisches „W“-Logo wenn CI verfügbar  
-3. `rel="noopener noreferrer"` bei external  
-4. Shipcheck vor Live-Links an Christian  
-
-## Vorlage (nach SCHRITT 2)
-
-Geplant:
-
-```
-templates/agency-app-starter/
-  index.html
-  login.html
-  styles → link webschmiede-app.css
-```
+Nur BrandConfig / Tenant-Tokens — siehe [branding-modes.md](./branding-modes.md).

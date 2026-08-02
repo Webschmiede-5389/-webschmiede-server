@@ -1,0 +1,93 @@
+{
+  "brand": "WebSchmiede",
+  "subtitle": "Digitale Handwerkskunst",
+  "generated_at": "2026-08-02",
+  "source_of_truth": "docs/agency/ci/BRAND.md",
+  "svg_status": "unavailable_no_redraw",
+  "assets": [
+    {
+      "asset_name": "logo-horizontal",
+      "path": "/brand/webschmiede/logo-horizontal.png",
+      "source_path": "/ci/webschmiede-logo.png",
+      "usage": "headers, documents, brand lockup full",
+      "dimensions": "1114x268",
+      "format": "png",
+      "canonical": true,
+      "deprecated_replacements": [
+        "/ci/webschmiede-logo-horizontal.png",
+        "/ci/webschmiede-logo-horizontal.jpeg",
+        "/ci/webschmiede-logo-icon.png"
+      ]
+    },
+    {
+      "asset_name": "logo-mark",
+      "path": "/brand/webschmiede/logo-mark.png",
+      "source_path": "/ci/webschmiede-logo-mark.png",
+      "usage": "sidebar, compact lockup, icon source",
+      "dimensions": "623x602",
+      "format": "png",
+      "canonical": true,
+      "deprecated_replacements": [
+        "CSS letter W placeholder",
+        "/ci/webschmiede-logo-icon.png"
+      ]
+    },
+    {
+      "asset_name": "favicon",
+      "path": "/brand/webschmiede/favicon.png",
+      "usage": "browser tab derived from mark",
+      "dimensions": "32x32",
+      "format": "png",
+      "canonical": true,
+      "deprecated_replacements": []
+    },
+    {
+      "asset_name": "app-icon-192",
+      "path": "/brand/webschmiede/app-icon-192.png",
+      "usage": "PWA / apple-touch",
+      "dimensions": "192x192",
+      "format": "png",
+      "canonical": true,
+      "deprecated_replacements": []
+    },
+    {
+      "asset_name": "app-icon-512",
+      "path": "/brand/webschmiede/app-icon-512.png",
+      "usage": "PWA large",
+      "dimensions": "512x512",
+      "format": "png",
+      "canonical": true,
+      "deprecated_replacements": []
+    },
+    {
+      "asset_name": "logo-horizontal.svg",
+      "path": null,
+      "usage": "planned when official SVG export exists",
+      "dimensions": null,
+      "format": "svg",
+      "canonical": false,
+      "status": "MISSING_NO_REDRAW",
+      "deprecated_replacements": []
+    },
+    {
+      "asset_name": "logo-mark.svg",
+      "path": null,
+      "usage": "planned when official SVG export exists",
+      "dimensions": null,
+      "format": "svg",
+      "canonical": false,
+      "status": "MISSING_NO_REDRAW",
+      "deprecated_replacements": []
+    },
+    {
+      "asset_name": "favicon.svg",
+      "path": null,
+      "usage": "planned when official SVG export exists",
+      "dimensions": null,
+      "format": "svg",
+      "canonical": false,
+      "status": "MISSING_NO_REDRAW",
+      "deprecated_replacements": []
+    }
+  ]
+}

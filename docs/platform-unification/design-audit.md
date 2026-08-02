@@ -103,7 +103,15 @@ Sehr nah an Cockpit — **beste Seed** für Shared Tokens.
 
 Dark + Gold `#C9A84C` + Playfair teils — **bewusst anderes Branding** (CUSTOMER_PORTAL). Nicht angleichen an Agency Orange.
 
-## 7. Designvarianten im Bestand (Überblick)
+## 8. Preflight-Nachweise (2026-08-02)
+
+| URL | Titel | Login | Layout | Farben |
+|-----|-------|-------|--------|--------|
+| `/agency` | Agency Admin – Webschmiede | ja | Light LoginCard + Shell im DOM | `#FF6600` |
+| `crm…/login` | Login · Webschmiede | ja | Light card, **W**-Mark | Orange + Canvas `#F7F5F2` |
+| `leads…/` | (leer / Auth-Gate) | vermutl. Basic | — | Template lokal warm `#E8600A` |
+
+Screenshots: `docs/platform-unification/evidence/preflight/`
 
 | Variante | Kennzeichen | Apps |
 |----------|-------------|------|

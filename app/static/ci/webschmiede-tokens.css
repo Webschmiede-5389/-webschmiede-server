@@ -1,0 +1,143 @@
+/**
+ * WebSchmiede Design Tokens (SCHRITT 2)
+ * Quelle: docs/agency/ci/BRAND.md + Agency Cockpit + webschmiede-ci.css
+ * Keine erfundenen Markenfarben. Snack-House-Gold gehört NICHT hierher (Kunden/Legacy).
+ */
+
+:root {
+  /* ── BRAND ─────────────────────────────────────────
+   * Herkunft: BRAND.md / Cockpit --orange / CI --ws-orange
+   */
+  --ws-brand-primary: #FF6600;
+  --ws-brand-primary-hover: #E55A00;
+  --ws-brand-primary-active: #CC5200;
+  --ws-brand-primary-soft: #FFF4ED;
+  --ws-brand-primary-border: #FFD4B8;
+  --ws-brand-on-primary: #FFFFFF;
+
+  /* Legacy aliases (Dokument-CI / ältere Selektoren) — gleiche Werte, keine zweite Palette */
+  --ws-orange: var(--ws-brand-primary);
+  --ws-orange-dark: var(--ws-brand-primary-hover);
+  --ws-orange-soft: var(--ws-brand-primary-soft);
+
+  /* ── SURFACES ──────────────────────────────────────
+   * Herkunft: Cockpit body #F5F5F5, panels #fff, BRAND Weiß
+   */
+  --ws-surface-page: #F5F5F5;
+  --ws-surface-card: #FFFFFF;
+  --ws-surface-raised: #FFFFFF;
+  --ws-surface-sidebar: #FFFFFF;
+  --ws-surface-header: #FFFFFF;
+  --ws-surface-input: #FFFFFF;
+  --ws-surface-muted: #FAFAFA;
+  --ws-white: var(--ws-surface-card);
+  --ws-paper-accent: var(--ws-surface-muted);
+
+  /* ── TEXT ────────────────────────────────────────── */
+  --ws-text-primary: #1A1A1A;
+  --ws-text-secondary: #555555;
+  --ws-text-muted: #666666;
+  --ws-text-inverse: #FFFFFF;
+  --ws-text-link: var(--ws-brand-primary);
+  --ws-ink: var(--ws-text-primary);
+  --ws-ink-muted: var(--ws-text-muted);
+
+  /* ── BORDERS ─────────────────────────────────────── */
+  --ws-border-default: #E8E8E8;
+  --ws-border-strong: #D0D0D0;
+  --ws-border-focus: var(--ws-brand-primary);
+  --ws-border: var(--ws-border-default);
+
+  /* ── STATUS ────────────────────────────────────────
+   * Herkunft: webschmiede-ci.css success/problem; CRM warn/danger angepasst
+   */
+  --ws-success: #16A34A;
+  --ws-success-soft: #F0FDF4;
+  --ws-warning: #B45309;
+  --ws-warning-soft: #FFFBEB;
+  --ws-danger: #DC2626;
+  --ws-danger-soft: #FEF2F2;
+  --ws-info: #2563EB;
+  --ws-info-soft: #EFF6FF;
+  --ws-problem: var(--ws-danger);
+  --ws-problem-bg: var(--ws-danger-soft);
+  --ws-success-bg: var(--ws-success-soft);
+
+  /* ── TYPOGRAPHY ────────────────────────────────────
+   * Nur Inter (Bunny) — BRAND.md
+   */
+  --ws-font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ws-font: var(--ws-font-family);
+  --ws-font-size-xs: 0.75rem;    /* 12 */
+  --ws-font-size-sm: 0.8125rem;  /* 13 */
+  --ws-font-size-md: 0.875rem;   /* 14 */
+  --ws-font-size-base: 1rem;     /* 16 */
+  --ws-font-size-lg: 1.125rem;   /* 18 */
+  --ws-font-size-xl: 1.25rem;    /* 20 */
+  --ws-font-size-2xl: 1.5rem;    /* 24 */
+  --ws-font-size-3xl: 1.875rem;  /* 30 */
+  --ws-line-height-tight: 1.25;
+  --ws-line-height-snug: 1.4;
+  --ws-line-height-normal: 1.55;
+  --ws-font-weight-normal: 400;
+  --ws-font-weight-medium: 500;
+  --ws-font-weight-semibold: 600;
+  --ws-font-weight-bold: 700;
+
+  /* ── SPACING (4px-Raster) ────────────────────────── */
+  --ws-space-1: 0.25rem;  /* 4 */
+  --ws-space-2: 0.5rem;   /* 8 */
+  --ws-space-3: 0.75rem;  /* 12 */
+  --ws-space-4: 1rem;     /* 16 */
+  --ws-space-5: 1.25rem;  /* 20 */
+  --ws-space-6: 1.5rem;   /* 24 */
+  --ws-space-8: 2rem;     /* 32 */
+  --ws-space-10: 2.5rem;  /* 40 */
+  --ws-space-12: 3rem;    /* 48 */
+
+  /* ── LAYOUT ────────────────────────────────────────
+   * Herkunft: Cockpit --sidebar-w 15.5rem, topbar 3.5rem
+   */
+  --ws-sidebar-width: 15.5rem;
+  --ws-sidebar-collapsed-width: 4.5rem;
+  --ws-header-height: 3.5rem;
+  --ws-content-max-width: 72rem;
+  --ws-page-padding: 1.5rem;
+  --ws-mobile-page-padding: 1rem;
+
+  /* ── SHAPE ───────────────────────────────────────── */
+  --ws-radius-sm: 8px;
+  --ws-radius-md: 12px;
+  --ws-radius-lg: 14px;
+  --ws-radius-pill: 999px;
+  --ws-radius: var(--ws-radius-md);
+
+  /* ── SHADOW ──────────────────────────────────────── */
+  --ws-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.04);
+  --ws-shadow-md: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --ws-shadow-overlay: 0 20px 60px rgba(0, 0, 0, 0.15);
+  --ws-shadow: var(--ws-shadow-md);
+
+  /* ── INTERACTION ─────────────────────────────────── */
+  --ws-focus-ring: 0 0 0 3px rgba(255, 102, 0, 0.28);
+  --ws-transition-fast: 120ms ease;
+  --ws-transition-normal: 180ms ease;
+  --ws-control-height-sm: 2rem;
+  --ws-control-height-md: 2.5rem;
+  --ws-control-height-lg: 2.75rem;
+
+  /* ── Z-INDEX ─────────────────────────────────────── */
+  --ws-z-sidebar: 40;
+  --ws-z-header: 45;
+  --ws-z-drawer: 50;
+  --ws-z-modal: 60;
+  --ws-z-toast: 70;
+}
+
+/* Customer portal override hook — only applied when .ws-brand-mode-customer is set */
+.ws-brand-mode-customer {
+  --ws-brand-primary: var(--ws-tenant-primary, #FF6600);
+  --ws-brand-primary-hover: var(--ws-tenant-primary-hover, #E55A00);
+  --ws-brand-primary-soft: var(--ws-tenant-primary-soft, #FFF4ED);
+  --ws-text-link: var(--ws-brand-primary);
+}

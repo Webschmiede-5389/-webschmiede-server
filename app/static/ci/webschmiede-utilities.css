@@ -1,0 +1,30 @@
+/**
+ * WebSchmiede utilities — opt-in helpers under .ws-app
+ */
+
+.ws-app .ws-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ws-app .ws-flex { display: flex; }
+.ws-app .ws-flex-wrap { flex-wrap: wrap; }
+.ws-app .ws-items-center { align-items: center; }
+.ws-app .ws-justify-between { justify-content: space-between; }
+.ws-app .ws-gap-2 { gap: var(--ws-space-2); }
+.ws-app .ws-gap-3 { gap: var(--ws-space-3); }
+.ws-app .ws-gap-4 { gap: var(--ws-space-4); }
+.ws-app .ws-mt-4 { margin-top: var(--ws-space-4); }
+.ws-app .ws-mt-6 { margin-top: var(--ws-space-6); }
+.ws-app .ws-mb-4 { margin-bottom: var(--ws-space-4); }
+.ws-app .ws-mb-6 { margin-bottom: var(--ws-space-6); }
+.ws-app .ws-text-muted { color: var(--ws-text-muted); }
+.ws-app .ws-text-sm { font-size: var(--ws-font-size-sm); }
+.ws-app .ws-hidden { display: none !important; }

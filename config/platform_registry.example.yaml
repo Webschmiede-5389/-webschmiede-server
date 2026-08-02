@@ -1,0 +1,84 @@
+# Example Tool Registry — no secrets, no production activation in SCHRITT 2.
+# Schema validated by scripts/validate_platform_registry.py
+
+version: 1
+entries:
+  - id: agency-cockpit
+    slug: agency-cockpit
+    display_name: Agency Cockpit
+    short_description: Zentrale Agency-Übersicht
+    category: Administration
+    icon: dashboard
+    environment: production
+    service_type: dashboard
+    internal_or_external: internal
+    base_url: https://digitalehandwerkskunst.de/agency
+    open_mode: same_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 10
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: crm
+    slug: crm
+    display_name: CRM
+    short_description: Unternehmen, Pipeline, Angebote
+    category: CRM
+    icon: crm
+    environment: production
+    service_type: dashboard
+    internal_or_external: internal
+    base_url: https://crm.digitalehandwerkskunst.de
+    open_mode: new_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 20
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: lead-creator-dhk
+    slug: lead-creator
+    display_name: Lead Creator
+    short_description: DHK Leads Research Dashboard
+    category: Leadgewinnung
+    icon: leads
+    environment: production
+    service_type: dashboard
+    internal_or_external: internal
+    base_url: https://leads.digitalehandwerkskunst.de
+    open_mode: new_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 30
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: n8n
+    slug: n8n
+    display_name: n8n
+    short_description: Automation Hub (externe UI)
+    category: Automatisierung
+    icon: automation
+    environment: production
+    service_type: automation
+    internal_or_external: external
+    base_url: https://digitalehandwerkskunst.de/n8n/
+    open_mode: new_tab
+    required_roles: [agency_admin]
+    tenant_visibility: agency
+    status: EXTERNAL_SERVICE
+    sort_order: 100
+    branding_mode: EXTERNAL_SERVICE_CARD
+    owner: Nils
+    healthcheck_url: null
+    active: true

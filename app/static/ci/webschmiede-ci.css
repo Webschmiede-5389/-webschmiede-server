@@ -1,25 +1,17 @@
 /**
- * Webschmiede CI — Orange & Weiß (Christian Kummetat)
+ * Webschmiede CI — Dokument-/Print-Styles (Christian Kummetat)
  * Nur Inter — kein Playfair / kein Snack-House-Gold
+ *
+ * DEPRECATION (Apps): Für interne Dashboards bitte `/ci/webschmiede-app.css` nutzen.
+ * Diese Datei bleibt der Einstieg für Rechnungen, Flyer, Visitenkarten (.ws-doc).
+ * Tokens kommen aus webschmiede-tokens.css (eine Quelle, keine zweite CI).
  */
+@import url("./webschmiede-tokens.css");
 @import url('https://fonts.bunny.net/css?family=inter:400;500;600;700&display=swap');
 
 :root {
-  --ws-orange: #FF6600;
-  --ws-orange-dark: #E55A00;
-  --ws-orange-soft: #FFF4ED;
-  --ws-white: #FFFFFF;
-  --ws-ink: #1A1A1A;
-  --ws-ink-muted: #666666;
-  --ws-border: #E8E8E8;
-  --ws-paper-accent: #FAFAFA;
-  --ws-problem: #DC2626;
-  --ws-problem-bg: #FEF2F2;
-  --ws-success: #16A34A;
-  --ws-success-bg: #F0FDF4;
+  /* Print-Dokument-Radius kann enger sein als App-md — bewusste Abweichung */
   --ws-radius: 10px;
-  --ws-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  --ws-font: 'Inter', system-ui, sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

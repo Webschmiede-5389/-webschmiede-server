@@ -1,0 +1,101 @@
+{# Shared UI macros — no business logic, no tenant queries. #}
+{% macro brand_lockup(variant='compact', brand_name='WebSchmiede', brand_subtitle='Digitale Handwerkskunst', logo_mark='/brand/webschmiede/logo-mark.png', logo_full='/brand/webschmiede/logo-horizontal.png') -%}
+  <div class="ws-brand-lockup ws-brand-lockup--{{ variant }}">
+    {% if variant == 'full' %}
+      <img class="ws-brand-lockup__wordmark" src="{{ logo_full }}" alt="{{ brand_name }}">
+    {% else %}
+      <img class="ws-brand-lockup__mark" src="{{ logo_mark }}" alt="" aria-hidden="true">
+      {% if variant != 'icon-only' %}
+      <div class="ws-brand-lockup__text">
+        <span class="ws-brand-lockup__name">{{ brand_name }}</span>
+        <span class="ws-brand-lockup__sub">{{ brand_subtitle }}</span>
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+{%- endmacro %}
+
+{% macro environment_badge(env='local') -%}
+  {% set e = (env or 'local')|lower %}
+  {% set cls = 'ws-env-badge--local' %}
+  {% if e in ['staging', 'stage'] %}{% set cls = 'ws-env-badge--staging' %}
+  {% elif e in ['production', 'prod'] %}{% set cls = 'ws-env-badge--production' %}
+  {% endif %}
+  <span class="ws-env-badge {{ cls }}" title="Umgebung">{{ e }}</span>
+{%- endmacro %}
+
+{% macro button(label, variant='primary', type='button', href=None, attrs='', loading=false, disabled=false) -%}
+  {% set classes = 'ws-btn ws-btn--' ~ variant %}
+  {% if loading %}{% set classes = classes ~ ' is-loading' %}{% endif %}
+  {% if disabled %}{% set classes = classes ~ ' is-disabled' %}{% endif %}
+  {% if href %}
+    <a class="{{ classes }}" href="{{ href }}" {{ attrs|safe }}{% if disabled %} aria-disabled="true"{% endif %}>{{ label }}</a>
+  {% else %}
+    <button class="{{ classes }}" type="{{ type }}" {{ attrs|safe }}{% if disabled or loading %} disabled{% endif %}>{{ label }}</button>
+  {% endif %}
+{%- endmacro %}
+
+{% macro page_header(title, description=None, primary_label=None, primary_href=None) -%}
+  <header class="ws-page-header">
+    <div>
+      <h1 class="ws-page-header__title">{{ title }}</h1>
+      {% if description %}<p class="ws-page-header__desc">{{ description }}</p>{% endif %}
+    </div>
+    {% if primary_label %}
+    <div class="ws-page-header__actions">
+      {{ button(primary_label, 'primary', href=primary_href) }}
+    </div>
+    {% endif %}
+  </header>
+{%- endmacro %}
+
+{% macro alert(message, variant='info', title=None) -%}
+  <div class="ws-alert ws-alert--{{ variant }}" role="status">
+    <div>
+      {% if title %}<strong>{{ title }}</strong><br>{% endif %}
+      {{ message }}
+    </div>
+  </div>
+{%- endmacro %}
+
+{% macro empty_state(title, description=None, action_label=None, action_href=None) -%}
+  <div class="ws-empty" role="status">
+    <h3>{{ title }}</h3>
+    {% if description %}<p>{{ description }}</p>{% endif %}
+    {% if action_label %}{{ button(action_label, 'secondary', href=action_href) }}{% endif %}
+  </div>
+{%- endmacro %}
+
+{% macro tool_card(name, description, env='production', status='ACTIVE', href='#', external=false, icon='fa-solid fa-wrench') -%}
+  <article class="ws-card ws-tool-card">
+    <div class="ws-tool-card__head">
+      <div class="ws-tool-card__icon" aria-hidden="true"><i class="{{ icon }}"></i></div>
+      <div>
+        <h3 style="margin:0;font-size:0.95rem;">{{ name }}</h3>
+        <p class="ws-muted" style="margin:0.25rem 0 0;">{{ description }}</p>
+      </div>
+    </div>
+    <div class="ws-tool-card__meta">
+      {{ environment_badge(env) }}
+      <span class="ws-badge ws-badge--brand">{{ status }}</span>
+      <span>{% if external %}extern{% else %}intern{% endif %}</span>
+    </div>
+    <div>
+      <a class="ws-btn ws-btn--secondary ws-btn--sm" href="{{ href }}"{% if external %} target="_blank" rel="noopener noreferrer"{% endif %}>
+        Öffnen{% if external %} <span class="ws-sr-only">(neues Fenster)</span>{% endif %}
+      </a>
+    </div>
+  </article>
+{%- endmacro %}
+
+{% macro field_input(name, label, type='text', value='', required=false, error=None, help=None, autocomplete=None) -%}
+  <div class="ws-field{% if error %} is-invalid{% endif %}">
+    <label class="ws-label" for="id-{{ name }}">{{ label }}{% if required %}<span class="ws-required" aria-hidden="true">*</span>{% endif %}</label>
+    <input class="ws-input" id="id-{{ name }}" name="{{ name }}" type="{{ type }}" value="{{ value }}"
+      {% if required %}required{% endif %}
+      {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+      {% if error %}aria-invalid="true" aria-describedby="err-{{ name }}"{% elif help %}aria-describedby="help-{{ name }}"{% endif %}>
+    {% if help %}<p class="ws-help" id="help-{{ name }}">{{ help }}</p>{% endif %}
+    {% if error %}<p class="ws-field-error" id="err-{{ name }}" role="alert">{{ error }}</p>{% endif %}
+  </div>
+{%- endmacro %}

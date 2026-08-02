@@ -1,0 +1,172 @@
+{% from "shared/ui/macros.html" import brand_lockup, environment_badge, button, page_header, alert, empty_state, tool_card, field_input %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{{ page_title }} · WebSchmiede Design System</title>
+  <link rel="icon" type="image/png" href="/brand/webschmiede/favicon.png">
+  <link rel="stylesheet" href="/ci/webschmiede-app.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="ws-app">
+  <div style="max-width:1100px;margin:0 auto;padding:var(--ws-page-padding);">
+    <div class="ws-flex ws-items-center ws-justify-between ws-mb-6 ws-flex-wrap ws-gap-3">
+      {{ brand_lockup('compact') }}
+      <div class="ws-flex ws-items-center ws-gap-2">
+        {{ environment_badge(env_label) }}
+        <a class="ws-btn ws-btn--secondary ws-btn--sm" href="/design-system/appshell">AppShell Prototyp</a>
+      </div>
+    </div>
+
+    {{ page_header('Design System Showcase', 'Synthetische Demo — keine Kundendaten. Nur local/staging.') }}
+
+    {{ alert('Diese Seite ist in Production deaktiviert (404).', 'info', 'Intern') }}
+
+    <section class="ws-mb-6">
+      <h2>BrandLockup</h2>
+      <div class="ws-flex ws-flex-wrap ws-gap-4 ws-items-center">
+        {{ brand_lockup('full') }}
+        {{ brand_lockup('compact') }}
+        {{ brand_lockup('icon-only') }}
+      </div>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>Farben</h2>
+      <div class="ws-flex ws-flex-wrap ws-gap-3">
+        {% for name, color in [
+          ('primary', 'var(--ws-brand-primary)'),
+          ('hover', 'var(--ws-brand-primary-hover)'),
+          ('soft', 'var(--ws-brand-primary-soft)'),
+          ('page', 'var(--ws-surface-page)'),
+          ('card', 'var(--ws-surface-card)'),
+          ('success', 'var(--ws-success)'),
+          ('warning', 'var(--ws-warning)'),
+          ('danger', 'var(--ws-danger)'),
+          ('info', 'var(--ws-info)')
+        ] %}
+        <div class="ws-token-swatch">
+          <div class="ws-token-swatch__chip" style="background:{{ color }}"></div>
+          {{ name }}
+        </div>
+        {% endfor %}
+      </div>
+      <p class="ws-muted ws-text-sm ws-mt-4">Kein Snack-House-Gold / Legacy-Braun in diesem System.</p>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>Typografie</h2>
+      <h1>Überschrift H1</h1>
+      <h2>Überschrift H2</h2>
+      <h3>Überschrift H3</h3>
+      <p>Fließtext Inter · Klartext Mechernich · keine Agentur-Buzzwords.</p>
+      <p class="ws-help">Hilfetext / Label-Stil</p>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>Buttons</h2>
+      <div class="ws-flex ws-flex-wrap ws-gap-2">
+        {{ button('Primary', 'primary') }}
+        {{ button('Secondary', 'secondary') }}
+        {{ button('Subtle', 'subtle') }}
+        {{ button('Danger', 'danger') }}
+        {{ button('Loading', 'primary', loading=true) }}
+        {{ button('Disabled', 'primary', disabled=true) }}
+      </div>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>Formular</h2>
+      <div class="ws-card" style="max-width:28rem;">
+        {{ field_input('demo_email', 'E-Mail', type='email', autocomplete='username') }}
+        {{ field_input('demo_name', 'Name', required=true, help='Nur Demo-Feld') }}
+        {{ field_input('demo_bad', 'Mit Fehler', error='Bitte ausfüllen') }}
+        <label class="ws-check"><input type="checkbox"> Checkbox Demo</label>
+        <div class="ws-mt-4">
+          <button type="button" class="ws-switch" role="switch" aria-checked="false" aria-label="Demo Schalter"></button>
+        </div>
+        <div class="ws-mt-4">{{ button('Speichern', 'primary') }}</div>
+      </div>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>LoginCard</h2>
+      <div class="ws-card ws-login-card">
+        {{ brand_lockup('compact') }}
+        <h2 style="font-size:0.9rem;color:var(--ws-text-muted);">Demo Login</h2>
+        {{ field_input('login_user', 'Benutzername', autocomplete='username') }}
+        {{ field_input('login_pw', 'Passwort', type='password', autocomplete='current-password') }}
+        {{ button('Anmelden', 'primary') }}
+      </div>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>Karten &amp; Stats</h2>
+      <div class="ws-grid-stats">
+        <div class="ws-card ws-stat-card"><div class="ws-stat-card__value">12</div><div class="ws-stat-card__label">Offene Tasks (Demo)</div></div>
+        <div class="ws-card ws-stat-card"><div class="ws-stat-card__value">3</div><div class="ws-stat-card__label">Pipeline (Demo)</div></div>
+        <div class="ws-card ws-stat-card"><div class="ws-stat-card__value">ok</div><div class="ws-stat-card__label">Health (Demo)</div></div>
+        <div class="ws-card ws-stat-card"><div class="ws-stat-card__value">0</div><div class="ws-stat-card__label">Fehler (Demo)</div></div>
+      </div>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>ToolCards</h2>
+      <div class="ws-grid-tools">
+        {{ tool_card('Agency Cockpit', 'Zentrale Übersicht', 'production', 'ACTIVE', '/agency', false, 'fa-solid fa-gauge-high') }}
+        {{ tool_card('CRM', 'Unternehmen & Pipeline', 'production', 'ACTIVE', 'https://crm.digitalehandwerkskunst.de', true, 'fa-solid fa-address-book') }}
+        {{ tool_card('Lead Creator', 'DHK Leads Research', 'production', 'ACTIVE', 'https://leads.digitalehandwerkskunst.de', true, 'fa-solid fa-magnet') }}
+        {{ tool_card('n8n', 'Automation (extern)', 'production', 'EXTERNAL', 'https://digitalehandwerkskunst.de/n8n/', true, 'fa-solid fa-diagram-project') }}
+      </div>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>Tabelle</h2>
+      <div class="ws-table-wrap">
+        <table class="ws-table">
+          <thead><tr><th>Name</th><th>Status</th><th>Aktion</th></tr></thead>
+          <tbody>
+            <tr><td>Demo GmbH</td><td><span class="ws-badge ws-badge--success">aktiv</span></td><td><button class="ws-btn ws-btn--subtle ws-btn--sm" type="button">Öffnen</button></td></tr>
+            <tr><td>Musterbetrieb</td><td><span class="ws-badge ws-badge--warning">offen</span></td><td><button class="ws-btn ws-btn--subtle ws-btn--sm" type="button">Öffnen</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>Alerts / Empty / Loading</h2>
+      {{ alert('Alles in Ordnung (Demo).', 'success') }}
+      <div class="ws-mt-4">{{ alert('Achtung Staging.', 'warning') }}</div>
+      <div class="ws-mt-4">{{ empty_state('Keine Einträge', 'Synthetischer Empty State.') }}</div>
+      <div class="ws-loading-state ws-mt-4"><span class="ws-skeleton" style="width:60%;margin:0 auto;"></span></div>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>Modal</h2>
+      <button class="ws-btn ws-btn--secondary" type="button" data-ws-open-modal="demo-modal">Modal öffnen</button>
+      <div class="ws-modal-backdrop" id="demo-modal" hidden>
+        <div class="ws-modal" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title" tabindex="-1">
+          <h2 id="demo-modal-title">Bestätigen?</h2>
+          <p class="ws-muted">Synthetischer Confirm-Dialog. Escape schließt.</p>
+          <div class="ws-flex ws-gap-2 ws-mt-4">
+            <button class="ws-btn ws-btn--primary" type="button" data-ws-close-modal>OK</button>
+            <button class="ws-btn ws-btn--secondary" type="button" data-ws-close-modal>Abbrechen</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ws-mb-6">
+      <h2>Kundenbranding-Beispiel (synthetisch)</h2>
+      <div class="ws-card ws-brand-mode-customer" style="--ws-tenant-primary:#0F766E;--ws-tenant-primary-hover:#0D9488;--ws-tenant-primary-soft:#CCFBF1;">
+        {{ brand_lockup('compact', brand_name='Demo Imbiss', brand_subtitle='Kundenportal (Beispiel)', logo_mark='/brand/webschmiede/logo-mark.png') }}
+        <p class="ws-muted ws-text-sm">Tenant-Primary nur über CSS-Variablen — kein freies Kunden-CSS.</p>
+        {{ button('Bestellen', 'primary') }}
+      </div>
+    </section>
+  </div>
+  <script src="/ci/webschmiede-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+......................F
+================================== FAILURES ===================================
+_______________ test_parallel_allocations_no_duplicate_numbers ________________
+tests\test_customer_provisioning.py:403: in test_parallel_allocations_no_duplicate_numbers
+    assert all(n.startswith("POL") for n in numbers)
+E   assert False
+E    +  where False = all(<generator object test_parallel_allocations_no_duplicate_numbers.<locals>.<genexpr> at 0x00000297A1D3F060>)
+============================== warnings summary ===============================
+tests\conftest.py:23
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\tests\conftest.py:23: DeprecationWarning: 'asyncio.WindowsSelectorEventLoopPolicy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+tests\conftest.py:23
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\tests\conftest.py:23: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+.venv-step4\Lib\site-packages\fastapi\routing.py:233: 205 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\fastapi\routing.py:233: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    is_coroutine = asyncio.iscoroutinefunction(dependant.call)
+
+.venv-step4\Lib\site-packages\starlette\_utils.py:39: 209 warnings
+tests/test_company_edit_archive.py: 16 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\starlette\_utils.py:39: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    return asyncio.iscoroutinefunction(obj) or (callable(obj) and asyncio.iscoroutinefunction(obj.__call__))
+
+tests/test_014_task_applicability_migration.py::test_014_upgrade_downgrade_backfill
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:1153: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    return asyncio.get_event_loop_policy()
+
+tests/test_company_edit_archive.py: 13 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\starlette\testclient.py:484: DeprecationWarning: Setting per-request cookies=<...> is being deprecated, because the expected behaviour on cookie persistence is ambiguous. Set cookies directly on the client instance instead.
+    return super().request(
+
+tests/test_customer_provisioning.py::test_company_create_makes_draft
+tests/test_customer_provisioning.py::test_won_assigns_number_once_and_reuses
+tests/test_customer_provisioning.py::test_parallel_allocations_no_duplicate_numbers
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:844: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    _restore_event_loop_policy(asyncio.get_event_loop_policy()),
+
+tests/test_customer_provisioning.py::test_company_create_makes_draft
+tests/test_customer_provisioning.py::test_won_assigns_number_once_and_reuses
+tests/test_customer_provisioning.py::test_parallel_allocations_no_duplicate_numbers
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:1125: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(new_loop_policy)
+
+tests/test_customer_provisioning.py::test_company_create_makes_draft
+tests/test_customer_provisioning.py::test_won_assigns_number_once_and_reuses
+tests/test_customer_provisioning.py::test_parallel_allocations_no_duplicate_numbers
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:1126: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+
+tests/test_customer_provisioning.py::test_company_create_makes_draft
+tests/test_customer_provisioning.py::test_won_assigns_number_once_and_reuses
+tests/test_customer_provisioning.py::test_parallel_allocations_no_duplicate_numbers
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:859: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+tests/test_customer_provisioning.py::test_company_create_makes_draft
+tests/test_customer_provisioning.py::test_won_assigns_number_once_and_reuses
+tests/test_customer_provisioning.py::test_parallel_allocations_no_duplicate_numbers
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:904: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+tests/test_customer_provisioning.py::test_company_create_makes_draft
+tests/test_customer_provisioning.py::test_won_assigns_number_once_and_reuses
+tests/test_customer_provisioning.py::test_parallel_allocations_no_duplicate_numbers
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:928: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(previous_policy)
+
+tests/test_customer_provisioning.py::test_company_create_makes_draft
+tests/test_customer_provisioning.py::test_won_assigns_number_once_and_reuses
+tests/test_customer_provisioning.py::test_parallel_allocations_no_duplicate_numbers
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:940: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_customer_provisioning.py::test_parallel_allocations_no_duplicate_numbers
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 22 passed, 467 warnings in 13.52s

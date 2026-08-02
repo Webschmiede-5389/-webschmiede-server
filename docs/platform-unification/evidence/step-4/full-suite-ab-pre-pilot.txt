@@ -1,0 +1,309 @@
+commit=ee1da86
+exit=1
+.......................................F.......EEEEEEEE.EEEEE....EEEEEEE [ 69%]
+EEE.............................                                         [100%]
+=================================== ERRORS ====================================
+__________ ERROR at setup of test_valid_lead_persisted_before_email ___________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+----------------------------- Captured log setup ------------------------------
+WARNING  crm.migrate:migrate.py:88 ensure_schema_columns aktiv — nur Notfall/Legacy; Schema bitte über Alembic pflegen
+____________________ ERROR at setup of test_missing_fields ____________________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+____________________ ERROR at setup of test_duplicate_lead ____________________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_____ ERROR at setup of test_meta_field_data_persisted_and_dedup_keeps_it _____
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_____________________ ERROR at setup of test_wrong_tenant _____________________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+__________________ ERROR at setup of test_invalid_signature ___________________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_______________ ERROR at setup of test_email_failure_and_resend _______________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+________________ ERROR at setup of test_n8n_failure_and_retry _________________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+________________ ERROR at setup of test_audit_and_company_link ________________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+________________ ERROR at setup of test_token_via_query_param _________________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+____________ ERROR at setup of test_graph_enrichment_on_meta_entry ____________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+__________ ERROR at setup of test_wrong_page_id_rejected_and_audited __________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_____ ERROR at setup of test_wrong_form_id_with_correct_page_fail_closed ______
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_________ ERROR at setup of test_missing_customer_token_config_error __________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_________ ERROR at setup of test_force_test_blocks_ivk_global_domain __________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_ ERROR at setup of test_email_testmodus_follows_force_test_not_meta_is_test __
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_____________ ERROR at setup of test_cutover_recipients_to_and_cc _____________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+___________ ERROR at setup of test_dry_run_compares_without_ingest ____________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_______ ERROR at setup of test_recover_once_idempotent_and_audit_alert ________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+__________ ERROR at setup of test_prod_mode_recover_routes_to_safer ___________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_______________ ERROR at setup of test_wrong_page_form_blocked ________________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+_____________ ERROR at setup of test_missing_routing_fail_closed ______________
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+______ ERROR at setup of test_safer_blocked_despite_force_false_no_send _______
+E   sqlite3.IntegrityError: UNIQUE constraint failed: tenants.slug
+
+The above exception was the direct cause of the following exception:
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: tenants.slug
+    [SQL: INSERT INTO tenants (name, slug, notify_email, "plan", settings_json) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at]
+    [parameters: ('Webschmiede', 'webschmiede', None, 'starter', '{}')]
+    (Background on this error at: https://sqlalche.me/e/20/gkpj)
+================================== FAILURES ===================================
+C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm-ab-pre-pilot\tests\test_placetel_pilot_prep.py:211: assert (None)
+============================== warnings summary ===============================
+tests\conftest.py:16
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm-ab-pre-pilot\tests\conftest.py:16: DeprecationWarning: 'asyncio.WindowsSelectorEventLoopPolicy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+tests\conftest.py:16
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm-ab-pre-pilot\tests\conftest.py:16: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+..\crm\.venv-step4\Lib\site-packages\fastapi\routing.py:233: 205 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\fastapi\routing.py:233: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    is_coroutine = asyncio.iscoroutinefunction(dependant.call)
+
+..\crm\.venv-step4\Lib\site-packages\starlette\_utils.py:39: 209 warnings
+tests/test_pol001_delivery_leads.py: 2 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\starlette\_utils.py:39: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    return asyncio.iscoroutinefunction(obj) or (callable(obj) and asyncio.iscoroutinefunction(obj.__call__))
+
+tests/test_handwerk_inquiry_template.py::test_musterdach_provision_pipeline_and_demo_data
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:1153: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    return asyncio.get_event_loop_policy()
+
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:844: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    _restore_event_loop_policy(asyncio.get_event_loop_policy()),
+
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:1125: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(new_loop_policy)
+
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:1126: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:859: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:904: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:928: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(previous_policy)
+
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:940: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_placetel_pilot_prep.py::test_pilot_guard_nonce_reuse_and_expiry
+ERROR tests/test_pol001_delivery_leads.py::test_valid_lead_persisted_before_email
+ERROR tests/test_pol001_delivery_leads.py::test_missing_fields - sqlalchemy.e...
+ERROR tests/test_pol001_delivery_leads.py::test_duplicate_lead - sqlalchemy.e...
+ERROR tests/test_pol001_delivery_leads.py::test_meta_field_data_persisted_and_dedup_keeps_it
+ERROR tests/test_pol001_delivery_leads.py::test_wrong_tenant - sqlalchemy.exc...
+ERROR tests/test_pol001_delivery_leads.py::test_invalid_signature - sqlalchem...
+ERROR tests/test_pol001_delivery_leads.py::test_email_failure_and_resend - sq...
+ERROR tests/test_pol001_delivery_leads.py::test_n8n_failure_and_retry - sqlal...
+ERROR tests/test_pol001_delivery_leads.py::test_audit_and_company_link - sqla...
+ERROR tests/test_pol001_delivery_leads.py::test_token_via_query_param - sqlal...
+ERROR tests/test_pol001_delivery_leads.py::test_graph_enrichment_on_meta_entry
+ERROR tests/test_pol001_delivery_leads.py::test_wrong_page_id_rejected_and_audited
+ERROR tests/test_pol001_delivery_leads.py::test_wrong_form_id_with_correct_page_fail_closed
+ERROR tests/test_pol001_delivery_leads.py::test_missing_customer_token_config_error
+ERROR tests/test_pol001_delivery_leads.py::test_force_test_blocks_ivk_global_domain
+ERROR tests/test_pol001_delivery_leads.py::test_email_testmodus_follows_force_test_not_meta_is_test
+ERROR tests/test_pol001_delivery_leads.py::test_cutover_recipients_to_and_cc
+ERROR tests/test_pol001_graph_recon.py::test_dry_run_compares_without_ingest
+ERROR tests/test_pol001_graph_recon.py::test_recover_once_idempotent_and_audit_alert
+ERROR tests/test_pol001_graph_recon.py::test_prod_mode_recover_routes_to_safer
+ERROR tests/test_pol001_graph_recon.py::test_wrong_page_form_blocked - sqlalc...
+ERROR tests/test_pol001_graph_recon.py::test_missing_routing_fail_closed - sq...
+ERROR tests/test_pol001_graph_recon.py::test_safer_blocked_despite_force_false_no_send
+1 failed, 80 passed, 678 warnings, 23 errors in 35.07s
+C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:207: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))

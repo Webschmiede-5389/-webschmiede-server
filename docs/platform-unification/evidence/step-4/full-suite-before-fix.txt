@@ -1,0 +1,8 @@
+﻿=== CRM isolated full suite BEFORE step-4 isolation fixes ===
+note: System Python without alembic package; shared engine pollution
+commit_pilot=3276689
+python=3.14.4 (system)
+result_summary=226 passed, 4 failed, 16 errors (prior conversation run)
+alembic_errors=No module named alembic / alembic.operations
+isolation_errors=Company-ID 8 got 10; tenants.slug UNIQUE; CSRF 403; Placetel nonce None
+see_also=_failing-subset.txt, full-suite-ab-pre-pilot.txt

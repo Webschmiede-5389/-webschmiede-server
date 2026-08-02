@@ -1,0 +1,170 @@
+﻿=== CRM isolated full suite ===
+start_utc=2026-08-02T17:52:42.1389225Z
+crm_root=C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm
+commit=32766893a22b53d5ff2d994d8d497e215430fc86
+python=3.14.4
+venv=C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4
+PYTHONPATH_prefix=C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4
+APP_ENV=test
+CRM_TEST_DIALECT=sqlite
+providers=disabled
+command=C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Scripts\python.exe -m pytest tests/ -q --tb=line
+=== BEGIN pytest ===
+......................F................................................. [ 29%]
+........................................................................ [ 58%]
+........................................................................ [ 87%]
+..............................                                           [100%]
+================================== FAILURES ===================================
+C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\tests\test_customer_provisioning.py:403: assert False
+============================== warnings summary ===============================
+tests\conftest.py:23
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\tests\conftest.py:23: DeprecationWarning: 'asyncio.WindowsSelectorEventLoopPolicy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+tests\conftest.py:23
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\tests\conftest.py:23: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+.venv-step4\Lib\site-packages\fastapi\routing.py:233: 205 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\fastapi\routing.py:233: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    is_coroutine = asyncio.iscoroutinefunction(dependant.call)
+
+.venv-step4\Lib\site-packages\starlette\_utils.py:39: 209 warnings
+tests/test_company_edit_archive.py: 16 warnings
+tests/test_customer_provisioning.py: 7 warnings
+tests/test_deal_offer_lifecycle.py: 53 warnings
+tests/test_pol001_delivery_leads.py: 8 warnings
+tests/test_pol001_graph_recon.py: 12 warnings
+tests/test_prooffice_customer_onboarding.py: 3 warnings
+tests/test_security_gate.py: 42 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\starlette\_utils.py:39: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    return asyncio.iscoroutinefunction(obj) or (callable(obj) and asyncio.iscoroutinefunction(obj.__call__))
+
+tests/test_014_task_applicability_migration.py::test_014_upgrade_downgrade_backfill
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:1153: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    return asyncio.get_event_loop_policy()
+
+tests/test_company_edit_archive.py: 13 warnings
+tests/test_customer_provisioning.py: 3 warnings
+tests/test_deal_offer_lifecycle.py: 36 warnings
+tests/test_prooffice_customer_onboarding.py: 2 warnings
+tests/test_security_gate.py: 25 warnings
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\starlette\testclient.py:484: DeprecationWarning: Setting per-request cookies=<...> is being deprecated, because the expected behaviour on cookie persistence is ambiguous. Set cookies directly on the client instance instead.
+    return super().request(
+
+tests/test_customer_provisioning.py: 10 warnings
+tests/test_delivery_provisioning.py: 7 warnings
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_import_bridge.py: 6 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_pol001_delivery_leads.py: 3 warnings
+tests/test_prooffice_customer_onboarding.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+tests/test_security_gate.py: 1 warning
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:844: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    _restore_event_loop_policy(asyncio.get_event_loop_policy()),
+
+tests/test_customer_provisioning.py: 10 warnings
+tests/test_delivery_provisioning.py: 7 warnings
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_import_bridge.py: 6 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_pol001_delivery_leads.py: 3 warnings
+tests/test_prooffice_customer_onboarding.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+tests/test_security_gate.py: 1 warning
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:1125: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(new_loop_policy)
+
+tests/test_customer_provisioning.py: 10 warnings
+tests/test_delivery_provisioning.py: 7 warnings
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_import_bridge.py: 6 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_pol001_delivery_leads.py: 3 warnings
+tests/test_prooffice_customer_onboarding.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+tests/test_security_gate.py: 1 warning
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:1126: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+
+tests/test_customer_provisioning.py: 10 warnings
+tests/test_delivery_provisioning.py: 7 warnings
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_import_bridge.py: 6 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_pol001_delivery_leads.py: 3 warnings
+tests/test_prooffice_customer_onboarding.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+tests/test_security_gate.py: 1 warning
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:859: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+tests/test_customer_provisioning.py: 10 warnings
+tests/test_delivery_provisioning.py: 7 warnings
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_import_bridge.py: 6 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_pol001_delivery_leads.py: 3 warnings
+tests/test_prooffice_customer_onboarding.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+tests/test_security_gate.py: 1 warning
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:904: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+tests/test_customer_provisioning.py: 10 warnings
+tests/test_delivery_provisioning.py: 7 warnings
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_import_bridge.py: 6 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_pol001_delivery_leads.py: 3 warnings
+tests/test_prooffice_customer_onboarding.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+tests/test_security_gate.py: 1 warning
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:928: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(previous_policy)
+
+tests/test_customer_provisioning.py: 10 warnings
+tests/test_delivery_provisioning.py: 7 warnings
+tests/test_handwerk_inquiry_template.py: 9 warnings
+tests/test_import_bridge.py: 6 warnings
+tests/test_placetel_pilot_prep.py: 1 warning
+tests/test_placetel_staging_safety.py: 7 warnings
+tests/test_pol001_delivery_leads.py: 3 warnings
+tests/test_prooffice_customer_onboarding.py: 7 warnings
+tests/test_sales_conversion_separation.py: 12 warnings
+tests/test_sales_os_db.py: 2 warnings
+tests/test_sales_os_mvp.py: 6 warnings
+tests/test_security_gate.py: 1 warning
+  C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:940: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_customer_provisioning.py::test_parallel_allocations_no_duplicate_numbers
+1 failed, 245 passed, 1134 warnings in 137.29s (0:02:17)
+C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.venv-step4\Lib\site-packages\pytest_asyncio\plugin.py:207: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+=== END pytest ===
+exit_code=1
+end_utc=2026-08-02T17:55:01.5981577Z

@@ -1,0 +1,14 @@
+﻿{
+  "drill": "crm-testclient-smoke",
+  "environment": "local-isolated-sqlite",
+  "production_deploy": false,
+  "results": {
+    "login_branding": "PASS",
+    "dashboard_branding": "PASS",
+    "navigation_paths": "PASS",
+    "static_ws_assets": "PASS",
+    "agency_tools_api": "NOT_RUN_LOCAL_FLASK",
+    "browser_viewports": "NOT_RUN",
+    "notes": "Synthetic tenant BRANDING PILOT TESTDATA; no Placetel/email/whatsapp"
+  }
+}

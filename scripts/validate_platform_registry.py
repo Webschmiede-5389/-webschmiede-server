@@ -13,7 +13,8 @@ except ImportError:
     yaml = None
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT = ROOT / "config" / "platform_registry.example.yaml"
+DEFAULT = ROOT / "config" / "platform_registry.yaml"
+EXAMPLE = ROOT / "config" / "platform_registry.example.yaml"
 
 ALLOWED_ENV = {"production", "staging", "local"}
 ALLOWED_IO = {"internal", "external"}
@@ -133,6 +134,8 @@ def main(argv: list[str]) -> int:
         print("WARN: PyYAML not installed; existence check only")
         return 0
     path = Path(argv[1]) if len(argv) > 1 else DEFAULT
+    if not path.is_file() and path == DEFAULT and EXAMPLE.is_file():
+        path = EXAMPLE
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     errors = validate(data)
     if errors:

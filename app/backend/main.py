@@ -594,6 +594,15 @@ def require_agency_admin(f):
         }), 401
     return decorated
 
+
+# Werkzeuge API (platform_registry.yaml) — auth-gated, no business-logic change
+from platform_tools import platform_tools_bp as _platform_tools_bp
+
+app.register_blueprint(_platform_tools_bp)
+app.view_functions["platform_tools.agency_tools_list"] = require_agency_admin(
+    app.view_functions["platform_tools.agency_tools_list"]
+)
+
 # ── E-Mail ────────────────────────────────────────────────────────────────────
 
 def send_confirmation_email(order):

@@ -1,19 +1,24 @@
-# Tool Registry
+﻿# Tool Registry
 
-**Status:** Schema + Example YAML + Validator · Cockpit-UI „Werkzeuge“ noch nicht gebaut (SCHRITT 3)
+**Status SCHRITT 3:** reale Datei `config/platform_registry.yaml` + Loader + Cockpit-UI „Werkzeuge“ + Validator/Tests.
 
 ## Dateien
 
-- `config/platform_registry.example.yaml`  
-- `scripts/validate_platform_registry.py`  
+- `config/platform_registry.yaml` (produktiv für Cockpit-API, nur bestätigte URLs)
+- `config/platform_registry.example.yaml` (Schema-Beispiel)
+- `app/backend/platform_registry.py` (fail-closed Load/Filter)
+- `app/backend/platform_tools.py` → `GET /api/agency/tools`
+- `scripts/validate_platform_registry.py`
+- `app/backend/scripts/test_platform_registry.py`
 
 ```bash
-python scripts/validate_platform_registry.py
+python scripts/validate_platform_registry.py config/platform_registry.yaml
+python -m unittest app.backend.scripts.test_platform_registry -v
 ```
 
 ## Ziel
 
-Zentrale, mandantenfähige Liste aller Systeme. Speist den Cockpit-Bereich **Werkzeuge** (oder „Systeme & Werkzeuge“).  
+Zentrale Liste aller Systeme. Speist den Cockpit-Bereich **Werkzeuge**.  
 **Keine Secrets.** Keine hardcodierten Link-Duplikate in vielen Templates.
 
 ## Schema `ToolRegistryEntry`
@@ -24,77 +29,58 @@ Zentrale, mandantenfähige Liste aller Systeme. Speist den Cockpit-Bereich **Wer
 | slug | string | ja |
 | display_name | string | ja |
 | short_description | string | ja |
-| category | enum | ja |
-| icon | string (FA class oder /ci path) | ja |
+| category | string (s. Kategorien) | ja |
+| icon | string (FA key aus ui_icons.yaml) | ja |
 | environment | production \| staging \| local | ja |
-| service_type | dashboard \| portal \| automation \| vendor \| docs \| calc | ja |
+| service_type | string | ja |
 | internal_or_external | internal \| external | ja |
 | base_url | https URL oder path | ja |
 | healthcheck_url | URL \| null | nein |
 | open_mode | same_tab \| new_tab | ja |
 | required_roles | string[] | ja |
-| tenant_visibility | agency \| all_customers \| customer_ids[] | ja |
-| customer_visibility | boolean | ja |
-| status | inventory status enum | ja |
+| tenant_visibility | agency \| … | ja |
+| status | enum | ja |
 | sort_order | int | ja |
 | branding_mode | AGENCY_INTERNAL \| … | ja |
 | owner | string | ja |
-| documentation_url | string \| null | nein |
-| active | boolean | ja |
-| created_at / updated_at | ISO8601 | ja |
+| active | bool | ja |
 
-### Kategorien
+## Kategorien (UI)
 
-Vertrieb · CRM · Kundenverwaltung · Kommunikation · Content & Social Media · Leadgewinnung · Automatisierung · Website & Funnel · Angebote & Abrechnung · KI & Assistenten · Betrieb & Monitoring · Administration · Externe Dienste · Entwicklung & Staging
+Zentrale · Vertrieb · Leads · CRM · Kunden · Kommunikation · Content · Automatisierung · Dokumente · Betrieb · Externe Dienste · Entwicklung & Staging
 
-## Speicherort (Vorschlag)
+## Reale Einträge (SCHRITT 3)
 
-```
-agency/tool-registry.json          # git-tracked, keine Secrets
-app/backend/tool_registry.py       # load + RBAC filter (SCHRITT 2/3)
-GET /api/agency/tools              # auth required
-```
+| ID | URL | Env | Rollen |
+|----|-----|-----|--------|
+| agency-cockpit | https://digitalehandwerkskunst.de/agency | production | agency |
+| agency-hub | https://digitalehandwerkskunst.de/agency-hub | production | agency |
+| crm | https://crm.digitalehandwerkskunst.de | production | agency |
+| dhk-leads | https://leads.digitalehandwerkskunst.de | production | agency |
+| agency-setup | https://digitalehandwerkskunst.de/agency-setup | production | agency_admin |
+| nils | https://digitalehandwerkskunst.de/nils | production | agency |
+| n8n | https://digitalehandwerkskunst.de/n8n/ | production | agency_admin |
+| calcom | https://cal.digitalehandwerkskunst.de | production | agency |
+| docuseal | https://sign.digitalehandwerkskunst.de | production | agency |
+| umami | https://analytics.digitalehandwerkskunst.de | production | agency_admin |
+| ci-docs | https://digitalehandwerkskunst.de/ci/ | production | agency |
+| design-system-lab | /design-system | staging | agency_admin |
 
-Agency Hub Cards später aus derselben Datei speisen (eine Quelle).
-
-## Seed (Auszug — aktiv für Registry)
-
-| id | Name | Kategorie | URL | Env | open | roles |
-|----|------|-----------|-----|-----|------|-------|
-| agency-cockpit | Agency Cockpit | Administration | /agency | production | same | agency |
-| crm | CRM | CRM | https://crm.digitalehandwerkskunst.de | production | new_tab | agency |
-| lead-creator-dhk | Lead Creator (DHK Leads) | Leadgewinnung | https://leads.digitalehandwerkskunst.de | production | new_tab | agency |
-| preview-studio | Preview Studio | Website & Funnel | /agency (tab) | production | same | agency |
-| kalkulator | Kalkulator | Angebote & Abrechnung | /agency | production | same | agency |
-| nils | Nils Ops | KI & Assistenten | /nils | production | new_tab | agency |
-| agency-hub | Agency Hub | Administration | /agency-hub | production | new_tab | agency |
-| n8n | n8n | Automatisierung | /n8n/ | production | new_tab | agency_admin |
-| calcom | Cal.com | Kommunikation | https://cal.digitalehandwerkskunst.de | production | new_tab | agency |
-| docuseal | DocuSeal | Angebote & Abrechnung | https://sign.digitalehandwerkskunst.de | production | new_tab | agency |
-| umami | Umami | Betrieb & Monitoring | https://analytics.digitalehandwerkskunst.de | production | new_tab | agency_admin |
-| retell | Retell AI | Externe Dienste | vendor URL | production | new_tab | agency_admin |
-| placetel | Placetel | Externe Dienste | vendor URL | production | new_tab | agency_admin |
-| meta | Meta Business | Externe Dienste | vendor | production | new_tab | agency_admin |
-| shy001-admin | SHY001 Admin | Kundenverwaltung | snackhouse admin URL | production | new_tab | agency + customer_ops |
-| tourmeter | TourMeter | Entwicklung & Staging | /transport-kalkulator.html | production | new_tab | agency |
-| sales-dashboard-legacy | Sales Dashboard (Legacy) | Vertrieb | /sales-dashboard.html | production | new_tab | agency | warn legacy |
-
-Externe Vendor-URLs in Registry nur als erlaubte Allowlist-Hosts.
+Nicht aufgenommen ohne bestätigte sichere URL: Retell, Placetel-Admin, Meta Business, Google-Konsolen, Jarvis-Tab ohne eigene URL, Preview-Studio-Duplikat.
 
 ## RBAC / Sichtbarkeit
 
-- Normale Agency-Nutzer: keine Admin-only Vendor-Links (n8n Admin, Umami, Retell)  
-- Staging-Einträge nur mit Rolle `agency_admin` oder Env Badge + Staging-Session  
-- Kundenrollen sehen nur `customer_visibility` Tools ihres Tenants  
-- Keine Tokens in Query-Parametern
+- Production-Viewer sieht keine Staging/Local-Einträge
+- `agency` sieht keine `agency_admin`-only Tools
+- `agency_admin` impliziert `agency`
+- Ungültige URL → Karte übersprungen (Seite bleibt)
+- Registry-Strukturfehler → API 503 fail-closed
 
 ## UI im Cockpit
 
-Neuer Nav-Punkt **Werkzeuge** → Liste/Karten aus API:
+Nav **Werkzeuge** → Suche, Kategorie, Environment, ToolCards, External `noopener noreferrer`.  
+Deep-Link: `/agency#tools`.
 
-- Name, Kurzbeschreibung, Icon (CI Mark oder FA)  
-- EnvironmentBadge, Status, System, Link  
-- Warnung bei LEGACY / EXPERIMENTAL  
-- HealthStatus wenn `healthcheck_url` gesetzt und Cache ok
+## Inventur-Hinweise (SCHRITT 1)
 
-Healthchecks: optional, async, nie Secrets loggen.
+Vollständige Kandidatenliste: `application-inventory.md`. Vendor ohne confirmed Link bleiben draußen.

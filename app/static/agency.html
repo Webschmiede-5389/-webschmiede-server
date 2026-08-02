@@ -140,6 +140,7 @@
         <button type="button" id="nav-inbox" class="nav-item" onclick="showTab('inbox')"><i class="fa-solid fa-inbox w-4"></i> Posteingang <span id="nav-inbox-badge" class="nav-badge hidden">0</span></button>
         <p class="nav-section">System</p>
         <button type="button" id="nav-ops" class="nav-item" onclick="showTab('ops')"><i class="fa-solid fa-heart-pulse w-4"></i> Betrieb <span id="nav-ops-badge" class="nav-badge hidden">!</span></button>
+        <button type="button" id="nav-tools" class="nav-item" onclick="showTab('tools')"><i class="fa-solid fa-wrench w-4"></i> Werkzeuge</button>
         <p class="nav-section">Finanzen</p>
         <button type="button" id="nav-kalkulator" class="nav-item" onclick="showTab('kalkulator')"><i class="fa-solid fa-calculator w-4"></i> Kalkulator</button>
         <button type="button" id="nav-abrechnung" class="nav-item" onclick="showTab('abrechnung')"><i class="fa-solid fa-credit-card w-4"></i> Abrechnung</button>
@@ -380,6 +381,28 @@
       <p id="ops-err" class="text-sm text-red-600 mt-3 hidden"></p>
     </div>
 
+    <div id="panel-tools" class="hidden">
+      <div class="mb-4">
+        <p class="text-sm text-muted mb-3">Zentrale Übersicht bestätigter Systeme. Externe Dienste öffnen in neuem Tab — eigene Anmeldung, kein Auto-Login.</p>
+        <div class="flex flex-wrap gap-2 mb-3">
+          <input id="tools-q" type="search" placeholder="Suchen…" class="px-3 py-2 rounded-lg border border-border text-sm flex-1 min-w-[12rem]" oninput="renderTools()" aria-label="Werkzeuge suchen">
+          <select id="tools-cat" class="px-3 py-2 rounded-lg border border-border text-sm" onchange="renderTools()" aria-label="Kategorie">
+            <option value="">Alle Kategorien</option>
+          </select>
+          <select id="tools-env" class="px-3 py-2 rounded-lg border border-border text-sm" onchange="renderTools()" aria-label="Umgebung">
+            <option value="">Alle Umgebungen</option>
+            <option value="production">Production</option>
+            <option value="staging">Staging</option>
+            <option value="local">Local</option>
+          </select>
+        </div>
+        <p id="tools-err" class="text-sm text-red-600 hidden"></p>
+        <p id="tools-meta" class="text-xs text-muted mb-3"></p>
+      </div>
+      <div id="tools-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      <div id="tools-empty" class="panel p-8 text-center text-muted text-sm hidden">Keine Werkzeuge für diese Filter.</div>
+    </div>
+
       </main>
     </div>
   </div>
@@ -454,7 +477,14 @@
     function getPw() { return AgencyAuth.getToken(); }
     function hdr() { return AgencyAuth.headers(); }
 
-    const PAGE_TITLES = { home: 'Übersicht', pipeline: 'Pipeline', kunden: 'Kunden', jarvis: 'Jarvis', inbox: 'Posteingang', kalkulator: 'Kalkulator', abrechnung: 'Abrechnung', ops: 'Betrieb' };
+    const PAGE_TITLES = { home: 'Übersicht', pipeline: 'Pipeline', kunden: 'Kunden', jarvis: 'Jarvis', inbox: 'Posteingang', kalkulator: 'Kalkulator', abrechnung: 'Abrechnung', ops: 'Betrieb', tools: 'Werkzeuge' };
+    let toolsCache = null;
+    const TOOL_ICONS = {
+      dashboard: 'fa-gauge-high', crm: 'fa-address-book', leads: 'fa-magnet', tools: 'fa-wrench',
+      settings: 'fa-sliders', assistant: 'fa-robot', automation: 'fa-diagram-project', calendar: 'fa-calendar',
+      monitoring: 'fa-heart-pulse', content: 'fa-image', preview: 'fa-eye', billing: 'fa-credit-card',
+      calculator: 'fa-calculator', phone: 'fa-phone', mail: 'fa-envelope'
+    };
     let opsCache = null;
     const PIPELINE_COLUMNS = [
       { stage: 'lead', label: 'Lead', hint: 'Neu · Erstkontakt' },
@@ -470,7 +500,8 @@
     function showApp() {
       document.getElementById('login-screen').classList.add('hidden');
       document.getElementById('app').classList.remove('hidden');
-      showTab('home');
+      const hashTab = (location.hash || '').replace(/^#/, '');
+      showTab(hashTab === 'tools' ? 'tools' : 'home');
       loadKunden();
       loadGlobalAutomations();
       loadInbox();
@@ -564,7 +595,7 @@
     }
 
     function showTab(name) {
-      ['home', 'pipeline', 'kunden', 'jarvis', 'inbox', 'kalkulator', 'abrechnung', 'ops'].forEach(t => {
+      ['home', 'pipeline', 'kunden', 'jarvis', 'inbox', 'kalkulator', 'abrechnung', 'ops', 'tools'].forEach(t => {
         document.getElementById('panel-' + t)?.classList.toggle('hidden', name !== t);
         document.getElementById('nav-' + t)?.classList.toggle('active', name === t);
       });
@@ -575,11 +606,90 @@
       if (name === 'pipeline') renderPipeline();
       if (name === 'ops') loadOps();
       if (name === 'kalkulator') loadKalkulator();
+      if (name === 'tools') loadTools();
       if (name === 'jarvis') {
         syncJarvisKundeSelect();
         updateJarvisContextBanner();
         loadJarvisHistory();
       }
+    }
+
+    async function loadTools() {
+      const errEl = document.getElementById('tools-err');
+      if (errEl) { errEl.classList.add('hidden'); errEl.textContent = ''; }
+      try {
+        const r = await fetch('/api/agency/tools', { headers: hdr() });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data.error || data.hint || ('HTTP ' + r.status));
+        toolsCache = data;
+        const cat = document.getElementById('tools-cat');
+        if (cat && cat.options.length <= 1) {
+          (data.categories || []).forEach(c => {
+            const o = document.createElement('option');
+            o.value = c; o.textContent = c;
+            cat.appendChild(o);
+          });
+        }
+        const meta = document.getElementById('tools-meta');
+        if (meta) meta.textContent = (data.count || 0) + ' Werkzeuge · Viewer-Env: ' + (data.env || '–');
+        renderTools();
+      } catch (e) {
+        if (errEl) {
+          errEl.textContent = e.message || 'Werkzeuge laden fehlgeschlagen';
+          errEl.classList.remove('hidden');
+        }
+        toolsCache = { entries: [] };
+        renderTools();
+      }
+    }
+
+    function renderTools() {
+      const grid = document.getElementById('tools-grid');
+      const empty = document.getElementById('tools-empty');
+      if (!grid) return;
+      const q = (document.getElementById('tools-q')?.value || '').trim().toLowerCase();
+      const cat = document.getElementById('tools-cat')?.value || '';
+      const envf = document.getElementById('tools-env')?.value || '';
+      let list = (toolsCache && toolsCache.entries) ? toolsCache.entries.slice() : [];
+      if (cat) list = list.filter(t => t.category === cat);
+      if (envf) list = list.filter(t => t.environment === envf);
+      if (q) list = list.filter(t =>
+        (t.display_name || '').toLowerCase().includes(q) ||
+        (t.short_description || '').toLowerCase().includes(q) ||
+        (t.slug || '').toLowerCase().includes(q)
+      );
+      if (!list.length) {
+        grid.innerHTML = '';
+        empty?.classList.remove('hidden');
+        return;
+      }
+      empty?.classList.add('hidden');
+      grid.innerHTML = list.map(t => {
+        try {
+          const ext = t.internal_or_external === 'external';
+          const target = (t.open_mode === 'new_tab' || ext) ? ' target="_blank" rel="noopener noreferrer"' : '';
+          const icon = TOOL_ICONS[t.icon] || 'fa-wrench';
+          const status = t.status || '';
+          const hint = (status === 'LEGACY' || status === 'EXPERIMENTAL' || status === 'EXTERNAL_SERVICE')
+            ? `<span class="text-[10px] uppercase tracking-wide text-muted">${esc(status.replace(/_/g,' '))}</span>` : '';
+          const envBadge = t.environment && t.environment !== 'production'
+            ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#FFF4ED] text-gold">${esc(t.environment.toUpperCase())}</span>`
+            : `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-green-50 text-green-700">PROD</span>`;
+          const extMark = ext ? ' <i class="fa-solid fa-arrow-up-right-from-square text-xs text-muted" aria-hidden="true"></i><span class="sr-only"> (externer Link)</span>' : '';
+          const href = esc(t.base_url || '#');
+          return `<a href="${href}"${target} class="panel p-4 block hover:border-gold transition-colors focus:outline-none focus:ring-2 focus:ring-gold">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[#FFF4ED] text-gold"><i class="fa-solid ${icon}" aria-hidden="true"></i></span>
+              <div class="flex flex-col items-end gap-1">${envBadge}${hint}</div>
+            </div>
+            <p class="font-semibold text-ink text-sm">${esc(t.display_name || '')}${extMark}</p>
+            <p class="text-xs text-muted mt-1">${esc(t.short_description || '')}</p>
+            <p class="text-[10px] text-muted mt-2">${esc(t.category || '')}${ext ? ' · extern' : ' · intern'}</p>
+          </a>`;
+        } catch (err) {
+          return '';
+        }
+      }).join('');
     }
 
     function renderDashboard() {

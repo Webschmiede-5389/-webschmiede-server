@@ -1,0 +1,246 @@
+# Real Tool Registry — SCHRITT 3 Branding Pilot
+# Only confirmed URLs from docs/platform-unification/application-inventory.md
+# Validated by scripts/validate_platform_registry.py + app/backend/platform_registry.py
+# No tokens, no credentials, no private IPs for end users.
+
+version: 1
+entries:
+  - id: agency-cockpit
+    slug: agency-cockpit
+    display_name: Agency Cockpit
+    short_description: Zentrale Übersicht, Kunden, Pipeline, Betrieb
+    category: Zentrale
+    icon: dashboard
+    environment: production
+    service_type: dashboard
+    internal_or_external: internal
+    base_url: https://digitalehandwerkskunst.de/agency
+    open_mode: same_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 10
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: crm
+    slug: crm
+    display_name: CRM
+    short_description: Unternehmen, Kontakte, Pipeline, Angebote, Sales-OS
+    category: CRM
+    icon: crm
+    environment: production
+    service_type: dashboard
+    internal_or_external: internal
+    base_url: https://crm.digitalehandwerkskunst.de
+    open_mode: new_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 20
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: dhk-leads
+    slug: dhk-leads
+    display_name: DHK B2B-Kundenfänger
+    short_description: Lead-Research Dashboard (Places/OSM, Scoring, CSV)
+    category: Leads
+    icon: leads
+    environment: production
+    service_type: dashboard
+    internal_or_external: internal
+    base_url: https://leads.digitalehandwerkskunst.de
+    open_mode: new_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 30
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: agency-hub
+    slug: agency-hub
+    display_name: Agency Hub
+    short_description: Hub-Übersicht und Einstiege
+    category: Zentrale
+    icon: tools
+    environment: production
+    service_type: dashboard
+    internal_or_external: internal
+    base_url: https://digitalehandwerkskunst.de/agency-hub
+    open_mode: new_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 15
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: agency-setup
+    slug: agency-setup
+    display_name: Agency Setup
+    short_description: Keys, Integrationen, Setup
+    category: Betrieb
+    icon: settings
+    environment: production
+    service_type: dashboard
+    internal_or_external: internal
+    base_url: https://digitalehandwerkskunst.de/agency-setup
+    open_mode: new_tab
+    required_roles: [agency_admin]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 40
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: nils
+    slug: nils
+    display_name: Nils
+    short_description: Ops-Assistent (Agency)
+    category: Betrieb
+    icon: assistant
+    environment: production
+    service_type: dashboard
+    internal_or_external: internal
+    base_url: https://digitalehandwerkskunst.de/nils
+    open_mode: new_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 50
+    branding_mode: AGENCY_INTERNAL
+    owner: Nils
+    healthcheck_url: null
+    active: true
+
+  - id: n8n
+    slug: n8n
+    display_name: n8n
+    short_description: Automation Hub (eigene Anmeldung)
+    category: Automatisierung
+    icon: automation
+    environment: production
+    service_type: automation
+    internal_or_external: external
+    base_url: https://digitalehandwerkskunst.de/n8n/
+    open_mode: new_tab
+    required_roles: [agency_admin]
+    tenant_visibility: agency
+    status: EXTERNAL_SERVICE
+    sort_order: 100
+    branding_mode: EXTERNAL_SERVICE_CARD
+    owner: Nils
+    healthcheck_url: null
+    active: true
+
+  - id: calcom
+    slug: calcom
+    display_name: Cal.com
+    short_description: Terminbuchung (eigene Anmeldung)
+    category: Kommunikation
+    icon: calendar
+    environment: production
+    service_type: calendar
+    internal_or_external: external
+    base_url: https://cal.digitalehandwerkskunst.de
+    open_mode: new_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: EXTERNAL_SERVICE
+    sort_order: 110
+    branding_mode: EXTERNAL_SERVICE_CARD
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: docuseal
+    slug: docuseal
+    display_name: DocuSeal
+    short_description: Verträge und Signaturen
+    category: Dokumente
+    icon: settings
+    environment: production
+    service_type: documents
+    internal_or_external: external
+    base_url: https://sign.digitalehandwerkskunst.de
+    open_mode: new_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: EXTERNAL_SERVICE
+    sort_order: 120
+    branding_mode: EXTERNAL_SERVICE_CARD
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: umami
+    slug: umami
+    display_name: Umami
+    short_description: Website-Analytics (eigene Anmeldung)
+    category: Externe Dienste
+    icon: monitoring
+    environment: production
+    service_type: analytics
+    internal_or_external: external
+    base_url: https://analytics.digitalehandwerkskunst.de
+    open_mode: new_tab
+    required_roles: [agency_admin]
+    tenant_visibility: agency
+    status: EXTERNAL_SERVICE
+    sort_order: 130
+    branding_mode: EXTERNAL_SERVICE_CARD
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: ci-docs
+    slug: ci-docs
+    display_name: CI-Vorlagen
+    short_description: Print- und Dokument-Vorlagen
+    category: Content
+    icon: content
+    environment: production
+    service_type: docs
+    internal_or_external: internal
+    base_url: https://digitalehandwerkskunst.de/ci/
+    open_mode: new_tab
+    required_roles: [agency]
+    tenant_visibility: agency
+    status: ACTIVE_PRODUCTION
+    sort_order: 90
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true
+
+  - id: design-system-lab
+    slug: design-system-lab
+    display_name: Design-System-Lab
+    short_description: Tokens, Components, AppShell-Prototyp (nur non-prod)
+    category: Entwicklung & Staging
+    icon: preview
+    environment: staging
+    service_type: lab
+    internal_or_external: internal
+    base_url: /design-system
+    open_mode: new_tab
+    required_roles: [agency_admin]
+    tenant_visibility: agency
+    status: ACTIVE_STAGING
+    sort_order: 200
+    branding_mode: AGENCY_INTERNAL
+    owner: Christian
+    healthcheck_url: null
+    active: true

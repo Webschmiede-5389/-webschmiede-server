@@ -4,7 +4,9 @@ Stand: 2026-08-02
 
 ## Jetzt
 
-**Nils Entity-Routing Staging-Canary (2026-08-02):** Current-Turn-First / Entity-Guards. Canary A–E **16/16 PASS** auf Staging-sqlite. Urteil **READY_FOR_OWNER_CANARY**. Prospect-Write danach wieder **aus**. Kein Limited-Production. → `audits/.../nils-entity-routing-staging-canary-2026-08-02.md`
+**Platform Unification SCHRITT 1 (2026-08-02):** Read-only Inventur + Docs unter `docs/platform-unification/`. Urteil **INVENTORY_COMPLETE**. Designsystem/Pilot noch offen. Lead Creator = DHK Leads (`leads.digitalehandwerkskunst.de`). Kein Production-Deploy. → Topic `platform-unification.md`
+
+**Nils Prospect Defaults PASS (2026-08-02):** Release `nils-entity-routing-9f90f42bdea6` live. Kein stilles DE/art6_1_f mehr. Canary ID16 country/legal NULL, outbound gesperrt, success_count=2/5. Caps unverändert isoliert. Urteil **LIMITED_PRODUCTION_PASS**. STOP. → Topic `nils-entity-routing.md`
 
 **Login-/Hackerschutz live (2026-07-28):** Shared SQLite Rate-Limit, Admin+Agency 2FA-UI, Password-Header nur intern/Allowlist. → `docs/memory/topics/shy001-login-sicherheit.md` (2FA einmal in Authenticator bestätigen)
 

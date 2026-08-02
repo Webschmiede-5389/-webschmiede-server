@@ -137,6 +137,23 @@ def execute_prospect_create(
         phone = (collected.get("phone") or "").strip()
         entity_kind = (collected.get("entity_kind") or "").strip().lower()
         original = (job.get("original_request") or "")[:500]
+        # Country / legal_basis only from explicit text or prior collected values
+        country = (collected.get("country") or "").strip() or pilot.extract_country_from_text(
+            original
+        )
+        legal_basis = (
+            collected.get("legal_basis") or ""
+        ).strip() or pilot.extract_legal_basis_from_text(original)
+        # Storage ≠ marketing: outbound never auto-on for Nils create
+        outbound_allowed = False
+        if (collected.get("outbound_allowed") or "").strip().lower() in (
+            "1",
+            "true",
+            "yes",
+            "ja",
+        ):
+            # only if a separate approved process set this flag on the turn
+            outbound_allowed = True
 
         if not company:
             prompt = crm_language.ask_company_prompt()
@@ -188,13 +205,24 @@ def execute_prospect_create(
             }
 
         payload = pilot.payload_dict(
-            company=company, contact=contact, email=email, phone=phone
+            company=company,
+            contact=contact,
+            email=email,
+            phone=phone,
+            country=country,
+            legal_basis=legal_basis,
+            outbound_allowed="true" if outbound_allowed else "false",
         )
         company = payload["company"]
         contact = payload["contact"]
+        country = payload.get("country") or ""
+        legal_basis = payload.get("legal_basis") or ""
         collected["company"] = company
         collected["customer"] = company
         collected["contact"] = contact
+        collected["country"] = country
+        collected["legal_basis"] = legal_basis
+        collected["outbound_allowed"] = payload.get("outbound_allowed") or "false"
         turn["collected_parameters"] = collected
 
         # Duplicate check before preview and before write
@@ -387,7 +415,21 @@ def execute_prospect_create(
         pilot.mark_confirmed(turn)
         tc.save(jid, turn)
 
-        result = crm.create_prospect(company_name=company, contact_name=contact)
+        # Write exactly the confirmed preview payload
+        bound = (binding or {}).get("payload") or payload
+        company = bound.get("company") or company
+        contact = bound.get("contact") or contact
+        country = bound.get("country") or ""
+        legal_basis = bound.get("legal_basis") or ""
+        outbound_allowed = (bound.get("outbound_allowed") or "false").lower() == "true"
+
+        result = crm.create_prospect(
+            company_name=company,
+            contact_name=contact,
+            country=country or None,
+            legal_basis=legal_basis or None,
+            outbound_allowed=bool(outbound_allowed),
+        )
         after_count = _company_count()
 
         # Side-effect / safety checks

@@ -104,7 +104,8 @@ def main() -> int:
         and "ich würde folgenden interessenten" in (r.get("text") or "").lower()
         and "Müller Dach" in (r.get("text") or "")
         and "Peter Müller" in (r.get("text") or "")
-        and "prospect" in (r.get("text") or "").lower(),
+        and "noch nicht bewertet" in (r.get("text") or "").lower()
+        and "outbound: nicht freigegeben" in (r.get("text") or "").lower(),
         f"status={(r.get('job') or {}).get('status')} text={(r.get('text') or '')[:200]}",
     )
 

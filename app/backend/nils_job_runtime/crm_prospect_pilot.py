@@ -75,15 +75,84 @@ def payload_dict(
     contact: str = "",
     email: str = "",
     phone: str = "",
+    country: str = "",
+    legal_basis: str = "",
+    outbound_allowed: str = "false",
     lifecycle: str = LIFECYCLE,
 ) -> dict[str, str]:
+    out_raw = (outbound_allowed or "false").strip().lower()
+    outbound = "true" if out_raw in ("1", "true", "yes", "ja") else "false"
     return {
         "company": normalize_company_name(company),
         "contact": re.sub(r"\s+", " ", (contact or "").strip())[:200],
         "email": (email or "").strip().lower()[:200],
         "phone": re.sub(r"\s+", "", (phone or "").strip())[:40],
+        "country": (country or "").strip().upper()[:8],
+        "legal_basis": (legal_basis or "").strip()[:40],
+        "outbound_allowed": outbound,
         "lifecycle": (lifecycle or LIFECYCLE).strip().upper(),
     }
+
+
+_COUNTRY_DE_RE = re.compile(
+    r"(?i)\b(?:deutschland|germany|bundesrepublik\s+deutschland)\b"
+    r"|(?:^|[\s,;])(?:land|standort)\s*[:=]?\s*de(?:$|[\s,;.])"
+    r"|(?:^|[\s,;])in\s+deutschland(?:$|[\s,;.])"
+)
+
+_LEGAL_BASIS_RULES: list[tuple[re.Pattern[str], str, str]] = [
+    (
+        re.compile(
+            r"(?i)rechtsgrundlage\s*[:=]?\s*(?:art\.?\s*)?6\s*(?:abs\.?\s*)?1\s*"
+            r"(?:lit\.?\s*)?f|rechtsgrundlage\s*[:=]?\s*berechtigtes\s+interesse"
+        ),
+        "art6_1_f",
+        "Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)",
+    ),
+    (
+        re.compile(
+            r"(?i)rechtsgrundlage\s*[:=]?\s*(?:art\.?\s*)?6\s*(?:abs\.?\s*)?1\s*"
+            r"(?:lit\.?\s*)?a|rechtsgrundlage\s*[:=]?\s*einwilligung"
+        ),
+        "art6_1_a",
+        "Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)",
+    ),
+    (
+        re.compile(
+            r"(?i)rechtsgrundlage\s*[:=]?\s*(?:art\.?\s*)?6\s*(?:abs\.?\s*)?1\s*"
+            r"(?:lit\.?\s*)?b|rechtsgrundlage\s*[:=]?\s*vertrag"
+        ),
+        "art6_1_b",
+        "Art. 6 Abs. 1 lit. b DSGVO (Vertrag)",
+    ),
+]
+
+LEGAL_BASIS_LABELS = {
+    "": "noch nicht bewertet",
+    "art6_1_f": "Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)",
+    "art6_1_a": "Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)",
+    "art6_1_b": "Art. 6 Abs. 1 lit. b DSGVO (Vertrag)",
+}
+
+
+def extract_country_from_text(text: str) -> str:
+    t = text or ""
+    if _COUNTRY_DE_RE.search(t):
+        return "DE"
+    return ""
+
+
+def extract_legal_basis_from_text(text: str) -> str:
+    """Only explicit, validated phrases — never invent art6_1_f."""
+    t = text or ""
+    for rx, code, _label in _LEGAL_BASIS_RULES:
+        if rx.search(t):
+            return code
+    return ""
+
+
+def legal_basis_label(code: str) -> str:
+    return LEGAL_BASIS_LABELS.get((code or "").strip(), code or LEGAL_BASIS_LABELS[""])
 
 
 def payload_hash(payload: dict[str, str]) -> str:
@@ -96,14 +165,20 @@ def format_preview(payload: dict[str, str]) -> str:
         v = (payload.get(key) or "").strip()
         return f"{label}: {v if v else 'nicht angegeben'}"
 
+    country = (payload.get("country") or "").strip()
+    legal = (payload.get("legal_basis") or "").strip()
+    outbound = (payload.get("outbound_allowed") or "false").strip().lower() == "true"
     lines = [
         "Ich würde folgenden Interessenten anlegen:",
         "",
         f"Unternehmen: {payload.get('company') or 'nicht angegeben'}",
-        f"Status: {payload.get('lifecycle') or LIFECYCLE}",
+        f"Lifecycle: {payload.get('lifecycle') or LIFECYCLE}",
         _v("contact", "Ansprechpartner"),
         _v("email", "E-Mail"),
         _v("phone", "Telefon"),
+        f"Land: {country if country else 'nicht angegeben'}",
+        f"Rechtsgrundlage: {legal_basis_label(legal)}",
+        f"Outbound: {'freigegeben' if outbound else 'nicht freigegeben'}",
         "",
         "Soll ich den Datensatz jetzt anlegen?",
         "Antwort: Ja / Anlegen / Bestätigen / Ja, anlegen — sonst Abbrechen.",
@@ -138,6 +213,11 @@ def bind_preview(
     collected["company"] = payload["company"]
     collected["customer"] = payload["company"]
     collected["contact"] = payload.get("contact") or ""
+    collected["email"] = payload.get("email") or ""
+    collected["phone"] = payload.get("phone") or ""
+    collected["country"] = payload.get("country") or ""
+    collected["legal_basis"] = payload.get("legal_basis") or ""
+    collected["outbound_allowed"] = payload.get("outbound_allowed") or "false"
     turn["collected_parameters"] = collected
     return binding
 
@@ -176,6 +256,9 @@ def validate_confirmation(
         contact=collected.get("contact") or "",
         email=collected.get("email") or "",
         phone=collected.get("phone") or "",
+        country=collected.get("country") or "",
+        legal_basis=collected.get("legal_basis") or "",
+        outbound_allowed=collected.get("outbound_allowed") or "false",
         lifecycle=collected.get("lifecycle") or LIFECYCLE,
     )
     if payload_hash(current) != binding.get("payload_hash"):

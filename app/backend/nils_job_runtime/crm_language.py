@@ -20,9 +20,13 @@ def policy() -> Any:
     global _POLICY
     if _POLICY is not None:
         return _POLICY
-    path = _crm_root() / "app" / "services" / "lifecycle_policy.py"
-    if not path.is_file():
-        raise FileNotFoundError(f"lifecycle_policy nicht gefunden: {path}")
+    candidates = [
+        Path(__file__).resolve().with_name("crm_lifecycle_policy.py"),
+        _crm_root() / "app" / "services" / "lifecycle_policy.py",
+    ]
+    path = next((p for p in candidates if p.is_file()), None)
+    if path is None:
+        raise FileNotFoundError("lifecycle_policy nicht gefunden")
     spec = importlib.util.spec_from_file_location("crm_lifecycle_policy_svc", path)
     if spec is None or spec.loader is None:
         raise ImportError(str(path))

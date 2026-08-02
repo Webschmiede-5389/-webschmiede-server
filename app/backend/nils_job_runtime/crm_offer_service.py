@@ -341,7 +341,11 @@ def seed_isolated_fixture(path: Path | None = None, *, reset: bool = True) -> Pa
                 status TEXT DEFAULT 'neu',
                 archived_at TEXT,
                 industry TEXT DEFAULT '',
-                sub_industry TEXT DEFAULT ''
+                sub_industry TEXT DEFAULT '',
+                country TEXT,
+                legal_basis TEXT,
+                do_not_contact INTEGER DEFAULT 1,
+                blocked INTEGER DEFAULT 0
             );
             CREATE TABLE IF NOT EXISTS deals (
                 id INTEGER PRIMARY KEY,

@@ -536,9 +536,11 @@ def extract_company_from_text(text: str) -> str:
     ) and not re.search(r"(?i)\b(?:bei|von)\b", t):
         return ""
     # „Lege Hassan Yassine als potentieller Kunde / Interessenten an“
+    # Optional trailing metadata: „. Standort Deutschland.“ / „Rechtsgrundlage: …“
     m = re.search(
         r"(?i)^\s*lege?\s+(.+?)\s+als\s+(?:einen?\s+|ein\s+)?"
-        r"(?:interessenten?|prospect|potentiell\w*\s+kunden?)\s+an\s*$",
+        r"(?:interessenten?|prospect|potentiell\w*\s+kunden?)\s+an"
+        r"(?:\s*[.!…]?\s+(?:standort|land|rechtsgrundlage)\b.*)?\s*$",
         t,
     )
     if m:

@@ -1,0 +1,56 @@
+{
+  "at": "2026-08-03T22:17:15Z",
+  "base": "http://127.0.0.1:18099",
+  "pass": true,
+  "steps": [
+    {
+      "api": {
+        "ok": true,
+        "count": 12,
+        "env": "staging",
+        "sample": [
+          "Agency Cockpit",
+          "Agency Hub",
+          "CRM",
+          "DHK B2B-Kundenfänger",
+          "Agency Setup",
+          "Nils",
+          "CI-Vorlagen",
+          "n8n"
+        ]
+      }
+    },
+    {
+      "unauthorized_without_creds": true
+    },
+    {
+      "viewport": "390",
+      "login": {
+        "success": true,
+        "token": "pilot-session-ok"
+      },
+      "tools_state": {
+        "ok": true,
+        "count": 12,
+        "meta": "12 Werkzeuge · staging"
+      },
+      "card_count": 12,
+      "screenshot": "screenshots/agency-tools-390.png"
+    },
+    {
+      "viewport": "1440",
+      "login": {
+        "success": true,
+        "token": "pilot-session-ok"
+      },
+      "tools_state": {
+        "ok": true,
+        "count": 12,
+        "meta": "12 Werkzeuge · staging"
+      },
+      "card_count": 12,
+      "screenshot": "screenshots/agency-tools-1440.png"
+    }
+  ],
+  "server_commit": "ff4fa6f"
+}

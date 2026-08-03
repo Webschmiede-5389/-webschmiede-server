@@ -1,0 +1,306 @@
+{
+  "at": "2026-08-03T22:14:07Z",
+  "base": "http://127.0.0.1:8093",
+  "viewports": {
+    "390": {
+      "shots": {
+        "login": "screenshots/390-login.png",
+        "appshell": "screenshots/390-appshell-dashboard.png",
+        "mobile_nav": "screenshots/390-mobile-nav-open.png",
+        "companies_list": "screenshots/390-companies-list.png",
+        "company_detail_or_form": "screenshots/390-company-detail-or-form.png",
+        "pipeline": "screenshots/390-pipeline.png",
+        "tasks": "screenshots/390-tasks.png",
+        "settings": "screenshots/390-settings.png",
+        "after_logout": "screenshots/390-after-logout.png"
+      },
+      "visual": {
+        "login": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "CRM anmelden · WebSchmiede"
+        },
+        "appshell": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "Vertriebsübersicht · WebSchmiede"
+        },
+        "companies_list": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "Unternehmen · WebSchmiede"
+        },
+        "company_detail": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "Unternehmen anlegen · WebSchmiede"
+        }
+      },
+      "nav": {
+        "mobile_expanded": "true",
+        "mobile_closed": "true"
+      },
+      "a11y_focus": "A#.active",
+      "agency_tools_link": true,
+      "button_count": 5,
+      "console_errors": [],
+      "failed_requests_core": [],
+      "login_ms": 946
+    },
+    "768": {
+      "shots": {
+        "login": "screenshots/768-login.png",
+        "appshell": "screenshots/768-appshell-dashboard.png",
+        "mobile_nav": "screenshots/768-mobile-nav-open.png",
+        "companies_list": "screenshots/768-companies-list.png",
+        "company_detail_or_form": "screenshots/768-company-detail-or-form.png",
+        "pipeline": "screenshots/768-pipeline.png",
+        "tasks": "screenshots/768-tasks.png",
+        "settings": "screenshots/768-settings.png",
+        "after_logout": "screenshots/768-after-logout.png"
+      },
+      "visual": {
+        "login": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "CRM anmelden · WebSchmiede"
+        },
+        "appshell": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "Vertriebsübersicht · WebSchmiede"
+        },
+        "companies_list": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "Unternehmen · WebSchmiede"
+        },
+        "company_detail": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "Unternehmen anlegen · WebSchmiede"
+        }
+      },
+      "nav": {
+        "mobile_expanded": "true",
+        "mobile_closed": "true"
+      },
+      "a11y_focus": "A#.active",
+      "agency_tools_link": true,
+      "button_count": 5,
+      "console_errors": [],
+      "failed_requests_core": [],
+      "login_ms": 860
+    },
+    "1440": {
+      "shots": {
+        "login": "screenshots/1440-login.png",
+        "appshell": "screenshots/1440-appshell-dashboard.png",
+        "companies_list": "screenshots/1440-companies-list.png",
+        "company_detail_or_form": "screenshots/1440-company-detail-or-form.png",
+        "pipeline": "screenshots/1440-pipeline.png",
+        "tasks": "screenshots/1440-tasks.png",
+        "settings": "screenshots/1440-settings.png",
+        "after_logout": "screenshots/1440-after-logout.png"
+      },
+      "visual": {
+        "login": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "CRM anmelden · WebSchmiede"
+        },
+        "appshell": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "Vertriebsübersicht · WebSchmiede"
+        },
+        "companies_list": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "Unternehmen · WebSchmiede"
+        },
+        "company_detail": {
+          "overflowX": false,
+          "clipped": [],
+          "logos": [
+            {
+              "src": "/static/ws/brand/webschmiede/logo-mark.png",
+              "w": 623,
+              "h": 602,
+              "complete": true
+            }
+          ],
+          "themeColor": "#FF6600",
+          "hasWsApp": true,
+          "cssHasGold": false,
+          "cssHasOrange": true,
+          "title": "Unternehmen anlegen · WebSchmiede"
+        }
+      },
+      "nav": {},
+      "a11y_focus": "A#.skip-link",
+      "agency_tools_link": true,
+      "button_count": 5,
+      "console_errors": [],
+      "failed_requests_core": [],
+      "login_ms": 830
+    }
+  },
+  "checks": [],
+  "console_errors": [],
+  "failed_requests": [],
+  "a11y": {
+    "labels_login": "login-email / login-password labeled",
+    "skip_link": "present in base.html",
+    "nav_toggle_aria": "aria-controls=sidebar aria-expanded",
+    "focus_sample": {
+      "390": "A#.active",
+      "768": "A#.active",
+      "1440": "A#.skip-link"
+    },
+    "critical_violations": [],
+    "notes": "Kein vollständiger axe-Lauf; manueller Browser-Audit + DOM-Checks."
+  },
+  "performance": {
+    "login_ms_by_viewport": {
+      "390": 946,
+      "768": 860,
+      "1440": 830
+    },
+    "notes": "Kein Lighthouse-Projekt; grobe Navigation-/Login-Zeiten."
+  },
+  "pass": true,
+  "failures": []
+}

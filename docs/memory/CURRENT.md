@@ -1,8 +1,15 @@
 # Aktueller Fokus
 
-Stand: 2026-08-02
+Stand: 2026-08-04
 
 ## Jetzt
+
+**Platform Unification SCHRITT 5 (2026-08-04):** Isoliertes PostgreSQL-Staging + Playwright Browser-Drill + Visual-Baselines 390/768/1440 + Agency-Werkzeuge-E2E. Urteil **BRANDING_PILOT_READY**. Server `b8e2bf2`, CRM Worktree `4af56fc` (auf `878cc23`). Stash unangetastet. Kein Prod-Deploy. → `docs/platform-unification/step-5-acceptance-report.md`
+
+**Platform Unification SCHRITT 4 (2026-08-02):** Suite-Isolation Fix + Evidence. CRM Full-Suite **246 passed / 0 failed / 0 errors** (venv). Staging-Browser/Visual-Baselines noch offen → Urteil weiter **NOT_READY**. Stash unangetastet. → `docs/platform-unification/step-4-*.md`
+
+
+**Platform Unification SCHRITT 3 (2026-08-02):** Branding-Pilot Code fertig (CRM Login/AppShell/Dashboard + Agency Werkzeuge + `platform_registry.yaml`). Branches: Server `feature/platform-unification-branding-pilot` @ `6987fa8`, CRM gleicher Branchname @ `3276689`. Urteil **NOT_READY** (volle CRM-Suite nicht grün, Staging-E2E/Visual-Baselines offen). Kein Prod-Deploy. → `docs/platform-unification/step-3-*.md`
 
 **Platform Unification SCHRITT 2 (2026-08-02):** Shared Design System ready — Tokens, AppShell-Lab `/design-system`, Brand-Manifest, Lint+Tests. **Keine** CRM-/Cockpit-Migration, kein Prod-Deploy. Urteil **DESIGN_SYSTEM_READY**. → `docs/platform-unification/step-2-report.md`
 

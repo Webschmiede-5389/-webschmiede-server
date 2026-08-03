@@ -4,6 +4,8 @@ Stand: 2026-08-04
 
 ## Jetzt
 
+**Platform Unification SCHRITT 5 MERGE (2026-08-04):** In Integrationsbranch `feature/platform-unification-branding-pilot` übernommen. Server Squash `44881c2`, CRM Merge `81398b4`. Staging gestoppt. Urteil **MERGED_NO_DEPLOY**. Kein Prod-Deploy. → `docs/platform-unification/step-5-acceptance-report.md`
+
 **Platform Unification SCHRITT 5 (2026-08-04):** Isoliertes PostgreSQL-Staging + Playwright Browser-Drill + Visual-Baselines 390/768/1440 + Agency-Werkzeuge-E2E. Urteil **BRANDING_PILOT_READY**. Server `b8e2bf2`, CRM Worktree `4af56fc` (auf `878cc23`). Stash unangetastet. Kein Prod-Deploy. → `docs/platform-unification/step-5-acceptance-report.md`
 
 **Platform Unification SCHRITT 4 (2026-08-02):** Suite-Isolation Fix + Evidence. CRM Full-Suite **246 passed / 0 failed / 0 errors** (venv). Staging-Browser/Visual-Baselines noch offen → Urteil weiter **NOT_READY**. Stash unangetastet. → `docs/platform-unification/step-4-*.md`

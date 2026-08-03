@@ -182,12 +182,34 @@ psql -h 127.0.0.1 -p 55432 -U postgres -c "DROP DATABASE IF EXISTS crm_branding_
 # Worktree entfernen
 git -C projects/crm worktree remove projects/crm-branding-pilot-wt --force
 
-# Server: Step-5 Commits revertieren / Branch nicht mergen
+# Server: Squash-Commit auf Pilot-Branch zurücknehmen
+git -C projects/webschmiede-server checkout feature/platform-unification-branding-pilot
+git -C projects/webschmiede-server reset --hard ff4fa6f
+
+# CRM: Merge-Commit zurücknehmen
+git -C projects/crm checkout feature/platform-unification-branding-pilot
+git -C projects/crm reset --hard 4e6f9dc
+
 # Production: keine Änderung vorgenommen
 ```
 
 ---
 
-## Nächster Schritt
+## Abschluss Merge (2026-08-04) — `MERGED_NO_DEPLOY`
 
-**Warten auf Freigabe von Christian.** Kein Production-Deploy, kein Merge ohne OK.
+| Größe | Wert |
+|-------|------|
+| Zielbranch (beide Repos) | `feature/platform-unification-branding-pilot` |
+| Server Squash | `44881c2` ← Soft-Reset von `b8e2bf2…4aff199` auf Basis `ff4fa6f` |
+| CRM Merge | `81398b4` ← `feature/platform-unification-branding-pilot-step5` (`4af56fc`) in Pilot-Branch |
+| CRM vor Merge | `4e6f9dc` |
+| Staging Port 8093 | **down** |
+| Postgres-Parity-Service | läuft weiter (shared lokal, kein Prod; nur App gestoppt) |
+| Server-Stash | `wip-before-branding-pilot-step3` **unverändert** |
+| Dialer-/fremde WIP | Working-Tree CRM weiter dirty/untracked (**nicht** gestaged) |
+| Production-Deploy | **nein** |
+| Post-Merge Tests | fokussiert **10 passed** (`test_014_*`, `test_handwerk_inquiry_template`); Full-Suite-Lauf (295 collected) bei ~48 % gehängt → abgebrochen (kein Merge-Scope-Fail nachweisbar) |
+| Alembic Head (CRM Branch) | `021_dialer_call_control_terminal` (Branch enthält Dialer; Pilot-Abnahme war `017` auf Worktree) |
+| Browser-Drill erneut | nicht nötig (Merge konfliktfrei, Scope nur table-wrap/CSS/env/gitignore/docs) |
+
+**Urteil: MERGED_NO_DEPLOY**

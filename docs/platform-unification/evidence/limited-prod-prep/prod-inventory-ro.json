@@ -1,0 +1,136 @@
+{
+  "at": "2026-08-04T07:12:30.914785+00:00",
+  "role": "web-ro",
+  "prod_health": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "app": "Webschmiede-CRM",
+      "env": "production",
+      "outbound_enabled": false,
+      "n8n_enabled": false,
+      "n8n_internal_only": true,
+      "nils_write_enabled": false,
+      "sales_customer_conversion_enabled": true,
+      "delivery_provisioning_enabled": false,
+      "customer_provisioning_enabled_deprecated": false,
+      "csrf_enabled": true,
+      "rate_limit_enabled": true
+    }
+  },
+  "staging_health": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "app": "Webschmiede-CRM-Staging",
+      "env": "staging",
+      "outbound_enabled": false,
+      "n8n_enabled": false,
+      "n8n_internal_only": true,
+      "nils_write_enabled": false,
+      "sales_customer_conversion_enabled": false,
+      "delivery_provisioning_enabled": false,
+      "customer_provisioning_enabled_deprecated": false,
+      "csrf_enabled": true,
+      "rate_limit_enabled": true,
+      "sales_os_mvp_enabled": true,
+      "phone_integration_enabled": false,
+      "placetel_enabled": true,
+      "placetel_click_to_dial_enabled": false,
+      "call_recording_enabled": false,
+      "live_transcription_enabled": false,
+      "email_send_enabled": false,
+      "whatsapp_send_enabled": false,
+      "progressive_dialer_enabled": true,
+      "progressive_dialer_live_calling_enabled": false,
+      "softphone_webrtc_enabled": true,
+      "dialer_safety": {
+        "ami_listener": {
+          "enabled": true,
+          "started_at": "2026-08-03T22:03:46.088392+00:00",
+          "connected": true,
+          "last_event_at": "2026-08-03T22:09:43.854688+00:00",
+          "last_event": "Hangup",
+          "events_seen": 68,
+          "events_applied": 44,
+          "events_buffered": 24,
+          "reconnects": 0,
+          "last_error": null,
+          "heartbeat_at": "2026-08-04T07:12:18.375062+00:00",
+          "healthy": true
+        },
+        "alarms": {
+          "ok": true,
+          "counts": {},
+          "recent": [],
+          "open_codes": [],
+          "tracked_codes": [
+            "ACTIVE_CONTROL_WITHOUT_CHANNEL",
+            "AMI_CORRELATION_MISSING",
+            "AMI_LISTENER_DOWN",
+            "CHANNEL_WITHOUT_CONTROL",
+            "CONTROL_WITHOUT_CHANNEL",
+            "HANGUP_INCOMPLETE",
+            "LIVE_GRANT_AFTER_TERMINAL",
+            "MULTIPLE_ACTIVE_CALLS",
+            "MULTI_ACTIVE_CALLS_SESSION",
+            "MULTI_ACTIVE_CALLS_USER",
+            "ORIGINATE_BLOCKED_ACTIVE_CALL",
+            "RINGING_OVER_30S"
+          ]
+        },
+        "internal_originate_only": false,
+        "ringing_timeout_sec": 25,
+        "hard_call_timeout_sec": 30
+      }
+    }
+  },
+  "docker_crm": {
+    "code": 0,
+    "out": "crm-asterisk-staging\tUp 10 hours (healthy)\tcrm-asterisk-staging:local\ncrm-app-staging\tUp 9 hours (healthy)\tcrm-app-staging:local\ncrm-coturn-staging\tUp 16 hours\tcoturn/coturn:4.6.2\ncrm-app-prod\tUp 2 days (healthy)\tcrm-app-prod:local\ncrm-db-prod\tUp 3 days (healthy)\tpostgres:16.14\ncrm-db-staging\tUp 4 days (healthy)\tpostgres:16.14"
+  },
+  "prod_root_ls": {
+    "code": 0,
+    "out": "total 68\ndrwxr-xr-x 10 root root 4096 Aug  1 20:28 .\ndrwxr-xr-x 11 root root 4096 Jul 31 11:10 ..\ndrwxr-xr-x  3 root root 4096 Jul 31 11:10 alembic\n-rw-r--r--  1 root root  657 Aug  1 19:40 alembic.ini\ndrwxr-xr-x  9 root root 4096 Aug  1 19:40 app\ndrwx------  2 root root 4096 Aug  1 21:58 backups\ndrwxr-xr-x  2 root root 4096 Jul 31 11:10 data\n-rw-r--r--  1 root root 1956 Aug  1 19:40 docker-compose.production.yml\n-rw-r--r--  1 root root  518 Aug  1 19:40 Dockerfile\ndrwxr-xr-x  2 root root 4096 Jul 31 11:10 docs\n-rw-------  1 root root 2913 Aug  1 21:43 .env.production\n-rw-r--r--  1 root root 1302 Jul 31 11:10 .env.production.example\ndrwxr-xr-x  3 root root 4096 Jul 31 11:10 infra\n-rw-r--r--  1 root root  120 Aug  1 19:40 requirements-prod.txt\n-rw-r--r--  1 root root  628 Aug  1 19:40 requirements.txt\ndrwxr-xr-x  2 root root 4096 Aug  1 20:32 scripts\ndrwx------  2 root root 4096 Aug  1 20:29 var"
+  },
+  "prod_git": {
+    "code": 0,
+    "out": "NO_GIT"
+  },
+  "prod_release_marker": {
+    "code": 0,
+    "out": ""
+  },
+  "compose_files": {
+    "code": 0,
+    "out": "-rw-r--r-- 1956 /opt/crm-prod/docker-compose.production.yml\n-rw------- 2913 /opt/crm-prod/.env.production"
+  },
+  "env_keys_only": {
+    "code": 0,
+    "out": "ALLOW_CREATE_ALL\nALLOW_LEGACY_SCHEMA_ENSURE\nAPP_ENV\nAPP_NAME\nCRON_SECRET\nCSRF_ENABLED\nCUSTOMER_PROVISIONING_ENABLED\nCUSTOMER_TASK_CREATION_ENABLED\nCUSTOMER_TECHNICAL_PROVISIONING_ENABLED\nDATABASE_URL\nDEBUG\nDELIVERY_AUTOMATION_ENABLED\nDELIVERY_LEAD_BLOCKED_DOMAINS\nDELIVERY_LEAD_DEFAULT_TEST_EMAIL\nDELIVERY_LEAD_FORCE_TEST_EMAIL\nDELIVERY_PROVISIONING_ENABLED\nGOHIGHLEVEL_STILL_ACTIVE\nMETA_LEAD_VERIFY_TOKEN\nMETA_WEBHOOK_ALLOW_INSECURE\nN8N_ENABLED\nNILS_CAP_CRM_WRITE\nNILS_CRM_WRITE_ENABLED\nNILS_WRITE_ENABLED\nONBOARDING_AUTOMATION_ENABLED\nOUTBOUND_ENABLED\nPOL001_APP_SECRET\nPOL001_META_APP_ID\nPOL001_META_FORM_IDS\nPOL001_META_PAGE_ID\nPOL001_PAGE_ACCESS_TOKEN\nPOL001_WEBHOOK_TOKEN\nPOSTGRES_DB\nPOSTGRES_PASSWORD\nPOSTGRES_USER\nPUBLIC_BASE_URL\nRATE_LIMIT_ENABLED\nSALES_CUSTOMER_CONVERSION_ENABLED\nSALES_N8N_INTERNAL_ONLY\nSALES_OUTBOUND_ENABLED\nSECRET_KEY\nSESSION_TTL_HOURS\nSMTP_FROM\nSMTP_HOST\nSMTP_PASS\nSMTP_PORT\nSMTP_USER\nSUPERADMIN_EMAIL\nSUPERADMIN_PASSWORD\nSUPERADMIN_TENANT_NAME\nSUPERADMIN_TENANT_SLUG"
+  },
+  "alembic_prod": {
+    "code": 0,
+    "out": "016_dl_meta_context"
+  },
+  "nginx_crm": {
+    "code": 0,
+    "out": "lrwxrwxrwx 1 root root 56 Aug  1 09:43 /etc/nginx/sites-enabled/crm.digitalehandwerkskunst.de -> /etc/nginx/sites-available/crm.digitalehandwerkskunst.de\nlrwxrwxrwx 1 root root 64 Jul 30 21:44 /etc/nginx/sites-enabled/crm-staging.digitalehandwerkskunst.de -> /etc/nginx/sites-available/crm-staging.digitalehandwerkskunst.de\n2026/08/04 07:12:36 [warn] 2661581#2661581: conflicting server name \"yassine.digitalehandwerkskunst.de\" on 0.0.0.0:80, ignored\n2026/08/04 07:12:36 [warn] 2661581#2661581: conflicting server name \"_\" on 0.0.0.0:80, ignored\n2026/08/04 07:12:36 [warn] 2661581#2661581: conflicting server name \"yassine.digitalehandwerkskunst.de\" on [::]:80, ignored\nnginx: the configuration file /etc/nginx/nginx.conf syntax is ok\nnginx: configuration file /etc/nginx/nginx.conf test is successful"
+  },
+  "backup_paths": {
+    "code": 0,
+    "out": "drwx------ 2 root root 4096 Aug  1 21:58 /opt/crm-prod/backups\ntotal 3720\n-rw------- 1 root root 146681 Aug  1 21:58 crm_prod_pre_pol001_clean_commit_20260801T215808Z.dump\n-rw------- 1 root root   2913 Aug  1 21:43 env.production.pre_pol001_clean_commit_20260801T215808Z\n-rw------- 1 root root    339 Aug  1 19:53 pol001_page_token_pre_renew_20260801T195306Z.envfragment\n-rw------- 1 root root    367 Aug  1 19:52 pol001_page_token_pre_renew_20260801T195213Z.envfragment\n-rw-r--r-- 1 root root    138 Aug  1 18:26 crm_prod_pre_pol001_cutover_20260801T202601Z.dump.sha256\n-rw-r--r-- 1 root root 141709 Aug  1 18:26 crm_prod_pre_pol001_cutover_20260801T202601Z.dump\n-rw-r--r-- 1 root root    136 Aug  1 15:55 crm_prod_pre_016_parallel_20260801T155522Z.dump.sha256\n-rw------- 1 root root 140172 Aug  1 15:55 crm_prod_pre_016_parallel_20260801T155522Z.dump\n-rw-r--r-- 1 root root 138602 Aug  1 12:17 crm_prod_pre_prequal_20260801T121706Z.dump"
+  },
+  "ui_sha_prod": {
+    "code": 0,
+    "out": "84928b71c371ed52ef8c31c1a849509ea85b442003f1c6c970a77f9e8903c106  app/static/css/crm.css\nb1611c85f9948b64203e882a0bb4e0cfe6866d20d2e2e05beeac611dfc26948b  app/templates/companies/list.html\n37da38124ec75b06960b5b5f9e4d1a5cfc6803a91538afe1a11b326387640f92  app/templates/companies/archived.html\nd3b90acd290b8b7c12cd60bdadf40780bf036f1a7c1f920e9cc5179eecf04d6b  app/templates/dashboard/index.html\n7c93952f3ba997beed656dfa43b34eef33aa21e9014fcf0c71659070da3c2462  app/templates/leads/list.html\n1e3f4010aad5521740bedf76032a21b8f6a2978e5b5010cd329c167e8010cea3  app/templates/tasks/list.html\nMISSING app/templates/vertrieb/anrufliste.html"
+  },
+  "static_mount": {
+    "code": 0,
+    "out": "[]"
+  },
+  "app_env_ro": {
+    "code": 0,
+    "out": "production"
+  }
+}

@@ -1,0 +1,7 @@
+﻿PROD_BASE_COMMIT=f0f22780a9a1371ef91298024c84f1bd5aa0ffd6
+PROD_BASE_SOURCE=docker image label git.sha on crm-app-prod:local
+RELEASE_COMMIT=68ede4d842b4fdfe67f2d61826ce70a47af25801
+FULL_DIFF_FILES=212
+FULL_DIALERISH=70
+LIMITED_UI_ONLY=yes
+NOTE=Limited deploy MUST copy only UI paths from release checkout; must NOT rebuild/redeploy full tree from 68ede4d which includes 212 files vs prod base.

@@ -1,0 +1,95 @@
+﻿STASH_SEARCH_RO at 2026-08-04T09:15:53.0348444+02:00
+
+=== C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm ===
+HEAD=68ede4d branch=feature/platform-unification-branding-pilot
+stash_list:
+
+stash_refs:
+
+reflog_hits: none
+git_dir=C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm\.git
+refs/stash absent
+
+=== C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\webschmiede-server ===
+HEAD=a7f7c36 branch=feature/platform-unification-branding-pilot
+stash_list:
+stash@{0}: On feature/platform-unification-branding-pilot: wip-before-branding-pilot-step3
+stash@{1}: On main: wip-non-entity-routing-before-rc-65a9393
+
+stash_refs:
+refs/stash f110119 On feature/platform-unification-branding-pilot: wip-before-branding-pilot-step3
+
+reflog_hits:
+f110119 refs/stash@{0}: On feature/platform-unification-branding-pilot: wip-before-branding-pilot-step3
+c99ba79 refs/stash@{1}: On main: wip-non-entity-routing-before-rc-65a9393
+git_dir=C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\webschmiede-server\.git
+refs/stash EXISTS
+logs/refs/stash:
+0000000000000000000000000000000000000000 c99ba793df04c32fcd8ec2efae82f1089af22026 Webschmiede <dev@webschmiede.local> 1785655709 +0200	On main: wip-non-entity-routing-before-rc-65a9393
+c99ba793df04c32fcd8ec2efae82f1089af22026 f11011920f07d28ea431fed3122ba846ad55f41c Webschmiede <dev@webschmiede.local> 1785690689 +0200	On feature/platform-unification-branding-pilot: wip-before-branding-pilot-step3
+
+
+=== C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm-release-68ede4d ===
+HEAD=68ede4d branch=HEAD
+stash_list:
+
+stash_refs:
+
+reflog_hits: none
+git_dir=C:/Users/kumex/OneDrive/Desktop/Jarvis/My_Company_Hub/projects/crm/.git/worktrees/crm-release-68ede4d
+refs/stash absent
+
+=== C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm-postmerge-ro ===
+HEAD=68ede4d branch=feature/platform-unification-branding-ui-visual
+stash_list:
+
+stash_refs:
+
+reflog_hits: none
+git_dir=C:/Users/kumex/OneDrive/Desktop/Jarvis/My_Company_Hub/projects/crm/.git/worktrees/crm-postmerge-ro
+refs/stash absent
+
+=== C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm-branding-pilot-wt ===
+HEAD=4af56fc branch=feature/platform-unification-branding-pilot-step5
+stash_list:
+
+stash_refs:
+
+reflog_hits: none
+git_dir=C:/Users/kumex/OneDrive/Desktop/Jarvis/My_Company_Hub/projects/crm/.git/worktrees/crm-branding-pilot-wt
+refs/stash absent
+
+=== C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm-dialer-webrtc-wt ===
+HEAD=37d4289 branch=feature/progressive-dialer-webrtc
+stash_list:
+
+stash_refs:
+
+reflog_hits: none
+git_dir=C:/Users/kumex/OneDrive/Desktop/Jarvis/My_Company_Hub/projects/crm/.git/worktrees/crm-dialer-webrtc-wt
+refs/stash absent
+
+=== C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm-dialer-repro-37d4289 ===
+HEAD=37d4289 branch=HEAD
+stash_list:
+
+stash_refs:
+
+reflog_hits: none
+git_dir=C:/Users/kumex/OneDrive/Desktop/Jarvis/My_Company_Hub/projects/crm/.git/worktrees/crm-dialer-repro-37d4289
+refs/stash absent
+
+=== C:\Users\kumex\OneDrive\Desktop\Jarvis\My_Company_Hub\projects\crm-ab-pre-pilot ===
+HEAD=ee1da86 branch=HEAD
+stash_list:
+
+stash_refs:
+
+reflog_hits: none
+git_dir=C:/Users/kumex/OneDrive/Desktop/Jarvis/My_Company_Hub/projects/crm/.git/worktrees/crm-ab-pre-pilot
+refs/stash absent
+
+=== HUB ===
+stash@{0}: WIP on main: f4fab77 docs: Fehlerfixes SSH-Default und Secrets dokumentiert
+
+450fbd7 refs/stash@{0}: WIP on main: f4fab77 docs: Fehlerfixes SSH-Default und Secrets dokumentiert

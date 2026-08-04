@@ -1,0 +1,50 @@
+﻿[
+    {
+        "file":  "app/static/css/crm.css",
+        "prod":  "84928b71c371ed52ef8c31c1a849509ea85b442003f1c6c970a77f9e8903c106",
+        "release":  "217adbac8a23a9a704803b1f84d1a80958e3efbc56d205495fe8b51935a71e78",
+        "match":  false
+    },
+    {
+        "file":  "app/templates/companies/list.html",
+        "prod":  "b1611c85f9948b64203e882a0bb4e0cfe6866d20d2e2e05beeac611dfc26948b",
+        "release":  "edad9c59928e127e79cad765d972cc06ba3386504f0470c3b51db4e6c1695e1f",
+        "match":  false
+    },
+    {
+        "file":  "app/templates/companies/archived.html",
+        "prod":  "37da38124ec75b06960b5b5f9e4d1a5cfc6803a91538afe1a11b326387640f92",
+        "release":  "4320246532fc615b0b0c93b1c9d681adb56ec852e0339b500fda0b73173f5d4a",
+        "match":  false
+    },
+    {
+        "file":  "app/templates/dashboard/index.html",
+        "prod":  "d3b90acd290b8b7c12cd60bdadf40780bf036f1a7c1f920e9cc5179eecf04d6b",
+        "release":  "681bc192050ac6ac038985ddda5f58cfc5f114ba842040ddea8faddb207fa532",
+        "match":  false
+    },
+    {
+        "file":  "app/templates/leads/list.html",
+        "prod":  "7c93952f3ba997beed656dfa43b34eef33aa21e9014fcf0c71659070da3c2462",
+        "release":  "52bc58f6589b7a7d15494d8fb1ee288e7d3ecf4de8edcc3b045a03e9f3933d04",
+        "match":  false
+    },
+    {
+        "file":  "app/templates/tasks/list.html",
+        "prod":  "1e3f4010aad5521740bedf76032a21b8f6a2978e5b5010cd329c167e8010cea3",
+        "release":  "d0ca709fdbe3657f98dc837a69114475c04f653806e8bf83ac7362ef6df1b18a",
+        "match":  false
+    },
+    {
+        "file":  "app/templates/vertrieb/anrufliste.html",
+        "prod":  "MISSING",
+        "release":  "f9e41eada05912a5ab05738c5df2fc203f4703bbb576f9c76bdbfc4680bfc99d",
+        "match":  false
+    },
+    {
+        "file":  "tests/test_branding_ui_layout.py",
+        "prod":  "ABSENT_ON_PROD_MAP",
+        "release":  "4e8d4580b10cc8b4e65845a148da6ed766acd43bd37ffcf880e57982b2667b8f",
+        "match":  false
+    }
+]

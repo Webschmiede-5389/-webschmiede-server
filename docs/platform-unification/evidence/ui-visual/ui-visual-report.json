@@ -1,0 +1,1880 @@
+{
+  "at": "2026-08-04T05:48:41Z",
+  "base": "http://127.0.0.1:8093",
+  "viewports": {
+    "390x844": {
+      "pages": {
+        "login": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anmelden",
+                "w": 284,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "CRM anmelden · WebSchmiede",
+            "hasShell": false,
+            "hasSidebar": false,
+            "hasMobileBar": false
+          },
+          "shot": {
+            "full": "screenshots/390x844-login.png",
+            "viewport": "screenshots/390x844-login-viewport.png"
+          }
+        },
+        "dashboard": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 640,
+                "cw": 354
+              },
+              {
+                "ox": "auto",
+                "sw": 640,
+                "cw": 354
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Unternehmen",
+                "w": 358,
+                "h": 40
+              },
+              {
+                "t": "Pipeline",
+                "w": 87,
+                "h": 41
+              },
+              {
+                "t": "Alle",
+                "w": 59,
+                "h": 41
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Vertriebsübersicht · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/390x844-dashboard.png",
+            "viewport": "screenshots/390x844-dashboard-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/"
+        },
+        "companies": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 908,
+                "cw": 356
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 222,
+                "h": 40
+              },
+              {
+                "t": "Archiv",
+                "w": 128,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 358,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/390x844-companies.png",
+            "viewport": "screenshots/390x844-companies-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies"
+        },
+        "company_form": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 358,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen anlegen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/390x844-company_form.png",
+            "viewport": "screenshots/390x844-company_form-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies/new"
+        },
+        "leads": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 640,
+                "cw": 354
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Neuer Lead",
+                "w": 358,
+                "h": 40
+              },
+              {
+                "t": "Filtern",
+                "w": 358,
+                "h": 36
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Leads · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/390x844-leads.png",
+            "viewport": "screenshots/390x844-leads-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/leads"
+        },
+        "pipeline": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Deal anlegen",
+                "w": 324,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Pipeline · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/390x844-pipeline.png",
+            "viewport": "screenshots/390x844-pipeline-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/pipeline"
+        },
+        "tasks": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 640,
+                "cw": 354
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anlegen",
+                "w": 324,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Aufgaben · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/390x844-tasks.png",
+            "viewport": "screenshots/390x844-tasks-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/tasks"
+        },
+        "telefonie_layout": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Telefonie · Progressive Dialer · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/390x844-telefonie_layout.png",
+            "viewport": "screenshots/390x844-telefonie_layout-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/vertrieb/telefonie"
+        },
+        "settings": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 1,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 321,
+                "h": 34
+              },
+              {
+                "t": "Hinzufügen",
+                "w": 321,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Einstellungen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/390x844-settings.png",
+            "viewport": "screenshots/390x844-settings-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/settings"
+        },
+        "companies_longname": {
+          "visual": {
+            "overflowX": false,
+            "docW": 390,
+            "winW": 390,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1273,
+                "cw": 356
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 222,
+                "h": 40
+              },
+              {
+                "t": "Archiv",
+                "w": 128,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 358,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/390x844-companies-longname.png",
+            "viewport": "screenshots/390x844-companies-longname-viewport.png"
+          }
+        }
+      },
+      "mobile_nav": {
+        "expanded": "true",
+        "shot": {
+          "full": "screenshots/390x844-mobile-nav-open.png",
+          "viewport": "screenshots/390x844-mobile-nav-open-viewport.png"
+        }
+      }
+    },
+    "768x1024": {
+      "pages": {
+        "login": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anmelden",
+                "w": 362,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "CRM anmelden · WebSchmiede",
+            "hasShell": false,
+            "hasSidebar": false,
+            "hasMobileBar": false
+          },
+          "shot": {
+            "full": "screenshots/768x1024-login.png",
+            "viewport": "screenshots/768x1024-login-viewport.png"
+          }
+        },
+        "dashboard": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 732,
+                "cw": 732
+              },
+              {
+                "ox": "auto",
+                "sw": 732,
+                "cw": 732
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Unternehmen",
+                "w": 736,
+                "h": 40
+              },
+              {
+                "t": "Pipeline",
+                "w": 87,
+                "h": 41
+              },
+              {
+                "t": "Alle",
+                "w": 59,
+                "h": 41
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Vertriebsübersicht · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/768x1024-dashboard.png",
+            "viewport": "screenshots/768x1024-dashboard-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/"
+        },
+        "companies": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 908,
+                "cw": 734
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 411,
+                "h": 40
+              },
+              {
+                "t": "Archiv",
+                "w": 317,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 736,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/768x1024-companies.png",
+            "viewport": "screenshots/768x1024-companies-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies"
+        },
+        "company_form": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 736,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen anlegen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/768x1024-company_form.png",
+            "viewport": "screenshots/768x1024-company_form-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies/new"
+        },
+        "leads": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 732,
+                "cw": 732
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Neuer Lead",
+                "w": 736,
+                "h": 40
+              },
+              {
+                "t": "Filtern",
+                "w": 736,
+                "h": 36
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Leads · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/768x1024-leads.png",
+            "viewport": "screenshots/768x1024-leads-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/leads"
+        },
+        "pipeline": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Deal anlegen",
+                "w": 702,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Pipeline · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/768x1024-pipeline.png",
+            "viewport": "screenshots/768x1024-pipeline-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/pipeline"
+        },
+        "tasks": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 732,
+                "cw": 732
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anlegen",
+                "w": 702,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Aufgaben · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/768x1024-tasks.png",
+            "viewport": "screenshots/768x1024-tasks-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/tasks"
+        },
+        "telefonie_layout": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Telefonie · Progressive Dialer · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/768x1024-telefonie_layout.png",
+            "viewport": "screenshots/768x1024-telefonie_layout-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/vertrieb/telefonie"
+        },
+        "settings": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 1,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 603,
+                "h": 34
+              },
+              {
+                "t": "Hinzufügen",
+                "w": 699,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Einstellungen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/768x1024-settings.png",
+            "viewport": "screenshots/768x1024-settings-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/settings"
+        },
+        "companies_longname": {
+          "visual": {
+            "overflowX": false,
+            "docW": 768,
+            "winW": 768,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1273,
+                "cw": 734
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 411,
+                "h": 40
+              },
+              {
+                "t": "Archiv",
+                "w": 317,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 736,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/768x1024-companies-longname.png",
+            "viewport": "screenshots/768x1024-companies-longname-viewport.png"
+          }
+        }
+      },
+      "mobile_nav": {
+        "expanded": "true",
+        "shot": {
+          "full": "screenshots/768x1024-mobile-nav-open.png",
+          "viewport": "screenshots/768x1024-mobile-nav-open-viewport.png"
+        }
+      }
+    },
+    "1024x768": {
+      "pages": {
+        "login": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anmelden",
+                "w": 362,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "CRM anmelden · WebSchmiede",
+            "hasShell": false,
+            "hasSidebar": false,
+            "hasMobileBar": false
+          },
+          "shot": {
+            "full": "screenshots/1024x768-login.png",
+            "viewport": "screenshots/1024x768-login-viewport.png"
+          }
+        },
+        "dashboard": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 732,
+                "cw": 732
+              },
+              {
+                "ox": "auto",
+                "sw": 732,
+                "cw": 732
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Unternehmen",
+                "w": 138,
+                "h": 39
+              },
+              {
+                "t": "Pipeline",
+                "w": 87,
+                "h": 41
+              },
+              {
+                "t": "Alle",
+                "w": 59,
+                "h": 41
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Vertriebsübersicht · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1024x768-dashboard.png",
+            "viewport": "screenshots/1024x768-dashboard-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/"
+        },
+        "companies": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 734,
+                "cw": 734
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 172,
+                "h": 39
+              },
+              {
+                "t": "Archiv",
+                "w": 78,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 73,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1024x768-companies.png",
+            "viewport": "screenshots/1024x768-companies-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies"
+        },
+        "company_form": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 360,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen anlegen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1024x768-company_form.png",
+            "viewport": "screenshots/1024x768-company_form-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies/new"
+        },
+        "leads": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 732,
+                "cw": 732
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Neuer Lead",
+                "w": 122,
+                "h": 39
+              },
+              {
+                "t": "Filtern",
+                "w": 75,
+                "h": 36
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Leads · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1024x768-leads.png",
+            "viewport": "screenshots/1024x768-leads-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/leads"
+        },
+        "pipeline": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Deal anlegen",
+                "w": 117,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Pipeline · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1024x768-pipeline.png",
+            "viewport": "screenshots/1024x768-pipeline-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/pipeline"
+        },
+        "tasks": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 732,
+                "cw": 732
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anlegen",
+                "w": 86,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Aufgaben · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1024x768-tasks.png",
+            "viewport": "screenshots/1024x768-tasks-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/tasks"
+        },
+        "telefonie_layout": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Telefonie · Progressive Dialer · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1024x768-telefonie_layout.png",
+            "viewport": "screenshots/1024x768-telefonie_layout-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/vertrieb/telefonie"
+        },
+        "settings": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 1,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 98,
+                "h": 34
+              },
+              {
+                "t": "Hinzufügen",
+                "w": 107,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Einstellungen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1024x768-settings.png",
+            "viewport": "screenshots/1024x768-settings-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/settings"
+        },
+        "companies_longname": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1024,
+            "winW": 1024,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1010,
+                "cw": 734
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 172,
+                "h": 39
+              },
+              {
+                "t": "Archiv",
+                "w": 78,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 73,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1024x768-companies-longname.png",
+            "viewport": "screenshots/1024x768-companies-longname-viewport.png"
+          }
+        }
+      },
+      "mobile_nav": {}
+    },
+    "1366x768": {
+      "pages": {
+        "login": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anmelden",
+                "w": 362,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "CRM anmelden · WebSchmiede",
+            "hasShell": false,
+            "hasSidebar": false,
+            "hasMobileBar": false
+          },
+          "shot": {
+            "full": "screenshots/1366x768-login.png",
+            "viewport": "screenshots/1366x768-login-viewport.png"
+          }
+        },
+        "dashboard": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1074,
+                "cw": 1074
+              },
+              {
+                "ox": "auto",
+                "sw": 1074,
+                "cw": 1074
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Unternehmen",
+                "w": 138,
+                "h": 39
+              },
+              {
+                "t": "Pipeline",
+                "w": 87,
+                "h": 41
+              },
+              {
+                "t": "Alle",
+                "w": 59,
+                "h": 41
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Vertriebsübersicht · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1366x768-dashboard.png",
+            "viewport": "screenshots/1366x768-dashboard-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/"
+        },
+        "companies": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1076,
+                "cw": 1076
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 172,
+                "h": 39
+              },
+              {
+                "t": "Archiv",
+                "w": 78,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 73,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1366x768-companies.png",
+            "viewport": "screenshots/1366x768-companies-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies"
+        },
+        "company_form": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 531,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen anlegen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1366x768-company_form.png",
+            "viewport": "screenshots/1366x768-company_form-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies/new"
+        },
+        "leads": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1074,
+                "cw": 1074
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Neuer Lead",
+                "w": 122,
+                "h": 39
+              },
+              {
+                "t": "Filtern",
+                "w": 75,
+                "h": 36
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Leads · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1366x768-leads.png",
+            "viewport": "screenshots/1366x768-leads-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/leads"
+        },
+        "pipeline": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Deal anlegen",
+                "w": 117,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Pipeline · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1366x768-pipeline.png",
+            "viewport": "screenshots/1366x768-pipeline-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/pipeline"
+        },
+        "tasks": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1074,
+                "cw": 1074
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anlegen",
+                "w": 86,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Aufgaben · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1366x768-tasks.png",
+            "viewport": "screenshots/1366x768-tasks-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/tasks"
+        },
+        "telefonie_layout": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Telefonie · Progressive Dialer · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1366x768-telefonie_layout.png",
+            "viewport": "screenshots/1366x768-telefonie_layout-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/vertrieb/telefonie"
+        },
+        "settings": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 1,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 98,
+                "h": 34
+              },
+              {
+                "t": "Hinzufügen",
+                "w": 107,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Einstellungen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1366x768-settings.png",
+            "viewport": "screenshots/1366x768-settings-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/settings"
+        },
+        "companies_longname": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1366,
+            "winW": 1366,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1076,
+                "cw": 1076
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 172,
+                "h": 39
+              },
+              {
+                "t": "Archiv",
+                "w": 78,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 73,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1366x768-companies-longname.png",
+            "viewport": "screenshots/1366x768-companies-longname-viewport.png"
+          }
+        }
+      },
+      "mobile_nav": {}
+    },
+    "1440x900": {
+      "pages": {
+        "login": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anmelden",
+                "w": 362,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "CRM anmelden · WebSchmiede",
+            "hasShell": false,
+            "hasSidebar": false,
+            "hasMobileBar": false
+          },
+          "shot": {
+            "full": "screenshots/1440x900-login.png",
+            "viewport": "screenshots/1440x900-login-viewport.png"
+          }
+        },
+        "dashboard": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1148,
+                "cw": 1148
+              },
+              {
+                "ox": "auto",
+                "sw": 1148,
+                "cw": 1148
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Unternehmen",
+                "w": 138,
+                "h": 39
+              },
+              {
+                "t": "Pipeline",
+                "w": 87,
+                "h": 41
+              },
+              {
+                "t": "Alle",
+                "w": 59,
+                "h": 41
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Vertriebsübersicht · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1440x900-dashboard.png",
+            "viewport": "screenshots/1440x900-dashboard-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/"
+        },
+        "companies": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1150,
+                "cw": 1150
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 172,
+                "h": 39
+              },
+              {
+                "t": "Archiv",
+                "w": 78,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 73,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1440x900-companies.png",
+            "viewport": "screenshots/1440x900-companies-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies"
+        },
+        "company_form": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 568,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen anlegen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1440x900-company_form.png",
+            "viewport": "screenshots/1440x900-company_form-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/companies/new"
+        },
+        "leads": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1148,
+                "cw": 1148
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "+ Neuer Lead",
+                "w": 122,
+                "h": 39
+              },
+              {
+                "t": "Filtern",
+                "w": 75,
+                "h": 36
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Leads · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1440x900-leads.png",
+            "viewport": "screenshots/1440x900-leads-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/leads"
+        },
+        "pipeline": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Deal anlegen",
+                "w": 117,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Pipeline · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1440x900-pipeline.png",
+            "viewport": "screenshots/1440x900-pipeline-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/pipeline"
+        },
+        "tasks": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1148,
+                "cw": 1148
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Anlegen",
+                "w": 86,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Aufgaben · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1440x900-tasks.png",
+            "viewport": "screenshots/1440x900-tasks-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/tasks"
+        },
+        "telefonie_layout": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Telefonie · Progressive Dialer · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1440x900-telefonie_layout.png",
+            "viewport": "screenshots/1440x900-telefonie_layout-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/vertrieb/telefonie"
+        },
+        "settings": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [],
+            "bareTables": 1,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Speichern",
+                "w": 98,
+                "h": 34
+              },
+              {
+                "t": "Hinzufügen",
+                "w": 107,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Einstellungen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1440x900-settings.png",
+            "viewport": "screenshots/1440x900-settings-viewport.png"
+          },
+          "url": "http://127.0.0.1:8093/settings"
+        },
+        "companies_longname": {
+          "visual": {
+            "overflowX": false,
+            "docW": 1440,
+            "winW": 1440,
+            "delta": 0,
+            "wraps": [
+              {
+                "ox": "auto",
+                "sw": 1150,
+                "cw": 1150
+              }
+            ],
+            "bareTables": 0,
+            "clipped": [],
+            "btns": [
+              {
+                "t": "Neues Unternehmen",
+                "w": 172,
+                "h": 39
+              },
+              {
+                "t": "Archiv",
+                "w": 78,
+                "h": 41
+              },
+              {
+                "t": "Filtern",
+                "w": 73,
+                "h": 34
+              }
+            ],
+            "overlapPairs": [],
+            "shatteredCells": [],
+            "goldHint": false,
+            "title": "Unternehmen · WebSchmiede",
+            "hasShell": true,
+            "hasSidebar": true,
+            "hasMobileBar": true
+          },
+          "shot": {
+            "full": "screenshots/1440x900-companies-longname.png",
+            "viewport": "screenshots/1440x900-companies-longname-viewport.png"
+          }
+        }
+      },
+      "mobile_nav": {}
+    }
+  },
+  "failures": [],
+  "pass": true
+}

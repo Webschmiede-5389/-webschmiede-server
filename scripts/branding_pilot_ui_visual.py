@@ -16,7 +16,12 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 
 WS_ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = WS_ROOT / "docs" / "platform-unification" / "evidence" / "ui-visual"
+EVIDENCE = Path(
+    os.environ.get(
+        "BRANDING_UI_EVIDENCE",
+        str(WS_ROOT / "docs" / "platform-unification" / "evidence" / "ui-visual"),
+    )
+).resolve()
 SHOTS = EVIDENCE / "screenshots"
 BASE = os.environ.get("BRANDING_PILOT_URL", "http://127.0.0.1:8093").rstrip("/")
 EMAIL = os.environ.get("BRANDING_PILOT_EMAIL", "branding-pilot@example.local")
@@ -36,9 +41,11 @@ PAGES = [
     ("dashboard", "/", True),
     ("companies", "/companies", True),
     ("company_form", "/companies/new", True),
+    ("companies_archived", "/companies/archived", True),
     ("leads", "/leads", True),
     ("pipeline", "/pipeline", True),
     ("tasks", "/tasks", True),
+    ("anrufliste", "/vertrieb/anrufliste", True),
     ("telefonie_layout", "/vertrieb/telefonie", True),
     ("settings", "/settings", True),
 ]
@@ -135,13 +142,32 @@ def login(page) -> None:
 def run() -> dict:
     EVIDENCE.mkdir(parents=True, exist_ok=True)
     SHOTS.mkdir(parents=True, exist_ok=True)
-    report: dict = {"at": utc_now(), "base": BASE, "viewports": {}, "failures": [], "pass": False}
+    report: dict = {
+        "at": utc_now(),
+        "base": BASE,
+        "evidence": str(EVIDENCE),
+        "viewports": {},
+        "failures": [],
+        "console_errors": [],
+        "network_failures": [],
+        "pass": False,
+    }
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         for vp_name, vp in VIEWPORTS:
             ctx = browser.new_context(viewport=vp, locale="de-DE", color_scheme="light")
             page = ctx.new_page()
+            page.on(
+                "console",
+                lambda msg: report["console_errors"].append(f"{vp_name}:{msg.type}:{msg.text}")
+                if msg.type in ("error",) else None,
+            )
+            page.on(
+                "response",
+                lambda res: report["network_failures"].append(f"{vp_name}:{res.status}:{res.url}")
+                if res.status >= 400 and "favicon" not in res.url else None,
+            )
             vp_rep: dict = {"pages": {}, "mobile_nav": {}}
             failures_before = len(report["failures"])
 
@@ -228,6 +254,21 @@ def run() -> dict:
             ctx.close()
         browser.close()
 
+    report["pass"] = len(report["failures"]) == 0
+    # Cap noisy lists
+    report["console_errors"] = report["console_errors"][:40]
+    report["network_failures"] = report["network_failures"][:40]
+    critical_console = [
+        e for e in report["console_errors"]
+        if re.search(r"TypeError|ReferenceError|SyntaxError|Uncaught", e, re.I)
+    ]
+    hard_net = [n for n in report["network_failures"] if re.search(r":5\d\d:", n)]
+    report["console_critical"] = critical_console
+    report["network_5xx"] = hard_net
+    if critical_console:
+        report["failures"].append(f"console_critical:{critical_console[:3]}")
+    if hard_net:
+        report["failures"].append(f"network_5xx:{hard_net[:5]}")
     report["pass"] = len(report["failures"]) == 0
     out = EVIDENCE / "ui-visual-report.json"
     out.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")

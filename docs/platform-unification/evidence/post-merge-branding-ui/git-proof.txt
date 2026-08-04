@@ -1,0 +1,12 @@
+﻿CRM_TARGET_BRANCH=feature/platform-unification-branding-pilot
+CRM_TIP=68ede4d842b4fdfe67f2d61826ce70a47af25801
+CRM_CONTAINS_68ede4d=yes
+CRM_BASE_WAS=81398b4
+CRM_INTEGRATION=fast-forward
+SERVER_TARGET_BRANCH=feature/platform-unification-branding-pilot
+SERVER_TIP=22a550a5cf6f250e0cfe420dca8a37d863c6446e
+SERVER_CONTAINS_22a550a=yes
+CRM_DIRTY_TOTAL=263
+CRM_DIALERISH=99
+CRM_UI_CLEAN_MATCH=yes
+SERVER_WORKING_TREE=dirty_unrelated_not_staged_for_this_integration

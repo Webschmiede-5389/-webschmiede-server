@@ -1,0 +1,6 @@
+{
+  "docker inspect crm-app-prod --format 'St": "StartedAt=2026-08-04T07:21:04.478474861Z Health=healthy Image=sha256:31ada8e913746971d0dbd88fd87e5f788c0c3801a535bfc5b12a14b3fa25d6e1\n",
+  "docker image inspect crm-app-prod:brandi": "Id=sha256:31ada8e913746971d0dbd88fd87e5f788c0c3801a535bfc5b12a14b3fa25d6e1 Created=2026-08-04T07:21:01.220787139Z Labels={\"branding.ui.base\":\"pre-branding-ui-68ede4d\",\"branding.ui.commit\":\"68ede4d\",\"branding.ui.scope\":\"css+templates-only\",\"build.ts\":\"20260801T220322Z\",\"git.sha\":\"f0f22780a9a1371ef91298024c84f1bd5aa0ffd6\",\"git.short\":\"f0f22780a9a1\",\"pol001.handover\":\"clean-commit\"}\n",
+  "docker image inspect crm-app-prod:pre-br": "Id=sha256:640c9e79ea55d037ab9aba191f70f92409b4ded0a01f68e9a87c0e2f3168068d\n",
+  "docker ps --format '{{.Names}} {{.Status": "crm-app-prod Up 3 minutes (healthy)\ncrm-asterisk-staging Up 10 hours (healthy)\ncrm-coturn-staging Up 16 hours\ncrm-db-prod Up 3 days (healthy)\n"
+}

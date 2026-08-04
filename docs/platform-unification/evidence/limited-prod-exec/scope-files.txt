@@ -1,0 +1,8 @@
+﻿scope_ok
+app/static/css/crm.css
+app/templates/companies/list.html
+app/templates/companies/archived.html
+app/templates/dashboard/index.html
+app/templates/leads/list.html
+app/templates/tasks/list.html
+app/templates/vertrieb/anrufliste.html

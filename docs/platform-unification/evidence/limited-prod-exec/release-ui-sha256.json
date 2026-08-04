@@ -1,0 +1,9 @@
+﻿{
+    "app/templates/tasks/list.html":  "d0ca709fdbe3657f98dc837a69114475c04f653806e8bf83ac7362ef6df1b18a",
+    "app/templates/companies/list.html":  "edad9c59928e127e79cad765d972cc06ba3386504f0470c3b51db4e6c1695e1f",
+    "app/templates/leads/list.html":  "52bc58f6589b7a7d15494d8fb1ee288e7d3ecf4de8edcc3b045a03e9f3933d04",
+    "app/templates/dashboard/index.html":  "681bc192050ac6ac038985ddda5f58cfc5f114ba842040ddea8faddb207fa532",
+    "app/static/css/crm.css":  "217adbac8a23a9a704803b1f84d1a80958e3efbc56d205495fe8b51935a71e78",
+    "app/templates/companies/archived.html":  "4320246532fc615b0b0c93b1c9d681adb56ec852e0339b500fda0b73173f5d4a",
+    "app/templates/vertrieb/anrufliste.html":  "f9e41eada05912a5ab05738c5df2fc203f4703bbb576f9c76bdbfc4680bfc99d"
+}

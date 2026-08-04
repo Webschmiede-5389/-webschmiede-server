@@ -1,0 +1,167 @@
+{
+  "at": "2026-08-04T07:23:36.266487+00:00",
+  "phase": "3b",
+  "routes": {
+    "after_login": {
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 2,
+      "title": "Vertriebsübersicht · Webschmiede",
+      "hasSidebar": true,
+      "hasNav": true,
+      "bad": false,
+      "sample": "W\nWebschmiede\nWebschmiede\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\nLeitfaden\nEinwände\nAngebote\nKampagnen\nTermine"
+    },
+    "dashboard": {
+      "ok": true,
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 2,
+      "title": "Vertriebsübersicht · Webschmiede",
+      "hasSidebar": true,
+      "hasNav": true,
+      "bad": false,
+      "sample": "W\nWebschmiede\nWebschmiede\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\nLeitfaden\nEinwände\nAngebote\nKampagnen\nTermine",
+      "url": "https://crm.digitalehandwerkskunst.de/"
+    },
+    "companies": {
+      "ok": true,
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 1,
+      "title": "Unternehmen · Webschmiede",
+      "hasSidebar": true,
+      "hasNav": true,
+      "bad": false,
+      "sample": "W\nWebschmiede\nWebschmiede\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\nLeitfaden\nEinwände\nAngebote\nKampagnen\nTermine",
+      "url": "https://crm.digitalehandwerkskunst.de/companies"
+    },
+    "companies_archived": {
+      "ok": true,
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 1,
+      "title": "Archivierte Unternehmen · Webschmiede",
+      "hasSidebar": true,
+      "hasNav": true,
+      "bad": false,
+      "sample": "W\nWebschmiede\nWebschmiede\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\nLeitfaden\nEinwände\nAngebote\nKampagnen\nTermine",
+      "url": "https://crm.digitalehandwerkskunst.de/companies/archived"
+    },
+    "leads": {
+      "ok": true,
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 1,
+      "title": "Leads · Webschmiede",
+      "hasSidebar": true,
+      "hasNav": true,
+      "bad": false,
+      "sample": "W\nWebschmiede\nWebschmiede\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\nLeitfaden\nEinwände\nAngebote\nKampagnen\nTermine",
+      "url": "https://crm.digitalehandwerkskunst.de/leads"
+    },
+    "tasks": {
+      "ok": true,
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 1,
+      "title": "Aufgaben · Webschmiede",
+      "hasSidebar": true,
+      "hasNav": true,
+      "bad": false,
+      "sample": "W\nWebschmiede\nWebschmiede\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\nLeitfaden\nEinwände\nAngebote\nKampagnen\nTermine",
+      "url": "https://crm.digitalehandwerkskunst.de/tasks"
+    },
+    "anrufliste": {
+      "ok": true,
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 0,
+      "title": "",
+      "hasSidebar": false,
+      "hasNav": false,
+      "bad": false,
+      "sample": "{\"detail\":\"Not Found\"}",
+      "url": "https://crm.digitalehandwerkskunst.de/vertrieb/anrufliste"
+    },
+    "telefonie_layout": {
+      "ok": true,
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 0,
+      "title": "",
+      "hasSidebar": false,
+      "hasNav": false,
+      "bad": false,
+      "sample": "{\"detail\":\"Not Found\"}",
+      "url": "https://crm.digitalehandwerkskunst.de/vertrieb/telefonie"
+    },
+    "pipeline": {
+      "ok": true,
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 0,
+      "title": "Pipeline · Webschmiede",
+      "hasSidebar": true,
+      "hasNav": true,
+      "bad": false,
+      "sample": "W\nWebschmiede\nWebschmiede\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\nLeitfaden\nEinwände\nAngebote\nKampagnen\nTermine",
+      "url": "https://crm.digitalehandwerkskunst.de/pipeline"
+    },
+    "companies_1440": {
+      "overflowX": false,
+      "delta": 0,
+      "wraps": 1,
+      "title": "Unternehmen · Webschmiede",
+      "hasSidebar": true,
+      "hasNav": true,
+      "bad": false,
+      "sample": "W\nWebschmiede\nWebschmiede\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\nLeitfaden\nEinwände\nAngebote\nKampagnen\nTermine"
+    }
+  },
+  "failures": [],
+  "login": {
+    "ok": true,
+    "url": "https://crm.digitalehandwerkskunst.de/"
+  },
+  "console_critical": [],
+  "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "network_5xx": [],
+  "health": {
+    "ok": true,
+    "app": "Webschmiede-CRM",
+    "env": "production",
+    "outbound_enabled": false,
+    "n8n_enabled": false,
+    "n8n_internal_only": true,
+    "nils_write_enabled": false,
+    "sales_customer_conversion_enabled": true,
+    "delivery_provisioning_enabled": false,
+    "customer_provisioning_enabled_deprecated": false,
+    "csrf_enabled": true,
+    "rate_limit_enabled": true
+  },
+  "alembic": "016_dl_meta_context",
+  "non_ui_file_compare": {
+    "/app/app/main.py": {
+      "before": "15bc702f38129b91c95f5603bd96a06e89c01510f85fd6431d905b69bced72d5",
+      "after": "15bc702f38129b91c95f5603bd96a06e89c01510f85fd6431d905b69bced72d5",
+      "same": true
+    },
+    "/app/requirements.txt": {
+      "before": "bcc52f3b7a892e854883c0c88f043181395a7afd8ff431e2c67d280997c7f753",
+      "after": "bcc52f3b7a892e854883c0c88f043181395a7afd8ff431e2c67d280997c7f753",
+      "same": true
+    },
+    "/app/alembic.ini": {
+      "before": "74fc818864dfefc2d2d7917e0c6a4f0e2bad935b4756211257bfeb37255bea32",
+      "after": "74fc818864dfefc2d2d7917e0c6a4f0e2bad935b4756211257bfeb37255bea32",
+      "same": true
+    }
+  },
+  "container": "2026-08-04T07:21:04.478474861Z healthy sha256:31ada8e913746971d0dbd88fd87e5f788c0c3801a535bfc5b12a14b3fa25d6e1",
+  "pass": true
+}

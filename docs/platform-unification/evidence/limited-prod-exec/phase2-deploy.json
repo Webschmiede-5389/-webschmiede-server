@@ -1,0 +1,95 @@
+{
+  "at": "2026-08-04T07:21:11.608878+00:00",
+  "phase": 2,
+  "uploaded": [
+    {
+      "file": "app/static/css/crm.css",
+      "sha256": "217adbac8a23a9a704803b1f84d1a80958e3efbc56d205495fe8b51935a71e78"
+    },
+    {
+      "file": "app/templates/companies/list.html",
+      "sha256": "edad9c59928e127e79cad765d972cc06ba3386504f0470c3b51db4e6c1695e1f"
+    },
+    {
+      "file": "app/templates/companies/archived.html",
+      "sha256": "4320246532fc615b0b0c93b1c9d681adb56ec852e0339b500fda0b73173f5d4a"
+    },
+    {
+      "file": "app/templates/dashboard/index.html",
+      "sha256": "681bc192050ac6ac038985ddda5f58cfc5f114ba842040ddea8faddb207fa532"
+    },
+    {
+      "file": "app/templates/leads/list.html",
+      "sha256": "52bc58f6589b7a7d15494d8fb1ee288e7d3ecf4de8edcc3b045a03e9f3933d04"
+    },
+    {
+      "file": "app/templates/tasks/list.html",
+      "sha256": "d0ca709fdbe3657f98dc837a69114475c04f653806e8bf83ac7362ef6df1b18a"
+    },
+    {
+      "file": "app/templates/vertrieb/anrufliste.html",
+      "sha256": "f9e41eada05912a5ab05738c5df2fc203f4703bbb576f9c76bdbfc4680bfc99d"
+    }
+  ],
+  "context_files": [
+    "/opt/crm-prod/build-branding-ui-68ede4d/app/static/css/crm.css",
+    "/opt/crm-prod/build-branding-ui-68ede4d/app/templates/companies/archived.html",
+    "/opt/crm-prod/build-branding-ui-68ede4d/app/templates/companies/list.html",
+    "/opt/crm-prod/build-branding-ui-68ede4d/app/templates/dashboard/index.html",
+    "/opt/crm-prod/build-branding-ui-68ede4d/app/templates/leads/list.html",
+    "/opt/crm-prod/build-branding-ui-68ede4d/app/templates/tasks/list.html",
+    "/opt/crm-prod/build-branding-ui-68ede4d/app/templates/vertrieb/anrufliste.html",
+    "/opt/crm-prod/build-branding-ui-68ede4d/Dockerfile"
+  ],
+  "new_image_id": "sha256:31ada8e913746971d0dbd88fd87e5f788c0c3801a535bfc5b12a14b3fa25d6e1",
+  "backup_image_id": "sha256:640c9e79ea55d037ab9aba191f70f92409b4ded0a01f68e9a87c0e2f3168068d",
+  "recreate_started": "2026-08-04T07:21:01.095192+00:00",
+  "recreate_ended": "2026-08-04T07:21:02.898725+00:00",
+  "compose_up": "Container crm-app-prod Recreate \n Container crm-app-prod Recreated \n Container crm-app-prod Starting \n Container crm-app-prod Started",
+  "container_state": "running healthy sha256:31ada8e913746971d0dbd88fd87e5f788c0c3801a535bfc5b12a14b3fa25d6e1",
+  "verified": [
+    {
+      "file": "app/static/css/crm.css",
+      "container_sha": "217adbac8a23a9a704803b1f84d1a80958e3efbc56d205495fe8b51935a71e78",
+      "expected": "217adbac8a23a9a704803b1f84d1a80958e3efbc56d205495fe8b51935a71e78",
+      "ok": true
+    },
+    {
+      "file": "app/templates/companies/list.html",
+      "container_sha": "edad9c59928e127e79cad765d972cc06ba3386504f0470c3b51db4e6c1695e1f",
+      "expected": "edad9c59928e127e79cad765d972cc06ba3386504f0470c3b51db4e6c1695e1f",
+      "ok": true
+    },
+    {
+      "file": "app/templates/companies/archived.html",
+      "container_sha": "4320246532fc615b0b0c93b1c9d681adb56ec852e0339b500fda0b73173f5d4a",
+      "expected": "4320246532fc615b0b0c93b1c9d681adb56ec852e0339b500fda0b73173f5d4a",
+      "ok": true
+    },
+    {
+      "file": "app/templates/dashboard/index.html",
+      "container_sha": "681bc192050ac6ac038985ddda5f58cfc5f114ba842040ddea8faddb207fa532",
+      "expected": "681bc192050ac6ac038985ddda5f58cfc5f114ba842040ddea8faddb207fa532",
+      "ok": true
+    },
+    {
+      "file": "app/templates/leads/list.html",
+      "container_sha": "52bc58f6589b7a7d15494d8fb1ee288e7d3ecf4de8edcc3b045a03e9f3933d04",
+      "expected": "52bc58f6589b7a7d15494d8fb1ee288e7d3ecf4de8edcc3b045a03e9f3933d04",
+      "ok": true
+    },
+    {
+      "file": "app/templates/tasks/list.html",
+      "container_sha": "d0ca709fdbe3657f98dc837a69114475c04f653806e8bf83ac7362ef6df1b18a",
+      "expected": "d0ca709fdbe3657f98dc837a69114475c04f653806e8bf83ac7362ef6df1b18a",
+      "ok": true
+    },
+    {
+      "file": "app/templates/vertrieb/anrufliste.html",
+      "container_sha": "f9e41eada05912a5ab05738c5df2fc203f4703bbb576f9c76bdbfc4680bfc99d",
+      "expected": "f9e41eada05912a5ab05738c5df2fc203f4703bbb576f9c76bdbfc4680bfc99d",
+      "ok": true
+    }
+  ],
+  "alembic_after_recreate": "016_dl_meta_context"
+}

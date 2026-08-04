@@ -1,0 +1,64 @@
+{
+  "at": "20260804T072006Z",
+  "phase": 1,
+  "health": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "app": "Webschmiede-CRM",
+      "env": "production",
+      "outbound_enabled": false,
+      "n8n_enabled": false,
+      "n8n_internal_only": true,
+      "nils_write_enabled": false,
+      "sales_customer_conversion_enabled": true,
+      "delivery_provisioning_enabled": false,
+      "customer_provisioning_enabled_deprecated": false,
+      "csrf_enabled": true,
+      "rate_limit_enabled": true
+    }
+  },
+  "source_image_inspect": "sha256:640c9e79ea55d037ab9aba191f70f92409b4ded0a01f68e9a87c0e2f3168068d 2026-08-01T22:02:56.140361357Z {\"build.ts\":\"20260801T220322Z\",\"git.sha\":\"f0f22780a9a1371ef91298024c84f1bd5aa0ffd6\",\"git.short\":\"f0f22780a9a1\",\"pol001.handover\":\"clean-commit\"}",
+  "container_before": "2db0ea0af0ee Up 2 days (healthy) crm-app-prod:local",
+  "alembic_before": "016_dl_meta_context",
+  "backup_tag": "sha256:640c9e79ea55d037ab9aba191f70f92409b4ded0a01f68e9a87c0e2f3168068d",
+  "image_ids_after_tag": "[crm-app-prod:git-f0f22780a9a1 crm-app-prod:local crm-app-prod:pre-branding-ui-68ede4d] sha256:640c9e79ea55d037ab9aba191f70f92409b4ded0a01f68e9a87c0e2f3168068d\n[crm-app-prod:git-f0f22780a9a1 crm-app-prod:local crm-app-prod:pre-branding-ui-68ede4d] sha256:640c9e79ea55d037ab9aba191f70f92409b4ded0a01f68e9a87c0e2f3168068d",
+  "backup_dir": "/opt/crm-prod/backups/ui-branding-20260804T072006Z",
+  "backed_files": [
+    {
+      "file": "app/static/css/crm.css",
+      "status": "ok",
+      "sha": "84928b71c371ed52ef8c31c1a849509ea85b442003f1c6c970a77f9e8903c106  /opt/crm-prod/backups/ui-branding-20260804T072006Z/app__static__css__crm.css"
+    },
+    {
+      "file": "app/templates/companies/list.html",
+      "status": "ok",
+      "sha": "b1611c85f9948b64203e882a0bb4e0cfe6866d20d2e2e05beeac611dfc26948b  /opt/crm-prod/backups/ui-branding-20260804T072006Z/app__templates__companies__list.html"
+    },
+    {
+      "file": "app/templates/companies/archived.html",
+      "status": "ok",
+      "sha": "37da38124ec75b06960b5b5f9e4d1a5cfc6803a91538afe1a11b326387640f92  /opt/crm-prod/backups/ui-branding-20260804T072006Z/app__templates__companies__archived.html"
+    },
+    {
+      "file": "app/templates/dashboard/index.html",
+      "status": "ok",
+      "sha": "d3b90acd290b8b7c12cd60bdadf40780bf036f1a7c1f920e9cc5179eecf04d6b  /opt/crm-prod/backups/ui-branding-20260804T072006Z/app__templates__dashboard__index.html"
+    },
+    {
+      "file": "app/templates/leads/list.html",
+      "status": "ok",
+      "sha": "7c93952f3ba997beed656dfa43b34eef33aa21e9014fcf0c71659070da3c2462  /opt/crm-prod/backups/ui-branding-20260804T072006Z/app__templates__leads__list.html"
+    },
+    {
+      "file": "app/templates/tasks/list.html",
+      "status": "ok",
+      "sha": "1e3f4010aad5521740bedf76032a21b8f6a2978e5b5010cd329c167e8010cea3  /opt/crm-prod/backups/ui-branding-20260804T072006Z/app__templates__tasks__list.html"
+    },
+    {
+      "file": "app/templates/vertrieb/anrufliste.html",
+      "status": "missing_on_prod"
+    }
+  ],
+  "image_save": "skipped_tag_sufficient"
+}

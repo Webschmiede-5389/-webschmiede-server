@@ -1,0 +1,40 @@
+{
+  "at": "2026-08-04T07:22:00.730205+00:00",
+  "phase": 3,
+  "routes": {},
+  "failures": [],
+  "health": {
+    "ok": true,
+    "app": "Webschmiede-CRM",
+    "env": "production",
+    "outbound_enabled": false,
+    "n8n_enabled": false,
+    "n8n_internal_only": true,
+    "nils_write_enabled": false,
+    "sales_customer_conversion_enabled": true,
+    "delivery_provisioning_enabled": false,
+    "customer_provisioning_enabled_deprecated": false,
+    "csrf_enabled": true,
+    "rate_limit_enabled": true
+  },
+  "dialer_flags_readonly": {
+    "outbound_enabled": false
+  },
+  "alembic_after": "016_dl_meta_context",
+  "runtime_images": "Up About a minute (healthy) crm-app-prod:local\nsha256:31ada8e913746971d0dbd88fd87e5f788c0c3801a535bfc5b12a14b3fa25d6e1\nsha256:31ada8e913746971d0dbd88fd87e5f788c0c3801a535bfc5b12a14b3fa25d6e1\nsha256:640c9e79ea55d037ab9aba191f70f92409b4ded0a01f68e9a87c0e2f3168068d",
+  "css": {
+    "status": 200,
+    "length": 15181,
+    "etag": "\"fabcee28dd2a4fcfc21b5343fc929f1e\"",
+    "has_table_wrap": true,
+    "has_badge_hide": true,
+    "sha256_hint": "217adbac8a23a9a704803b1f84d1a80958e3efbc56d205495fe8b51935a71e78"
+  },
+  "login_page": {
+    "status": 200,
+    "has_form": true
+  },
+  "login_error": "Page.wait_for_selector: Timeout 20000ms exceeded.\nCall log:\n  - waiting for locator(\"#app-shell\") to be visible\n",
+  "login_url": "https://crm.digitalehandwerkskunst.de/",
+  "fatal": "login_failed"
+}

@@ -1,0 +1,58 @@
+{
+  "at": "2026-08-04T07:52:40.359025+00:00",
+  "backup_tag": "crm-app-prod:pre-branding-shell-68ede4d",
+  "backup_id": "sha256:31ada8e913746971d0dbd88fd87e5f788c0c3801a535bfc5b12a14b3fa25d6e1",
+  "new_tag": "crm-app-prod:branding-shell-68ede4d",
+  "new_id": "sha256:2a6ebc828170c403c8d4c693a584f638f1c0ae39ea1e3c051325c488809801de",
+  "started": "2026-08-04T07:52:30.321324+00:00",
+  "container": "running healthy sha256:2a6ebc828170c403c8d4c693a584f638f1c0ae39ea1e3c051325c488809801de",
+  "alembic": "016_dl_meta_context",
+  "main_note": "inserted_jinja_compat_import_only",
+  "file_count": 22,
+  "verified": [
+    {
+      "file": "app/templates/base.html",
+      "ok": true,
+      "got": "fef3a6e63df9b7b3ee0ef95740a9ac6569c7c23d9b7ae82e125f4856942efcaf",
+      "expect": "fef3a6e63df9b7b3ee0ef95740a9ac6569c7c23d9b7ae82e125f4856942efcaf"
+    },
+    {
+      "file": "app/templates/auth/login.html",
+      "ok": true,
+      "got": "e77e2453061f0a4dac66d27252cf9299c7fd9fa5fe48d739af8a9ac63150c500",
+      "expect": "e77e2453061f0a4dac66d27252cf9299c7fd9fa5fe48d739af8a9ac63150c500"
+    },
+    {
+      "file": "app/branding.py",
+      "ok": true,
+      "got": "cf84c192fed20454db2c9f1304cfdec0492a6453646a2e9070b5e3abad02c477",
+      "expect": "cf84c192fed20454db2c9f1304cfdec0492a6453646a2e9070b5e3abad02c477"
+    },
+    {
+      "file": "app/static/ws/ci/webschmiede-app.css",
+      "ok": true,
+      "got": "a745d7c516da3eadcbfdd8396a214c1a44ae46171ff1b2bbb5642fe5a2e6200b",
+      "expect": "a745d7c516da3eadcbfdd8396a214c1a44ae46171ff1b2bbb5642fe5a2e6200b"
+    },
+    {
+      "file": "app/static/ws/brand/webschmiede/logo-mark.png",
+      "ok": true,
+      "got": "5ab5a6700518823634f5593f30210ac4d26cda6818b6b716f23f6f8c64e488c3",
+      "expect": "5ab5a6700518823634f5593f30210ac4d26cda6818b6b716f23f6f8c64e488c3"
+    }
+  ],
+  "health_before": {
+    "ok": true,
+    "app": "Webschmiede-CRM",
+    "env": "production",
+    "outbound_enabled": false,
+    "n8n_enabled": false,
+    "n8n_internal_only": true,
+    "nils_write_enabled": false,
+    "sales_customer_conversion_enabled": true,
+    "delivery_provisioning_enabled": false,
+    "customer_provisioning_enabled_deprecated": false,
+    "csrf_enabled": true,
+    "rate_limit_enabled": true
+  }
+}

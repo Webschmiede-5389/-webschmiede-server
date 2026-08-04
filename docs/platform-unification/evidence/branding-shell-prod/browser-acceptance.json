@@ -1,0 +1,413 @@
+{
+  "at": "2026-08-04T07:54:11.068685+00:00",
+  "base": "https://crm.digitalehandwerkskunst.de",
+  "failures": [],
+  "viewports": {
+    "390": {
+      "pages": {
+        "login": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "CRM anmelden · WebSchmiede",
+          "hasAppShell": false,
+          "hasSidebar": false,
+          "hasTopbar": false,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nCRM anmelden\n\nMit Ihrem Agency-Konto anmelden. Passwort wird nicht in Logs geschrieben.\n\nE-Mail\nPasswort\nAnmelden",
+          "branding_ok": true
+        },
+        "dashboard": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "Vertriebsübersicht · WebSchmiede",
+          "hasAppShell": true,
+          "hasSidebar": true,
+          "hasTopbar": true,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "Webschmiede",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nMANDANT\nWebschmiede\n\nCRM\n\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\n\nVERTRIEB\n\nLeitfaden\nEinwände\nAngebote",
+          "shell_ok": true,
+          "branding_ok": true
+        },
+        "companies": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "Unternehmen · WebSchmiede",
+          "hasAppShell": true,
+          "hasSidebar": true,
+          "hasTopbar": true,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "Webschmiede",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nMANDANT\nWebschmiede\n\nCRM\n\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\n\nVERTRIEB\n\nLeitfaden\nEinwände\nAngebote",
+          "shell_ok": true,
+          "branding_ok": true
+        },
+        "leads": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "Leads · WebSchmiede",
+          "hasAppShell": true,
+          "hasSidebar": true,
+          "hasTopbar": true,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "Webschmiede",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nMANDANT\nWebschmiede\n\nCRM\n\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\n\nVERTRIEB\n\nLeitfaden\nEinwände\nAngebote",
+          "shell_ok": true,
+          "branding_ok": true
+        }
+      },
+      "ws_resources": [
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-tokens.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-base.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-layout.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-components.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-utilities.css",
+          "transferSize": 0
+        }
+      ]
+    },
+    "768": {
+      "pages": {
+        "login": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "CRM anmelden · WebSchmiede",
+          "hasAppShell": false,
+          "hasSidebar": false,
+          "hasTopbar": false,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nCRM anmelden\n\nMit Ihrem Agency-Konto anmelden. Passwort wird nicht in Logs geschrieben.\n\nE-Mail\nPasswort\nAnmelden",
+          "branding_ok": true
+        },
+        "dashboard": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "Vertriebsübersicht · WebSchmiede",
+          "hasAppShell": true,
+          "hasSidebar": true,
+          "hasTopbar": true,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "Webschmiede",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nMANDANT\nWebschmiede\n\nCRM\n\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\n\nVERTRIEB\n\nLeitfaden\nEinwände\nAngebote",
+          "shell_ok": true,
+          "branding_ok": true
+        },
+        "companies": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "Unternehmen · WebSchmiede",
+          "hasAppShell": true,
+          "hasSidebar": true,
+          "hasTopbar": true,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "Webschmiede",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nMANDANT\nWebschmiede\n\nCRM\n\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\n\nVERTRIEB\n\nLeitfaden\nEinwände\nAngebote",
+          "shell_ok": true,
+          "branding_ok": true
+        },
+        "leads": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "Leads · WebSchmiede",
+          "hasAppShell": true,
+          "hasSidebar": true,
+          "hasTopbar": true,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "Webschmiede",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nMANDANT\nWebschmiede\n\nCRM\n\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\n\nVERTRIEB\n\nLeitfaden\nEinwände\nAngebote",
+          "shell_ok": true,
+          "branding_ok": true
+        }
+      },
+      "ws_resources": [
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-tokens.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-base.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-layout.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-components.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-utilities.css",
+          "transferSize": 0
+        }
+      ]
+    },
+    "1440": {
+      "pages": {
+        "login": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "CRM anmelden · WebSchmiede",
+          "hasAppShell": false,
+          "hasSidebar": false,
+          "hasTopbar": false,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nCRM anmelden\n\nMit Ihrem Agency-Konto anmelden. Passwort wird nicht in Logs geschrieben.\n\nE-Mail\nPasswort\nAnmelden",
+          "branding_ok": true
+        },
+        "dashboard": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "Vertriebsübersicht · WebSchmiede",
+          "hasAppShell": true,
+          "hasSidebar": true,
+          "hasTopbar": true,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "Webschmiede",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nMANDANT\nWebschmiede\n\nCRM\n\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\n\nVERTRIEB\n\nLeitfaden\nEinwände\nAngebote",
+          "shell_ok": true,
+          "branding_ok": true
+        },
+        "companies": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "Unternehmen · WebSchmiede",
+          "hasAppShell": true,
+          "hasSidebar": true,
+          "hasTopbar": true,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "Webschmiede",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nMANDANT\nWebschmiede\n\nCRM\n\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\n\nVERTRIEB\n\nLeitfaden\nEinwände\nAngebote",
+          "shell_ok": true,
+          "branding_ok": true
+        },
+        "leads": {
+          "overflowX": false,
+          "delta": 0,
+          "title": "Leads · WebSchmiede",
+          "hasAppShell": true,
+          "hasSidebar": true,
+          "hasTopbar": true,
+          "hasWsApp": true,
+          "brandText": "WebSchmiede",
+          "tenant": "Webschmiede",
+          "dsCss": [
+            "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+          ],
+          "logoSrc": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "bad": false,
+          "sample": "Zum Inhalt\nWebSchmiede\nDigitale Handwerkskunst\nMANDANT\nWebschmiede\n\nCRM\n\nDashboard\nUnternehmen\nKontakte\nPipeline\nAufgaben\n\nVERTRIEB\n\nLeitfaden\nEinwände\nAngebote",
+          "shell_ok": true,
+          "branding_ok": true
+        }
+      },
+      "ws_resources": [
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-tokens.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-base.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-layout.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-components.css",
+          "transferSize": 0
+        },
+        {
+          "name": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-utilities.css",
+          "transferSize": 0
+        }
+      ]
+    }
+  },
+  "assets": [
+    {
+      "url": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3",
+      "status": 200,
+      "len": 475,
+      "ct": "text/css; charset=utf-8"
+    },
+    {
+      "url": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-tokens.css",
+      "status": 200,
+      "len": 6028,
+      "ct": "text/css; charset=utf-8"
+    },
+    {
+      "url": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-base.css",
+      "status": 200,
+      "len": 2068,
+      "ct": "text/css; charset=utf-8"
+    },
+    {
+      "url": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-layout.css",
+      "status": 200,
+      "len": 5686,
+      "ct": "text/css; charset=utf-8"
+    },
+    {
+      "url": "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-components.css",
+      "status": 200,
+      "len": 11608,
+      "ct": "text/css; charset=utf-8"
+    },
+    {
+      "url": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/logo-mark.png",
+      "status": 200,
+      "len": 323299,
+      "ct": "image/png"
+    },
+    {
+      "url": "https://crm.digitalehandwerkskunst.de/static/ws/brand/webschmiede/favicon.png",
+      "status": 200,
+      "len": 2653,
+      "ct": "image/png"
+    },
+    {
+      "url": "https://crm.digitalehandwerkskunst.de/static/css/crm.css?v=pilot3",
+      "status": 200,
+      "len": 15181,
+      "ct": "text/css; charset=utf-8"
+    }
+  ],
+  "health": {
+    "ok": true,
+    "app": "Webschmiede-CRM",
+    "env": "production",
+    "outbound_enabled": false,
+    "n8n_enabled": false,
+    "n8n_internal_only": true,
+    "nils_write_enabled": false,
+    "sales_customer_conversion_enabled": true,
+    "delivery_provisioning_enabled": false,
+    "customer_provisioning_enabled_deprecated": false,
+    "csrf_enabled": true,
+    "rate_limit_enabled": true
+  },
+  "tenant": "Webschmiede",
+  "console_critical": [],
+  "network_5xx": [],
+  "before_vs_after": {
+    "before_hasAppShell": false,
+    "after_login_ds": [
+      "https://crm.digitalehandwerkskunst.de/static/ws/ci/webschmiede-app.css?v=pilot3"
+    ],
+    "after_dash_shell": true,
+    "after_dash_sidebar": true,
+    "after_brand": "WebSchmiede",
+    "changed_visible": true
+  },
+  "pass": true,
+  "url": "https://crm.digitalehandwerkskunst.de"
+}

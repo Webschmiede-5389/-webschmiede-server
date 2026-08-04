@@ -1,0 +1,140 @@
+{
+  "files": [
+    {
+      "file": "app/templates/base.html",
+      "sha256": "fef3a6e63df9b7b3ee0ef95740a9ac6569c7c23d9b7ae82e125f4856942efcaf",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/templates/auth/login.html",
+      "sha256": "e77e2453061f0a4dac66d27252cf9299c7fd9fa5fe48d739af8a9ac63150c500",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/branding.py",
+      "sha256": "cf84c192fed20454db2c9f1304cfdec0492a6453646a2e9070b5e3abad02c477",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/jinja_compat.py",
+      "sha256": "f53e0369d7e09359010f645726a6967edb60ad5d3fbd4bed1bec83b8e26dce2c",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/manifest.webmanifest",
+      "sha256": "8d9c435eab1d60e730efc9dc8508789fdbba412be7f50cacf22d1be9d675cd79",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/VERSION.yaml",
+      "sha256": "21fa24a118c6b0fac19b09dc280986ebd37c667e4dbeafe8fce7c267d31aaa4e",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/ci/webschmiede-app.css",
+      "sha256": "a745d7c516da3eadcbfdd8396a214c1a44ae46171ff1b2bbb5642fe5a2e6200b",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/ci/webschmiede-base.css",
+      "sha256": "9d4115b742bef9591068eae45d33e08f9a26b95222b836833bde44b6853ef70e",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/ci/webschmiede-components.css",
+      "sha256": "abf742cc59445962a9d169d7e44a0d30c780bfa6c2ac89412bed7d27f295b846",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/ci/webschmiede-layout.css",
+      "sha256": "4e12d69d069717d7fdf9938e7fe4806d1f61836e8e61f2fe0e02026da03e4488",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/ci/webschmiede-tokens.css",
+      "sha256": "f52e1ee1adfa3a3098fe54bd4d7b1aee26edf09840ace732f9963449d2bf15b9",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/ci/webschmiede-ui.js",
+      "sha256": "203873f5c3ab176347f01af24880aa2c325f74051d9bad900592b6abcb0112f4",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/ci/webschmiede-utilities.css",
+      "sha256": "6beb7690aab9571dc59eaa63ed76d488a62aa97ae7a53e136c34078f64e3435d",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/brand/webschmiede/app-icon-192.png",
+      "sha256": "3593ed64096461b460172b4bf939f6d195624b6aeead5433b23e8ddc8ff35669",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/brand/webschmiede/app-icon-512.png",
+      "sha256": "968fc3bc693ce4c30d66bbe3a2e4625a3e31d78615e6b9a9744baad17c847be6",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/brand/webschmiede/favicon-32.png",
+      "sha256": "ffe245ad07cc05dd4ef0768361babd71c6b6081030c04cf1276a79086f6f71c1",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/brand/webschmiede/favicon.png",
+      "sha256": "ffe245ad07cc05dd4ef0768361babd71c6b6081030c04cf1276a79086f6f71c1",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/brand/webschmiede/logo-horizontal.png",
+      "sha256": "f3e4eaf4c809cd030bd9ef942016f1a566093fbaa0b3f498b6ade5dd011b0be5",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/brand/webschmiede/logo-mark.png",
+      "sha256": "5ab5a6700518823634f5593f30210ac4d26cda6818b6b716f23f6f8c64e488c3",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/brand/webschmiede/manifest.json",
+      "sha256": "e48f8b6f5c55c914adc1a988555c70cf502a334a02e69ba46e8b8e5ece46ef9f",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/static/ws/brand/webschmiede/README.md",
+      "sha256": "abb6446a51f6f5da71afdd89bf5ab3862b58eef4ced47d782e831815d39eb56e",
+      "source": "68ede4d"
+    },
+    {
+      "file": "app/main.py",
+      "sha256": "51e82b237e52901b5c7bccbcfdb86116de42c252ecad0953870065ed567e89c1",
+      "source": "prod+jinja_compat_import",
+      "note": "inserted_jinja_compat_import_only"
+    }
+  ],
+  "listing": [
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/branding.py",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/jinja_compat.py",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/main.py",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/manifest.webmanifest",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/brand/webschmiede/app-icon-192.png",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/brand/webschmiede/app-icon-512.png",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/brand/webschmiede/favicon-32.png",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/brand/webschmiede/favicon.png",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/brand/webschmiede/logo-horizontal.png",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/brand/webschmiede/logo-mark.png",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/brand/webschmiede/manifest.json",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/brand/webschmiede/README.md",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/ci/webschmiede-app.css",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/ci/webschmiede-base.css",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/ci/webschmiede-components.css",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/ci/webschmiede-layout.css",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/ci/webschmiede-tokens.css",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/ci/webschmiede-ui.js",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/ci/webschmiede-utilities.css",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/static/ws/VERSION.yaml",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/templates/auth/login.html",
+    "/opt/crm-prod/build-branding-shell-68ede4d/app/templates/base.html",
+    "/opt/crm-prod/build-branding-shell-68ede4d/Dockerfile"
+  ]
+}

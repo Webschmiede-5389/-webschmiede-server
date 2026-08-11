@@ -55,7 +55,17 @@ def format_bon(order):
         for i in order.get("items", [])
     )
     del_label = "LIEFERUNG" if order["delivery_type"] == "lieferung" else "ABHOLUNG"
-    pay_label = {"cash":"Barzahlung","card":"EC-Karte","stripe":"Online"}.get(order["pay_method"], order["pay_method"])
+    ps = (order.get("payment_status") or "").lower()
+    if order.get("payment_refund_required"):
+        pay_label = "ONLINE BEZAHLT - REFUND ERFORDERLICH"
+    elif ps == "paid":
+        pay_label = "ONLINE BEZAHLT"
+    elif order.get("pay_method") == "stripe" and ps == "pending":
+        pay_label = "ONLINE-ZAHLUNG AUSSTEHEND"
+    else:
+        pay_label = {"cash": "BARZAHLUNG", "card": "EC-Karte", "stripe": "Online"}.get(
+            order.get("pay_method"), order.get("pay_method") or ""
+        )
     now = datetime.now().strftime("%d.%m.%Y %H:%M")
 
     bon = f"""

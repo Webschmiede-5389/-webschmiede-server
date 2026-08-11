@@ -18,6 +18,7 @@ import onboarding as onboarding_svc
 import domain_onboarding as domain_onboarding_svc
 import google_onboarding as google_onboarding_svc
 import stripe_billing as stripe_billing_svc
+import shop_stripe as shop_stripe_svc
 import inbox_agent as inbox_svc
 import agency_cockpit as agency_cockpit_svc
 import agency_chat as agency_chat_svc
@@ -537,6 +538,11 @@ def init_db():
                 db.execute(f"ALTER TABLE orders ADD COLUMN {col} {typ}")
             except Exception:
                 pass
+        # Shop Stripe (SHY001) – Soft-Migration, getrennt von Agency-Billing
+        try:
+            shop_stripe_svc.ensure_schema(db)
+        except Exception:
+            pass
         db.commit()
         try:
             expected_agency = agency_secret_svc.resolve_agency_admin_password(AGENCY_ADMIN_PASSWORD)
@@ -1698,7 +1704,9 @@ def public_order_status(order_number: str):
         return jsonify({"error": "Ungültige Bestellnummer"}), 400
     db = get_db()
     row = db.execute(
-        "SELECT order_number, status, delivery_type, wunschzeit, total, created_at, first_name FROM orders WHERE order_number=?",
+        """SELECT order_number, status, delivery_type, wunschzeit, total, created_at, first_name,
+                  pay_method, payment_status, payment_refund_required
+           FROM orders WHERE order_number=?""",
         (nr,),
     ).fetchone()
     if not row:
@@ -1715,6 +1723,11 @@ def public_order_status(order_number: str):
         "firstName": (o.get("first_name") or "")[:1] + "…" if o.get("first_name") else "",
         "phone": SHOP_PHONE,
         "shopName": SHOP_NAME,
+        "payMethod": o.get("pay_method"),
+        "paymentStatus": o.get("payment_status") or "",
+        "paymentLabel": shop_stripe_svc.payment_label(o),
+        # Absolute Regel: Zahlung ≠ Annahme
+        "awaitingRestaurantAccept": (o.get("status") or "neu") == "neu",
     })
 
 # ── Admin: Settings speichern ──────────────────────────────────────────────
@@ -2408,6 +2421,9 @@ def create_order():
         "wunschzeit":    data.get("wunschzeit",""),
         "notes":         data.get("notes",""),
     }
+    pay_method = (order["pay_method"] or "cash").strip().lower()
+    order["pay_method"] = pay_method
+    payment_status = shop_stripe_svc.default_payment_status(pay_method)
 
     # Aktive Promo mitloggen
     promo = get_active_promo()
@@ -2431,14 +2447,14 @@ def create_order():
     db.execute("""INSERT OR IGNORE INTO orders
         (order_number,first_name,last_name,phone,email,address,delivery_type,pay_method,
          items,total,wunschzeit,notes,promo_applied,contact_id,customer_account_id,
-         original_requested_ready_at)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+         original_requested_ready_at,payment_status)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         (order["order_number"], order["first_name"], order["last_name"],
          order["phone"], order["email"], order["address"],
          order["delivery_type"], order["pay_method"],
          json.dumps(order["items"], ensure_ascii=False),
          order["total"], order["wunschzeit"], order["notes"], promo_label, None, _ca_id,
-         _orig_ready_iso)
+         _orig_ready_iso, payment_status)
     )
 
     contact_id, is_new = upsert_contact(db, order)
@@ -2450,6 +2466,7 @@ def create_order():
     db.commit()
 
     order["promo_applied"] = promo_label
+    order["payment_status"] = payment_status
     agency_metrics_svc.bump_daily(db, "orders", kunde_id=KUNDE_ID or "")
     agency_metrics_svc.record_event(
         db, category="order", action="created", status="ok",
@@ -2472,11 +2489,41 @@ def create_order():
 
     db.commit()
 
-    return jsonify({
+    resp = {
         "success": True,
         "orderNumber": order["order_number"],
         "loyalty": loyalty_info,
-    })
+        "paymentStatus": payment_status,
+        "status": "neu",
+    }
+
+    # Stripe Checkout Session nur für Onlinezahlung – nie Bar/Karte
+    if pay_method == "stripe":
+        if not shop_stripe_svc.shop_stripe_configured():
+            return jsonify({
+                "error": "Online-Zahlung ist gerade nicht verfügbar. Bitte Bar oder Karte wählen.",
+                "orderNumber": order["order_number"],
+            }), 503
+        try:
+            checkout = shop_stripe_svc.create_or_reuse_checkout_session(
+                db, order=order, kunde_id=(KUNDE_ID or "SHY001"),
+            )
+            resp["checkoutUrl"] = checkout.get("url")
+            resp["checkoutSessionId"] = checkout.get("session_id")
+            resp["paymentStatus"] = shop_stripe_svc.PS_PENDING
+        except Exception as e:
+            app.logger.warning(f"shop stripe checkout: {e}")
+            db.execute(
+                "UPDATE orders SET payment_status=? WHERE order_number=?",
+                (shop_stripe_svc.PS_FAILED, order["order_number"]),
+            )
+            db.commit()
+            return jsonify({
+                "error": "Stripe-Checkout konnte nicht gestartet werden. Bitte erneut versuchen oder Bar zahlen.",
+                "orderNumber": order["order_number"],
+            }), 502
+
+    return jsonify(resp)
 
 @app.post("/api/admin/login")
 def admin_login():
@@ -2678,6 +2725,7 @@ def admin_orders():
     for r in rows:
         o = dict(r)
         o["items"] = json.loads(o.get("items") or "[]")
+        o["payment_label"] = shop_stripe_svc.payment_label(o)
         orders.append(o)
 
     # Prioritäts-Sortierung: abgeschlossene/stornierte nach unten, Rest nach Dringlichkeit
@@ -2713,6 +2761,14 @@ def update_status(order_number):
         db.execute("UPDATE orders SET status=? WHERE order_number=?", (new_status, order_number))
     db.commit()
 
+    # PAID + Ablehnung → Refund erforderlich (kein Auto-Refund in Batch 2)
+    refund_required = False
+    if new_status == "storniert":
+        try:
+            refund_required = shop_stripe_svc.mark_refund_required(db, order_number)
+        except Exception as e:
+            app.logger.warning(f"refund_required mark: {e}")
+
     row = db.execute("SELECT * FROM orders WHERE order_number=?", (order_number,)).fetchone()
     if row:
         order = dict(row)
@@ -2745,7 +2801,11 @@ def update_status(order_number):
                 ae_svc.track_order_ready(db, order, on_time=on_time)
                 oa_svc.resolve_by_order(db, order_number)
 
-    return jsonify({"success": True, "status": new_status})
+    out = {"success": True, "status": new_status}
+    if refund_required:
+        out["paymentRefundRequired"] = True
+        out["warning"] = "Bestellung war ONLINE BEZAHLT – Refund manuell in Stripe auslösen."
+    return jsonify(out)
 
 @app.get("/api/admin/contacts")
 @require_admin
@@ -5596,6 +5656,7 @@ def agency_inbox_export():
 
 @app.post("/api/stripe/webhook")
 def stripe_webhook():
+    """Agency-Billing Webhook (Abo/Setup) – unverändert."""
     payload = request.get_data()
     sig = request.headers.get("Stripe-Signature", "")
     if not sig:
@@ -5607,6 +5668,60 @@ def stripe_webhook():
         return jsonify({"error": str(e)}), 400
     except Exception as e:
         return jsonify({"error": str(e)[:200]}), 500
+
+
+@app.post("/api/shop/stripe/webhook")
+def shop_stripe_webhook():
+    """SHY001 Shop Checkout – isoliert. Setzt nur payment_status, nie order angenommen."""
+    payload = request.get_data()
+    sig = request.headers.get("Stripe-Signature", "")
+    if not sig:
+        return jsonify({"error": "Keine Signatur"}), 400
+    db = get_db()
+    try:
+        shop_stripe_svc.ensure_schema(db)
+        result = shop_stripe_svc.handle_webhook(db, payload, sig)
+        return jsonify(result)
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        app.logger.exception("shop stripe webhook")
+        return jsonify({"error": str(e)[:200]}), 500
+
+
+@app.post("/api/shop/stripe/checkout/<order_number>")
+def shop_stripe_checkout_retry(order_number: str):
+    """Erneute Checkout-URL für pending Stripe-Orders (Idempotent)."""
+    nr = (order_number or "").strip()
+    if not nr:
+        return jsonify({"error": "order_number fehlt"}), 400
+    db = get_db()
+    row = db.execute("SELECT * FROM orders WHERE order_number=?", (nr,)).fetchone()
+    if not row:
+        return jsonify({"error": "Bestellung nicht gefunden"}), 404
+    order = dict(row)
+    if (order.get("pay_method") or "").lower() != "stripe":
+        return jsonify({"error": "Keine Online-Zahlung für diese Bestellung"}), 400
+    if (order.get("payment_status") or "").lower() == shop_stripe_svc.PS_PAID:
+        return jsonify({"error": "Bereits bezahlt", "paymentStatus": "paid"}), 400
+    if not shop_stripe_svc.shop_stripe_configured():
+        return jsonify({"error": "Online-Zahlung nicht konfiguriert"}), 503
+    try:
+        if order.get("items") and isinstance(order["items"], str):
+            order["items"] = json.loads(order["items"])
+        checkout = shop_stripe_svc.create_or_reuse_checkout_session(
+            db, order=order, kunde_id=(KUNDE_ID or "SHY001"),
+        )
+        return jsonify({
+            "success": True,
+            "checkoutUrl": checkout.get("url"),
+            "checkoutSessionId": checkout.get("session_id"),
+            "paymentStatus": shop_stripe_svc.PS_PENDING,
+            "status": order.get("status") or "neu",
+        })
+    except Exception as e:
+        app.logger.warning(f"shop stripe retry: {e}")
+        return jsonify({"error": "Checkout fehlgeschlagen"}), 502
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

@@ -1740,9 +1740,8 @@ function buildCheckoutSummary() {
   document.getElementById('co-total').textContent = fmtPrice(sub + fee);
 }
 
-// ── API CONFIG (Backend – kein Token im Browser) ────────────────────────────
-const API_BASE    = '/api';
-const STRIPE_LINK = 'DEIN_STRIPE_PAYMENT_LINK_HIER';
+// ── API CONFIG (Backend – kein Token / kein Secret Key im Browser) ─────────
+const API_BASE = '/api';
 
 function generateOrderNumber() {
   const now = new Date();
@@ -1850,7 +1849,7 @@ async function submitOrder() {
 
   try {
     const nameParts = name.trim().split(/\s+/);
-    await submitToBackend({
+    const apiRes = await submitToBackend({
       firstName:    nameParts[0],
       lastName:     nameParts.slice(1).join(' ') || '',
       phone,
@@ -1874,6 +1873,17 @@ async function submitOrder() {
       notes:       note || '',
       orderNumber,
     });
+
+    // Online: serverseitige Checkout Session – Redirect zu Stripe
+    if (payMethod === 'stripe') {
+      const url = apiRes && apiRes.checkoutUrl;
+      if (!url) {
+        throw new Error((apiRes && apiRes.error) || 'Online-Zahlung konnte nicht gestartet werden.');
+      }
+      sessionStorage.setItem('sh_pending_order', JSON.stringify(payload));
+      window.location.href = url;
+      return;
+    }
   } catch(e) {
     trackEvent('checkout_failed', { error: e.message });
     alert(e.message || 'Bestellung fehlgeschlagen. Bitte erneut versuchen.');
@@ -1881,14 +1891,6 @@ async function submitOrder() {
     btn.disabled = false;
     icon.innerHTML = '<i class="fas fa-paper-plane"></i>';
     label.textContent = 'Bestellung absenden';
-    return;
-  }
-
-  if (payMethod === 'stripe' && STRIPE_LINK !== 'DEIN_STRIPE_PAYMENT_LINK_HIER') {
-    sessionStorage.setItem('sh_pending_order', JSON.stringify(payload));
-    window.location.href = STRIPE_LINK
-      + '?client_reference_id=' + encodeURIComponent(orderNumber)
-      + '&prefilled_custom_fields[order]=' + encodeURIComponent(orderNumber);
     return;
   }
 
@@ -2373,6 +2375,33 @@ document.addEventListener('DOMContentLoaded', () => {
   if (cartBtn) {
     cartBtn.addEventListener('click', () => trackEvent('cart_viewed'));
   }
+  // Stripe return: Zahlung ok ≠ Restaurant-Annahme
+  try {
+    const q = new URLSearchParams(window.location.search);
+    const pay = q.get('pay');
+    const nr = q.get('nr') || '';
+    if (pay === 'success' && nr) {
+      const info = document.getElementById('success-info');
+      if (info) {
+        showView('success');
+        info.innerHTML = `
+          <div style="text-align:center;padding:12px 0;">
+            <div style="font-size:42px;margin-bottom:12px;">💳</div>
+            <h2 style="color:#C9A84C;margin:0 0 10px;font-size:20px;">Zahlung erfolgreich</h2>
+            <p style="color:#ccc;line-height:1.6;font-size:14px;margin:0 0 12px;">
+              Deine Bestellung <strong style="color:#fff;">${nr}</strong> wartet noch auf Bestätigung durch Snack House Yassine.
+            </p>
+            <p style="color:#888;font-size:13px;line-height:1.5;margin:0;">
+              Du erhältst eine weitere Nachricht, sobald wir deine Bestellung angenommen haben.
+            </p>
+          </div>`;
+        lastOrderNumber = nr;
+        startStatusPoll(nr);
+      }
+    } else if (pay === 'cancel') {
+      alert('Zahlung abgebrochen. Deine Bestellung ist noch nicht bezahlt. Du kannst erneut online zahlen oder Bar wählen.');
+    }
+  } catch (_) {}
 });
 
 // ── INIT ───────────────────────────────────────────────────────────────────

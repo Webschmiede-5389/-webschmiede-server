@@ -121,8 +121,11 @@
     }
   },
   "stripe": {
-    "status": "ausstehend",
-    "payment_link": ""
+    "status": "test",
+    "mode": "test",
+    "shop_checkout": true,
+    "payment_link": "",
+    "notes": "Shop Checkout Sessions via SHOP_STRIPE_* Env. Secrets nie in dieser Datei."
   },
   "billing": {},
   "n8n": {

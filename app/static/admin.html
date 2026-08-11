@@ -2178,6 +2178,13 @@ function renderOrders() {
 const STATUS_LABELS   = { neu:'Neue Bestellung', angenommen:'Angenommen', zubereitung:'In Zubereitung', unterwegs:'Unterwegs', abholbereit:'Abholbereit', fertig:'Fertig', storniert:'Storniert' };
 const DELIVERY_LABELS = { lieferung:'Lieferung', abholung:'Abholung' };
 const PAY_LABELS      = { cash:'Bar', card:'EC-Karte', stripe:'Online' };
+const PAYMENT_STATUS_LABEL = {
+  unpaid: 'BARZAHLUNG',
+  pending: 'ONLINE-ZAHLUNG AUSSTEHEND',
+  paid: 'ONLINE BEZAHLT',
+  failed: 'ONLINE-ZAHLUNG FEHLGESCHLAGEN',
+  refunded: 'ERSTATTET',
+};
 
 function renderCard(o) {
   const dt = new Date(o.created_at + 'Z').toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
@@ -2189,7 +2196,13 @@ function renderCard(o) {
   }).join('<br>');
 
   const delCl = o.delivery_type === 'lieferung' ? 'pill-lieferung' : 'pill-abholung';
-  const payCl = o.pay_method === 'stripe' ? 'pill-online' : o.pay_method === 'card' ? 'pill-ec' : 'pill-bar';
+  const payLabel = o.payment_label || PAYMENT_STATUS_LABEL[o.payment_status] || PAY_LABELS[o.pay_method] || o.pay_method;
+  const payCl = (o.payment_status === 'paid' || (o.pay_method === 'stripe' && o.payment_status === 'paid'))
+    ? 'pill-online'
+    : o.pay_method === 'stripe' ? 'pill-online' : o.pay_method === 'card' ? 'pill-ec' : 'pill-bar';
+  const refundNote = o.payment_refund_required
+    ? `<div style="margin:8px 0;padding:8px 10px;border-radius:8px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:#fca5a5;font-size:12px;font-weight:700;">⚠ ONLINE BEZAHLT – Refund in Stripe manuell auslösen</div>`
+    : '';
 
   let btns = '';
   if (o.status === 'neu') {
@@ -2250,10 +2263,10 @@ function renderCard(o) {
     </div>
     <div class="meta-row">
       <span class="pill ${delCl}">${DELIVERY_LABELS[o.delivery_type]||o.delivery_type}</span>
-      <span class="pill ${payCl}">${PAY_LABELS[o.pay_method]||o.pay_method}</span>
+      <span class="pill ${payCl}">ZAHLUNG: ${payLabel}</span>
       ${zeit}${promo}
     </div>
-    ${promoAlert}${delayBadge}${addr}${note}
+    ${refundNote}${promoAlert}${delayBadge}${addr}${note}
     <div class="order-items">${items}</div>
     <div class="order-total">${o.total.toFixed(2)} €</div>
     <div class="action-row">${btns}</div>
@@ -2373,11 +2386,15 @@ function renderOpsCard(o) {
   const typePill = o.delivery_type === 'lieferung'
     ? `<span class="ops-pill ops-pill-lieferung"><i class="fas fa-motorcycle"></i> Lieferung</span>`
     : `<span class="ops-pill ops-pill-abholung"><i class="fas fa-store"></i> Abholung</span>`;
-  const payPill = o.pay_method === 'stripe'
-    ? `<span class="ops-pill ops-pill-stripe"><i class="fas fa-credit-card"></i> Online</span>`
+  const payPillLabel = o.payment_label || (o.payment_status === 'paid' ? 'ONLINE BEZAHLT' : o.pay_method === 'stripe' ? 'Online' : o.pay_method === 'card' ? 'EC' : 'Bar');
+  const payPill = o.payment_status === 'paid' || o.pay_method === 'stripe'
+    ? `<span class="ops-pill ops-pill-stripe"><i class="fas fa-credit-card"></i> ${payPillLabel}</span>`
     : o.pay_method === 'card'
     ? `<span class="ops-pill ops-pill-card"><i class="fas fa-credit-card"></i> EC</span>`
     : `<span class="ops-pill ops-pill-cash"><i class="fas fa-money-bill"></i> Bar</span>`;
+  const refundBanner = o.payment_refund_required
+    ? `<div style="margin:6px 0;padding:8px;border-radius:8px;background:rgba(239,68,68,.15);color:#fca5a5;font-size:11px;font-weight:700;">REFUND ERFORDERLICH (Online bezahlt + abgelehnt)</div>`
+    : '';
 
   // Primäraktion
   const pdef = OPS_STATUS_PRIMARY[o.status];
@@ -2465,6 +2482,7 @@ function renderOpsCard(o) {
     </div>
     <div class="ops-pills">
       ${typePill}${payPill}${wunschLabel}${knr}${studentPill}${delayPill}
+      ${refundBanner}
     </div>
     ${promoHtml}${couponHtml}${addrHtml}${noteHtml}
     <div class="ops-items">${itemsHtml}</div>

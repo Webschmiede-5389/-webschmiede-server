@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -166,8 +166,8 @@
     .f-pill.active { background: #C9A84C; border-color: #C9A84C; color: #000; }
 
     /* ── VIEWS ── */
-    .view { display: none; }
-    .view.active { display: block; }
+    .view { display: none !important; }
+    .view.active { display: block !important; }
 
     /* ── ORDERS ── */
     .orders-wrap { padding: 16px 20px; max-width: 860px; margin: 0 auto; }
@@ -270,17 +270,296 @@
     ::-webkit-scrollbar { width:4px; height:4px; }
     ::-webkit-scrollbar-track { background:#0a0804; }
     ::-webkit-scrollbar-thumb { background:#2a2318; border-radius:2px; }
+
+    /* ── ANALYTICS ── */
+    .an-kpi-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:16px; }
+    .an-kpi-card { background:#111008; border:1px solid #2a2318; border-radius:12px; padding:18px 16px; text-align:center; }
+    .an-kpi-val { font-size:24px; font-weight:900; color:#C9A84C; line-height:1; }
+    .an-kpi-label { font-size:11px; color:#555; margin-top:4px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; }
+    .an-kpi-delta { font-size:11px; margin-top:4px; }
+    .an-card { background:#111008; border:1px solid #2a2318; border-radius:12px; padding:18px; }
+    .an-card-title { font-size:12px; font-weight:700; color:#888; margin-bottom:14px; text-transform:uppercase; letter-spacing:.06em; display:flex; align-items:center; gap:6px; }
+    .an-period { background:#111008; border:1px solid #2a2318; color:#555; border-radius:6px; padding:5px 12px; font-size:12px; font-weight:600; cursor:pointer; font-family:inherit; transition:all .2s; }
+    .an-period.active { background:#C9A84C22; border-color:#C9A84C; color:#C9A84C; }
+    .an-bar-wrap { display:flex; flex-direction:column; align-items:center; flex:1; min-width:28px; }
+    .an-bar { background:linear-gradient(180deg,#C9A84C,#8a6b28); border-radius:3px 3px 0 0; width:100%; transition:height .3s; }
+    .an-bar-label { font-size:9px; color:#444; margin-top:3px; white-space:nowrap; transform:rotate(-45deg); transform-origin:top center; margin-top:8px; }
+    .an-item-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .an-item-bar-bg { flex:1; background:#1a1a1a; border-radius:3px; height:6px; }
+    .an-item-bar-fill { background:linear-gradient(90deg,#C9A84C,#e8c76a); border-radius:3px; height:6px; transition:width .4s; }
+    .an-item-name { font-size:12px; color:#ccc; width:140px; flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .an-item-qty { font-size:12px; color:#C9A84C; font-weight:700; width:30px; text-align:right; flex-shrink:0; }
+    .an-seg-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #1a1a1a; }
+    .an-seg-row:last-child { border-bottom:none; }
+    .an-seg-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .an-risk-row { padding:8px 0; border-bottom:1px solid #1a1a1a; font-size:12px; }
+    .an-risk-row:last-child { border-bottom:none; }
+    .an-customers-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .an-customers-table th { color:#555; font-weight:600; text-transform:uppercase; letter-spacing:.04em; font-size:10px; padding:6px 8px; text-align:left; border-bottom:1px solid #1a1a1a; }
+    .an-customers-table td { padding:8px 8px; border-bottom:1px solid #0f0d0a; color:#ccc; }
+    .an-customers-table tr:hover td { background:#1a1a1a22; }
+    @media(max-width:700px){.an-kpi-row{grid-template-columns:1fr 1fr;} #view-analyse>div[style*="grid-template-columns:2fr"]{grid-template-columns:1fr;} #view-analyse>div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr;} }
+
+    /* ══════════════════════════════════════════════════════════════════
+       BETRIEB vs. VERWALTUNG – Modus-Umschalter
+       ══════════════════════════════════════════════════════════════════ */
+    .mode-bar {
+      display: flex; align-items: center; gap: 8px;
+      background: #0a0805; border-bottom: 1px solid #1e1a14;
+      padding: 8px 16px;
+    }
+    .mode-btn {
+      padding: 8px 18px; border-radius: 10px; border: 1px solid #2a2318;
+      font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit;
+      transition: all .2s; display: flex; align-items: center; gap: 6px;
+      min-height: 40px; /* Touch-Target */
+    }
+    .mode-btn.active-betrieb {
+      background: #C9A84C; color: #000; border-color: #C9A84C;
+    }
+    .mode-btn.active-verwalt {
+      background: #1e3a5f; color: #93c5fd; border-color: #1e3a8a;
+    }
+    .mode-btn:not(.active-betrieb):not(.active-verwalt) {
+      background: #111; color: #555;
+    }
+    .mode-role-badge {
+      margin-left: auto; font-size: 11px; padding: 4px 10px;
+      border-radius: 99px; border: 1px solid #2a2318; color: #666;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .role-koch   { border-color: #ef444444; color: #fca5a5; background: #1f0d0d; }
+    .role-schicht{ border-color: #f59e0b44; color: #fde68a; background: #1f1507; }
+    .role-admin  { border-color: #C9A84C44; color: #C9A84C; background: #1a1407; }
+
+    /* ── Login: Rollen-Auswahl ─────────────────────────────────────── */
+    .login-role-row {
+      display: flex; gap: 8px; margin-bottom: 14px;
+    }
+    .login-role-btn {
+      flex: 1; padding: 9px 4px; border-radius: 10px;
+      border: 1.5px solid #2a2318; background: #111;
+      color: #555; font-size: 12px; font-weight: 700;
+      cursor: pointer; font-family: inherit; transition: all .2s;
+    }
+    .login-role-btn.selected { border-color: #C9A84C; color: #C9A84C; background: #1a1407; }
+
+    /* ══════════════════════════════════════════════════════════════════
+       STRESSFESTE BESTELLKARTE (Betriebsmodus)
+       ══════════════════════════════════════════════════════════════════ */
+    .ops-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 14px; padding: 14px;
+    }
+    @media(max-width: 480px) { .ops-grid { grid-template-columns: 1fr; padding: 8px; } }
+
+    /* Betriebsmodus-Karte */
+    .ops-card {
+      background: #0f0d09; border: 1.5px solid #2a2318;
+      border-radius: 16px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: border-color .2s;
+    }
+    .ops-card.neu        { border-top: 4px solid #ef4444; }
+    .ops-card.zubereitung{ border-top: 4px solid #f59e0b; }
+    .ops-card.abholbereit{ border-top: 4px solid #22c55e; }
+    .ops-card.unterwegs  { border-top: 4px solid #3b82f6; }
+    .ops-card.overdue    { border-top: 4px solid #ef4444; animation: pulse-border 1.5s infinite; }
+    .ops-card.start-soon { box-shadow: 0 0 0 2px #f59e0b66; }
+    @keyframes pulse-border { 0%,100%{border-top-color:#ef4444;} 50%{border-top-color:#ff8888;} }
+
+    .ops-card-head {
+      padding: 12px 14px 0;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 8px;
+    }
+    .ops-nr {
+      font-family: 'Playfair Display', serif; color: #C9A84C;
+      font-size: 20px; font-weight: 700; line-height: 1.1;
+    }
+    .ops-time {
+      font-size: 22px; font-weight: 800; color: #fff; line-height: 1.1;
+      text-align: right;
+    }
+    .ops-time-sub {
+      font-size: 10px; color: #555; text-align: right; margin-top: 2px;
+    }
+    .ops-priority-label {
+      font-size: 11px; font-weight: 700; padding: 3px 8px;
+      border-radius: 99px; margin-top: 4px; display: inline-block;
+    }
+    .prio-overdue  { background:#7f1d1d; color:#fca5a5; }
+    .prio-due-now  { background:#78350f; color:#fde68a; }
+    .prio-instant  { background:#1e3a5f; color:#93c5fd; }
+    .prio-soon     { background:#14532d; color:#86efac; }
+    .prio-later    { background:#1e1a14; color:#888; }
+
+    .ops-pills {
+      padding: 6px 14px; display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .ops-pill {
+      font-size: 11px; font-weight: 700; padding: 3px 9px;
+      border-radius: 99px; white-space: nowrap;
+    }
+    .ops-pill-lieferung { background:#0c1a33; color:#93c5fd; }
+    .ops-pill-abholung  { background:#0f2310; color:#86efac; }
+    .ops-pill-cash      { background:#1a1407; color:#C9A84C; }
+    .ops-pill-card      { background:#0f1a2e; color:#60a5fa; }
+    .ops-pill-stripe    { background:#1a0f29; color:#c4b5fd; }
+    .ops-pill-delay     { background:#78350f; color:#fde68a; }
+    .ops-pill-wunsch    { background:#1a1407; color:#C9A84C; }
+
+    .ops-items {
+      padding: 8px 14px;
+      font-size: 14px; color: #ccc; line-height: 1.6;
+      border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a;
+      flex: 1;
+    }
+    .ops-item-row { display: flex; justify-content: space-between; gap: 8px; }
+    .ops-item-name { flex: 1; }
+    .ops-item-price { color: #C9A84C; font-weight: 600; white-space: nowrap; }
+    .ops-free-row { color: #22c55e; font-style: italic; }
+    .ops-addr {
+      padding: 6px 14px; font-size: 12px; color: #888;
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+    .ops-note {
+      padding: 4px 14px 6px; font-size: 12px; color: #f59e0b;
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+    .ops-promo-alert {
+      margin: 0 14px 6px; padding: 7px 10px; background:#1a2810;
+      border: 1px solid #22c55e33; border-radius: 8px;
+      font-size: 12px; color: #86efac; display: flex; gap: 6px;
+    }
+
+    .ops-total {
+      padding: 6px 14px; font-size: 18px; font-weight: 800; color: #C9A84C;
+      text-align: right;
+    }
+
+    /* Hauptaktion – GROSS für Tablet */
+    .ops-primary-btn {
+      margin: 0 14px 8px;
+      padding: 16px; border-radius: 12px; border: none;
+      font-size: 17px; font-weight: 800; cursor: pointer;
+      font-family: inherit; letter-spacing: .02em;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 56px; /* Tablet Touch-Target */
+      transition: filter .15s, transform .1s;
+      width: calc(100% - 28px);
+      position: relative;
+    }
+    .ops-primary-btn:active { transform: scale(.97); }
+    .ops-primary-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .ops-primary-btn.btn-accept { background: linear-gradient(135deg,#16a34a,#22c55e); color: #fff; }
+    .ops-primary-btn.btn-ready  { background: linear-gradient(135deg,#0f766e,#14b8a6); color: #fff; }
+    .ops-primary-btn.btn-picked { background: linear-gradient(135deg,#1d4ed8,#3b82f6); color: #fff; }
+    .ops-primary-btn.btn-done   { background: linear-gradient(135deg,#334155,#475569); color: #fff; }
+    /* Loading-Spinner auf Button */
+    .ops-primary-btn.loading::after {
+      content: ''; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+    /* Sekundäre Aktionen */
+    .ops-secondary-row {
+      padding: 0 14px 12px;
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .ops-sec-btn {
+      flex: 1; min-width: 80px;
+      padding: 10px 8px; border-radius: 10px; border: 1px solid #2a2318;
+      background: #111; color: #888; font-size: 12px; font-weight: 700;
+      cursor: pointer; font-family: inherit; transition: all .2s;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      min-height: 44px; /* Touch-Target */
+    }
+    .ops-sec-btn:hover { border-color: #555; color: #ccc; }
+    .ops-sec-btn.sec-delay { border-color: #92400e44; color: #fde68a; }
+    .ops-sec-btn.sec-cancel{ border-color: #ef444444; color: #fca5a5; }
+    .ops-sec-btn.sec-call  { border-color: #22c55e44; color: #86efac; }
+
+    /* ── Betriebsmodus: Status-Spalten-Layout (Landscape Tablet) ── */
+    @media(orientation: landscape) and (min-width: 768px) {
+      .ops-columns {
+        display: flex; gap: 12px; padding: 12px; align-items: flex-start;
+      }
+      .ops-column {
+        flex: 1; min-width: 0;
+      }
+      .ops-column-header {
+        font-size: 11px; font-weight: 700; color: #555;
+        text-transform: uppercase; letter-spacing: .08em;
+        padding: 6px 12px; margin-bottom: 8px;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      .ops-grid { padding: 0; gap: 10px; }
+    }
+
+    /* ── Stressmodus: Viele Bestellungen ── */
+    .ops-stress-bar {
+      background: #7f1d1d; color: #fca5a5; padding: 6px 16px;
+      font-size: 12px; font-weight: 700; text-align: center;
+      display: none;
+    }
+    .ops-stress-bar.visible { display: block; animation: pulse-red 1.5s infinite; }
+
+    /* ── Verwaltungsmodus: ausgeblendet wenn Betrieb ── */
+    body.mode-betrieb .nav-tabs,
+    body.mode-betrieb .wait-bar,
+    body.mode-betrieb .call-bar { display: none !important; }
+    body.mode-betrieb #view-orders { display: block !important; }
+    body.mode-betrieb #orders-list { display: none !important; } /* klassisch ausblenden */
+    body.mode-betrieb #ops-container { display: block !important; }
+    body.mode-betrieb .stats-bar { display: none !important; }
+
+    body.mode-verwalt #ops-container { display: none !important; }
+    body.mode-verwalt #orders-list   { display: block !important; }
+    body.mode-verwalt .stats-bar    { display: flex !important; }
+
+    /* Koch-Rolle: Management-Button ausblenden */
+    body.role-koch .mode-btn[data-mode="verwalt"] { display: none !important; }
+    body.role-koch .hdr-btn[onclick*="openReport"]  { display: none !important; }
+
+    /* Responsive Header – kompakter auf Tablet */
+    @media(max-width: 900px) {
+      .header { height: auto; padding: 10px 12px; flex-wrap: wrap; gap: 8px; }
+      .header-name-main { font-size: 22px; }
+      .header-logo { width: 56px; height: 56px; }
+    }
+    @media(max-width: 600px) {
+      .header-brand { gap: 8px; }
+      .header-right { gap: 6px; }
+      .hdr-btn { font-size: 11px; padding: 5px 8px; }
+    }
+
+    /* ── Scroll-Fix Betriebsmodus ── */
+    body.mode-betrieb #view-orders { overflow-y: auto; height: calc(100vh - 130px); }
   </style>
 </head>
-<body>
+
 
 <!-- ══ LOGIN ══════════════════════════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-box">
-    <img class="login-logo" src="https://files.catbox.moe/3uyamu.png" alt="Snack House Logo">
+    <img class="login-logo" src="/img/logo.png" alt="Snack House Logo">
     <h1>Snack House Yassine</h1>
     <p class="sub">Bestellverwaltung · Mechernich</p>
-    <input class="login-inp" type="password" id="pw-input" placeholder="Passwort eingeben" onkeydown="if(event.key==='Enter')doLogin()">
+    <!-- Rollen-Auswahl (lokal gespeichert, kein Backend-Aufruf) -->
+    <div class="login-role-row">
+      <button class="login-role-btn selected" data-role="admin"   onclick="selectRole('admin',this)">⚙ Admin</button>
+      <button class="login-role-btn"          data-role="schicht" onclick="selectRole('schicht',this)">📋 Schicht</button>
+      <button class="login-role-btn"          data-role="koch"    onclick="selectRole('koch',this)">👨‍🍳 Koch</button>
+    </div>
+    <input class="login-inp" type="password" id="pw-input" placeholder="Passwort eingeben" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="current-password">
+    <div id="login-totp-wrap" style="display:none;margin-top:10px;">
+      <input class="login-inp" type="text" id="totp-input" inputmode="numeric" autocomplete="one-time-code" placeholder="2FA-Code (6 Ziffern)" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
     <button class="btn-gold" onclick="doLogin()">Anmelden</button>
     <p class="login-error" id="login-error">Falsches Passwort</p>
   </div>
@@ -292,10 +571,10 @@
   <!-- HEADER -->
   <div class="header">
     <div class="header-brand">
-      <img class="header-logo" src="https://files.catbox.moe/3uyamu.png" alt="Logo">
+      <img class="header-logo" src="/img/logo.png" alt="Logo">
       <div class="header-name">
         <span class="header-name-main">Snack House Yassine</span>
-        <span class="header-name-sub">Admin-Dashboard · Mechernich</span>
+        <span class="header-name-sub" id="hdr-role-label">Admin-Dashboard · Mechernich</span>
       </div>
     </div>
     <div class="header-right">
@@ -310,6 +589,43 @@
       <button class="hdr-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </div>
+
+  <!-- MODUS-LEISTE (Betrieb / Verwaltung) -->
+  <div class="mode-bar" id="mode-bar">
+    <button class="mode-btn active-betrieb" data-mode="betrieb" onclick="setMode('betrieb')">
+      <i class="fas fa-bolt"></i> Betrieb
+    </button>
+    <button class="mode-btn" data-mode="verwalt" onclick="setMode('verwalt')">
+      <i class="fas fa-cog"></i> Verwaltung
+    </button>
+    <!-- Pause-Button (nur Schicht/Admin) -->
+    <!-- Pause im Betriebsmodus (verlinkt auf bestehenden btn-pause-toggle) -->
+    <button class="hdr-btn" style="margin-left:8px;" onclick="openPauseModal()" id="mode-bar-pause-btn" title="Bestellannahme pausieren">
+      <i class="fas fa-pause-circle"></i> Pause
+    </button>
+    <!-- Stressbar für viele Bestellungen -->
+    <div class="ops-stress-bar" id="stress-bar">
+      ⚠ Viele offene Bestellungen – Priorität beachten!
+    </div>
+    <!-- Rollen-Badge -->
+    <span class="mode-role-badge" id="role-badge">
+      <i class="fas fa-user-circle"></i> <span id="role-badge-text">Admin</span>
+    </span>
+    <button class="hdr-btn" style="margin-left:8px;" onclick="toggleShiftChecklist()" id="shift-check-btn" title="Schicht-Check">
+      <i class="fas fa-clipboard-check"></i> Check
+    </button>
+  </div>
+
+  <div id="shift-checklist" style="display:none;background:#13110d;border-bottom:1px solid #2a2318;padding:10px 14px;font-size:13px;color:#ccc;">
+    <div style="font-weight:700;color:#C9A84C;margin-bottom:8px;">Schicht-Check (1× / Tag)</div>
+    <label style="display:flex;gap:8px;align-items:center;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sc-online" onchange="saveShiftCheck()"> Online / Bestellannahme an?</label>
+    <label style="display:flex;gap:8px;align-items:center;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sc-promo" onchange="saveShiftCheck()"> Aktion aktiv geprüft?</label>
+    <label style="display:flex;gap:8px;align-items:center;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sc-student" onchange="saveShiftCheck()"> Offene Schülerprüfungen erledigt?</label>
+    <p id="sc-hint" style="font-size:11px;color:#666;margin:6px 0 0;"></p>
+  </div>
+
+  <!-- Betriebsmodus-Container -->
+  <div id="ops-container" style="display:block;"></div>
 
   <!-- Wartezeit-Bar -->
   <div class="wait-bar" id="wait-bar">
@@ -367,8 +683,19 @@
     <button class="nav-tab"        id="tab-kunden"   onclick="switchView('kunden',this)"><i class="fas fa-users"></i> Kunden</button>
     <button class="nav-tab"        id="tab-botlog"   onclick="switchView('botlog',this)"><i class="fas fa-robot"></i> Bot-Log</button>
     <button class="nav-tab"        id="tab-aktionen" onclick="switchView('aktionen',this)"><i class="fas fa-gift"></i> Aktionen</button>
+    <button class="nav-tab"        id="tab-autotexte" onclick="switchView('autotexte',this)"><i class="fas fa-envelope-open-text"></i> Auto-Texte</button>
     <button class="nav-tab"        id="tab-artikel"  onclick="switchView('artikel',this)"><i class="fas fa-utensils"></i> Speisekarte</button>
     <button class="nav-tab"        id="tab-drucker"  onclick="switchView('drucker',this)" style="color:#3b82f6;border-bottom:2px solid #3b82f6;"><i class="fas fa-print"></i> Drucker einrichten</button>
+    <button class="nav-tab"        id="tab-analyse"  onclick="switchView('analyse',this)"><i class="fas fa-chart-line"></i> Analyse</button>
+    <button class="nav-tab"        id="tab-stempel"  onclick="switchView('stempel',this)"><i class="fas fa-stamp"></i> Stempelkarte</button>
+    <button class="nav-tab"        id="tab-schueler" onclick="switchView('schueler',this)"><i class="fas fa-graduation-cap"></i> Schülerangebote</button>
+    <button class="nav-tab"        id="tab-kpi"      onclick="switchView('kpi',this)"><i class="fas fa-tachometer-alt"></i> KPIs</button>
+  </div>
+  <!-- Alerts-Banner -->
+  <div id="alerts-banner" style="display:none;background:#7f1d1d;color:#fca5a5;padding:8px 16px;font-size:12px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="switchView('kpi',document.getElementById('tab-kpi'))">
+    <i class="fas fa-exclamation-triangle"></i>
+    <span id="alerts-banner-text">Offene Warnungen</span>
+    <span style="margin-left:auto;font-size:11px;opacity:.7;">KPI-Tab öffnen →</span>
   </div>
 
   <!-- Push-Benachrichtigungs-Banner -->
@@ -381,6 +708,13 @@
 
   <!-- ══ VIEW: BESTELLUNGEN ══════════════════════════════════════════════ -->
   <div id="view-orders" class="view active">
+    <!-- Operative Schnellaktionen -->
+    <div style="display:flex;gap:10px;align-items:center;padding:10px 14px;background:#111;border-bottom:1px solid #1e1e1e;flex-wrap:wrap;">
+      <div id="pause-status-bar" style="flex:1;font-size:12px;color:#666;"></div>
+      <button id="btn-pause-toggle" onclick="openPauseModal()" style="background:#b45309;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-pause-circle"></i> Bestellungen pausieren
+      </button>
+    </div>
     <div class="filter-bar">
       <button class="f-pill active" onclick="filterOrders('alle',this)">Alle</button>
       <button class="f-pill" onclick="filterOrders('neu',this)"><i class="fas fa-bell"></i> Neue</button>
@@ -391,9 +725,39 @@
     </div>
     <div class="orders-wrap" id="orders-list">
       <div class="empty-state">
-        <img class="es-logo" src="https://files.catbox.moe/3uyamu.png" alt="Logo">
+        <img class="es-logo" src="/img/logo.png" alt="Logo">
         <i class="fas fa-circle-notch spinner es-icon" style="color:#444;"></i>
         <span class="es-text" style="color:#333;">Lade Bestellungen…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: KPI-DASHBOARD ══════════════════════════════════════════════ -->
+  <div id="view-kpi" class="view">
+    <div class="orders-wrap">
+      <!-- Alerts -->
+      <div id="kpi-alerts-section" style="margin-bottom:16px;display:none;">
+        <div class="section-title" style="color:#f87171;"><i class="fas fa-exclamation-triangle"></i> Offene Warnungen</div>
+        <div id="kpi-alerts-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+      <!-- Heute -->
+      <div class="section-box" style="margin-bottom:14px;">
+        <div class="section-title"><i class="fas fa-sun"></i> Heute</div>
+        <div id="kpi-today-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:10px;">
+          <div class="empty-state" style="grid-column:1/-1;padding:20px;"><i class="fas fa-circle-notch spinner"></i> Lade…</div>
+        </div>
+      </div>
+      <!-- Diese Woche -->
+      <div class="section-box" style="margin-bottom:14px;">
+        <div class="section-title"><i class="fas fa-calendar-week"></i> Diese Woche</div>
+        <div id="kpi-week-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:10px;">
+          <div class="empty-state" style="grid-column:1/-1;padding:20px;"><i class="fas fa-circle-notch spinner"></i> Lade…</div>
+        </div>
+      </div>
+      <!-- Funnel -->
+      <div class="section-box" style="margin-bottom:14px;">
+        <div class="section-title"><i class="fas fa-filter"></i> Conversion-Funnel (7 Tage)</div>
+        <div id="kpi-funnel" style="margin-top:10px;font-size:13px;color:#aaa;">Lade…</div>
       </div>
     </div>
   </div>
@@ -420,7 +784,7 @@
     <div class="orders-wrap">
       <div class="section-box" style="margin-bottom:14px;">
         <div class="section-title"><i class="fas fa-robot"></i> Follow-up Automation</div>
-        <p style="color:#555;font-size:12px;margin-bottom:12px;">Review-SMS nach 3 Tagen (Status „Fertig“) · Win-back nach 30 Tagen Inaktivität</p>
+        <p style="color:#555;font-size:12px;margin-bottom:12px;">Nur per E-Mail: Review nach Status „Fertig“ · Win-back nach 30/60 Tagen Inaktivität. Kein SMS.</p>
         <div class="section-box" style="margin-bottom:14px;background:#0d1a12;border-color:#1a3d28;">
           <div class="section-title" style="color:#22c55e;"><i class="fas fa-star"></i> Online-Treueprogramm</div>
           <p style="color:#888;font-size:12px;line-height:1.6;margin:0;">10 Online-Bestellungen = gratis <strong style="color:#e8c76a;">Ayran 0,4 L</strong> · Stempel pro Telefonnummer · Belohnung erscheint automatisch im Warenkorb · Einstellungen in Server-DB (<code style="color:#666;">loyalty_*</code>)</p>
@@ -437,7 +801,7 @@
       </div>
       <div class="section-box" style="margin-bottom:14px;">
         <div class="section-title"><i class="fas fa-database"></i> Kunden-Datenbank <span id="crm-count" style="color:#555;font-size:12px;font-weight:400;margin-left:8px;"></span></div>
-        <p style="color:#555;font-size:12px;margin-bottom:12px;">Automatisch aus Bestellungen · Telefon = eindeutige ID · Klick auf „Historie“ für Bestellungen</p>
+        <p style="color:#555;font-size:12px;margin-bottom:12px;">Automatisch aus Bestellungen · Kundennummer K-XXXXX · Telefon = Kontakt · Klick auf „Historie“ für Bestellungen</p>
         <input class="form-inp" id="crm-search" placeholder="Suchen: Name, Telefon, E-Mail…" oninput="renderContacts()" style="margin:0;">
       </div>
       <div id="crm-list"></div>
@@ -591,6 +955,81 @@
         </div>
       </div>
 
+      <!-- Kunden per E-Mail informieren -->
+      <div class="section-box" id="promo-blast-box">
+        <div class="section-title"><i class="fas fa-paper-plane"></i> Kunden informieren (E-Mail)</div>
+        <p style="color:#555;font-size:12px;margin-bottom:12px;">Nur Empfänger mit Marketing-Einwilligung. Transaktionsmails bleiben unberührt.</p>
+        <div id="promo-blast-preview" style="background:#0e0b08;border:1px solid #2a2318;border-radius:10px;padding:12px;margin-bottom:12px;font-size:13px;color:#aaa;">
+          Lade Vorschau…
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <button class="btn-gold" style="width:auto;padding:10px 18px;font-size:13px;" onclick="loadPromoBroadcastPreview()"><i class="fas fa-sync"></i> Vorschau</button>
+          <button class="btn-promo-start" style="width:auto;" onclick="startPromoBroadcast()"><i class="fas fa-bullhorn"></i> Jetzt an Consent-Liste senden</button>
+        </div>
+        <p id="promo-blast-status" style="font-size:12px;color:#666;margin:10px 0 0;"></p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ VIEW: AUTOMATISCHE TEXTE ═══════════════════════════════════════ -->
+  <div id="view-autotexte" class="view">
+    <div class="orders-wrap">
+      <div class="section-box">
+        <div class="section-title"><i class="fas fa-sliders-h"></i> Timing</div>
+        <div class="form-grid3" style="margin-bottom:10px;">
+          <div>
+            <label class="form-label">Review nach X Tagen</label>
+            <input class="form-inp" id="tpl-review-days" type="number" min="1" max="30" value="2">
+          </div>
+          <div>
+            <label class="form-label">Winback nach X Tagen</label>
+            <input class="form-inp" id="tpl-winback-days" type="number" min="7" max="120" value="30">
+          </div>
+          <div>
+            <label class="form-label">Max. 1 Marketing-Mail / X Tage</label>
+            <input class="form-inp" id="tpl-freq-days" type="number" min="1" max="30" value="3">
+          </div>
+        </div>
+        <button class="btn-gold" style="width:auto;padding:10px 18px;font-size:13px;" onclick="saveMessageSettings()">Timing speichern</button>
+        <button class="btn-print-card" style="padding:10px 16px;margin-left:8px;" onclick="runBusinessScan()"><i class="fas fa-chart-line"></i> Business-Scan jetzt</button>
+        <p id="tpl-settings-msg" style="font-size:12px;color:#666;margin:8px 0 0;"></p>
+      </div>
+      <div class="section-box">
+        <div class="section-title"><i class="fas fa-pen"></i> E-Mail-Vorlagen</div>
+        <p style="color:#555;font-size:12px;margin-bottom:12px;">Normaler Text, keine HTML-Kenntnisse nötig. Platzhalter: <code>{{name}}</code> <code>{{shop_name}}</code> <code>{{review_url}}</code> <code>{{order_url}}</code> <code>{{promo_title}}</code></p>
+        <label class="form-label">Welche Mail?</label>
+        <select class="form-inp" id="tpl-key" onchange="fillTemplateEditor()" style="margin-bottom:10px;">
+          <option value="">Laden…</option>
+        </select>
+        <label class="form-label">Betreff</label>
+        <input class="form-inp" id="tpl-subject" placeholder="Betreff der E-Mail">
+        <label class="form-label">Text (Klartext)</label>
+        <textarea class="form-inp" id="tpl-body-text" rows="8" style="resize:vertical;line-height:1.5;" placeholder="Hallo {{name}}…"></textarea>
+        <label class="form-label" style="margin-top:10px;">Vorschau</label>
+        <div id="tpl-preview" style="background:#0a0806;border:1px solid #2a2318;border-radius:12px;padding:16px;min-height:80px;color:#ccc;font-size:13px;line-height:1.6;white-space:pre-wrap;"></div>
+        <details style="margin-top:12px;">
+          <summary style="color:#666;font-size:12px;cursor:pointer;">Erweitert: HTML (nur Notfall)</summary>
+          <textarea class="form-inp" id="tpl-body" rows="6" style="font-family:ui-monospace,monospace;font-size:12px;resize:vertical;margin-top:8px;"></textarea>
+        </details>
+        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+          <button class="btn-gold" style="width:auto;padding:10px 18px;font-size:13px;" onclick="saveCurrentTemplate()">Vorlage speichern</button>
+        </div>
+        <p id="tpl-save-msg" style="font-size:12px;color:#666;margin:8px 0 0;"></p>
+      </div>
+      <div class="section-box" style="background:#0d1a12;border-color:#1a3d28;">
+        <div class="section-title" style="color:#22c55e;"><i class="fas fa-lightbulb"></i> Upsell-Regeln</div>
+        <label style="display:flex;gap:8px;align-items:center;margin-bottom:8px;color:#ccc;font-size:13px;cursor:pointer;">
+          <input type="checkbox" id="upsell-dreh" checked style="accent-color:#C9A84C;"> Burger ≥2×, nie Pizza/Drehspieß → Drehspieß-Tipp
+        </label>
+        <label style="display:flex;gap:8px;align-items:center;margin-bottom:8px;color:#ccc;font-size:13px;cursor:pointer;">
+          <input type="checkbox" id="upsell-ayran" checked style="accent-color:#C9A84C;"> ≥3 Bestellungen, nie Getränk → Ayran-Tipp
+        </label>
+        <label style="display:flex;gap:8px;align-items:center;margin-bottom:8px;color:#ccc;font-size:13px;cursor:pointer;">
+          <input type="checkbox" id="upsell-loyal" checked style="accent-color:#C9A84C;"> 8–9 Stempel, &gt;7 Tage still → Reminder
+        </label>
+        <p style="color:#666;font-size:11px;margin:8px 0 10px;">Nur mit Marketing-Consent + Frequency-Cap. Speichern über „Timing speichern“.</p>
+      </div>
     </div>
   </div>
 
@@ -635,19 +1074,19 @@
               <div style="font-size:24px;margin-bottom:6px;">🖥️</div>
               <div style="font-size:12px;font-weight:700;color:#C9A84C;">Browser-Druck</div>
               <div style="font-size:10px;color:#555;margin-top:3px;">Jeder PC-Drucker</div>
-              <div style="font-size:10px;color:#22c55e;margin-top:4px;font-weight:600;">Empfohlen</div>
+              <div style="font-size:10px;color:#22c55e;margin-top:4px;font-weight:600;">Live: PC-Drucker</div>
             </div>
             <div class="printer-type-card" id="pt-autoprint" onclick="selectPrinterType('autoprint')"
               style="background:#0e0b08;border:2px solid #2a2318;border-radius:10px;padding:14px;text-align:center;cursor:pointer;">
               <div style="font-size:24px;margin-bottom:6px;">⚙️</div>
               <div style="font-size:12px;font-weight:700;color:#fff;">Auto-Druck</div>
-              <div style="font-size:10px;color:#555;margin-top:3px;">Hintergrund-Skript</div>
+              <div style="font-size:10px;color:#555;margin-top:3px;">Skript → gleicher PC-Drucker</div>
             </div>
             <div class="printer-type-card" id="pt-netzwerk" onclick="selectPrinterType('netzwerk')"
               style="background:#0e0b08;border:2px solid #2a2318;border-radius:10px;padding:14px;text-align:center;cursor:pointer;">
               <div style="font-size:24px;margin-bottom:6px;">📡</div>
               <div style="font-size:12px;font-weight:700;color:#fff;">Netzwerk-Drucker</div>
-              <div style="font-size:10px;color:#555;margin-top:3px;">Küchen-Bondrucker</div>
+              <div style="font-size:10px;color:#555;margin-top:3px;">Optional später</div>
             </div>
           </div>
         </div>
@@ -679,6 +1118,11 @@
           </button>
           <div style="font-size:11px;color:#444;flex:1;line-height:1.6;">Druckt einen Beispiel-Bon damit du siehst wie es auf deinem Drucker aussieht.</div>
         </div>
+      </div>
+
+            <div class="section-box" style="border-color:#1a3d28;background:#0d1a12;">
+        <div class="section-title" style="color:#22c55e;"><i class="fas fa-check-circle"></i> Live-Pfad: Drucker am PC</div>
+        <p style="color:#888;font-size:13px;line-height:1.6;margin:0;">Am Tresen-PC angeschlossen. <strong style="color:#e8e2d8;">Option A</strong> = Button auf der Bestellkarte. <strong style="color:#e8e2d8;">Option B</strong> = Autoprint-Skript druckt automatisch auf denselben Windows-Drucker. Extra Küchen-Netzwerkdrucker ist nicht nötig.</p>
       </div>
 
       <!-- Option A -->
@@ -724,9 +1168,9 @@
         <div class="printer-option">
           <div class="printer-icon">🏪</div>
           <div style="flex:1">
-            <div class="printer-badge badge-gold">Empfohlen für Küche</div>
+            <div class="printer-badge badge-blue">Optional – nicht nötig wenn PC-Drucker läuft</div>
             <div class="printer-title">ESC/POS Bondrucker via WLAN/LAN</div>
-            <div class="printer-desc">Drucker steht in der Küche, verbunden per WLAN/LAN. Druckt vollautomatisch ohne PC-Eingriff. Ideal für professionellen Betrieb.</div>
+            <div class="printer-desc">Nur wenn später ein eigener Netzwerk-Bondrucker kommt. Aktuell reicht der Drucker am PC (Option A oder B).</div>
             <div style="margin-top:14px;">
               <div style="font-size:12px;color:#666;margin-bottom:8px;font-weight:600;">Empfohlene Drucker:</div>
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:12px;">
@@ -759,7 +1203,358 @@
     </div>
   </div>
 
-  <!-- Druckbereich -->
+
+  <!-- Moved inside dashboard for tab visibility -->
+<!-- ══ STEMPELKARTEN-VIEW ════════════════════════════════════════════════ -->
+<div id="view-stempel" class="view" style="padding:20px;max-width:800px;margin:0 auto;">
+  <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:24px;margin-bottom:4px;"><i class="fas fa-stamp"></i> Stempelkarte</h2>
+  <p style="color:#555;font-size:13px;margin-bottom:24px;">Konfiguriere das digitale Treueprogramm für Kunden-Accounts.</p>
+
+  <div style="background:#111;border:1px solid #2a2318;border-radius:16px;padding:24px;margin-bottom:16px;">
+    <h3 style="color:#C9A84C;font-size:16px;font-weight:700;margin-bottom:8px;"><i class="fas fa-shield-alt"></i> Zugangsschutz (2FA)</h3>
+    <p style="color:#888;font-size:13px;line-height:1.5;margin:0 0 14px;">Zwei-Faktor schützt das Admin-Login. Authenticator-App (Google/Microsoft Authenticator, Authy).</p>
+    <p id="admin-2fa-status" style="font-size:13px;color:#666;margin:0 0 12px;">Status wird geladen …</p>
+    <div id="admin-2fa-setup-box" style="display:none;background:#0a0804;border:1px solid #2a2318;border-radius:12px;padding:14px;margin-bottom:12px;">
+      <p style="font-size:12px;color:#aaa;margin:0 0 8px;">Secret in die App scannen oder tippen:</p>
+      <code id="admin-2fa-secret" style="display:block;word-break:break-all;color:#C9A84C;font-size:13px;margin-bottom:8px;"></code>
+      <a id="admin-2fa-otpauth" href="#" target="_blank" rel="noopener" style="font-size:12px;color:#3b82f6;">otpauth-Link öffnen</a>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <input type="text" id="admin-2fa-confirm-code" inputmode="numeric" placeholder="Code aus App" style="flex:1;min-width:140px;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;">
+        <button type="button" onclick="confirmAdmin2fa()" style="background:#22c55e;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-weight:700;cursor:pointer;">Bestätigen</button>
+      </div>
+    </div>
+    <button type="button" id="admin-2fa-setup-btn" onclick="setupAdmin2fa()" style="background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;">2FA einrichten</button>
+    <span id="admin-2fa-msg" style="margin-left:10px;font-size:12px;color:#22c55e;"></span>
+  </div>
+
+  <div style="background:#111;border:1px solid #2a2318;border-radius:16px;padding:24px;margin-bottom:16px;">
+    <h3 style="color:#C9A84C;font-size:16px;font-weight:700;margin-bottom:16px;">Allgemeine Einstellungen</h3>
+    <div style="display:grid;gap:14px;">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="loy-enabled" style="width:18px;height:18px;accent-color:#C9A84C;">
+        <span style="color:#e8e2d8;font-size:14px;">Stempelkarte aktiv</span>
+      </label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Mindestwarenwert für Stempel (€)</label>
+          <input type="number" id="loy-min-value" min="0" step="0.01" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Stempel bis zur Belohnung</label>
+          <input type="number" id="loy-stamps-needed" min="2" max="50" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Belohnungsart</label>
+          <select id="loy-reward-type" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+            <option value="fixed">Fester Betrag (€)</option>
+            <option value="percent">Prozentualer Rabatt (%)</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;"><span id="loy-reward-value-label">Belohnungswert (€)</span></label>
+          <input type="number" id="loy-reward-value" min="0.01" step="0.01" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Mindestbestellwert für Einlösung (€)</label>
+          <input type="number" id="loy-reward-min" min="0" step="0.01" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Gutschein gültig (Tage)</label>
+          <input type="number" id="loy-valid-days" min="1" max="365" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+        </div>
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Anzeige-Bezeichnung Belohnung</label>
+        <input type="text" id="loy-reward-title" maxlength="80" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;" placeholder="z.B. 5,00 € Gutschein">
+      </div>
+      <div style="display:flex;gap:20px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#888;">
+          <input type="checkbox" id="loy-delivery" style="width:16px;height:16px;accent-color:#C9A84C;"> Lieferung stempelberechtigt
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#888;">
+          <input type="checkbox" id="loy-pickup" style="width:16px;height:16px;accent-color:#C9A84C;"> Abholung stempelberechtigt
+        </label>
+      </div>
+    </div>
+    <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
+      <button onclick="saveLoyaltySettings()" style="background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;border:none;border-radius:10px;padding:10px 22px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;">Einstellungen speichern</button>
+      <span id="loy-save-msg" style="color:#22c55e;font-size:13px;display:none;">✔ Gespeichert</span>
+    </div>
+  </div>
+
+  <!-- Kunden-Übersicht -->
+  <div style="background:#111;border:1px solid #2a2318;border-radius:16px;padding:24px;">
+    <h3 style="color:#C9A84C;font-size:16px;font-weight:700;margin-bottom:16px;">Registrierte Kunden <span id="customer-count" style="color:#555;font-size:13px;font-weight:400;"></span></h3>
+    <div id="customer-table-wrap" style="overflow-x:auto;">
+      <div style="color:#555;font-size:13px;">Wird geladen …</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Views restored inside document (were after
+
+<!-- Views restored inside document (previously after html close) -->
+
+
+<!-- ══ VIEW: SCHÜLERANGEBOTE ═════════════════════════════════════════════ -->
+<div id="view-schueler" class="view" style="padding:20px;max-width:900px;margin:0 auto;">
+  <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:24px;margin-bottom:4px;"><i class="fas fa-graduation-cap"></i> Schülerangebote</h2>
+  <p style="color:#555;font-size:13px;margin-bottom:24px;">Konfiguriere Schülerpreise, suche Kunden zum Freischalten und prüfe ausstehende Nachweise.</p>
+
+  <!-- Kunde suchen (Tresen) -->
+  <div style="background:#111;border:1px solid #2a2318;border-radius:16px;padding:20px;margin-bottom:16px;">
+    <h3 style="color:#C9A84C;font-size:16px;font-weight:700;margin-bottom:4px;"><i class="fas fa-search"></i> Kunde suchen &amp; freischalten</h3>
+    <p style="color:#555;font-size:12px;margin-bottom:12px;">Schüler zeigt Ausweis → Name oder Kundennummer (SHY-00012) eingeben → bestätigen. Dann gelten Schülerpreise dauerhaft (bis Ablauf).</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+      <input type="search" id="so-cust-search" placeholder="Name, E-Mail, Telefon oder SHY-Nummer…"
+             style="flex:1;min-width:220px;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:10px 12px;color:#e8e2d8;font-size:14px;outline:none;"
+             oninput="soOnCustomerSearch()">
+      <button type="button" onclick="soSearchCustomers(true)" style="background:#C9A84C;color:#0e0b08;font-weight:700;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;">Suchen</button>
+    </div>
+    <div id="so-cust-search-hint" style="font-size:12px;color:#666;margin-bottom:8px;"></div>
+    <div id="so-cust-search-list"></div>
+  </div>
+
+  <!-- Ausstehende Schülerprüfungen -->
+  <div id="so-pending-wrap" style="display:none;margin-bottom:20px;">
+    <div style="background:#1a1208;border:1px solid #C9A84C44;border-radius:14px;padding:20px;">
+      <div style="font-size:14px;font-weight:700;color:#C9A84C;margin-bottom:12px;"><i class="fas fa-exclamation-triangle"></i> Ausstehende Schülerprüfungen (offene Bestellungen)</div>
+      <div id="so-pending-list"></div>
+    </div>
+  </div>
+
+  <!-- Hauptschalter -->
+  <div style="background:#111;border:1px solid #2a2318;border-radius:16px;padding:24px;margin-bottom:16px;">
+    <h3 style="color:#C9A84C;font-size:16px;font-weight:700;margin-bottom:16px;">Hauptschalter</h3>
+    <div style="display:grid;gap:14px;">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="so-enabled" style="width:18px;height:18px;accent-color:#C9A84C;">
+        <span style="color:#e8e2d8;font-size:14px;">Schülerangebote aktiv</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="so-verification-required" style="width:18px;height:18px;accent-color:#C9A84C;">
+        <span style="color:#e8e2d8;font-size:14px;">Verifizierung durch Mitarbeiter erforderlich</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="so-allow-pending" style="width:18px;height:18px;accent-color:#C9A84C;">
+        <span style="color:#e8e2d8;font-size:14px;">Erste Bestellung unter Vorbehalt erlauben (Nachweis bei Abholung)</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Vertriebskanal & Limits -->
+  <div style="background:#111;border:1px solid #2a2318;border-radius:16px;padding:24px;margin-bottom:16px;">
+    <h3 style="color:#C9A84C;font-size:16px;font-weight:700;margin-bottom:16px;">Limits & Vertriebskanal</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Gültigkeitsdauer (Monate)</label>
+        <input type="number" id="so-validity-months" min="1" max="24" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Max. Schülerartikel pro Bestellung</label>
+        <input type="number" id="so-max-per-order" min="1" max="20" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Max. Schülerartikel pro Konto/Tag</label>
+        <input type="number" id="so-max-per-day" min="1" max="50" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Verhalten ohne Nachweis</label>
+        <select id="so-fallback" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+          <option value="regular_price">Regulären Preis anwenden</option>
+          <option value="reject">Bestellung ablehnen</option>
+          <option value="pending">Unter Vorbehalt zulassen</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:14px;display:grid;gap:10px;">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="so-pickup-only" style="width:18px;height:18px;accent-color:#C9A84C;">
+        <span style="color:#e8e2d8;font-size:14px;">Nur Abholung (kein Lieferung für Schülerpreise)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="so-stack-coupons" style="width:18px;height:18px;accent-color:#C9A84C;">
+        <span style="color:#e8e2d8;font-size:14px;">Mit Gutscheinen kombinierbar</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="so-stack-loyalty" style="width:18px;height:18px;accent-color:#C9A84C;">
+        <span style="color:#e8e2d8;font-size:14px;">Mit Treuepunkten (Stempelkarte) kombinierbar</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="so-restrict-time" style="width:18px;height:18px;accent-color:#C9A84C;">
+        <span style="color:#e8e2d8;font-size:14px;">Auf bestimmte Uhrzeiten einschränken</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Zeitfenster -->
+  <div id="so-time-windows-wrap" style="background:#111;border:1px solid #2a2318;border-radius:16px;padding:24px;margin-bottom:16px;display:none;">
+    <h3 style="color:#C9A84C;font-size:16px;font-weight:700;margin-bottom:4px;">Erlaubte Bestellzeiten</h3>
+    <p style="color:#555;font-size:12px;margin-bottom:14px;">Schülerangebote sind nur in diesen Zeitfenstern bestellbar.</p>
+    <div id="so-time-windows-list"></div>
+    <button onclick="soAddTimeWindow()" style="margin-top:10px;background:transparent;border:1.5px solid #C9A84C44;border-radius:8px;padding:8px 16px;color:#C9A84C;font-size:13px;cursor:pointer;">+ Zeitfenster hinzufügen</button>
+  </div>
+
+  <button onclick="soSaveSettings()" style="width:100%;background:#C9A84C;color:#0e0b08;font-weight:700;font-size:15px;border:none;border-radius:12px;padding:14px;cursor:pointer;margin-bottom:24px;">Einstellungen speichern</button>
+
+  <!-- Schulen -->
+  <div style="background:#111;border:1px solid #2a2318;border-radius:16px;padding:24px;margin-bottom:16px;">
+    <h3 style="color:#C9A84C;font-size:16px;font-weight:700;margin-bottom:4px;">Berechtigte Schulen</h3>
+    <p style="color:#555;font-size:12px;margin-bottom:16px;">Nur Schüler dieser Schulen können verifiziert werden.</p>
+    <div id="so-schools-list" style="margin-bottom:14px;"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <input type="text" id="so-new-school-name" placeholder="Schulname (vollständig)" style="flex:1;min-width:200px;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+      <input type="text" id="so-new-school-short" placeholder="Kürzel (optional)" style="width:120px;background:#1a1510;border:1.5px solid #2a2318;border-radius:8px;padding:9px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+      <button onclick="soAddSchool()" style="background:#C9A84C;color:#0e0b08;font-weight:700;border:none;border-radius:8px;padding:9px 18px;cursor:pointer;font-size:14px;">+ Hinzufügen</button>
+    </div>
+  </div>
+
+  <!-- Produkteditor: Schülerpreise -->
+  <div style="background:#111;border:1px solid #2a2318;border-radius:16px;padding:24px;">
+    <h3 style="color:#C9A84C;font-size:16px;font-weight:700;margin-bottom:4px;">Schülerpreise für Produkte</h3>
+    <p style="color:#555;font-size:12px;margin-bottom:16px;">Aktiviere Schülerpreise für einzelne Menü-Artikel. Preise werden immer serverseitig validiert.</p>
+    <div id="so-products-list">
+      <div style="text-align:center;color:#333;padding:30px;font-size:13px;">Lade Artikel…</div>
+    </div>
+  </div>
+
+  <div id="so-msg" style="margin-top:14px;font-size:13px;text-align:center;color:#28C76F;display:none;"></div>
+</div>
+
+<!-- Schüler-Verifikations-Modal -->
+<div id="so-verify-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#1a1512;border:1.5px solid #C9A84C44;border-radius:18px;padding:28px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;">
+    <h3 style="color:#C9A84C;font-size:18px;font-weight:700;margin-bottom:4px;"><i class="fas fa-user-graduate"></i> Schülerstatus bestätigen</h3>
+    <p style="color:#555;font-size:13px;margin-bottom:20px;">Nachweis wurde visuell geprüft. Es wird keine Kopie gespeichert.</p>
+    <input type="hidden" id="so-modal-customer-id">
+    <input type="hidden" id="so-modal-order-number">
+    <div style="display:grid;gap:14px;">
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Schule</label>
+        <select id="so-modal-school" style="width:100%;background:#0e0b08;border:1.5px solid #2a2318;border-radius:8px;padding:10px 12px;color:#e8e2d8;font-size:14px;outline:none;"></select>
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Nachweis-Art</label>
+        <select id="so-modal-method" style="width:100%;background:#0e0b08;border:1.5px solid #2a2318;border-radius:8px;padding:10px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+          <option value="visual_check">Schülerausweis (visuell geprüft)</option>
+          <option value="school_id_card">Schulbescheinigung</option>
+        </select>
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Gültig bis (Datum)</label>
+        <input type="date" id="so-modal-valid-until" style="width:100%;background:#0e0b08;border:1.5px solid #2a2318;border-radius:8px;padding:10px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+      </div>
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;background:#0e0b08;border-radius:10px;padding:12px;">
+        <input type="checkbox" id="so-modal-confirm" style="width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#C9A84C;">
+        <span style="color:#e8e2d8;font-size:13px;">Nachweis wurde visuell geprüft. Es wird keine Kopie gespeichert.</span>
+      </label>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button onclick="soSubmitVerify()" style="flex:1;background:#28C76F;color:#fff;font-weight:700;border:none;border-radius:10px;padding:12px;cursor:pointer;font-size:14px;">Schülerstatus bestätigen</button>
+      <button onclick="document.getElementById('so-verify-modal').style.display='none'" style="background:transparent;border:1.5px solid #2a2318;border-radius:10px;padding:12px 16px;color:#888;cursor:pointer;font-size:14px;">Abbrechen</button>
+    </div>
+    <div id="so-modal-err" style="color:#FF4D5A;font-size:13px;margin-top:10px;text-align:center;"></div>
+  </div>
+</div>
+
+<!-- Schüler-Ablehnungs-Modal -->
+<div id="so-reject-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#1a1512;border:1.5px solid #FF4D5A44;border-radius:18px;padding:28px;max-width:400px;width:100%;">
+    <h3 style="color:#FF4D5A;font-size:18px;font-weight:700;margin-bottom:16px;"><i class="fas fa-times-circle"></i> Schülerpreis ablehnen</h3>
+    <input type="hidden" id="so-reject-customer-id">
+    <input type="hidden" id="so-reject-order-number">
+    <div>
+      <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px;">Ablehnungsgrund</label>
+      <select id="so-reject-reason" style="width:100%;background:#0e0b08;border:1.5px solid #2a2318;border-radius:8px;padding:10px 12px;color:#e8e2d8;font-size:14px;outline:none;">
+        <option value="Kein gültiger Nachweis">Kein gültiger Nachweis</option>
+        <option value="Schule nicht berechtigt">Schule nicht berechtigt</option>
+        <option value="Ausweis abgelaufen">Ausweis abgelaufen</option>
+        <option value="Sonstiger Grund">Sonstiger Grund</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button onclick="soSubmitReject()" style="flex:1;background:#FF4D5A;color:#fff;font-weight:700;border:none;border-radius:10px;padding:12px;cursor:pointer;font-size:14px;">Ablehnen</button>
+      <button onclick="document.getElementById('so-reject-modal').style.display='none'" style="background:transparent;border:1.5px solid #2a2318;border-radius:10px;padding:12px 16px;color:#888;cursor:pointer;font-size:14px;">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ VIEW: ANALYSE ════════════════════════════════════════════════════ -->
+<!-- NOTE: injected via JS into #dashboard at runtime -->
+<!-- analyse was template -->
+<div id="view-analyse" class="view" style="padding:20px;max-width:1100px;margin:0 auto;">
+
+  <!-- Period Selector -->
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div style="font-size:18px;font-weight:700;color:#C9A84C;"><i class="fas fa-chart-line" style="margin-right:8px;"></i>Analytics Dashboard</div>
+    <div style="display:flex;gap:6px;" id="an-period-btns">
+      <button class="an-period active" data-days="7">7 Tage</button>
+      <button class="an-period" data-days="30">30 Tage</button>
+      <button class="an-period" data-days="60">60 Tage</button>
+      <button class="an-period" data-days="90">90 Tage</button>
+    </div>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="an-kpi-row" id="an-kpis">
+    <div class="an-kpi-card"><div class="an-kpi-val" id="an-kpi-rev">–</div><div class="an-kpi-label">Umsatz</div><div class="an-kpi-delta" id="an-kpi-rev-delta"></div></div>
+    <div class="an-kpi-card"><div class="an-kpi-val" id="an-kpi-orders">–</div><div class="an-kpi-label">Bestellungen</div><div class="an-kpi-delta" id="an-kpi-orders-delta"></div></div>
+    <div class="an-kpi-card"><div class="an-kpi-val" id="an-kpi-avg">–</div><div class="an-kpi-label">Ø Bestellwert</div></div>
+    <div class="an-kpi-card"><div class="an-kpi-val" id="an-kpi-new">–</div><div class="an-kpi-label">Neue Kunden</div></div>
+    <div class="an-kpi-card"><div class="an-kpi-val" id="an-kpi-clv">–</div><div class="an-kpi-label">Ø Kundenwert</div></div>
+  </div>
+
+  <!-- Tagesumsatz Chart + Abholung/Lieferung -->
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="an-card">
+      <div class="an-card-title"><i class="fas fa-chart-bar"></i> Tagesumsatz (letzte 14 Tage)</div>
+      <div id="an-daily-chart" style="height:140px;display:flex;align-items:flex-end;gap:4px;overflow-x:auto;padding-bottom:4px;"></div>
+    </div>
+    <div class="an-card">
+      <div class="an-card-title"><i class="fas fa-motorcycle"></i> Lieferung vs. Abholung</div>
+      <div id="an-deltype" style="padding-top:12px;"></div>
+    </div>
+  </div>
+
+  <!-- Top Items + Peak Hours -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="an-card">
+      <div class="an-card-title"><i class="fas fa-fire"></i> Top-Artikel</div>
+      <div id="an-top-items"></div>
+    </div>
+    <div class="an-card">
+      <div class="an-card-title"><i class="fas fa-clock"></i> Peak-Stunden</div>
+      <div id="an-peak-hours"></div>
+    </div>
+  </div>
+
+  <!-- Kunden-Segmente + At-Risk -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="an-card">
+      <div class="an-card-title"><i class="fas fa-users"></i> Kunden-Segmente</div>
+      <div id="an-segments"></div>
+    </div>
+    <div class="an-card">
+      <div class="an-card-title"><i class="fas fa-exclamation-triangle" style="color:#f59e0b;"></i> At-Risk Kunden</div>
+      <div id="an-atrisk" style="max-height:280px;overflow-y:auto;"></div>
+    </div>
+  </div>
+
+  <!-- Top Kunden -->
+  <div class="an-card" style="margin-bottom:16px;">
+    <div class="an-card-title"><i class="fas fa-crown" style="color:#C9A84C;"></i> Top-10 Kunden</div>
+    <div id="an-top-customers" style="overflow-x:auto;"></div>
+  </div>
+
+</div>
+<!-- /analyse template -->
+
+    <!-- Druckbereich -->
   <div id="print-area"></div>
 </div>
 
@@ -770,6 +1565,9 @@ function adminHeaders(extra) {
   const h = Object.assign({'X-Admin-Token': adminToken}, extra || {});
   return h;
 }
+function h(extra) {
+  return adminHeaders(Object.assign({'Content-Type': 'application/json'}, extra || {}));
+}
 let allOrders = [];
 let currentFilter = 'alle';
 let soundOn = true;
@@ -777,16 +1575,32 @@ let knownIds = new Set();
 
 // ── Audio ──────────────────────────────────────────────────────────────────
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+// AudioContext beim ersten Nutzer-Klick aufwecken (Browser-Autoplay-Policy)
+document.addEventListener('click', () => {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}, { once: false });
 function playBeep() {
   if (!soundOn) return;
-  [[880, 0], [1100, 200]].forEach(([freq, delay]) => {
+  if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+
+  // Fünfstufiger Chime – langsam, klar getrennt: ding … ding … ding … ding … ding
+  const notes = [
+    { freq: 523,  delay: 0,    dur: 0.6, gain: 0.28 },   // C5
+    { freq: 587,  delay: 380,  dur: 0.6, gain: 0.28 },   // D5
+    { freq: 659,  delay: 760,  dur: 0.6, gain: 0.28 },   // E5
+    { freq: 784,  delay: 1140, dur: 0.6, gain: 0.28 },   // G5
+    { freq: 1047, delay: 1520, dur: 0.9, gain: 0.30 },   // C6 – letzter Ton, länger
+  ];
+  notes.forEach(({ freq, delay, dur, gain }) => {
     setTimeout(() => {
-      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
       o.connect(g); g.connect(audioCtx.destination);
-      o.frequency.value = freq; o.type = 'sine';
-      g.gain.setValueAtTime(0.3, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
-      o.start(); o.stop(audioCtx.currentTime + 0.6);
+      o.frequency.value = freq;
+      o.type = 'triangle'; // wärmer als 'sine', nicht schrill
+      g.gain.setValueAtTime(gain, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      o.start(); o.stop(audioCtx.currentTime + dur);
     }, delay);
   });
 }
@@ -797,14 +1611,127 @@ function toggleSound() {
   btn.classList.toggle('on', soundOn);
 }
 
+// ══════════════════════════════════════════════════════════════════════════
+// ROLLEN & MODUS-SYSTEM
+// ══════════════════════════════════════════════════════════════════════════
+
+let currentRole = sessionStorage.getItem('ops_role') || 'admin';
+let currentMode = 'betrieb'; // 'betrieb' oder 'verwalt'
+
+const ROLE_LABELS = { admin:'Admin', schicht:'Schichtführer', koch:'Koch' };
+const ROLE_CLASSES= { admin:'role-admin', schicht:'role-schicht', koch:'role-koch' };
+
+function selectRole(role, btn) {
+  currentRole = role;
+  sessionStorage.setItem('ops_role', role);
+  document.querySelectorAll('.login-role-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function applyRole() {
+  const body = document.body;
+  body.classList.remove('role-admin','role-schicht','role-koch');
+  body.classList.add('role-' + currentRole);
+  const badge = document.getElementById('role-badge');
+  if (badge) {
+    badge.className = 'mode-role-badge ' + (ROLE_CLASSES[currentRole]||'');
+    document.getElementById('role-badge-text').textContent = ROLE_LABELS[currentRole]||currentRole;
+  }
+  const hdrSub = document.getElementById('hdr-role-label');
+  if (hdrSub) hdrSub.textContent = `${ROLE_LABELS[currentRole]||''}  · Mechernich`;
+  // Koch: Verwaltungs-Modus sperren → Betrieb erzwingen
+  if (currentRole === 'koch') setMode('betrieb');
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  const body = document.body;
+  body.classList.remove('mode-betrieb','mode-verwalt');
+  body.classList.add('mode-' + mode);
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.remove('active-betrieb','active-verwalt');
+    if (b.dataset.mode === mode) b.classList.add('active-' + mode);
+  });
+  if (mode === 'betrieb') {
+    // Sicherstellen dass view-orders aktiv ist (auch wenn Tabs versteckt)
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const vo = document.getElementById('view-orders');
+    if (vo) vo.classList.add('active');
+    renderOpsView();
+    loadShiftChecklist();
+  } else {
+    // Verwaltung → Standard-Tab aktivieren
+    switchView('orders', document.getElementById('tab-orders'));
+    const sc = document.getElementById('shift-checklist');
+    if (sc) sc.style.display = 'none';
+  }
+}
+
+function toggleShiftChecklist() {
+  const el = document.getElementById('shift-checklist');
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  if (el.style.display === 'block') loadShiftChecklist();
+}
+
+function _shiftCheckKey() {
+  const d = new Date();
+  return 'shy_shift_check_' + d.toISOString().slice(0,10);
+}
+
+function loadShiftChecklist() {
+  try {
+    const raw = localStorage.getItem(_shiftCheckKey());
+    const data = raw ? JSON.parse(raw) : {};
+    ['online','promo','student'].forEach(k => {
+      const el = document.getElementById('sc-' + k);
+      if (el) el.checked = !!data[k];
+    });
+    const pending = (allOrders || []).filter(o =>
+      !['fertig','storniert'].includes(o.status) &&
+      (o.items||[]).some(i => i._student_pending)
+    ).length;
+    const hint = document.getElementById('sc-hint');
+    if (hint) {
+      const online = document.getElementById('online-label')?.textContent || '';
+      hint.textContent = `Status: ${online || '–'} · Offene Schülerprüfungen in Bestellungen: ${pending}`;
+    }
+  } catch (_) {}
+}
+
+function saveShiftCheck() {
+  const data = {
+    online: !!document.getElementById('sc-online')?.checked,
+    promo: !!document.getElementById('sc-promo')?.checked,
+    student: !!document.getElementById('sc-student')?.checked,
+  };
+  try { localStorage.setItem(_shiftCheckKey(), JSON.stringify(data)); } catch (_) {}
+}
+
 // ── LOGIN ──────────────────────────────────────────────────────────────────
 async function doLogin() {
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  errEl.textContent = '';
   const pw = document.getElementById('pw-input').value;
-  const r  = await fetch(`${API}/admin/login`, {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    credentials: 'same-origin',
-    body: JSON.stringify({password: pw})
-  });
+  const totp = (document.getElementById('totp-input') || {}).value || '';
+  if (!pw) {
+    errEl.textContent = 'Bitte Passwort eingeben.';
+    errEl.style.display = 'block';
+    return;
+  }
+  let r;
+  try {
+    r = await fetch(`${API}/admin/login`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      credentials: 'same-origin',
+      body: JSON.stringify({password: pw, totp: totp || undefined})
+    });
+  } catch (e) {
+    errEl.textContent = 'Server nicht erreichbar. Netz prüfen.';
+    errEl.style.display = 'block';
+    return;
+  }
   if (r.ok) {
     const data = await r.json();
     adminToken = data.token || '';
@@ -812,23 +1739,63 @@ async function doLogin() {
     sessionStorage.removeItem('admin_pw');
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard').style.display    = 'block';
+    applyRole();
+    setMode('betrieb');
     startPolling();
-  } else {
-    document.getElementById('login-error').style.display = 'block';
+    loadAdminSecurityStatus();
+    return;
   }
+  let msg = 'Falsches Passwort.';
+  if (r.status === 429) msg = 'Zu viele Versuche. Kurz warten, dann erneut.';
+  else if (r.status >= 500) msg = 'Serverfehler beim Login. Kurz warten.';
+  else {
+    try {
+      const d = await r.json();
+      if (d.needs_totp || d.totp_required) {
+        const wrap = document.getElementById('login-totp-wrap');
+        if (wrap) wrap.style.display = 'block';
+        document.getElementById('totp-input')?.focus();
+        msg = d.error || '2FA-Code aus der Authenticator-App eingeben.';
+      } else if (d.error) {
+        msg = d.error;
+      }
+    } catch (_) {}
+  }
+  errEl.textContent = msg;
+  errEl.style.display = 'block';
 }
-function logout() { sessionStorage.removeItem('admin_token'); sessionStorage.removeItem('admin_pw'); location.reload(); }
+function logout() { sessionStorage.removeItem('admin_token'); sessionStorage.removeItem('admin_pw'); sessionStorage.removeItem('ops_role'); location.reload(); }
 
 // ── VIEW SWITCHING ─────────────────────────────────────────────────────────
 function switchView(name, tabEl) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
+  const pane = document.getElementById('view-' + name);
+  if (!pane) {
+    console.error('Admin-View fehlt:', name);
+    showToast && showToast('Ansicht „' + name + '“ nicht geladen. Seite neu laden.', '#ef4444');
+    return;
+  }
+  pane.classList.add('active');
   if (tabEl) tabEl.classList.add('active');
   if (name === 'artikel') loadArticleManager();
   if (name === 'kunden')  { loadContacts(); loadFollowupSettings(); }
   if (name === 'botlog')  loadBotLog();
   if (name === 'anfragen') loadJobs();
+  if (name === 'analyse') loadAnalytics();
+  if (name === 'schueler') loadStudentOffers();
+  if (name === 'aktionen') { if (typeof loadAdminPromo==='function') loadAdminPromo(); loadPromoBroadcastPreview(); }
+  if (name === 'autotexte') loadMessageTemplates();
+  if (name === 'drucker') { /* static */ }
+  if (name === 'stempel') {
+    if (typeof loadLoyaltySettings === 'function') loadLoyaltySettings();
+    if (typeof loadCustomerTable === 'function') loadCustomerTable();
+    if (typeof loadAdminSecurityStatus === 'function') loadAdminSecurityStatus();
+  }
+  if (name === 'kpi') {
+    if (typeof loadKpis === 'function') loadKpis();
+    if (typeof loadAlerts === 'function') loadAlerts();
+  }
 }
 
 // ── BOT-LOG ───────────────────────────────────────────────────────────────
@@ -950,7 +1917,7 @@ async function runFollowups() {
     const r = await fetch(`${API}/admin/followups/run`, {method:'POST', headers:{'X-Admin-Token':adminToken}});
     const d = await r.json();
     if (r.ok) {
-      el.textContent = `Fertig: ${d.reviews_sent||0} Review-SMS · ${d.winbacks_sent||0} Win-back-SMS${d.errors?` · ${d.errors} übersprungen/Fehler`:''}`;
+      el.textContent = `Fertig: ${d.reviews_sent||0} Review-Mails · ${d.winbacks_sent||0} Win-back-Mails · ${d.winbacks_60d||0} Win-back-60d${d.skipped_no_email?` · ${d.skipped_no_email} ohne E-Mail übersprungen`:''}${d.errors?` · ${d.errors} Fehler`:''}`;
       el.style.color = '#22c55e';
     } else {
       el.textContent = 'Fehler beim Ausführen';
@@ -1012,8 +1979,9 @@ async function openCrmModal(phone) {
   document.getElementById('crm-modal-head').innerHTML = `
     <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:8px;">${name}</h2>
     <div style="font-size:13px;color:#888;line-height:1.8;">
+      <span style="color:#C9A84C;font-weight:700;">${c.customer_number || ('K-' + String(c.id||0).padStart(5,'0'))}</span><br>
       <i class="fas fa-phone"></i> ${c.phone||'–'}<br>
-      ${c.email ? `<i class="fas fa-envelope"></i> ${c.email}<br>` : ''}
+      ${c.email ? `<i class="fas fa-envelope"></i> ${c.email}<br>` : '<span style="color:#a66;">Keine E-Mail</span><br>'}
       <span style="color:#C9A84C;font-weight:700;">${c.total_orders||0} Bestellungen</span> · ${parseFloat(c.total_spent||0).toFixed(2).replace('.',',')} €
       <br><span style="color:#22c55e;font-weight:600;"><i class="fas fa-star"></i> Treue: ${c.loyalty_stamps||0} / 9 Stempel</span>
     </div>
@@ -1101,8 +2069,9 @@ function renderContacts() {
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
         <div>
           <div style="font-weight:700;font-size:15px;color:#fff;">${name}</div>
+          <div style="font-size:12px;color:#C9A84C;font-weight:700;margin-top:2px;letter-spacing:.04em;">${c.customer_number || ('K-' + String(c.id||0).padStart(5,'0'))}</div>
           <div style="font-size:13px;color:#888;margin-top:4px;"><i class="fas fa-phone" style="width:14px;color:#555;"></i> ${c.phone||'–'}</div>
-          ${c.email ? `<div style="font-size:12px;color:#666;margin-top:2px;"><i class="fas fa-envelope" style="width:14px;color:#555;"></i> ${c.email}</div>` : ''}
+          ${c.email ? `<div style="font-size:12px;color:#666;margin-top:2px;"><i class="fas fa-envelope" style="width:14px;color:#555;"></i> ${c.email}</div>` : '<div style="font-size:11px;color:#664;margin-top:2px;">Keine E-Mail → kein Follow-up</div>'}
           <div style="margin-top:8px;">${tags}</div>
         </div>
         <div style="text-align:right;flex-shrink:0;">
@@ -1122,6 +2091,15 @@ function renderContacts() {
 }
 
 // ── ORDERS ────────────────────────────────────────────────────────────────
+const _preorderBeeped = new Set(JSON.parse(localStorage.getItem('shy_preorder_beeped') || '[]'));
+function _markPreorderBeeped(nr) {
+  _preorderBeeped.add(nr);
+  try {
+    const arr = [..._preorderBeeped].slice(-80);
+    localStorage.setItem('shy_preorder_beeped', JSON.stringify(arr));
+  } catch (_) {}
+}
+
 async function loadOrders() {
   try {
     const r = await fetch(`${API}/admin/orders`, {headers: {'X-Admin-Token': adminToken}});
@@ -1134,10 +2112,22 @@ async function loadOrders() {
       setTimeout(() => document.getElementById('new-badge').style.display = 'none', 5000);
       newOnes.forEach(o => sendPushNotif(o));
     }
+    // Vorbestell-Reminder: Produktionsstart fällig, Status noch neu
+    const dueStart = orders.filter(o =>
+      o.status === 'neu' &&
+      (o.priority_score === 0 || o.priority_score === 10 || o.is_overdue) &&
+      !_preorderBeeped.has(o.order_number)
+    );
+    if (dueStart.length && knownIds.size > 0) {
+      playBeep();
+      dueStart.forEach(o => _markPreorderBeeped(o.order_number));
+    }
     orders.forEach(o => knownIds.add(o.order_number));
     allOrders = orders;
     updateStats();
     renderOrders();
+    // Betriebsmodus parallel aktuell halten
+    if (currentMode === 'betrieb') renderOpsView();
   } catch(e) { console.warn(e); }
 }
 
@@ -1171,7 +2161,7 @@ function renderOrders() {
   const el = document.getElementById('orders-list');
   if (!filtered.length) {
     el.innerHTML = `<div class="empty-state">
-      <img class="es-logo" src="https://files.catbox.moe/3uyamu.png" alt="Logo">
+      <img class="es-logo" src="/img/logo.png" alt="Logo">
       <i class="fas fa-check-circle es-icon"></i>
       <span class="es-text">Alles erledigt</span>
       <span class="es-sub">Keine offenen Bestellungen</span>
@@ -1201,13 +2191,15 @@ function renderCard(o) {
   if (o.status === 'neu') {
     btns = `<button class="btn-action btn-cook"   onclick="setStatus('${o.order_number}','zubereitung')"><i class="fas fa-fire"></i> Zubereitung</button>
             <button class="btn-action btn-cancel"  onclick="setStatus('${o.order_number}','storniert')">Stornieren</button>`;
-  } else if (o.status === 'zubereitung') {
+  } else   if (o.status === 'zubereitung') {
     btns = o.delivery_type === 'lieferung'
       ? `<button class="btn-action btn-road"  onclick="setStatus('${o.order_number}','unterwegs')"><i class="fas fa-motorcycle"></i> Unterwegs</button>`
       : `<button class="btn-action btn-ready" onclick="setStatus('${o.order_number}','abholbereit')"><i class="fas fa-check"></i> Abholbereit</button>`;
     btns += `<button class="btn-action btn-done" onclick="setStatus('${o.order_number}','fertig')"><i class="fas fa-check-double"></i> Fertig</button>`;
+    btns += `<button class="btn-action" style="background:#78350f;color:#fde68a;border:1px solid #92400e;" onclick="openDelayModal('${o.order_number}','${o.order_number}')"><i class="fas fa-clock"></i> Verspätung</button>`;
   } else if (o.status === 'unterwegs' || o.status === 'abholbereit') {
     btns = `<button class="btn-action btn-done" onclick="setStatus('${o.order_number}','fertig')"><i class="fas fa-check-double"></i> Fertig</button>`;
+    btns += `<button class="btn-action" style="background:#78350f;color:#fde68a;border:1px solid #92400e;" onclick="openDelayModal('${o.order_number}','${o.order_number}')"><i class="fas fa-clock"></i> Verspätung</button>`;
   }
   btns += `<button class="btn-print-card" onclick="printOrder('${o.order_number}')"><i class="fas fa-print"></i> Drucken</button>`;
 
@@ -1227,6 +2219,14 @@ function renderCard(o) {
     ? `<span class="pill pill-promo"><i class="fas fa-gift" style="margin-right:4px;"></i>${o.promo_applied}</span>` : '';
   const promoAlert = o.promo_applied
     ? `<div class="promo-alert"><i class="fas fa-gift"></i><span><strong>Aktion:</strong> ${o.promo_applied}. Gratis-Artikel beilegen!</span></div>` : '';
+  // Verzögerungs-Badge
+  let delayBadge = '';
+  if (o.delay_minutes > 0) {
+    const expectedLabel = o.expected_ready_at
+      ? ' – Fertig ca. ' + new Date(o.expected_ready_at + (o.expected_ready_at.includes('T') ? '' : 'T00:00:00')).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}) + ' Uhr'
+      : '';
+    delayBadge = `<div style="background:#78350f;color:#fde68a;font-size:12px;padding:6px 12px;border-radius:8px;margin:6px 0;font-weight:600;"><i class="fas fa-clock"></i> Verspätet (+${o.delay_minutes} Min)${expectedLabel}</div>`;
+  }
 
   return `
   <div class="order-card ${o.status}" id="card-${o.order_number}">
@@ -1246,26 +2246,291 @@ function renderCard(o) {
       <span class="pill ${payCl}">${PAY_LABELS[o.pay_method]||o.pay_method}</span>
       ${zeit}${promo}
     </div>
-    ${promoAlert}${addr}${note}
+    ${promoAlert}${delayBadge}${addr}${note}
     <div class="order-items">${items}</div>
     <div class="order-total">${o.total.toFixed(2)} €</div>
     <div class="action-row">${btns}</div>
   </div>`;
 }
 
+// ── Double-Click-Schutz: verhindert versehentliche Doppelaktionen ──────────
+const _pendingStatus = new Set();
+
 async function setStatus(orderNumber, newStatus) {
-  const r = await fetch(`${API}/admin/orders/${orderNumber}/status`, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
-    body: JSON.stringify({status: newStatus})
-  });
-  if (r.ok) {
-    const o = allOrders.find(x => x.order_number === orderNumber);
-    if (o) o.status = newStatus;
-    updateStats();
-    renderOrders();
+  if (_pendingStatus.has(orderNumber)) return; // Schutz gegen Double-Tap
+  _pendingStatus.add(orderNumber);
+
+  // Loading-Zustand auf allen Buttons dieser Karte
+  const card = document.getElementById('card-' + orderNumber)
+             || document.getElementById('ops-card-' + orderNumber);
+  if (card) {
+    card.querySelectorAll('button').forEach(b => { b.disabled = true; });
+    const primary = card.querySelector('.ops-primary-btn');
+    if (primary) primary.classList.add('loading');
+  }
+
+  try {
+    const r = await fetch(`${API}/admin/orders/${orderNumber}/status`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
+      body: JSON.stringify({status: newStatus})
+    });
+    if (r.ok) {
+      const o = allOrders.find(x => x.order_number === orderNumber);
+      if (o) o.status = newStatus;
+      if (newStatus === 'fertig') {
+        // Karte kurz visuell bestätigen, dann entfernen
+        if (card) {
+          card.style.opacity = '0.4';
+          card.style.transform = 'scale(.97)';
+          setTimeout(() => { updateStats(); renderOrders(); renderOpsView(); }, 600);
+        } else { updateStats(); renderOrders(); renderOpsView(); }
+      } else {
+        updateStats(); renderOrders(); renderOpsView();
+      }
+    }
+  } finally {
+    _pendingStatus.delete(orderNumber);
+    if (card) {
+      card.querySelectorAll('button').forEach(b => { b.disabled = false; });
+      const primary = card.querySelector('.ops-primary-btn');
+      if (primary) primary.classList.remove('loading');
+    }
   }
 }
+
+// ══════════════════════════════════════════════════════════════════════════
+// BETRIEBSMODUS: VEREINFACHTE KARTEN + STRESS-ANZEIGE
+// ══════════════════════════════════════════════════════════════════════════
+
+const OPS_STATUS_PRIMARY = {
+  neu:         { label:'Annehmen',     icon:'fa-check',         next:'zubereitung', cls:'btn-accept' },
+  zubereitung: { label:'Fertig',       icon:'fa-check-double',  next:null,          cls:'btn-ready'  },
+  abholbereit: { label:'Abgeholt',     icon:'fa-hand-holding',  next:'fertig',      cls:'btn-picked' },
+  unterwegs:   { label:'Zugestellt',   icon:'fa-motorcycle',    next:'fertig',      cls:'btn-done'   },
+};
+
+function renderOpsCard(o) {
+  const isOpsRole = true; // alle Rollen nutzen Betriebskarten
+  const showPhone   = currentRole !== 'koch';
+  const showAddress = currentRole !== 'koch' && o.delivery_type === 'lieferung';
+
+  // Zeitanzeige
+  const dt = new Date(o.created_at + 'Z').toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+  // Priorität
+  const ps = o.priority_score ?? 20;
+  const pl = o.priority_label || '';
+  const isOverdue = o.is_overdue;
+  let prioCls = 'prio-later';
+  if (ps === 0)  prioCls = 'prio-overdue';
+  else if (ps <= 10) prioCls = 'prio-due-now';
+  else if (ps <= 20) prioCls = 'prio-instant';
+  else if (ps <= 30) prioCls = 'prio-soon';
+
+  // Wunschzeit-Label
+  const wunschLabel = o.wunschzeit
+    ? `<span class="ops-pill ops-pill-wunsch"><i class="fas fa-clock"></i> ${o.wunschzeit}</span>` : '';
+
+  // Schüler-Bestellung erkennen
+  const hasStudentItem = (o.items||[]).some(i => i._is_student_offer || i.is_student_offer || i._student_pending || (i.name||'').toLowerCase().includes('schüler'));
+  const needsStudentCheck = (o.items||[]).some(i => i._student_pending || i._student_verification_reason === 'pending_check' || i._student_verification_reason === 'pending_first_order');
+  const studentPill = hasStudentItem
+    ? `<span class="ops-pill" style="border-color:#F59E0B55;color:#F59E0B;"><i class="fas fa-graduation-cap"></i> Schüler${needsStudentCheck ? ' · prüfen' : ''}</span>` : '';
+  const knr = o.customer_account_id
+    ? `<span class="ops-pill" style="border-color:#3b82f655;color:#93c5fd;"><i class="fas fa-user"></i> SHY-${String(o.customer_account_id).padStart(5,'0')}</span>`
+    : '';
+
+  // Verzögerungs-Badge
+  let delayPill = '';
+  if (o.delay_minutes > 0) {
+    const newTime = o.expected_ready_at
+      ? new Date(o.expected_ready_at + (o.expected_ready_at.includes('T')?'':'T00:00:00'))
+            .toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}) + ' Uhr'
+      : '';
+    delayPill = `<span class="ops-pill ops-pill-delay"><i class="fas fa-clock"></i> +${o.delay_minutes} Min ${newTime}</span>`;
+  }
+
+  // Artikel
+  const itemsHtml = (o.items||[]).map(i => {
+    if (i.free || (i.name||'').includes('[GRATIS')) {
+      return `<div class="ops-item-row ops-free-row">🎁 ${i.name}</div>`;
+    }
+    return `<div class="ops-item-row">
+      <span class="ops-item-name">${i.qty}× ${i.name}</span>
+      <span class="ops-item-price">${(i.price*i.qty).toFixed(2)} €</span>
+    </div>`;
+  }).join('');
+
+  // Lieferung / Abholung
+  const typePill = o.delivery_type === 'lieferung'
+    ? `<span class="ops-pill ops-pill-lieferung"><i class="fas fa-motorcycle"></i> Lieferung</span>`
+    : `<span class="ops-pill ops-pill-abholung"><i class="fas fa-store"></i> Abholung</span>`;
+  const payPill = o.pay_method === 'stripe'
+    ? `<span class="ops-pill ops-pill-stripe"><i class="fas fa-credit-card"></i> Online</span>`
+    : o.pay_method === 'card'
+    ? `<span class="ops-pill ops-pill-card"><i class="fas fa-credit-card"></i> EC</span>`
+    : `<span class="ops-pill ops-pill-cash"><i class="fas fa-money-bill"></i> Bar</span>`;
+
+  // Primäraktion
+  const pdef = OPS_STATUS_PRIMARY[o.status];
+  let primaryBtn = '';
+  if (pdef) {
+    const nextStatus = pdef.next || (o.delivery_type === 'lieferung' ? 'unterwegs' : 'abholbereit');
+    primaryBtn = `<button class="ops-primary-btn ${pdef.cls}"
+      onclick="setStatus('${o.order_number}','${pdef.next||nextStatus}')"
+      aria-label="${pdef.label}">
+      <i class="fas ${pdef.icon}"></i> ${pdef.label}
+    </button>`;
+    // Spezialfall: Zubereitung → je nach Typ
+    if (o.status === 'zubereitung') {
+      const readyStatus = o.delivery_type === 'lieferung' ? 'unterwegs' : 'abholbereit';
+      const readyLabel  = o.delivery_type === 'lieferung' ? 'Unterwegs' : 'Abholbereit';
+      const readyIcon   = o.delivery_type === 'lieferung' ? 'fa-motorcycle' : 'fa-check';
+      primaryBtn = `<button class="ops-primary-btn btn-ready"
+        onclick="setStatus('${o.order_number}','${readyStatus}')"
+        aria-label="${readyLabel}">
+        <i class="fas ${readyIcon}"></i> ${readyLabel}
+      </button>`;
+    }
+  }
+
+  // Sekundäre Aktionen
+  const phoneClean = (o.phone||'').replace(/\s/g,'');
+  let secBtns = '';
+  // Verspätung (nicht für fertige Bestellungen)
+  if (['neu','zubereitung','abholbereit','unterwegs'].includes(o.status)) {
+    secBtns += `<button class="ops-sec-btn sec-delay" onclick="openDelayModal('${o.order_number}','${o.order_number}')">
+      <i class="fas fa-clock"></i> Verspätung
+    </button>`;
+  }
+  if (o.status === 'neu') {
+    secBtns += `<button class="ops-sec-btn sec-cancel" onclick="setStatus('${o.order_number}','storniert')">
+      <i class="fas fa-times"></i> Ablehnen
+    </button>`;
+  }
+  if (showPhone && phoneClean) {
+    secBtns += `<a class="ops-sec-btn sec-call" href="tel:${phoneClean}">
+      <i class="fas fa-phone"></i> Anrufen
+    </a>`;
+  }
+  if (['zubereitung','abholbereit','unterwegs'].includes(o.status)) {
+    secBtns += `<button class="ops-sec-btn" onclick="setStatus('${o.order_number}','fertig')" title="Als fertig/abgeschlossen markieren">
+      <i class="fas fa-check-double"></i> Fertig
+    </button>`;
+  }
+  if (needsStudentCheck && o.customer_account_id && typeof soOpenVerifyModal === 'function') {
+    secBtns += `<button class="ops-sec-btn" style="border-color:#F59E0B55;color:#F59E0B;" onclick="soOpenVerifyModal(${o.customer_account_id},'${o.order_number}')">
+      <i class="fas fa-id-card"></i> Nachweis prüfen
+    </button>`;
+  }
+
+  const addrHtml = showAddress && o.address
+    ? `<div class="ops-addr"><i class="fas fa-map-marker-alt" style="color:#C9A84C;"></i>${o.address}</div>` : '';
+  const noteHtml = o.notes && o.notes !== '-'
+    ? `<div class="ops-note"><i class="fas fa-comment-alt"></i>${o.notes}</div>` : '';
+  const promoHtml = o.promo_applied
+    ? `<div class="ops-promo-alert"><i class="fas fa-gift"></i> <strong>Aktion:</strong> ${o.promo_applied}</div>` : '';
+  const couponHtml = (o.coupon_code || (o.promo_applied||'').toLowerCase().includes('gutschein'))
+    ? `<div class="ops-promo-alert" style="border-color:#22c55e55;color:#86efac;"><i class="fas fa-ticket-alt"></i> <strong>Gutschein:</strong> ${o.coupon_code || 'eingelöst'}${o.coupon_discount ? ` (−${Number(o.coupon_discount).toFixed(2)} €)` : ''}</div>`
+    : '';
+
+  const cardStatus = isOverdue ? o.status + ' overdue' : o.status;
+  const startSoon = (o.priority_score != null && o.priority_score <= 10 && o.status === 'neu');
+
+  return `
+  <div class="ops-card ${cardStatus}${startSoon ? ' start-soon' : ''}" id="ops-card-${o.order_number}" data-prio="${o.priority_score ?? ''}">
+    <div class="ops-card-head">
+      <div>
+        <div class="ops-nr">${o.order_number}</div>
+        <div style="font-size:13px;color:#888;margin-top:2px;">${o.first_name} ${o.last_name}</div>
+        <span class="ops-priority-label ${prioCls}">${pl || 'Sofortbestellung'}</span>
+      </div>
+      <div>
+        <div class="ops-time">${dt}</div>
+        <div class="ops-time-sub">Eingang</div>
+      </div>
+    </div>
+    <div class="ops-pills">
+      ${typePill}${payPill}${wunschLabel}${knr}${studentPill}${delayPill}
+    </div>
+    ${promoHtml}${couponHtml}${addrHtml}${noteHtml}
+    <div class="ops-items">${itemsHtml}</div>
+    <div class="ops-total">${(o.total||0).toFixed(2)} €</div>
+    ${primaryBtn}
+    <div class="ops-secondary-row">${secBtns}</div>
+  </div>`;
+}
+
+function renderOpsView() {
+  const container = document.getElementById('ops-container');
+  if (!container) return;
+
+  const active = allOrders.filter(o =>
+    !['storniert','fertig'].includes(o.status)
+  );
+  const done = allOrders.filter(o =>
+    ['fertig','storniert'].includes(o.status)
+  ).slice(0, 6);
+
+  // Stress-Anzeige (> 5 aktive Bestellungen)
+  const stressBar = document.getElementById('stress-bar');
+  if (stressBar) stressBar.classList.toggle('visible', active.length > 5);
+
+  const dueNow = active.filter(o =>
+    o.status === 'neu' && (o.priority_score === 0 || o.priority_score === 10 || o.is_overdue)
+  );
+  const dueBanner = dueNow.length
+    ? `<div style="margin:10px 14px;padding:12px 14px;border-radius:12px;border:1px solid #f59e0b55;background:#1a1408;color:#fbbf24;font-size:13px;font-weight:700;">
+        <i class="fas fa-bell"></i> Jetzt starten / bald fällig (${dueNow.length}):
+        ${dueNow.slice(0,5).map(o => `${o.order_number}${o.wunschzeit ? ' · ' + o.wunschzeit : ''}`).join(' · ')}
+      </div>`
+    : '';
+
+  if (!active.length && !done.length) {
+    container.innerHTML = `<div class="empty-state" style="margin:40px auto;">
+      <img class="es-logo" src="/img/logo.png" alt="Logo">
+      <i class="fas fa-check-circle es-icon"></i>
+      <span class="es-text">Alles erledigt</span>
+      <span class="es-sub">Keine offenen Bestellungen</span>
+    </div>`;
+    return;
+  }
+
+  // Landscape-Tablet: Spalten-Layout (neu / zubereitung / abholbereit)
+  const isLandscapeTablet = window.innerWidth >= 768 && window.innerWidth > window.innerHeight;
+
+  if (isLandscapeTablet) {
+    const neu          = active.filter(o => o.status === 'neu');
+    const zubereitung  = active.filter(o => o.status === 'zubereitung');
+    const bereit       = active.filter(o => ['abholbereit','unterwegs'].includes(o.status));
+    container.innerHTML = dueBanner + `
+      <div class="ops-columns">
+        <div class="ops-column">
+          <div class="ops-column-header">📥 Neu (${neu.length})</div>
+          <div class="ops-grid">${neu.map(renderOpsCard).join('') || '<div style="padding:12px;color:#444;font-size:12px;">Keine</div>'}</div>
+        </div>
+        <div class="ops-column">
+          <div class="ops-column-header">🔥 In Zubereitung (${zubereitung.length})</div>
+          <div class="ops-grid">${zubereitung.map(renderOpsCard).join('') || '<div style="padding:12px;color:#444;font-size:12px;">Keine</div>'}</div>
+        </div>
+        <div class="ops-column">
+          <div class="ops-column-header">✅ Abholbereit / Unterwegs (${bereit.length})</div>
+          <div class="ops-grid">${bereit.map(renderOpsCard).join('') || '<div style="padding:12px;color:#444;font-size:12px;">Keine</div>'}</div>
+        </div>
+      </div>
+      ${done.length ? `<div style="padding:8px 14px;font-size:11px;color:#444;border-top:1px solid #1a1a1a;">Zuletzt abgeschlossen: <span style="color:#666;">${done.slice(0,3).map(o=>`${o.order_number} (${(o.total||0).toFixed(2)}€)`).join(', ')}</span></div>` : ''}`;
+  } else {
+    // Portrait / Mobile: einzelne Spalte sortiert nach Prio
+    container.innerHTML = dueBanner + `
+      <div class="ops-grid">${active.map(renderOpsCard).join('')}</div>
+      ${done.length ? `<div style="padding:8px 14px;font-size:11px;color:#444;border-top:1px solid #1a1a1a;">Zuletzt fertig: <span style="color:#666;">${done.slice(0,3).map(o=>`${o.order_number}`).join(', ')}</span></div>` : ''}`;
+  }
+}
+
+// Neurendering bei Orientierungswechsel (Tablet Landscape/Portrait)
+window.addEventListener('resize', () => {
+  if (currentMode === 'betrieb') renderOpsView();
+});
 
 // ── DRUCKEN ───────────────────────────────────────────────────────────────
 function printOrder(orderNumber) {
@@ -1316,6 +2581,7 @@ ${line}</pre>
     <div style="font-size:12px;">Zahlung: ${payLabel}</div>
     ${o.notes&&o.notes!=='-'?`<pre style="margin:4px 0;">${line}\nHinweis: ${o.notes}</pre>`:''}
     ${o.promo_applied?`<pre style="margin:4px 0;">${line}\nAKTION: ${o.promo_applied}</pre>`:''}
+    ${o.coupon_code?`<pre style="margin:4px 0;">GUTSCHEIN: ${o.coupon_code}${o.coupon_discount?` -${Number(o.coupon_discount).toFixed(2)} EUR`:''}</pre>`:''}
     <pre style="margin:8px 0;">${line}</pre>
     <div style="text-align:center;font-size:12px;font-weight:bold;">Danke fuer Ihren Besuch!</div>
     <div style="text-align:center;font-size:11px;">Mittwoch Ruhetag</div>
@@ -1391,7 +2657,14 @@ async function startPromo() {
   });
   if (r.ok) {
     await loadAdminPromo();
-    alert('Aktion ist jetzt live auf der Website!');
+    await loadPromoBroadcastPreview();
+    const ask = confirm('Aktion ist live (Banner). Kunden per E-Mail informieren?');
+    if (ask) {
+      switchView('aktionen', document.getElementById('tab-aktionen'));
+      await startPromoBroadcast();
+    } else {
+      alert('Aktion ist jetzt live auf der Website!');
+    }
   }
 }
 
@@ -1401,6 +2674,200 @@ async function stopPromo() {
   currentAdminPromo = null;
   document.getElementById('promo-active-bar').style.display = 'none';
   document.getElementById('promo-none').style.display = 'block';
+}
+
+let _tplCache = [];
+async function loadPromoBroadcastPreview() {
+  const el = document.getElementById('promo-blast-preview');
+  const st = document.getElementById('promo-blast-status');
+  if (!el) return;
+  try {
+    const r = await fetch(`${API}/admin/promo/broadcast/preview`, { headers:{'X-Admin-Token':adminToken} });
+    const d = await r.json();
+    if (!r.ok) { el.textContent = d.error || 'Vorschau fehlgeschlagen'; return; }
+    const p = d.promo;
+    el.innerHTML = p
+      ? `<div style="color:#C9A84C;font-weight:700;margin-bottom:4px;">${p.title || 'Aktion'}</div>
+         <div style="margin-bottom:6px;">${p.description || ''}</div>
+         <div>Empfänger mit Consent: <strong style="color:#fff;">${d.recipient_count}</strong></div>
+         <div style="margin-top:6px;color:#666;font-size:11px;">Betreff: ${d.preview_subject || '–'}</div>`
+      : `<div>Keine aktive Aktion. Erst Aktion aktivieren, dann senden.</div>
+         <div style="margin-top:6px;">Consent-Empfänger bereit: <strong style="color:#fff;">${d.recipient_count}</strong></div>`;
+    if (st && d.broadcast) {
+      const b = d.broadcast;
+      if (b.running || b.sent) {
+        st.textContent = `Versand: ${b.sent||0}/${b.total||0} · übersprungen ${b.skipped||0} · Fehler ${b.errors||0}` +
+          (b.running ? ' (läuft…)' : (b.finished_at ? ' (fertig)' : ''));
+      }
+    }
+  } catch (e) {
+    el.textContent = 'Vorschau nicht erreichbar';
+  }
+}
+
+async function startPromoBroadcast() {
+  await loadPromoBroadcastPreview();
+  let count = 0;
+  try {
+    const r0 = await fetch(`${API}/admin/promo/broadcast/preview`, { headers:{'X-Admin-Token':adminToken} });
+    const d0 = await r0.json();
+    count = d0.recipient_count || 0;
+    if (!d0.promo) { alert('Keine aktive Aktion.'); return; }
+    if (!count) { alert('Keine Empfänger mit Marketing-Einwilligung.'); return; }
+  } catch (_) { alert('Vorschau fehlgeschlagen'); return; }
+  if (!confirm(`Jetzt ${count} Kunden mit Consent per E-Mail informieren?`)) return;
+  const st = document.getElementById('promo-blast-status');
+  try {
+    const r = await fetch(`${API}/admin/promo/broadcast`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Admin-Token':adminToken},
+      body: JSON.stringify({ confirm: true }),
+    });
+    const d = await r.json();
+    if (!r.ok) { alert(d.error || 'Versand fehlgeschlagen'); return; }
+    if (st) st.textContent = `Versand gestartet: 0/${d.total||count}…`;
+    const poll = setInterval(async () => {
+      try {
+        const rs = await fetch(`${API}/admin/promo/broadcast/status`, { headers:{'X-Admin-Token':adminToken} });
+        const b = await rs.json();
+        if (st) st.textContent = `Versand: ${b.sent||0}/${b.total||0} · übersprungen ${b.skipped||0} · Fehler ${b.errors||0}` +
+          (b.running ? ' (läuft…)' : ' (fertig)');
+        if (!b.running) clearInterval(poll);
+      } catch (_) { clearInterval(poll); }
+    }, 1500);
+  } catch (_) {
+    alert('Versand fehlgeschlagen');
+  }
+}
+
+async function loadMessageTemplates() {
+  try {
+    const r = await fetch(`${API}/admin/message-templates`, { headers:{'X-Admin-Token':adminToken} });
+    const d = await r.json();
+    if (!r.ok) return;
+    _tplCache = d.templates || [];
+    const labels = d.labels || {};
+    const sel = document.getElementById('tpl-key');
+    if (sel) {
+      const prev = sel.value;
+      sel.innerHTML = _tplCache.map(t => {
+        const label = t.label || labels[t.key] || t.key;
+        return `<option value="${t.key}">${label}</option>`;
+      }).join('') || '<option value="">Keine</option>';
+      if (prev && [...sel.options].some(o => o.value === prev)) sel.value = prev;
+    }
+    if (d.settings) {
+      const rd = document.getElementById('tpl-review-days');
+      const wd = document.getElementById('tpl-winback-days');
+      const fd = document.getElementById('tpl-freq-days');
+      if (rd) rd.value = d.settings.review_days || 2;
+      if (wd) wd.value = d.settings.winback_days || 30;
+      if (fd) fd.value = d.settings.marketing_freq_days || 3;
+      const ud = document.getElementById('upsell-dreh');
+      const ua = document.getElementById('upsell-ayran');
+      const ul = document.getElementById('upsell-loyal');
+      if (ud) ud.checked = d.settings.upsell_drehspiess_enabled !== '0';
+      if (ua) ua.checked = d.settings.upsell_ayran_enabled !== '0';
+      if (ul) ul.checked = d.settings.upsell_loyalty_enabled !== '0';
+    }
+    fillTemplateEditor();
+  } catch (_) {}
+}
+
+function updateTplPreview() {
+  const plain = document.getElementById('tpl-body-text')?.value || '';
+  const prev = document.getElementById('tpl-preview');
+  if (!prev) return;
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const blocks = plain.trim().split(/\n\n+/).filter(Boolean);
+  if (!blocks.length) {
+    prev.innerHTML = '<span style="color:#555;">Vorschau erscheint hier…</span>';
+    return;
+  }
+  prev.innerHTML = blocks.map(b =>
+    `<p style="margin:0 0 12px;color:#ccc;">${esc(b).replace(/\n/g,'<br>')}</p>`
+  ).join('');
+}
+
+function fillTemplateEditor() {
+  const key = document.getElementById('tpl-key')?.value;
+  const t = _tplCache.find(x => x.key === key);
+  if (!t) return;
+  const s = document.getElementById('tpl-subject');
+  const bt = document.getElementById('tpl-body-text');
+  const bh = document.getElementById('tpl-body');
+  if (s) s.value = t.subject || '';
+  if (bt) {
+    bt.value = (t.body_text || '').trim() || (t.body_html || '').replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n\n').replace(/<[^>]+>/g, '').trim();
+    bt.oninput = updateTplPreview;
+  }
+  if (bh) bh.value = t.body_html || '';
+  updateTplPreview();
+}
+
+async function saveCurrentTemplate() {
+  const key = document.getElementById('tpl-key')?.value;
+  const subject = document.getElementById('tpl-subject')?.value || '';
+  const body_text = document.getElementById('tpl-body-text')?.value || '';
+  const body_html_adv = (document.getElementById('tpl-body')?.value || '').trim();
+  const msg = document.getElementById('tpl-save-msg');
+  if (!key) return;
+  try {
+    const payload = { subject, body_text };
+    // Nur wenn HTML-Notfall bewusst befüllt und Klartext leer: HTML mitschicken
+    if (body_html_adv && !body_text.trim()) payload.body_html = body_html_adv;
+    const r = await fetch(`${API}/admin/message-templates/${encodeURIComponent(key)}`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
+      body: JSON.stringify(payload),
+    });
+    const d = await r.json();
+    if (msg) msg.textContent = r.ok ? 'Gespeichert.' : (d.error || 'Fehler');
+    if (r.ok) loadMessageTemplates();
+  } catch (_) {
+    if (msg) msg.textContent = 'Speichern fehlgeschlagen';
+  }
+}
+
+async function saveMessageSettings() {
+  const msg = document.getElementById('tpl-settings-msg');
+  try {
+    const r = await fetch(`${API}/admin/message-settings`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','X-Admin-Token':adminToken},
+      body: JSON.stringify({
+        review_days: document.getElementById('tpl-review-days')?.value,
+        winback_days: document.getElementById('tpl-winback-days')?.value,
+        marketing_freq_days: document.getElementById('tpl-freq-days')?.value,
+        upsell_drehspiess_enabled: !!document.getElementById('upsell-dreh')?.checked,
+        upsell_ayran_enabled: !!document.getElementById('upsell-ayran')?.checked,
+        upsell_loyalty_enabled: !!document.getElementById('upsell-loyal')?.checked,
+      }),
+    });
+    const d = await r.json();
+    if (msg) msg.textContent = r.ok ? 'Timing + Upsell-Regeln gespeichert.' : (d.error || 'Fehler');
+  } catch (_) {
+    if (msg) msg.textContent = 'Speichern fehlgeschlagen';
+  }
+}
+
+async function runBusinessScan() {
+  const msg = document.getElementById('tpl-settings-msg');
+  if (msg) msg.textContent = 'Business-Scan läuft…';
+  try {
+    const r = await fetch(`${API}/admin/business-scan/run`, {
+      method: 'POST',
+      headers: {'X-Admin-Token': adminToken},
+    });
+    const d = await r.json();
+    if (!r.ok || !d.success) {
+      if (msg) msg.textContent = d.error || 'Scan fehlgeschlagen';
+      return;
+    }
+    if (msg) msg.textContent = `Scan gesendet an ${d.to || 'Inhaber'}.`;
+  } catch (_) {
+    if (msg) msg.textContent = 'Scan fehlgeschlagen (Netzwerk).';
+  }
 }
 
 // ── DRUCKER-KONFIGURATION ────────────────────────────────────────────────
@@ -1602,19 +3069,44 @@ function startPolling() {
   });
 }
 
-// ── ONLINE / OFFLINE ───────────────────────────────────────────────────────
+// ── ONLINE / OFFLINE (+ Shop-Status SoT) ────────────────────────────────────
 let isOnline = true;
 let onlineToggleBusy = false;
+let adminShopStatus = null;
 
 async function loadSettings() {
   try {
-    const r = await fetch('/api/settings');
+    const [r, rSt] = await Promise.all([
+      fetch('/api/settings'),
+      fetch('/api/shop-status'),
+    ]);
     const s = await r.json();
     isOnline = !!s.online;
     applyOnlineUI();
     document.getElementById('wait-pickup').value   = s.wait_pickup   || 20;
     document.getElementById('wait-delivery').value = s.wait_delivery || 40;
+    if (rSt.ok) {
+      adminShopStatus = await rSt.json();
+      applyShopStatusHint();
+    }
   } catch(e) {}
+}
+
+function applyShopStatusHint() {
+  const lbl = document.getElementById('online-label');
+  if (!lbl || !adminShopStatus) return;
+  const st = adminShopStatus;
+  // Toggle bleibt Online/Offline; Tooltip trägt Ampel aus SoT
+  const btn = document.getElementById('online-toggle');
+  if (btn) {
+    btn.title = [
+      'Portal: ' + (st.manual_online ? 'Online' : 'Offline'),
+      'Laden: ' + (st.label || (st.store_open ? 'Geöffnet' : 'Geschlossen')),
+      'Heute: ' + (st.hours_today_label || '–'),
+      'TZ: ' + (st.timezone || 'Europe/Berlin'),
+      'Bestellung: ' + (st.accept_orders ? 'ja' : 'nein'),
+    ].join('\n');
+  }
 }
 
 function applyOnlineUI() {
@@ -1656,6 +3148,13 @@ async function toggleOnline() {
     });
     if (!r.ok) throw new Error('Speichern fehlgeschlagen (' + r.status + ')');
     isOnline = nextOnline;
+    try {
+      const rSt = await fetch('/api/shop-status');
+      if (rSt.ok) {
+        adminShopStatus = await rSt.json();
+        applyShopStatusHint();
+      }
+    } catch (_) {}
     showToast(
       isOnline
         ? 'Bestellportal ist jetzt ONLINE'
@@ -1809,6 +3308,173 @@ async function toggleArticle(itemId, available) {
   renderArticleManager();
 }
 
+// ── ANALYTICS ─────────────────────────────────────────────────────────────
+let analyticsDays = 30;
+let analyticsLoaded = false;
+
+function initAnalyticsView() {
+  if (!document.getElementById('view-analyse')) return;
+  if (window.__anPeriodBound) return;
+  window.__anPeriodBound = true;
+  document.querySelectorAll('.an-period').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.an-period').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      analyticsDays = parseInt(this.dataset.days, 10);
+      fetchAnalytics();
+    });
+  });
+}
+
+async function loadAnalytics() {
+  initAnalyticsView();
+  await fetchAnalytics();
+}
+
+async function fetchAnalytics() {
+  const el = id => document.getElementById(id);
+  if (!el('an-kpis')) return;
+  try {
+    const r = await fetch(`/api/admin/analytics?days=${analyticsDays}`, {
+      headers: {'X-Admin-Token': adminToken}
+    });
+    if (!r.ok) { el('an-kpis').innerHTML = '<p style="color:#ef4444;font-size:13px;">Fehler beim Laden der Analyse-Daten.</p>'; return; }
+    const d = await r.json();
+    renderAnalytics(d);
+  } catch(e) {
+    console.error('Analytics Fehler:', e);
+  }
+}
+
+function renderAnalytics(d) {
+  const el = id => document.getElementById(id);
+  const fmt = v => (v||0).toFixed(2).replace('.', ',') + ' €';
+  const pct = (a,b) => b > 0 ? Math.round((a-b)/b*100) : 0;
+
+  // KPIs
+  el('an-kpi-rev').textContent = fmt(d.revenue.total);
+  el('an-kpi-orders').textContent = d.orders.total;
+  el('an-kpi-avg').textContent = fmt(d.revenue.avg_order);
+  el('an-kpi-new').textContent = d.customers.new_in_period;
+  el('an-kpi-clv').textContent = fmt(d.customers.avg_clv);
+
+  const revDelta = pct(d.revenue.total, d.revenue.prev);
+  const ordDelta = pct(d.orders.total, d.orders.prev);
+  el('an-kpi-rev-delta').innerHTML = deltaHtml(revDelta);
+  el('an-kpi-orders-delta').innerHTML = deltaHtml(ordDelta);
+
+  // Daily Chart
+  const daily = d.daily || [];
+  if (daily.length) {
+    const maxRev = Math.max(...daily.map(x=>x.revenue), 1);
+    el('an-daily-chart').innerHTML = daily.map(x => {
+      const h = Math.max(8, Math.round((x.revenue / maxRev) * 120));
+      const day = x.day.slice(5); // MM-DD
+      return `<div class="an-bar-wrap" title="${x.day}: ${x.revenue.toFixed(2)} € (${x.orders} Best.)">
+        <div class="an-bar" style="height:${h}px;"></div>
+        <div class="an-bar-label">${day}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Lieferung vs Abholung
+  const total = d.orders.total || 1;
+  const delPct = Math.round((d.orders.delivery / total) * 100);
+  const pickPct = 100 - delPct;
+  el('an-deltype').innerHTML = `
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+        <span style="color:#3b82f6;"><i class="fas fa-motorcycle"></i> Lieferung</span>
+        <span style="color:#3b82f6;font-weight:700;">${d.orders.delivery} (${delPct}%)</span>
+      </div>
+      <div style="background:#1a1a1a;border-radius:4px;height:8px;"><div style="background:#3b82f6;width:${delPct}%;height:8px;border-radius:4px;transition:width .4s;"></div></div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+        <span style="color:#22c55e;"><i class="fas fa-walking"></i> Abholung</span>
+        <span style="color:#22c55e;font-weight:700;">${d.orders.pickup} (${pickPct}%)</span>
+      </div>
+      <div style="background:#1a1a1a;border-radius:4px;height:8px;"><div style="background:#22c55e;width:${pickPct}%;height:8px;border-radius:4px;transition:width .4s;"></div></div>
+    </div>`;
+
+  // Top Items
+  const items = d.top_items || [];
+  const maxQty = Math.max(...items.map(x=>x.qty), 1);
+  el('an-top-items').innerHTML = items.slice(0,8).map(i => `
+    <div class="an-item-row">
+      <div class="an-item-name" title="${i.name}">${i.name}</div>
+      <div class="an-item-bar-bg"><div class="an-item-bar-fill" style="width:${Math.round(i.qty/maxQty*100)}%;"></div></div>
+      <div class="an-item-qty">${i.qty}x</div>
+    </div>`).join('') || '<p style="color:#444;font-size:12px;">Keine Daten</p>';
+
+  // Peak Hours
+  const hours = (d.peak_hours || []).sort((a,b)=>a.hour-b.hour);
+  const maxH = Math.max(...hours.map(x=>x.orders), 1);
+  el('an-peak-hours').innerHTML = hours.slice(0,8).map(h => {
+    const label = `${String(h.hour).padStart(2,'0')}:00`;
+    return `<div class="an-item-row">
+      <div class="an-item-name">${label}</div>
+      <div class="an-item-bar-bg"><div class="an-item-bar-fill" style="width:${Math.round(h.orders/maxH*100)}%;"></div></div>
+      <div class="an-item-qty">${h.orders}</div>
+    </div>`;
+  }).join('') || '<p style="color:#444;font-size:12px;">Keine Daten</p>';
+
+  // Segmente
+  const segs = d.segments || {};
+  const segDefs = [
+    {key:'champion', label:'Champion', desc:'>5 Best., aktiv', color:'#C9A84C'},
+    {key:'loyal',    label:'Loyal',    desc:'3–5 Bestellungen', color:'#22c55e'},
+    {key:'new',      label:'Neukunden',desc:'1 Bestellung',     color:'#3b82f6'},
+    {key:'at_risk',  label:'At Risk',  desc:'>30 Tage inaktiv', color:'#f59e0b'},
+    {key:'lost',     label:'Lost',     desc:'>60 Tage inaktiv', color:'#ef4444'},
+  ];
+  el('an-segments').innerHTML = segDefs.map(s => `
+    <div class="an-seg-row">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="an-seg-dot" style="background:${s.color};"></div>
+        <div><div style="font-size:13px;font-weight:600;color:#fff;">${s.label}</div>
+             <div style="font-size:11px;color:#555;">${s.desc}</div></div>
+      </div>
+      <div style="font-size:18px;font-weight:900;color:${s.color};">${segs[s.key]||0}</div>
+    </div>`).join('');
+
+  // At-Risk
+  const risks = d.at_risk || [];
+  el('an-atrisk').innerHTML = risks.length ? risks.map(c => `
+    <div class="an-risk-row">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="color:#fff;font-weight:600;">${c.name||'–'}</div>
+        <div style="color:#f59e0b;font-weight:700;">${c.days_inactive}d</div>
+      </div>
+      <div style="color:#555;margin-top:2px;">${c.total_orders} Best. · ${(c.total_spent||0).toFixed(2)} €</div>
+    </div>`).join('')
+    : '<p style="color:#444;font-size:12px;">Keine at-risk Kunden</p>';
+
+  // Top Customers
+  const tops = d.top_customers || [];
+  el('an-top-customers').innerHTML = tops.length ? `
+    <table class="an-customers-table">
+      <thead><tr>
+        <th>#</th><th>Name</th><th>Bestellungen</th><th>Umsatz</th><th>Zuletzt aktiv</th>
+      </tr></thead>
+      <tbody>${tops.map((c,i) => `<tr>
+        <td style="color:#555;">${i+1}</td>
+        <td style="color:#fff;font-weight:600;">${c.name||'–'}</td>
+        <td style="color:#ccc;">${c.total_orders}</td>
+        <td style="color:#C9A84C;font-weight:700;">${(c.total_spent||0).toFixed(2)} €</td>
+        <td style="color:#555;">${c.days_inactive < 999 ? c.days_inactive+'d' : '–'}</td>
+      </tr>`).join('')}</tbody>
+    </table>`
+    : '<p style="color:#444;font-size:12px;">Keine Daten</p>';
+}
+
+function deltaHtml(pct) {
+  if (!pct && pct !== 0) return '';
+  const color = pct >= 0 ? '#22c55e' : '#ef4444';
+  const arrow = pct >= 0 ? '↑' : '↓';
+  return `<span style="color:${color};">${arrow} ${Math.abs(pct)}%</span>`;
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   const saved = sessionStorage.getItem('admin_token');
@@ -1816,14 +3482,529 @@ window.addEventListener('DOMContentLoaded', () => {
     adminToken = saved;
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard').style.display    = 'block';
+    // Gespeicherte Rolle wiederherstellen
+    currentRole = sessionStorage.getItem('ops_role') || 'admin';
+    applyRole();
+    setMode('betrieb');
     startPolling();
     loadSettings();
     initPush();
+  } else {
+    // Gespeicherte Rolle im Login vorauswählen
+    const savedRole = sessionStorage.getItem('ops_role') || 'admin';
+    document.querySelectorAll('.login-role-btn').forEach(b => {
+      b.classList.toggle('selected', b.dataset.role === savedRole);
+    });
+    currentRole = savedRole;
   }
   sessionStorage.removeItem('admin_pw');
-  document.getElementById('pw-input').focus();
+  document.getElementById('pw-input')?.focus();
   loadPrinterConfig();
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STRESS-SZENARIEN – Automatische Tests (window.__stressTest)
+// Aufruf in Browser-Konsole: window.__stressTest()
+// ═══════════════════════════════════════════════════════════════════════════
+window.__stressTest = function() {
+  const results = [];
+  const now = new Date().toISOString();
+
+  // Test 1: 8 simultane Bestellungen → Stress-Bar sichtbar
+  const fakeOrders = Array.from({length:8}, (_,i) => ({
+    order_number: `STRESS-00${i+1}`,
+    first_name: 'Test', last_name: `${i+1}`,
+    phone: '01234567890', email: '', address: '',
+    delivery_type: i%2===0 ? 'abholung' : 'lieferung',
+    pay_method: 'cash', total: 10+i,
+    wunschzeit: i<3 ? null : `${14+i}:00`,
+    items: [{qty:1, name:'Shawarma', price:7.0}],
+    status: i<2 ? 'neu' : i<5 ? 'zubereitung' : 'abholbereit',
+    created_at: new Date(Date.now() - (8-i)*60000).toISOString().replace('Z',''),
+    delay_minutes: i===3 ? 10 : 0,
+    expected_ready_at: null,
+    is_overdue: i===0,
+    priority_score: i===0 ? 0 : i<3 ? 20 : i<5 ? 30 : 40,
+    priority_label: i===0 ? 'ÜBERFÄLLIG' : i<3 ? 'Sofortbestellung' : `Vorbestellung ${14+i}:00`,
+    promo_applied: i===1 ? 'Studentenrabatt -10%' : null,
+    notes: i===2 ? 'Ohne Zwiebeln bitte' : null,
+  }));
+
+  const prevOrders = allOrders;
+  allOrders = fakeOrders;
+  setMode('betrieb');
+  renderOpsView();
+  const stressVisible = document.getElementById('stress-bar')?.classList.contains('visible');
+  results.push({ test: 'Stress-Bar bei 8 Bestellungen', pass: stressVisible });
+
+  // Test 2: Double-Click-Schutz
+  const alreadyPending = _pendingStatus.has('FAKE');
+  _pendingStatus.add('FAKE');
+  const blocked = _pendingStatus.has('FAKE');
+  _pendingStatus.delete('FAKE');
+  results.push({ test: 'Double-Click-Schutz aktiv', pass: blocked && !alreadyPending });
+
+  // Test 3: Überfällige Karte hat overdue-Klasse
+  const card = document.getElementById('ops-card-STRESS-001');
+  const hasOverdue = card?.classList.contains('overdue');
+  results.push({ test: 'Überfällige Karte markiert (overdue)', pass: hasOverdue });
+
+  // Test 4: Touch-Targets ≥ 44px
+  const primaryBtns = document.querySelectorAll('.ops-primary-btn');
+  let allBigEnough = true;
+  primaryBtns.forEach(btn => {
+    const h = btn.getBoundingClientRect().height;
+    if (h < 44) allBigEnough = false;
+  });
+  results.push({ test: `Touch-Targets ≥ 44px (${primaryBtns.length} Buttons)`, pass: allBigEnough });
+
+  // Test 5: Prioritäts-Labels vorhanden
+  const hasLabels = document.querySelectorAll('.ops-priority-label').length > 0;
+  results.push({ test: 'Prioritäts-Labels vorhanden', pass: hasLabels });
+
+  // Test 6: Koch-Rolle blendet Adressen aus
+  const prevRole = currentRole;
+  currentRole = 'koch';
+  applyRole();
+  const kochCard = document.querySelector('.ops-card');
+  const noAddr = !kochCard || !kochCard.querySelector('.ops-addr');
+  currentRole = prevRole;
+  applyRole();
+  results.push({ test: 'Koch-Rolle: Adresse ausgeblendet', pass: noAddr });
+
+  // Test 7: Landscape-Layout-Erkennung
+  const isLandscape = window.innerWidth >= 768 && window.innerWidth > window.innerHeight;
+  const hasColumns = !!document.querySelector('.ops-columns');
+  results.push({ test: `Landscape-Layout (${window.innerWidth}×${window.innerHeight})`, pass: isLandscape === hasColumns });
+
+  // Aufräumen
+  setTimeout(() => { allOrders = prevOrders; renderOpsView(); }, 3000);
+
+  const passed = results.filter(r => r.pass).length;
+  const total  = results.length;
+  console.group(`%c🔥 STRESS-TEST: ${passed}/${total} bestanden`, passed===total ? 'color:green;font-weight:bold' : 'color:orange;font-weight:bold');
+  results.forEach(r => console.log(r.pass ? '✅' : '❌', r.test));
+  console.groupEnd();
+  return { passed, total, results };
+};
+
+// ═══════════════════════════════════════════════════════════════════════
+// SCHÜLERANGEBOTE
+// ═══════════════════════════════════════════════════════════════════════
+let soSettings = {};
+let soSchools = [];
+let soTimeWindows = [];
+let soMenuItems = [];
+
+async function loadStudentOffers() {
+  try {
+    const [cfg, schools] = await Promise.all([
+      fetch('/api/admin/student-offers/settings', {headers: h()}).then(r => r.json()),
+      fetch('/api/admin/student-offers/schools?all=1', {headers: h()}).then(r => r.json()),
+    ]);
+    soSettings = cfg.settings || {};
+    soTimeWindows = cfg.time_windows || [];
+    soSchools = schools;
+    soRenderSettings();
+    soRenderSchools();
+    soLoadProducts();
+    soLoadPendingOrders();
+  } catch(e) {
+    console.error('Schülerangebote laden fehlgeschlagen', e);
+  }
+}
+
+function soRenderSettings() {
+  const s = soSettings;
+  document.getElementById('so-enabled').checked                = !!s.enabled;
+  document.getElementById('so-verification-required').checked  = !!s.verification_required;
+  document.getElementById('so-allow-pending').checked          = !!s.allow_first_order_pending;
+  document.getElementById('so-validity-months').value         = s.validity_months || 12;
+  document.getElementById('so-max-per-order').value           = s.max_items_per_order || 3;
+  document.getElementById('so-max-per-day').value             = s.max_items_per_day || 5;
+  document.getElementById('so-fallback').value                = s.fallback || 'regular_price';
+  document.getElementById('so-pickup-only').checked           = !!s.pickup_only;
+  document.getElementById('so-stack-coupons').checked         = !!s.stack_coupons;
+  document.getElementById('so-stack-loyalty').checked         = !!s.stack_loyalty;
+  document.getElementById('so-restrict-time').checked         = !!s.restrict_time_windows;
+  document.getElementById('so-time-windows-wrap').style.display = s.restrict_time_windows ? '' : 'none';
+  document.getElementById('so-restrict-time').onchange = function() {
+    document.getElementById('so-time-windows-wrap').style.display = this.checked ? '' : 'none';
+  };
+  soRenderTimeWindows();
+}
+
+function soRenderTimeWindows() {
+  const container = document.getElementById('so-time-windows-list');
+  if (!container) return;
+  const days = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+  container.innerHTML = soTimeWindows.map((w, i) => `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+      <select onchange="soTimeWindows[${i}].weekday=parseInt(this.value)" style="background:#1a1510;border:1.5px solid #2a2318;border-radius:6px;padding:6px 10px;color:#e8e2d8;font-size:13px;">
+        ${days.map((d,j) => `<option value="${j}" ${w.weekday==j?'selected':''}>${d}</option>`).join('')}
+      </select>
+      <input type="time" value="${w.start_time||'10:00'}" onchange="soTimeWindows[${i}].start_time=this.value"
+        style="background:#1a1510;border:1.5px solid #2a2318;border-radius:6px;padding:6px 10px;color:#e8e2d8;font-size:13px;">
+      <span style="color:#555;">–</span>
+      <input type="time" value="${w.end_time||'14:00'}" onchange="soTimeWindows[${i}].end_time=this.value"
+        style="background:#1a1510;border:1.5px solid #2a2318;border-radius:6px;padding:6px 10px;color:#e8e2d8;font-size:13px;">
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+        <input type="checkbox" ${w.active?'checked':''} onchange="soTimeWindows[${i}].active=this.checked" style="accent-color:#C9A84C;">
+        <span style="color:#888;font-size:12px;">Aktiv</span>
+      </label>
+      <button onclick="soTimeWindows.splice(${i},1);soRenderTimeWindows()" style="background:transparent;border:1px solid #FF4D5A44;border-radius:6px;padding:4px 10px;color:#FF4D5A;font-size:12px;cursor:pointer;">✕</button>
+    </div>
+  `).join('');
+}
+
+function soAddTimeWindow() {
+  soTimeWindows.push({weekday:0, start_time:'11:00', end_time:'14:00', active:true});
+  soRenderTimeWindows();
+}
+
+async function soSaveSettings() {
+  const payload = {
+    settings: {
+      enabled:                   document.getElementById('so-enabled').checked,
+      verification_required:     document.getElementById('so-verification-required').checked,
+      allow_first_order_pending: document.getElementById('so-allow-pending').checked,
+      validity_months:           parseInt(document.getElementById('so-validity-months').value) || 12,
+      max_items_per_order:       parseInt(document.getElementById('so-max-per-order').value) || 3,
+      max_items_per_day:         parseInt(document.getElementById('so-max-per-day').value) || 5,
+      fallback:                  document.getElementById('so-fallback').value,
+      pickup_only:               document.getElementById('so-pickup-only').checked,
+      stack_coupons:             document.getElementById('so-stack-coupons').checked,
+      stack_loyalty:             document.getElementById('so-stack-loyalty').checked,
+      restrict_time_windows:     document.getElementById('so-restrict-time').checked,
+    },
+    time_windows: soTimeWindows,
+  };
+  try {
+    const r = await fetch('/api/admin/student-offers/settings', {method:'POST', headers:h(), body:JSON.stringify(payload)});
+    const d = await r.json();
+    const msg = document.getElementById('so-msg');
+    if (d.success) {
+      soSettings = d.settings;
+      msg.textContent = '✓ Einstellungen gespeichert';
+      msg.style.color = '#28C76F';
+      msg.style.display = 'block';
+    } else {
+      msg.textContent = d.error || 'Fehler';
+      msg.style.color = '#FF4D5A';
+      msg.style.display = 'block';
+    }
+    setTimeout(() => { msg.style.display = 'none'; }, 3000);
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+function soRenderSchools() {
+  const el = document.getElementById('so-schools-list');
+  if (!el) return;
+  if (!soSchools.length) {
+    el.innerHTML = '<div style="color:#555;font-size:13px;padding:8px 0;">Noch keine Schulen angelegt.</div>';
+    return;
+  }
+  el.innerHTML = soSchools.map(s => `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #1a1510;">
+      <div style="flex:1;">
+        <span style="color:#e8e2d8;font-size:14px;font-weight:600;">${s.name}</span>
+        ${s.short_name ? `<span style="color:#555;font-size:12px;margin-left:6px;">(${s.short_name})</span>` : ''}
+      </div>
+      <span style="font-size:11px;padding:3px 8px;border-radius:4px;font-weight:700;${s.active?'color:#28C76F;background:#28C76F18':'color:#FF4D5A;background:#FF4D5A18'}">
+        ${s.active ? 'Aktiv' : 'Inaktiv'}
+      </span>
+      <button onclick="soToggleSchool(${s.id},${s.active})" style="background:transparent;border:1px solid #2a2318;border-radius:6px;padding:4px 10px;color:#888;font-size:12px;cursor:pointer;">
+        ${s.active ? 'Deaktivieren' : 'Aktivieren'}
+      </button>
+    </div>
+  `).join('');
+}
+
+async function soAddSchool() {
+  const name = document.getElementById('so-new-school-name').value.trim();
+  const short = document.getElementById('so-new-school-short').value.trim();
+  if (!name) { alert('Schulname fehlt'); return; }
+  try {
+    const r = await fetch('/api/admin/student-offers/schools', {method:'POST', headers:h(), body:JSON.stringify({name, short_name:short||null})});
+    const d = await r.json();
+    if (d.success) {
+      soSchools.unshift(d.school);
+      soRenderSchools();
+      document.getElementById('so-new-school-name').value = '';
+      document.getElementById('so-new-school-short').value = '';
+      soRefreshModalSchools();
+    } else { alert(d.error || 'Fehler'); }
+  } catch(e) { console.error(e); }
+}
+
+async function soToggleSchool(id, currentlyActive) {
+  try {
+    const r = await fetch(`/api/admin/student-offers/schools/${id}`, {
+      method:'PATCH', headers:h(), body:JSON.stringify({active: !currentlyActive})
+    });
+    const d = await r.json();
+    if (d.success) {
+      soSchools = soSchools.map(s => s.id===id ? d.school : s);
+      soRenderSchools();
+      soRefreshModalSchools();
+    }
+  } catch(e) { console.error(e); }
+}
+
+function soRefreshModalSchools() {
+  const sel = document.getElementById('so-modal-school');
+  if (!sel) return;
+  sel.innerHTML = soSchools.filter(s=>s.active).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+}
+
+async function soLoadProducts() {
+  const el = document.getElementById('so-products-list');
+  try {
+    // Gleiche Speisekarte wie Artikel-Tab (kein toter /api/articles-Call)
+    soMenuItems = (typeof MENU_ITEMS !== 'undefined' ? MENU_ITEMS : []).map(m => ({
+      id: m.id, name: m.name, price: m.price != null ? m.price : 0, cat: m.cat, nr: m.nr,
+    }));
+    let spData = {};
+    const spR = await fetch('/api/admin/student-offers/products-detail', {headers:h()});
+    if (spR.ok) spData = await spR.json();
+    soRenderProducts(spData || {});
+  } catch(e) {
+    if (el) el.innerHTML = '<div style="color:#ef4444;font-size:13px;padding:8px;">Schüler-Produkte konnten nicht geladen werden.</div>';
+  }
+}
+
+function soRenderProducts(spData) {
+  const el = document.getElementById('so-products-list');
+  if (!el) return;
+  if (!soMenuItems.length) {
+    el.innerHTML = '<div style="color:#555;font-size:13px;padding:8px 0;">Keine Artikel gefunden. Bitte Speisekarte-Tab öffnen und Artikel laden.</div>';
+    return;
+  }
+  el.innerHTML = soMenuItems.map(item => {
+    const sp = spData[item.id] || item;
+    const isStudent = sp.is_student_offer || item.is_student_offer;
+    const studentPrice = sp.student_price !== undefined ? sp.student_price : item.student_price;
+    return `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #1a1510;flex-wrap:wrap;" id="so-prod-${item.id}">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0;">
+        <input type="checkbox" ${isStudent?'checked':''} style="width:16px;height:16px;accent-color:#C9A84C;"
+          onchange="soToggleStudentOffer('${item.id}', this.checked)">
+        <span style="color:#e8e2d8;font-size:13px;font-weight:600;">${item.name}</span>
+      </label>
+      <span style="color:#555;font-size:12px;">Regulär: ${(item.price||0).toFixed(2)} €</span>
+      <div style="display:flex;align-items:center;gap:6px;${isStudent?'':'opacity:0.4;pointer-events:none'}" id="so-prod-fields-${item.id}">
+        <span style="color:#888;font-size:12px;">Schülerpreis:</span>
+        <input type="number" step="0.01" min="0" value="${studentPrice != null ? studentPrice : ''}" placeholder="z.B. 5.50"
+          style="width:80px;background:#1a1510;border:1.5px solid #2a2318;border-radius:6px;padding:5px 8px;color:#e8e2d8;font-size:13px;"
+          id="so-sp-${item.id}">
+        <span style="color:#888;font-size:12px;">€</span>
+        <button onclick="soSaveProduct('${item.id}')" style="background:#C9A84C22;border:1px solid #C9A84C44;border-radius:6px;padding:4px 10px;color:#C9A84C;font-size:12px;cursor:pointer;">Speichern</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function soToggleStudentOffer(itemId, enabled) {
+  const fieldsEl = document.getElementById(`so-prod-fields-${itemId}`);
+  if (fieldsEl) {
+    fieldsEl.style.opacity = enabled ? '1' : '0.4';
+    fieldsEl.style.pointerEvents = enabled ? '' : 'none';
+  }
+  if (!enabled) {
+    await soSaveProduct(itemId, {is_student_offer: false});
+  }
+}
+
+async function soSaveProduct(itemId, overrides) {
+  const spInput = document.getElementById(`so-sp-${itemId}`);
+  const cbInput = document.querySelector(`#so-prod-${itemId} input[type=checkbox]`);
+  const payload = {
+    is_student_offer: overrides?.is_student_offer !== undefined ? overrides.is_student_offer : (cbInput?.checked || false),
+    student_price: spInput ? (parseFloat(spInput.value) || null) : null,
+    requires_verified_student: true,
+    ...(overrides || {}),
+  };
+  try {
+    const r = await fetch(`/api/admin/student-offers/product/${encodeURIComponent(itemId)}`, {
+      method:'PATCH', headers:h(), body:JSON.stringify(payload)
+    });
+    const d = await r.json();
+    if (!d.success) { alert(d.error || 'Fehler beim Speichern'); }
+  } catch(e) { console.error(e); }
+}
+
+// ── Ausstehende Verifikationen ──────────────────────────────────────────────
+let _soSearchTimer = null;
+function soOnCustomerSearch() {
+  clearTimeout(_soSearchTimer);
+  _soSearchTimer = setTimeout(() => soSearchCustomers(false), 280);
+}
+
+async function soSearchCustomers(force) {
+  const inp = document.getElementById('so-cust-search');
+  const list = document.getElementById('so-cust-search-list');
+  const hint = document.getElementById('so-cust-search-hint');
+  if (!inp || !list) return;
+  const q = (inp.value || '').trim();
+  if (q.length < 2) {
+    list.innerHTML = '';
+    if (hint) hint.textContent = force ? 'Mindestens 2 Zeichen eingeben.' : '';
+    return;
+  }
+  if (hint) hint.textContent = 'Suche…';
+  try {
+    const r = await fetch(`/api/admin/student-offers/customers/search?q=${encodeURIComponent(q)}`, {headers: h()});
+    const d = await r.json();
+    const rows = d.customers || [];
+    if (hint) hint.textContent = rows.length ? `${rows.length} Treffer` : 'Kein Konto gefunden. Kunde muss sich unter /konto registriert haben.';
+    if (!rows.length) { list.innerHTML = ''; return; }
+    list.innerHTML = rows.map(c => {
+      const st = c.student_status || 'not_verified';
+      const statusColor = {verified:'#28C76F',pending_check:'#F59E0B',not_verified:'#888',recheck_required:'#F59E0B',rejected:'#FF4D5A',blocked:'#FF4D5A',expired:'#F97316'}[st] || '#888';
+      const canVerify = ['not_verified','pending_check','recheck_required','expired','rejected'].includes(st);
+      return `<div style="background:#0e0b08;border:1px solid #2a2318;border-radius:12px;padding:14px;margin-bottom:8px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div style="font-weight:700;color:#e8e2d8;font-size:14px;">${escHtml(c.display_name||'–')}</div>
+          <div style="font-size:12px;color:#C9A84C;font-weight:700;margin-top:2px;">${escHtml(c.customer_number||'')}</div>
+          <div style="font-size:12px;color:#888;margin-top:4px;">${escHtml(c.email||'')} ${c.phone ? '· '+escHtml(c.phone) : ''}</div>
+          <div style="font-size:12px;margin-top:4px;"><span style="color:${statusColor};font-weight:700;">● ${escHtml(c.student_status_label||soStatusLabel(st))}</span>
+            ${c.school_name ? `<span style="color:#555;margin-left:8px;">${escHtml(c.school_name)}</span>` : ''}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          ${canVerify ? `<button type="button" onclick="soOpenVerifyModal(${c.id},'')" style="background:#28C76F22;border:1px solid #28C76F44;border-radius:8px;padding:8px 12px;color:#28C76F;font-size:12px;cursor:pointer;font-weight:700;">Nachweis bestätigen</button>` : ''}
+          ${st === 'verified' ? `<button type="button" onclick="soOpenRejectModal(${c.id},'')" style="background:transparent;border:1px solid #2a2318;border-radius:8px;padding:8px 12px;color:#888;font-size:12px;cursor:pointer;">Widerrufen/Ablehnen</button>` : ''}
+          ${canVerify && st !== 'rejected' ? `<button type="button" onclick="soOpenRejectModal(${c.id},'')" style="background:#FF4D5A22;border:1px solid #FF4D5A44;border-radius:8px;padding:8px 12px;color:#FF4D5A;font-size:12px;cursor:pointer;">Ablehnen</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    if (hint) hint.textContent = 'Suche fehlgeschlagen';
+  }
+}
+
+async function soLoadPendingOrders() {
+  try {
+    const r = await fetch('/api/admin/student-offers/pending-orders', {headers:h()});
+    if (!r.ok) return;
+    const orders = await r.json();
+    const wrap = document.getElementById('so-pending-wrap');
+    const list = document.getElementById('so-pending-list');
+    if (!orders.length) { wrap.style.display = 'none'; return; }
+    wrap.style.display = '';
+    list.innerHTML = orders.map(o => {
+      const studentStatus = o.student_status || 'not_verified';
+      const needsCheck = ['not_verified','pending_check','recheck_required'].includes(studentStatus);
+      const statusColor = {verified:'#28C76F',pending_check:'#F59E0B',not_verified:'#555',recheck_required:'#F59E0B',rejected:'#FF4D5A',blocked:'#FF4D5A',expired:'#F97316'}[studentStatus] || '#555';
+      const knr = o.customer_number || (o.customer_account_id ? ('SHY-' + String(o.customer_account_id).padStart(5,'0')) : '');
+      return `<div style="background:#0e0b08;border:1px solid ${needsCheck?'#F59E0B44':'#2a2318'};border-radius:12px;padding:16px;margin-bottom:10px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#e8e2d8;">Bestellung ${escHtml(o.order_number||'')}</div>
+            <div style="font-size:12px;color:#C9A84C;font-weight:700;margin-top:2px;">${escHtml(knr)}</div>
+            <div style="font-size:12px;color:#888;margin-top:2px;">Kunde: ${escHtml(o.display_name||'Gast')} · ${escHtml(o.delivery_type||'')} · ${escHtml(o.wunschzeit||'sofort')}</div>
+            <div style="font-size:12px;margin-top:4px;">
+              <span style="color:${statusColor};font-weight:700;">● ${soStatusLabel(studentStatus)}</span>
+              ${o.school_name ? `<span style="color:#555;margin-left:8px;">${escHtml(o.school_name)}</span>` : ''}
+              ${o.valid_until ? `<span style="color:#555;margin-left:8px;">bis ${new Date(o.valid_until*1000).toLocaleDateString('de-DE')}</span>` : ''}
+            </div>
+          </div>
+          ${needsCheck && o.customer_account_id ? `<div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button onclick="soOpenVerifyModal(${o.customer_account_id},'${o.order_number}')" style="background:#28C76F22;border:1px solid #28C76F44;border-radius:8px;padding:6px 12px;color:#28C76F;font-size:12px;cursor:pointer;font-weight:700;">Nachweis bestätigen</button>
+            <button onclick="soOpenRejectModal(${o.customer_account_id},'${o.order_number}')" style="background:#FF4D5A22;border:1px solid #FF4D5A44;border-radius:8px;padding:6px 12px;color:#FF4D5A;font-size:12px;cursor:pointer;">Ablehnen</button>
+            <button onclick="soApplyRegularPrice('${o.order_number}')" style="background:transparent;border:1px solid #2a2318;border-radius:8px;padding:6px 12px;color:#888;font-size:12px;cursor:pointer;">Regulären Preis</button>
+          </div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) { console.error(e); }
+}
+
+function soStatusLabel(status) {
+  return {not_verified:'Nicht bestätigt',pending_check:'Prüfung ausstehend',verified:'Bestätigt',expired:'Abgelaufen',recheck_required:'Erneute Prüfung',rejected:'Abgelehnt',blocked:'Gesperrt'}[status] || status;
+}
+
+function soOpenVerifyModal(customerId, orderNumber) {
+  soRefreshModalSchools();
+  document.getElementById('so-modal-customer-id').value = customerId;
+  document.getElementById('so-modal-order-number').value = orderNumber || '';
+  document.getElementById('so-modal-confirm').checked = false;
+  document.getElementById('so-modal-err').textContent = '';
+  // Standarddatum aus Settings (12 Monate)
+  const future = new Date(); future.setMonth(future.getMonth() + (soSettings.validity_months || 12));
+  document.getElementById('so-modal-valid-until').value = future.toISOString().split('T')[0];
+  document.getElementById('so-verify-modal').style.display = 'flex';
+}
+
+async function soSubmitVerify() {
+  const customerId = document.getElementById('so-modal-customer-id').value;
+  const schoolId   = document.getElementById('so-modal-school').value;
+  const method     = document.getElementById('so-modal-method').value;
+  const validUntil = document.getElementById('so-modal-valid-until').value;
+  const confirmed  = document.getElementById('so-modal-confirm').checked;
+  const orderNum   = document.getElementById('so-modal-order-number').value;
+  const errEl      = document.getElementById('so-modal-err');
+
+  if (!schoolId) { errEl.textContent = 'Bitte Schule auswählen'; return; }
+  if (!validUntil) { errEl.textContent = 'Bitte Gültigkeitsdatum setzen'; return; }
+  if (!confirmed) { errEl.textContent = 'Bitte Bestätigung anklicken'; return; }
+
+  const validUntilTs = new Date(validUntil + 'T23:59:59').getTime() / 1000;
+  try {
+    const r = await fetch(`/api/admin/student-offers/customer/${customerId}/verify`, {
+      method:'POST', headers:h(),
+      body: JSON.stringify({school_id: parseInt(schoolId), valid_until: validUntilTs, method, order_number: orderNum||null})
+    });
+    const d = await r.json();
+    if (d.success) {
+      document.getElementById('so-verify-modal').style.display = 'none';
+      soLoadPendingOrders();
+      soSearchCustomers(true);
+    } else {
+      errEl.textContent = d.error || 'Fehler';
+    }
+  } catch(e) { errEl.textContent = 'Netzwerkfehler'; }
+}
+
+function soOpenRejectModal(customerId, orderNumber) {
+  document.getElementById('so-reject-customer-id').value = customerId;
+  document.getElementById('so-reject-order-number').value = orderNumber || '';
+  document.getElementById('so-reject-modal').style.display = 'flex';
+}
+
+async function soSubmitReject() {
+  const customerId = document.getElementById('so-reject-customer-id').value;
+  const reason     = document.getElementById('so-reject-reason').value;
+  const orderNum   = document.getElementById('so-reject-order-number').value;
+  try {
+    const r = await fetch(`/api/admin/student-offers/customer/${customerId}/reject`, {
+      method:'POST', headers:h(), body:JSON.stringify({reason, order_number: orderNum||null})
+    });
+    const d = await r.json();
+    if (d.success) {
+      document.getElementById('so-reject-modal').style.display = 'none';
+      soLoadPendingOrders();
+      soSearchCustomers(true);
+    }
+  } catch(e) { console.error(e); }
+}
+
+async function soApplyRegularPrice(orderNumber) {
+  if (!confirm('Regulären Preis anwenden? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
+  try {
+    const r = await fetch(`/api/admin/student-offers/order/${orderNumber}/apply-regular-price`, {
+      method:'POST', headers:h()
+    });
+    const d = await r.json();
+    if (d.success) {
+      alert(`Regulärer Preis angewendet. Differenz: ${d.price_diff > 0 ? '+' : ''}${d.price_diff.toFixed(2)} €`);
+      soLoadPendingOrders();
+    } else {
+      alert(d.error || 'Fehler');
+    }
+  } catch(e) { console.error(e); }
+}
 </script>
 
 <!-- ══ TAGESBERICHT MODAL ═══════════════════════════════════════════════ -->
@@ -1833,6 +4014,582 @@ window.addEventListener('DOMContentLoaded', () => {
     <div id="report-content"></div>
   </div>
 </div>
+
+<script>
+// ── Admin 2FA / Sicherheit ────────────────────────────────────────────────────
+async function loadAdminSecurityStatus() {
+  const el = document.getElementById('admin-2fa-status');
+  if (!el) return;
+  try {
+    const r = await fetch('/api/admin/me', {
+      credentials: 'include',
+      headers: adminToken ? { 'X-Admin-Token': adminToken } : {},
+    });
+    if (!r.ok) { el.textContent = 'Status nicht ladbar (neu anmelden).'; return; }
+    const d = await r.json();
+    const on = !!(d.user && d.user.totp_enabled);
+    el.textContent = on
+      ? '2FA ist aktiv für diesen Admin-Zugang.'
+      : '2FA ist noch aus. Einmal einrichten empfohlen.';
+    el.style.color = on ? '#22c55e' : '#f59e0b';
+    const btn = document.getElementById('admin-2fa-setup-btn');
+    if (btn) btn.textContent = on ? '2FA neu einrichten' : '2FA einrichten';
+  } catch (_) {
+    el.textContent = 'Status nicht ladbar.';
+  }
+}
+
+async function setupAdmin2fa() {
+  const msg = document.getElementById('admin-2fa-msg');
+  if (msg) msg.textContent = '';
+  try {
+    const r = await fetch('/api/admin/2fa/setup', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(adminToken ? { 'X-Admin-Token': adminToken } : {}),
+      },
+      body: '{}',
+    });
+    const d = await r.json();
+    if (!r.ok || !d.ok) {
+      if (msg) { msg.style.color = '#ef4444'; msg.textContent = d.error || 'Setup fehlgeschlagen'; }
+      return;
+    }
+    const box = document.getElementById('admin-2fa-setup-box');
+    if (box) box.style.display = 'block';
+    const sec = document.getElementById('admin-2fa-secret');
+    if (sec) sec.textContent = d.secret || '';
+    const link = document.getElementById('admin-2fa-otpauth');
+    if (link && d.otpauth_url) {
+      link.href = d.otpauth_url;
+      link.style.display = 'inline';
+    }
+    if (msg) { msg.style.color = '#C9A84C'; msg.textContent = 'Code aus der App bestätigen.'; }
+  } catch (_) {
+    if (msg) { msg.style.color = '#ef4444'; msg.textContent = 'Netzfehler'; }
+  }
+}
+
+async function confirmAdmin2fa() {
+  const msg = document.getElementById('admin-2fa-msg');
+  const code = (document.getElementById('admin-2fa-confirm-code') || {}).value || '';
+  if (!code) { if (msg) { msg.style.color = '#ef4444'; msg.textContent = 'Code eingeben'; } return; }
+  try {
+    const r = await fetch('/api/admin/2fa/confirm', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(adminToken ? { 'X-Admin-Token': adminToken } : {}),
+      },
+      body: JSON.stringify({ code }),
+    });
+    const d = await r.json();
+    if (!r.ok || !d.ok) {
+      if (msg) { msg.style.color = '#ef4444'; msg.textContent = d.error || 'Code falsch'; }
+      return;
+    }
+    if (msg) { msg.style.color = '#22c55e'; msg.textContent = '2FA aktiv. Beim nächsten Login Code nötig.'; }
+    const box = document.getElementById('admin-2fa-setup-box');
+    if (box) box.style.display = 'none';
+    loadAdminSecurityStatus();
+  } catch (_) {
+    if (msg) { msg.style.color = '#ef4444'; msg.textContent = 'Netzfehler'; }
+  }
+}
+
+// ── STEMPELKARTE: Admin-Einstellungen ─────────────────────────────────────────
+async function loadLoyaltySettings() {
+  try {
+    const r = await fetch('/api/admin/loyalty2/settings', {
+      credentials: 'include',
+      headers: adminToken ? { 'X-Admin-Token': adminToken } : {},
+    });
+    if (!r.ok) return;
+    const d = await r.json();
+    document.getElementById('loy-enabled').checked      = !!d.enabled;
+    document.getElementById('loy-min-value').value      = d.min_value ?? 15;
+    document.getElementById('loy-stamps-needed').value  = d.stamps_needed ?? 10;
+    document.getElementById('loy-reward-type').value    = d.reward_type || 'fixed';
+    document.getElementById('loy-reward-value').value   = d.reward_value ?? 5;
+    document.getElementById('loy-reward-min').value     = d.reward_min_order ?? 20;
+    document.getElementById('loy-valid-days').value     = d.valid_days ?? 90;
+    document.getElementById('loy-reward-title').value   = d.reward_title || '5,00 € Gutschein';
+    document.getElementById('loy-delivery').checked     = !!d.delivery_eligible;
+    document.getElementById('loy-pickup').checked       = !!d.pickup_eligible;
+    updateRewardLabel();
+  } catch { }
+}
+
+function updateRewardLabel() {
+  const type = document.getElementById('loy-reward-type').value;
+  document.getElementById('loy-reward-value-label').textContent =
+    type === 'percent' ? 'Belohnungswert (%)' : 'Belohnungswert (€)';
+}
+document.getElementById('loy-reward-type').addEventListener('change', updateRewardLabel);
+
+async function saveLoyaltySettings() {
+  const payload = {
+    enabled:           document.getElementById('loy-enabled').checked,
+    min_value:         parseFloat(document.getElementById('loy-min-value').value) || 15,
+    stamps_needed:     parseInt(document.getElementById('loy-stamps-needed').value) || 10,
+    reward_type:       document.getElementById('loy-reward-type').value,
+    reward_value:      parseFloat(document.getElementById('loy-reward-value').value) || 5,
+    reward_min_order:  parseFloat(document.getElementById('loy-reward-min').value) || 20,
+    valid_days:        parseInt(document.getElementById('loy-valid-days').value) || 90,
+    reward_title:      document.getElementById('loy-reward-title').value.trim() || '5,00 € Gutschein',
+    delivery_eligible: document.getElementById('loy-delivery').checked,
+    pickup_eligible:   document.getElementById('loy-pickup').checked,
+  };
+  try {
+    const r = await fetch('/api/admin/loyalty2/settings', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(adminToken ? { 'X-Admin-Token': adminToken } : {}),
+      },
+      body: JSON.stringify(payload),
+    });
+    if (r.ok) {
+      const msg = document.getElementById('loy-save-msg');
+      msg.style.display = 'inline';
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+  } catch { }
+}
+
+
+async function adjustStamps(customerId, amount) {
+  const reason = amount > 0 ? 'Admin +1' : 'Admin -1';
+  try {
+    const r = await fetch(`/api/admin/customers/${customerId}/adjust-stamps`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(adminToken ? { 'X-Admin-Token': adminToken } : {}),
+      },
+      body: JSON.stringify({ amount, reason }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      alert(d.error || 'Stempel-Korrektur fehlgeschlagen');
+      return;
+    }
+    const el = document.getElementById('stamp-bal-' + customerId);
+    if (el && d.new_balance != null) el.textContent = d.new_balance;
+    else loadCustomerTable();
+  } catch (e) {
+    alert('Netzfehler bei Stempel-Korrektur');
+  }
+}
+
+async function loadCustomerTable() {
+  try {
+    const r = await fetch('/api/admin/customers', {
+      credentials: 'include',
+      headers: adminToken ? { 'X-Admin-Token': adminToken } : {},
+    });
+    if (!r.ok) return;
+    const customers = await r.json();
+    document.getElementById('customer-count').textContent = `(${customers.length})`;
+    const wrap = document.getElementById('customer-table-wrap');
+    if (!customers.length) {
+      wrap.innerHTML = '<p style="color:#555;font-size:13px;">Noch keine registrierten Kunden.</p>';
+      return;
+    }
+    wrap.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="border-bottom:1px solid #2a2318;">
+            <th style="text-align:left;padding:8px 6px;color:#888;font-weight:600;">Name</th>
+            <th style="text-align:left;padding:8px 6px;color:#888;font-weight:600;">E-Mail</th>
+            <th style="text-align:center;padding:8px 6px;color:#888;font-weight:600;">Stempel</th>
+            <th style="text-align:center;padding:8px 6px;color:#888;font-weight:600;">Bestellungen</th>
+            <th style="text-align:center;padding:8px 6px;color:#888;font-weight:600;">Verifiziert</th>
+            <th style="text-align:center;padding:8px 6px;color:#888;font-weight:600;">Korrektur</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${customers.map(c => `
+            <tr style="border-bottom:1px solid #1a1510;">
+              <td style="padding:8px 6px;color:#e8e2d8;">${escHtml(c.display_name || '')}</td>
+              <td style="padding:8px 6px;color:#888;">${escHtml(c.email || '')}</td>
+              <td style="padding:8px 6px;text-align:center;color:#C9A84C;font-weight:700;" id="stamp-bal-${c.id}">${c.stamps_total || 0}</td>
+              <td style="padding:8px 6px;text-align:center;color:#888;">${c.order_count || 0}</td>
+              <td style="padding:8px 6px;text-align:center;">${c.email_verified ? '<span style="color:#22c55e">✔</span>' : '<span style="color:#ef4444">✗</span>'}</td>
+              <td style="padding:8px 6px;text-align:center;white-space:nowrap;">
+                <button type="button" onclick="adjustStamps(${c.id},1)" title="+1 Stempel" style="background:#1a3d28;border:1px solid #22c55e55;color:#22c55e;border-radius:6px;padding:4px 8px;cursor:pointer;font-weight:700;">+</button>
+                <button type="button" onclick="adjustStamps(${c.id},-1)" title="-1 Stempel" style="background:#3d1a1a;border:1px solid #ef444455;color:#fca5a5;border-radius:6px;padding:4px 8px;cursor:pointer;font-weight:700;margin-left:4px;">−</button>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>`;
+  } catch { }
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* switchView-Wrapper entfernt: Function-Hoisting verursachte Endlosrekursion */
+</script>
+
+<!-- ══ PAUSE MODAL ══════════════════════════════════════════════════════ -->
+<div id="modal-pause" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:none;align-items:center;justify-content:center;">
+  <div style="background:#1a1a1a;border-radius:16px;padding:28px;max-width:460px;width:94%;border:1px solid #333;">
+    <div style="font-size:18px;font-weight:700;color:#f59e0b;margin-bottom:18px;"><i class="fas fa-pause-circle"></i> Bestellungen pausieren</div>
+    <p style="color:#999;font-size:13px;margin-bottom:16px;">Kunden sehen einen klaren Hinweis. Serverseitig aktiv – keine Bestellungen möglich.</p>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:12px;color:#888;margin-bottom:8px;">Dauer</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <button class="pause-dur-btn" data-min="15" onclick="selectPauseDur(this,15)">15 Min</button>
+        <button class="pause-dur-btn" data-min="30" onclick="selectPauseDur(this,30)">30 Min</button>
+        <button class="pause-dur-btn" data-min="45" onclick="selectPauseDur(this,45)">45 Min</button>
+        <button class="pause-dur-btn" data-min="60" onclick="selectPauseDur(this,60)">60 Min</button>
+        <button class="pause-dur-btn" data-min="0"  onclick="selectPauseDur(this,0)">Manuell</button>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:11px;color:#666;">bis</span>
+          <input type="time" id="pause-until-time" style="background:#111;border:1px solid #333;color:#fff;border-radius:6px;padding:6px;font-size:13px;width:100%;" onchange="selectPauseUntil(this)">
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <div style="font-size:12px;color:#888;margin-bottom:8px;">Art</div>
+      <select id="pause-type-sel" style="width:100%;background:#111;border:1px solid #333;color:#fff;border-radius:8px;padding:10px;font-size:13px;">
+        <option value="all">Alle Bestellungen</option>
+        <option value="instant">Nur Sofortbestellungen</option>
+        <option value="delivery">Nur Lieferbestellungen</option>
+        <option value="pickup">Nur Abholbestellungen</option>
+      </select>
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <button onclick="closePauseModal()" style="flex:1;background:#222;border:1px solid #333;color:#aaa;border-radius:8px;padding:12px;cursor:pointer;font-size:14px;">Abbrechen</button>
+      <button onclick="activatePause()" style="flex:2;background:#b45309;border:none;color:#fff;border-radius:8px;padding:12px;cursor:pointer;font-size:14px;font-weight:700;"><i class="fas fa-pause"></i> Jetzt pausieren</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DELAY MODAL ══════════════════════════════════════════════════════ -->
+<div id="modal-delay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:none;align-items:center;justify-content:center;">
+  <div style="background:#1a1a1a;border-radius:16px;padding:28px;max-width:400px;width:94%;border:1px solid #333;">
+    <div style="font-size:18px;font-weight:700;color:#f59e0b;margin-bottom:8px;"><i class="fas fa-clock"></i> Verzögerung melden</div>
+    <div id="delay-order-label" style="font-size:13px;color:#aaa;margin-bottom:18px;"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
+      <button class="pause-dur-btn" onclick="selectDelay(5)">+5 Min</button>
+      <button class="pause-dur-btn" onclick="selectDelay(10)">+10 Min</button>
+      <button class="pause-dur-btn" onclick="selectDelay(15)">+15 Min</button>
+      <button class="pause-dur-btn" onclick="selectDelay(20)">+20 Min</button>
+      <button class="pause-dur-btn" onclick="selectDelay(30)">+30 Min</button>
+    </div>
+    <input type="number" id="delay-custom-min" min="1" max="120" placeholder="Eigene Minuten…" style="width:100%;background:#111;border:1px solid #333;color:#fff;border-radius:8px;padding:10px;font-size:13px;margin-bottom:16px;box-sizing:border-box;">
+    <div style="display:flex;gap:10px;">
+      <button onclick="closeDelayModal()" style="flex:1;background:#222;border:1px solid #333;color:#aaa;border-radius:8px;padding:12px;cursor:pointer;font-size:14px;">Abbrechen</button>
+      <button onclick="confirmDelay()" style="flex:2;background:#b45309;border:none;color:#fff;border-radius:8px;padding:12px;cursor:pointer;font-size:14px;font-weight:700;"><i class="fas fa-clock"></i> Verzögerung bestätigen</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.pause-dur-btn {
+  background:#222; border:1px solid #333; color:#aaa; border-radius:8px;
+  padding:10px 6px; cursor:pointer; font-size:13px; font-weight:600;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.pause-dur-btn:hover, .pause-dur-btn.selected {
+  background:#b45309; border-color:#f59e0b; color:#fff;
+}
+.kpi-card {
+  background:#1a1a1a; border:1px solid #222; border-radius:12px;
+  padding:16px; text-align:center;
+}
+.kpi-card .kpi-val { font-size:22px; font-weight:800; color:#e8c76a; }
+.kpi-card .kpi-lbl { font-size:11px; color:#666; margin-top:4px; }
+.alert-item {
+  background:#1a1a1a; border-left:3px solid #f87171;
+  border-radius:8px; padding:12px 14px;
+  display:flex; align-items:center; gap:12px;
+}
+.alert-item.warning { border-color:#f59e0b; }
+.alert-item.info    { border-color:#60a5fa; }
+</style>
+
+<script>
+// ── PAUSE ─────────────────────────────────────────────────────────────────────
+let _pauseDurMin = 30;
+let _pauseUntilTime = null;
+let _delayOrderNumber = null;
+let _delayMinutes = 10;
+
+function openPauseModal() {
+  document.getElementById('modal-pause').style.display = 'flex';
+}
+function closePauseModal() {
+  document.getElementById('modal-pause').style.display = 'none';
+}
+function selectPauseDur(btn, min) {
+  _pauseDurMin = min;
+  _pauseUntilTime = null;
+  document.getElementById('pause-until-time').value = '';
+  document.querySelectorAll('.pause-dur-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+function selectPauseUntil(inp) {
+  _pauseUntilTime = inp.value;
+  _pauseDurMin = 0;
+  document.querySelectorAll('.pause-dur-btn[data-min]').forEach(b => b.classList.remove('selected'));
+}
+async function activatePause() {
+  const body = {
+    active: true,
+    duration_minutes: _pauseUntilTime ? 0 : _pauseDurMin,
+    until_time: _pauseUntilTime || null,
+    pause_type: document.getElementById('pause-type-sel').value,
+  };
+  const r = await fetch(`${API}/admin/pause`, {
+    method:'POST', headers:{'Content-Type':'application/json','X-Admin-Token':adminToken},
+    body: JSON.stringify(body)
+  });
+  if (r.ok) {
+    const d = await r.json();
+    closePauseModal();
+    const lbl = d.pause_until_label ? ` bis ${d.pause_until_label} Uhr` : ' (manuell)';
+    _updateAllPauseBtns(true, lbl);
+    document.getElementById('pause-status-bar').textContent = d.message || '';
+  }
+}
+async function deactivatePause() {
+  const r = await fetch(`${API}/admin/pause`, {
+    method:'POST', headers:{'Content-Type':'application/json','X-Admin-Token':adminToken},
+    body: JSON.stringify({active:false})
+  });
+  if (r.ok) {
+    _updateAllPauseBtns(false, '');
+    document.getElementById('pause-status-bar').textContent = '';
+  }
+}
+function _updateAllPauseBtns(paused, lbl) {
+  // Haupt-Pause-Button (view-orders)
+  const mainBtn = document.getElementById('btn-pause-toggle');
+  // Mode-Bar-Pause-Button
+  const modeBtn = document.getElementById('mode-bar-pause-btn');
+  [mainBtn, modeBtn].filter(Boolean).forEach(btn => {
+    if (paused) {
+      btn.style.background = '#991b1b';
+      btn.style.color = '#fff';
+      btn.innerHTML = `<i class="fas fa-stop-circle"></i> Pause aktiv${lbl} – Aufheben`;
+      btn.onclick = deactivatePause;
+    } else {
+      btn.style.background = btn === modeBtn ? '' : '#b45309';
+      btn.style.color = btn === modeBtn ? '' : '#fff';
+      btn.innerHTML = btn === modeBtn
+        ? `<i class="fas fa-pause-circle"></i> Pause`
+        : `<i class="fas fa-pause-circle"></i> Bestellungen pausieren`;
+      btn.onclick = openPauseModal;
+    }
+  });
+}
+
+async function checkPauseStatus() {
+  try {
+    const r = await fetch(`${API}/admin/pause`, {headers:{'X-Admin-Token':adminToken}});
+    if (!r.ok) return;
+    const d = await r.json();
+    if (d.paused) {
+      const lbl = d.pause_until > 0
+        ? ' bis ' + new Date(d.pause_until*1000).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}) + ' Uhr'
+        : ' (manuell)';
+      _updateAllPauseBtns(true, lbl);
+      document.getElementById('pause-status-bar').textContent = d.message || '';
+    } else {
+      _updateAllPauseBtns(false, '');
+    }
+  } catch {}
+}
+
+// ── DELAY ─────────────────────────────────────────────────────────────────────
+function openDelayModal(orderNumber, orderLabel) {
+  _delayOrderNumber = orderNumber;
+  _delayMinutes = 10;
+  document.getElementById('delay-order-label').textContent = `Bestellung ${orderLabel}`;
+  document.getElementById('delay-custom-min').value = '';
+  document.getElementById('modal-delay').style.display = 'flex';
+}
+function closeDelayModal() {
+  document.getElementById('modal-delay').style.display = 'none';
+}
+function selectDelay(min) {
+  _delayMinutes = min;
+  document.getElementById('delay-custom-min').value = '';
+}
+async function confirmDelay() {
+  const custom = parseInt(document.getElementById('delay-custom-min').value || '0');
+  const min = custom > 0 ? custom : _delayMinutes;
+  if (!_delayOrderNumber || min <= 0) return;
+  const r = await fetch(`${API}/admin/orders/${_delayOrderNumber}/delay`, {
+    method:'POST', headers:{'Content-Type':'application/json','X-Admin-Token':adminToken},
+    body: JSON.stringify({delay_minutes: min})
+  });
+  if (r.ok) {
+    const d = await r.json();
+    closeDelayModal();
+    const card = document.getElementById(`card-${_delayOrderNumber}`);
+    if (card) {
+      let badge = card.querySelector('.delay-badge');
+      if (!badge) {
+        badge = document.createElement('div');
+        badge.className = 'delay-badge';
+        badge.style.cssText = 'background:#b45309;color:#fff;font-size:11px;padding:4px 10px;border-radius:6px;margin:6px 0;font-weight:700;';
+        card.querySelector('.action-row').before(badge);
+      }
+      const label = d.expected_ready_at
+        ? new Date(d.expected_ready_at).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}) + ' Uhr'
+        : `+${min} Min`;
+      badge.innerHTML = `<i class="fas fa-clock"></i> Verzögerung: ca. ${label}`;
+    }
+  }
+}
+
+// ── KPI + ALERTS ──────────────────────────────────────────────────────────────
+async function loadKpis() {
+  try {
+    const [todayRes, weekRes, funnelRes] = await Promise.all([
+      fetch(`${API}/admin/kpis/today`, {headers:{'X-Admin-Token':adminToken}}),
+      fetch(`${API}/admin/kpis/week`,  {headers:{'X-Admin-Token':adminToken}}),
+      fetch(`${API}/admin/kpis/funnel?days=7`,{headers:{'X-Admin-Token':adminToken}}),
+    ]);
+    if (todayRes.ok) renderTodayKpis(await todayRes.json());
+    if (weekRes.ok)  renderWeekKpis(await weekRes.json());
+    if (funnelRes.ok) renderFunnel(await funnelRes.json());
+  } catch(e) {
+    document.getElementById('kpi-today-grid').innerHTML = '<div style="color:#f87171;padding:12px;">Fehler beim Laden</div>';
+  }
+}
+
+function kpiCard(val, lbl, color) {
+  return `<div class="kpi-card"><div class="kpi-val" style="color:${color||'#e8c76a'}">${val}</div><div class="kpi-lbl">${lbl}</div></div>`;
+}
+function renderTodayKpis(d) {
+  const pct = d.punctuality_rate != null ? (d.punctuality_rate*100).toFixed(0)+'%' : '–';
+  document.getElementById('kpi-today-grid').innerHTML = [
+    kpiCard(d.revenue ? d.revenue.toFixed(2)+' €':'0 €', 'Umsatz heute', '#e8c76a'),
+    kpiCard(d.orders||0, 'Bestellungen', '#60a5fa'),
+    kpiCard(d.avg_order_value ? d.avg_order_value.toFixed(2)+' €':'–', 'Ø Bon', '#a3e635'),
+    kpiCard(d.open_orders||0, 'Offen', '#f59e0b'),
+    kpiCard(d.cancelled||0, 'Storniert', '#f87171'),
+    kpiCard(
+      d.punctuality_note === 'not_measurable' ? 'Noch nicht messbar'
+        : d.punctuality_note === 'low_sample' ? `${pct} (wenig Daten)`
+        : pct,
+      'Pünktlichkeit',
+      d.punctuality_note === 'not_measurable' ? '#666'
+        : d.punctuality_rate > 0.8 ? '#22c55e' : '#f59e0b'
+    ),
+    kpiCard(d.delivery_orders||0, 'Lieferungen', '#c084fc'),
+    kpiCard(d.pickup_orders||0, 'Abholungen', '#67e8f9'),
+  ].join('');
+}
+function renderWeekKpis(d) {
+  const rr = d.reorder_rate != null ? (d.reorder_rate*100).toFixed(0)+'%' : '–';
+  document.getElementById('kpi-week-grid').innerHTML = [
+    kpiCard(d.revenue ? d.revenue.toFixed(2)+' €':'–', 'Umsatz 7 Tage', '#e8c76a'),
+    kpiCard(d.orders||0, 'Bestellungen', '#60a5fa'),
+    kpiCard(d.avg_order_value ? d.avg_order_value.toFixed(2)+' €':'–', 'Ø Bon', '#a3e635'),
+    kpiCard(d.new_customers||0, 'Neukunden', '#22c55e'),
+    kpiCard(d.returning_customers||0, 'Stammkunden', '#c084fc'),
+    kpiCard(d.reorders||0, 'Wiederbestellungen', '#67e8f9'),
+    kpiCard(rr, 'Wiederkehrrate', '#f59e0b'),
+  ].join('');
+}
+function renderFunnel(d) {
+  const pct = v => v != null ? (v*100).toFixed(1)+'%' : '–';
+  document.getElementById('kpi-funnel').innerHTML = `
+    <div style="display:grid;gap:8px;font-size:13px;">
+      <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#111;border-radius:8px;">
+        <span style="color:#aaa;">Warenkorb angesehen</span><strong style="color:#fff;">${d.cart_views||0}</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#111;border-radius:8px;">
+        <span style="color:#aaa;">Checkout gestartet</span><strong style="color:#fff;">${d.checkouts_started||0}</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#111;border-radius:8px;">
+        <span style="color:#aaa;">Bestellungen abgeschlossen</span><strong style="color:#22c55e;">${d.orders_completed||0}</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#111;border-radius:8px;">
+        <span style="color:#aaa;">Checkout-Abbruchquote</span><strong style="color:${d.checkout_abandon_rate > 0.5 ? '#f87171':'#a3e635'}">${pct(d.checkout_abandon_rate)}</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#111;border-radius:8px;">
+        <span style="color:#aaa;">Wiederbestellungen</span><strong style="color:#fff;">${d.reorders||0}</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#111;border-radius:8px;">
+        <span style="color:#aaa;">Upsell-Conversion</span><strong style="color:#fff;">${pct(d.upsell_conversion)}</strong>
+      </div>
+    </div>`;
+}
+
+async function loadAlerts() {
+  try {
+    const r = await fetch(`${API}/admin/alerts`, {headers:{'X-Admin-Token':adminToken}});
+    if (!r.ok) return;
+    const d = await r.json();
+    renderAlerts(d.alerts, d.counts);
+  } catch {}
+}
+function renderAlerts(alerts, counts) {
+  const banner = document.getElementById('alerts-banner');
+  const sect = document.getElementById('kpi-alerts-section');
+  const list = document.getElementById('kpi-alerts-list');
+  if (!counts || counts.total === 0) {
+    if (banner) banner.style.display = 'none';
+    if (sect) sect.style.display = 'none';
+    return;
+  }
+  if (banner) {
+    banner.style.display = 'flex';
+    document.getElementById('alerts-banner-text').textContent =
+      `${counts.critical > 0 ? counts.critical + ' kritisch · ' : ''}${counts.total} offene Warnung${counts.total !== 1 ? 'en' : ''}`;
+  }
+  if (sect) sect.style.display = 'block';
+  if (list) {
+    list.innerHTML = alerts.map(a => `
+      <div class="alert-item ${a.severity}" id="alert-${a.id}">
+        <i class="fas fa-${a.severity==='critical'?'exclamation-circle':a.severity==='warning'?'exclamation-triangle':'info-circle'}"
+           style="color:${a.severity==='critical'?'#f87171':a.severity==='warning'?'#f59e0b':'#60a5fa'};font-size:16px;flex-shrink:0;"></i>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:#eee;">${escHtml(a.title)}</div>
+          ${a.detail ? `<div style="font-size:11px;color:#888;margin-top:2px;">${escHtml(a.detail)}</div>` : ''}
+          <div style="font-size:10px;color:#555;margin-top:4px;">${new Date(a.created_at*1000).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})} Uhr</div>
+        </div>
+        <button onclick="resolveAlert(${a.id})" style="background:#222;border:1px solid #333;color:#aaa;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:11px;">Gelöst</button>
+      </div>`).join('');
+  }
+}
+async function resolveAlert(id) {
+  await fetch(`${API}/admin/alerts/${id}/resolve`, {
+    method:'POST', headers:{'X-Admin-Token':adminToken}
+  });
+  const el = document.getElementById(`alert-${id}`);
+  if (el) el.remove();
+}
+
+// Alerts beim Start prüfen
+document.addEventListener('DOMContentLoaded', () => {
+  checkPauseStatus();
+  loadAlerts();
+  setInterval(loadAlerts, 60000);
+  setInterval(checkPauseStatus, 30000);
+});
+</script>
+
+
+<!-- ══ Orphan views (were after
+
+<!-- restored views (were after
 
 </body>
 </html>

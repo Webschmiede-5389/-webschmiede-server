@@ -139,6 +139,9 @@
 
     /* ── Category anchor offsets ── */
     .cat-section { scroll-margin-top: 120px; }
+    .cat-banner-m {
+      position: relative; height: 110px; overflow: hidden; margin-top: 8px;
+    }
 
     /* ── Spinner ── */
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -204,8 +207,11 @@
         gap: 6px !important;
       }
       .status-pill {
-        flex: 1 1 auto; min-height: 36px; justify-content: center;
-        font-size: 12px; padding: 6px 10px;
+        flex: 1 1 auto; min-height: 40px; justify-content: center;
+        font-size: 13px; padding: 8px 12px; gap: 8px;
+      }
+      .status-pill .status-dot {
+        width: 10px !important; height: 10px !important;
       }
       .status-hours-txt { font-size: 11px; }
       #timing-strip {
@@ -223,9 +229,12 @@
       #ts-pickup, #ts-delivery { font-size: 12px !important; gap: 4px !important; }
       #ts-pickup-min, #ts-delivery-min { font-size: 11px !important; padding: 1px 6px !important; }
 
-      .chef-outer,
-      .menu-divider,
-      .cat-banner-m { display: none !important; }
+      /* Chef: Desktop-Karte verstecken, Compact-Strip zeigen */
+      .chef-card-full { display: none !important; }
+      .chef-strip-compact { display: flex !important; }
+      .menu-divider { display: none !important; }
+      /* Kategorie-Banner auf Mobile: sichtbar mit Foto */
+      .cat-banner-m { height: 80px; }
 
       #tab-bar {
         top: 52px !important;
@@ -322,10 +331,31 @@
     .status-pill.open { border-color: #22c55e44; background: #0d1f0d; }
     .status-pill.open .status-dot { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
     .status-pill.open .status-label { color: #86efac; }
-    .status-pill.closed { border-color: #ef444444; background: #1f0d0d; }
-    .status-pill.closed .status-dot { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
-    .status-pill.closed .status-label { color: #fca5a5; }
-    .status-hours-txt { color: #666; font-weight: 500; font-size: 12px; }
+    .status-pill.closed { border-color: rgba(201,168,76,.15); background: #131210; }
+    .status-pill.closed .status-dot { background: #c0392b; box-shadow: none; }
+    .status-pill.closed .status-label { color: #c8b090; }
+    .status-hours-txt { color: #6a5a48; font-weight: 500; font-size: 12px; }
+
+    /* Chef Strip – Compact Mobile Version */
+    .chef-strip-compact {
+      display: none; /* desktop: kein Strip */
+      align-items: center; gap: 12px;
+      background: #13110d; border: 1px solid #2a2318;
+      border-radius: 12px; padding: 10px 14px;
+      margin: 10px 16px 0; overflow: hidden;
+    }
+    .chef-strip-compact img {
+      width: 44px; height: 44px; border-radius: 50%;
+      object-fit: cover; object-position: center top;
+      border: 1.5px solid rgba(201,168,76,.4); flex-shrink: 0;
+    }
+    .chef-strip-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .chef-strip-text strong {
+      font-size: 13px; font-weight: 700; color: #e8dcc8;
+      font-family: 'Playfair Display', serif; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .chef-strip-text span { font-size: 11px; color: #7a6a50; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -340,15 +370,20 @@
     </a>
 
     <div class="order-brand-wrap" style="flex:1;display:flex;align-items:center;justify-content:center;gap:12px;min-width:0;">
-      <img class="order-logo" src="https://files.catbox.moe/3uyamu.png" alt="Snack House Yassine Logo" width="112" height="112"
+      <img class="order-logo" src="/img/logo.png" alt="Snack House Yassine Logo" width="112" height="112"
            style="width:112px;height:112px;max-width:112px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(201,168,76,.5));">
       <span class="order-brand-name" style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:44px;font-weight:700;">Snack House Yassine</span>
     </div>
 
-    <button id="hdr-cart-btn" onclick="openCart()" title="Warenkorb" style="position:relative;background:none;border:none;color:#666;font-size:21px;cursor:pointer;flex-shrink:0;display:none;">
-      <i class="fas fa-shopping-bag"></i>
-      <span id="hdr-badge" class="badge" style="position:absolute;top:-4px;right:-7px;font-size:10px;min-width:18px;height:18px;display:none;">0</span>
-    </button>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <a href="/konto" title="Mein Konto" aria-label="Mein Konto" style="color:#666;font-size:17px;text-decoration:none;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;" id="konto-hdr-link">
+        <i class="fas fa-user"></i>
+      </a>
+      <button id="hdr-cart-btn" onclick="openCart()" title="Warenkorb" style="position:relative;background:none;border:none;color:#666;font-size:21px;cursor:pointer;flex-shrink:0;display:none;">
+        <i class="fas fa-shopping-bag"></i>
+        <span id="hdr-badge" class="badge" style="position:absolute;top:-4px;right:-7px;font-size:10px;min-width:18px;height:18px;display:none;">0</span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -366,6 +401,7 @@
     <span class="status-label" id="status-label-vis">Geschlossen</span>
     <span class="status-hours-txt" id="status-hours-vis"></span>
   </div>
+  <div id="next-open-hint" style="font-size:12px;color:#888;display:none;"></div>
 </div>
 
 <!-- ══════════════════════════════════════════════════
@@ -392,12 +428,12 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════
-     AKTIONS-BANNER (dynamisch via API)
+     AKTIONS-BANNER (oben, sticky) – dynamisch via API
 ══════════════════════════════════════════════════ -->
-<div id="promo-banner" style="display:none;max-width:680px;margin:12px auto 0;padding:0 16px;">
-  <div style="background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.05));border:1.5px solid rgba(201,168,76,0.4);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
-    <span style="font-size:24px;flex-shrink:0;">🎉</span>
-    <div style="flex:1;">
+<div id="promo-banner" style="display:none;position:sticky;top:0;z-index:90;background:#0e0b08;border-bottom:1px solid rgba(201,168,76,0.35);padding:10px 16px;">
+  <div style="max-width:680px;margin:0 auto;background:linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.05));border:1.5px solid rgba(201,168,76,0.45);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;">
+    <span style="font-size:22px;flex-shrink:0;" aria-hidden="true">🎉</span>
+    <div style="flex:1;min-width:0;">
       <div id="promo-title" style="font-weight:700;color:#C9A84C;font-size:14px;margin-bottom:2px;"></div>
       <div id="promo-desc"  style="font-size:12px;color:#a89060;line-height:1.4;"></div>
     </div>
@@ -406,50 +442,69 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════
-     BOSS WELCOME
+     HASSAN BEGRÜSSUNG – oben sichtbar für alle Besucher
 ══════════════════════════════════════════════════ -->
-<div class="chef-outer" style="max-width:680px;margin:0 auto;padding:14px 16px 4px;">
-  <div class="chef-card" style="background:#13110d;border:1px solid #2a2318;border-radius:16px;overflow:hidden;display:flex;flex-wrap:wrap;min-height:320px;">
+<div style="max-width:680px;margin:0 auto;">
 
-    <!-- LINKE SEITE: Portrait -->
-    <div class="chef-photo" style="flex:0 0 42%;min-width:160px;position:relative;overflow:hidden;min-height:280px;">
-      <img src="https://files.catbox.moe/6t9u96.jpg"
+  <!-- Desktop: Vollständige Chef-Karte -->
+  <div class="chef-card-full" style="margin:14px 16px 0;background:#13110d;border:1px solid #2a2318;border-radius:16px;overflow:hidden;display:flex;flex-wrap:wrap;min-height:260px;">
+    <div style="flex:0 0 38%;min-width:150px;position:relative;overflow:hidden;min-height:200px;">
+      <img src="/img/hassan.jpg"
            alt="Hassan – Inhaber Snack House"
            style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;position:absolute;inset:0;">
-      <!-- goldene Linie als Trenner -->
       <div style="position:absolute;top:0;right:0;width:1px;height:100%;background:linear-gradient(to bottom,transparent,#C9A84C55,transparent);"></div>
     </div>
-
-    <!-- RECHTE SEITE: Text -->
-    <div class="chef-text" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 22px;">
-      <!-- Kleines goldenes Ornament -->
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-        <div style="height:1px;width:24px;background:#C9A84C;opacity:.5;"></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:22px 20px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div style="height:1px;width:20px;background:#C9A84C;opacity:.5;"></div>
         <span style="font-size:10px;color:#C9A84C;letter-spacing:.15em;font-weight:600;text-transform:uppercase;opacity:.7;">Der Chef</span>
       </div>
-
-      <p class="chef-quote" style="font-family:'Playfair Display',serif;font-size:20px;color:#e8dcc8;font-weight:700;margin:0 0 14px;line-height:1.25;">
+      <p style="font-family:'Playfair Display',serif;font-size:19px;color:#e8dcc8;font-weight:700;margin:0 0 12px;line-height:1.25;">
         Frisch. Ehrlich.<br>Mit Herz.
       </p>
-
-      <p class="chef-body" style="font-size:13px;line-height:1.7;color:#a8967e;margin:0 0 18px;">
+      <p style="font-size:13px;line-height:1.65;color:#a8967e;margin:0 0 14px;">
         Hey ihr Lieben, ich bin Hassan und ich koche seit Jahren mit vollem Herz für euch.
-        Jedes Gericht — so wie ich es für meine eigene Familie machen würde.
+        Jedes Gericht – so wie ich es für meine eigene Familie machen würde.
       </p>
-
-      <p style="font-size:12px;line-height:1.6;color:#C9A84C;font-weight:600;margin:0 0 20px;">
-        Viel Spaß beim Bestellen, und danke für euer Vertrauen!
-      </p>
-
+      <p style="font-size:12px;color:#C9A84C;font-weight:600;margin:0 0 16px;">Danke für euer Vertrauen!</p>
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:32px;height:1px;background:#C9A84C;opacity:.4;"></div>
+        <div style="width:28px;height:1px;background:#C9A84C;opacity:.4;"></div>
         <span style="font-size:11px;color:#6a5a40;font-style:italic;">Hassan Yassine · Inhaber &amp; Koch</span>
       </div>
     </div>
-
   </div>
+
+  <!-- Mobile: Kompakter Begrüßungs-Strip -->
+  <div class="chef-strip-compact">
+    <img src="/img/hassan.jpg" alt="Hassan – Inhaber">
+    <div class="chef-strip-text">
+      <strong>Hassan kocht für euch</strong>
+      <span>Frisch, ehrlich, mit Herz – wie für die Familie</span>
+    </div>
+    <div style="flex-shrink:0;margin-left:auto;font-size:10px;color:#C9A84C;letter-spacing:.1em;font-weight:600;text-transform:uppercase;opacity:.7;">Der Chef</div>
+  </div>
+
 </div>
 
+<!-- Bestellart direkt am Einstieg -->
+<div id="order-type-top" style="max-width:680px;margin:0 auto;padding:12px 16px 0;">
+  <label style="display:block;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Wie möchtest du bestellen?</label>
+  <div class="toggle-pill">
+    <button type="button" class="toggle-opt active" id="top-opt-pickup" onclick="setOrderType('pickup')"><i class="fas fa-store" style="margin-right:6px;"></i>Selbst abholen</button>
+    <button type="button" class="toggle-opt" id="top-opt-delivery" onclick="setOrderType('delivery')"><i class="fas fa-motorcycle" style="margin-right:6px;"></i>Liefern lassen</button>
+  </div>
+  <p id="order-type-hint" style="font-size:12px;color:#666;margin-top:8px;"></p>
+</div>
+
+<!-- Produktsuche -->
+<div style="max-width:680px;margin:0 auto;padding:12px 16px 0;">
+  <label for="menu-search" class="sr-only" style="position:absolute;left:-9999px;">Produkte suchen</label>
+  <div style="position:relative;">
+    <i class="fas fa-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#555;font-size:13px;"></i>
+    <input id="menu-search" class="inp" type="search" placeholder="Gericht suchen…" autocomplete="off"
+           style="padding-left:40px;" oninput="onMenuSearch(this.value)">
+  </div>
+</div>
 
 <!-- ══ GOLDENE TRENNLINIE ══════════════════════════════════════════════════ -->
 <div class="menu-divider" style="max-width:680px;margin:20px auto 0;padding:0 16px;">
@@ -461,12 +516,13 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════
-     CATEGORY TABS – alle sichtbar, 2 Reihen
+     CATEGORY TABS
 ══════════════════════════════════════════════════ -->
 <div id="tab-bar" style="position:sticky;top:57px;z-index:30;background:#0e0b08;border-bottom:1px solid #2a2318;padding:10px 16px 12px;">
   <div style="max-width:680px;margin:0 auto;">
     <div id="tab-strip" style="display:flex;flex-wrap:wrap;gap:7px;">
-      <button class="cat-tab active" data-cat="drehspiess"  onclick="jumpTo('drehspiess',this)">Drehspieß</button>
+      <button class="cat-tab active" data-cat="beliebt"     onclick="jumpTo('beliebt',this)">Beliebt</button>
+      <button class="cat-tab"        data-cat="drehspiess"  onclick="jumpTo('drehspiess',this)">Drehspieß</button>
       <button class="cat-tab"        data-cat="ueberbacken" onclick="jumpTo('ueberbacken',this)">Überbacken</button>
       <button class="cat-tab"        data-cat="burger"      onclick="jumpTo('burger',this)">Burger</button>
       <button class="cat-tab"        data-cat="schnitzel"   onclick="jumpTo('schnitzel',this)">Schnitzel</button>
@@ -483,7 +539,11 @@
 <!-- ══════════════════════════════════════════════════
      MENU
 ══════════════════════════════════════════════════ -->
-<div id="menu-root" style="max-width:680px;margin:0 auto 120px;padding-top:24px;padding-bottom:32px;"></div>
+<div id="menu-root" style="max-width:680px;margin:0 auto 24px;padding-top:24px;padding-bottom:8px;"></div>
+<div id="menu-empty" style="display:none;max-width:680px;margin:0 auto;padding:24px 16px;text-align:center;color:#666;font-size:14px;">Keine Treffer. Anderen Suchbegriff versuchen.</div>
+
+
+<div style="height:100px;"></div>
 
 <!-- ══════════════════════════════════════════════════
      CART BAR (sticky bottom)
@@ -527,6 +587,57 @@
         <h2 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;">Deine Angaben</h2>
       </div>
 
+      <!-- Schülerangebots-Hinweis im Checkout -->
+      <div id="student-hint-box" style="display:none;background:#13110a;border:1px solid #F59E0B44;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <i class="fas fa-graduation-cap" style="color:#F59E0B;font-size:18px;flex-shrink:0;margin-top:1px;"></i>
+          <div style="flex:1;">
+            <div id="student-hint-text" style="color:#e8e2d8;font-size:14px;font-weight:600;"></div>
+            <div id="student-hint-sub" style="color:#888;font-size:12px;margin-top:2px;"></div>
+          </div>
+        </div>
+        <label id="student-confirm-wrap" style="display:none;margin-top:12px;padding-top:10px;border-top:1px solid #2a2318;align-items:flex-start;gap:8px;cursor:pointer;">
+          <input type="checkbox" id="student-confirm-cb" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:#F59E0B;">
+          <span style="color:#e8e2d8;font-size:13px;">Ich bestätige, dass ich bei der Abholung meinen Schülerausweis vorzeige. Andernfalls kann der reguläre Preis berechnet werden.</span>
+        </label>
+      </div>
+
+      <!-- Mit Konto bestellen (optional) -->
+      <div id="checkout-account-box" style="background:#13110d;border:1px solid #2a2318;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">Mit Konto bestellen</div>
+        <p style="font-size:12px;color:#888;line-height:1.5;margin:0 0 10px;">Stempelkarte, Schülerpreise und Gutscheine brauchen ein Konto. Gast-Bestellung geht weiter ohne Login.</p>
+        <div id="checkout-logged-in" style="display:none;font-size:13px;color:#86efac;"></div>
+        <div id="checkout-login-form" style="display:none;">
+          <input class="inp" id="co-login-email" type="email" placeholder="E-Mail" style="margin-bottom:8px;" autocomplete="username">
+          <input class="inp" id="co-login-pass" type="password" placeholder="Passwort" style="margin-bottom:8px;" autocomplete="current-password">
+          <button type="button" onclick="checkoutInlineLogin()" style="width:100%;background:#C9A84C;color:#000;border:none;border-radius:10px;padding:10px;font-weight:700;font-size:13px;cursor:pointer;">Einloggen</button>
+          <p id="co-login-err" style="display:none;color:#f87171;font-size:12px;margin-top:8px;"></p>
+        </div>
+        <div id="checkout-login-cta" style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" onclick="showCheckoutLogin()" style="background:transparent;border:1px solid #C9A84C;color:#C9A84C;border-radius:99px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;">Einloggen</button>
+          <a href="/konto" style="background:transparent;border:1px solid #444;color:#aaa;border-radius:99px;padding:8px 14px;font-size:12px;font-weight:700;text-decoration:none;">Konto anlegen</a>
+        </div>
+      </div>
+
+      <!-- Stempel-Hint für eingeloggte Kunden -->
+      <div id="stamp-hint-box" style="display:none;background:#13110a;border:1px solid #C9A84C44;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-stamp" style="color:#C9A84C;font-size:18px;"></i>
+          <div>
+            <div id="stamp-hint-text" style="color:#e8e2d8;font-size:14px;font-weight:600;"></div>
+            <div id="stamp-hint-sub" style="color:#888;font-size:12px;margin-top:2px;"></div>
+          </div>
+        </div>
+        <!-- Aktive Gutscheine -->
+        <div id="stamp-coupon-section" style="display:none;margin-top:12px;padding-top:10px;border-top:1px solid #2a2318;">
+          <label style="display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Gutschein einlösen</label>
+          <select id="stamp-coupon-select" style="width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:10px;padding:9px 12px;color:#e8e2d8;font-size:13px;outline:none;">
+            <option value="">– Kein Gutschein –</option>
+          </select>
+          <div id="stamp-coupon-info" style="color:#22c55e;font-size:12px;margin-top:6px;display:none;"></div>
+        </div>
+      </div>
+
       <!-- Liefern / Abholen -->
       <div style="margin-bottom:20px;">
         <label style="display:block;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Bestellart</label>
@@ -552,7 +663,20 @@
         </div>
         <div id="addr-field" style="display:none;">
           <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Lieferadresse *</label>
-          <input class="inp" id="f-addr" type="text" placeholder="Straße, Hausnr., Mechernich">
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:10px;">
+            <input class="inp" id="f-street" type="text" placeholder="Straße" autocomplete="address-line1">
+            <input class="inp" id="f-house" type="text" placeholder="Nr." autocomplete="address-line2">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-bottom:10px;">
+            <input class="inp" id="f-plz" type="text" inputmode="numeric" placeholder="PLZ" autocomplete="postal-code" maxlength="5">
+            <input class="inp" id="f-city" type="text" placeholder="Ort" autocomplete="address-level2" value="Mechernich">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+            <input class="inp" id="f-floor" type="text" placeholder="Etage (optional)">
+            <input class="inp" id="f-doorbell" type="text" placeholder="Klingel (optional)">
+          </div>
+          <p id="zone-hint" style="font-size:12px;color:#888;min-height:18px;"></p>
+          <input type="hidden" id="f-addr" value="">
         </div>
         <div>
           <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Anmerkungen (optional)</label>
@@ -560,15 +684,13 @@
         </div>
       </div>
 
-      <!-- Wunschzeit -->
+      <!-- Wunschzeit / Vorbestellung -->
       <div style="margin-bottom:20px;">
-        <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Gewünschte Zeit</label>
+        <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Wann soll es fertig sein?</label>
         <select class="inp" id="f-time">
           <option value="asap">So schnell wie möglich (~25 Min.)</option>
-          <option value="30">In ca. 30 Minuten</option>
-          <option value="45">In ca. 45 Minuten</option>
-          <option value="60">In ca. 60 Minuten</option>
         </select>
+        <p style="font-size:11px;color:#555;margin-top:6px;line-height:1.4;">Für Schule oder Firma: Uhrzeit wählen (Abholung). Die Küche sieht die Zeit auf der Bestellkarte.</p>
       </div>
 
       <!-- Zahlung -->
@@ -578,12 +700,12 @@
           <div class="pay-opt sel" id="pay-cash" onclick="setPayment('cash')">
             <i class="fas fa-money-bill-wave" style="font-size:20px;color:#C9A84C;margin-bottom:6px;display:block;"></i>
             <div style="font-size:13px;font-weight:600;color:#fff;">Bar</div>
-            <div style="font-size:11px;color:#555;margin-top:2px;">bei Abholung</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">bei Abholung/Lieferung</div>
           </div>
           <div class="pay-opt" id="pay-card" onclick="setPayment('card')">
             <i class="fas fa-credit-card" style="font-size:20px;color:#C9A84C;margin-bottom:6px;display:block;"></i>
             <div style="font-size:13px;font-weight:600;color:#fff;">Karte</div>
-            <div style="font-size:11px;color:#555;margin-top:2px;">EC / Kreditkarte</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">am Lesegerät ab 15 €</div>
           </div>
           <div class="pay-opt" id="pay-stripe" onclick="setPayment('stripe')">
             <i class="fas fa-lock" style="font-size:20px;color:#C9A84C;margin-bottom:6px;display:block;"></i>
@@ -604,6 +726,7 @@
           <button onclick="showView('cart')" style="background:none;border:none;color:#C9A84C;font-size:12px;cursor:pointer;text-decoration:underline;">Ändern</button>
         </div>
         <div id="co-summary" style="font-size:13px;color:#ccc;line-height:1.8;"></div>
+        <div id="co-upsell"></div>
         <div style="border-top:1px solid #2a2a2a;margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;">
           <span style="font-weight:600;">Gesamt</span>
           <span id="co-total" style="font-weight:800;color:#C9A84C;font-size:16px;"></span>
@@ -623,18 +746,44 @@
       </p>
     </div>
 
-    <!-- Success view -->
-    <div id="view-success" style="display:none;padding:40px 24px;text-align:center;">
+    <!-- Success / Status view -->
+    <div id="view-success" style="display:none;padding:28px 24px;text-align:center;">
       <div style="width:72px;height:72px;border-radius:50%;background:rgba(34,197,94,0.12);border:2px solid #22c55e;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
         <i class="fas fa-check" style="font-size:28px;color:#22c55e;"></i>
       </div>
-      <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:10px;">Bestellung eingegangen!</h2>
-      <p style="color:#888;font-size:14px;line-height:1.7;margin-bottom:24px;">
-        Wir haben deine Bestellung erhalten und melden uns kurz per SMS oder WhatsApp zur Bestätigung.
+      <h2 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:8px;">Bestellung eingegangen</h2>
+      <p id="success-status-label" style="color:#C9A84C;font-size:14px;font-weight:600;margin-bottom:6px;">Annahme noch ausstehend</p>
+      <p style="color:#888;font-size:13px;line-height:1.6;margin-bottom:16px;">
+        Wir melden uns kurz. Bei Fragen: <a id="success-phone" href="tel:+4924433088966" style="color:#C9A84C;">02443 3088966</a>
       </p>
-      <div id="success-info" style="background:#1a1a1a;border-radius:14px;padding:16px;text-align:left;font-size:13px;line-height:2;color:#ccc;margin-bottom:24px;"></div>
+      <div id="success-steps" style="text-align:left;margin-bottom:16px;"></div>
+      <p id="success-status-hint" style="font-size:12px;color:#666;line-height:1.5;margin:0 0 16px;">
+        Seite offen lassen – oder den Link in der Bestätigungs-Mail nutzen, um den Status später wieder zu sehen.
+      </p>
+      <p id="success-status-link-wrap" style="display:none;font-size:12px;margin:0 0 16px;">
+        <a id="success-status-link" href="#" style="color:#C9A84C;">Live-Status-Link kopieren / öffnen</a>
+      </p>
+      <div id="success-info" style="background:#1a1a1a;border-radius:14px;padding:16px;text-align:left;font-size:13px;line-height:2;color:#ccc;margin-bottom:20px;"></div>
+      <div id="account-offer" style="background:#13110d;border:1px solid #2a2318;border-radius:14px;padding:14px;text-align:left;margin-bottom:20px;">
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">Konto anlegen – Stempel &amp; Schülerpreise</div>
+        <p style="font-size:12px;color:#888;line-height:1.5;margin-bottom:10px;">Mit denselben Daten wie bei der Bestellung. Dann merken wir uns Stempelkarte und Gutscheine.</p>
+        <div id="account-register-form">
+          <input class="inp" id="ar-email" type="email" placeholder="E-Mail" style="margin-bottom:8px;" autocomplete="email">
+          <input class="inp" id="ar-phone" type="tel" placeholder="Telefon" style="margin-bottom:8px;" autocomplete="tel">
+          <input class="inp" id="ar-name" type="text" placeholder="Name" style="margin-bottom:8px;" autocomplete="name">
+          <input class="inp" id="ar-pass" type="password" placeholder="Passwort (min. 8 Zeichen)" style="margin-bottom:8px;" autocomplete="new-password">
+          <input class="inp" id="ar-pass2" type="password" placeholder="Passwort wiederholen" style="margin-bottom:8px;" autocomplete="new-password">
+          <label style="display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;cursor:pointer;">
+            <input type="checkbox" id="ar-marketing" style="margin-top:2px;accent-color:#C9A84C;">
+            <span style="font-size:12px;color:#888;">Ich möchte Infos zu Aktionen per E-Mail (jederzeit abbestellbar).</span>
+          </label>
+          <button type="button" onclick="registerAfterOrder()" style="width:100%;background:#C9A84C;color:#000;border:none;border-radius:10px;padding:10px;font-weight:700;font-size:13px;cursor:pointer;">Konto jetzt anlegen</button>
+          <p id="ar-err" style="display:none;color:#f87171;font-size:12px;margin-top:8px;"></p>
+          <p id="ar-ok" style="display:none;color:#86efac;font-size:12px;margin-top:8px;">Konto ist da. Du bist eingeloggt.</p>
+        </div>
+      </div>
       <button onclick="resetOrder()" style="background:#C9A84C;color:#000;border:none;border-radius:99px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;">
-        Neue Bestellung aufgeben
+        Neue Bestellung
       </button>
     </div>
 
@@ -656,7 +805,7 @@ const MENU = [
   { id:'d6', cat:'drehspiess', nr:'6', name:'Drehspieß Tasche Döner-Style', desc:'Gefüllte Tasche mit Drehspießfleisch, gemischtem Salat, Zaziki', price:8.00, variants:[{l:'Hähnchen',p:8.00},{l:'Kalb',p:9.00}] },
   { id:'d7', cat:'drehspiess', nr:'7', name:'Drehspieß Box', desc:'Mit Pommes, Knoblauchpaste oder Zaziki', price:7.00, variants:[{l:'Hähnchen',p:7.00},{l:'Kalb',p:8.00}] },
   { id:'d8', cat:'drehspiess', nr:'8', name:'Drehspieß Teller', desc:'Orientalisch: Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste — oder Döner-Style', price:12.00, variants:[{l:'Hähnchen',p:12.00},{l:'Kalb',p:13.50}] },
-  { id:'d9', cat:'drehspiess', nr:'9 ★', name:'Arabischer Teller', desc:'Hähnchen-Shawarma-Rolle, Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste', price:14.00, badge:'Hausspezialität' },
+  { id:'d9', cat:'drehspiess', nr:'9 ★', name:'Arabischer Teller', desc:'Hähnchen-Shawarma-Rolle, Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste', price:14.00, badge:'Hausspezialität', popular:true, allergens:['A','C','G'], additives:['1','3'], allergens_note:'Gluten, Ei, Milch – Angaben vorläufig, Küche bestätigen' },
 
   // ÜBERBACKEN
   { id:'u10', cat:'ueberbacken', nr:'10', name:'Drehspieß mit Hollandaise', desc:'Sauce Hollandaise und Käse überbacken. Mit Pommes/Reis und Salat/Coleslaw', price:13.00, variants:[{l:'Hähnchen',p:13.00},{l:'Kalb',p:14.00}] },
@@ -665,7 +814,7 @@ const MENU = [
   { id:'u13', cat:'ueberbacken', nr:'13', name:'Drehspieß Tomaten-/Sahnesoße', desc:'Mit Tomaten- oder Sahnesoße und Käse überbacken', price:11.50, variants:[{l:'Hähnchen',p:11.50},{l:'Kalb',p:12.50}] },
 
   // BURGER
-  { id:'b14', cat:'burger', nr:'14', name:'Crispy Chicken Burger', desc:'Crispy Chicken, Blattsalat, Käse, Tomate, Coleslaw, Süß-Sauer- und Hamburgersoße', price:6.00 },
+  { id:'b14', cat:'burger', nr:'14', name:'Crispy Chicken Burger', desc:'Crispy Chicken, Blattsalat, Käse, Tomate, Coleslaw, Süß-Sauer- und Hamburgersoße', price:6.00, popular:true, allergens:['A','C','G'], additives:['1','2'] },
   { id:'b15', cat:'burger', nr:'15', name:'Hamburger', desc:'Rindfleisch-Patty, Salat, Tomaten, Gurken, Röstzwiebeln, Soßen', price:5.00 },
   { id:'b16', cat:'burger', nr:'16', name:'Cheeseburger', desc:'Rindfleisch-Patty, Käse, Salat, Tomaten, Gurken, Röstzwiebeln, Soßen', price:5.50 },
   { id:'b17', cat:'burger', nr:'17', name:'Chicken Burger', desc:'Chicken-Patty, Salat, Tomaten, Gurken, Soßen', price:5.50 },
@@ -677,7 +826,7 @@ const MENU = [
   { id:'s21', cat:'schnitzel', nr:'21', name:'Jägerschnitzel', desc:'Hähnchenbrust mit Jägersoße', price:14.00 },
   { id:'s22', cat:'schnitzel', nr:'22', name:'Schnitzel Paprika Art', desc:'Hähnchenbrust mit Paprikasoße', price:14.00 },
   { id:'s23', cat:'schnitzel', nr:'23', name:'Champignon-Rahmschnitzel', desc:'Hähnchenbrust mit Champignon-Rahmsauce', price:14.00 },
-  { id:'s24', cat:'schnitzel', nr:'24 ★', name:'Schnitzel Yassine', desc:'Hähnchenbrust mit gebratenen Zwiebeln und Champignons. Tipp: +2 € Hollandaise!', price:14.00, badge:'Empfehlung' },
+  { id:'s24', cat:'schnitzel', nr:'24 ★', name:'Schnitzel Yassine', desc:'Hähnchenbrust mit gebratenen Zwiebeln und Champignons. Tipp: +2 € Hollandaise!', price:14.00, badge:'Empfehlung', popular:true, allergens:['A','C','G'], additives:[] },
   { id:'s25', cat:'schnitzel', nr:'25', name:'Hawaii Schnitzel', desc:'Hähnchenbrust mit Ananas und Käse', price:14.00 },
 
   // NUDELN
@@ -686,7 +835,7 @@ const MENU = [
   { id:'n28', cat:'nudeln', nr:'28', name:'Bolognese', desc:'Mit Tomatenfleischsoße', price:12.00 },
   { id:'n29', cat:'nudeln', nr:'29', name:'Drehspieß Pasta', desc:'Mit Hähnchen-Drehspieß, Champignon in Tomaten- oder Sahnesoße', price:12.50 },
   { id:'n30', cat:'nudeln', nr:'30', name:'Quattro Formaggi', desc:'Vier Käsesorten mit cremiger Sahnesoße', price:12.50 },
-  { id:'n31', cat:'nudeln', nr:'31', name:'Scampi Pasta', desc:'Scampi mit Spinat und Knoblauch in Tomaten-Sahnesoße — oder mit Sahnesoße und Parmesan', price:13.00 },
+  { id:'n31', cat:'nudeln', nr:'31', name:'Scampi Pasta', desc:'Scampi mit Spinat und Knoblauch in Tomaten-Sahnesoße — oder mit Sahnesoße und Parmesan', price:13.00, popular:true, allergens:['A','B','G'], additives:[] },
   { id:'n32', cat:'nudeln', nr:'32 🌿', name:'Vegetarische Pasta', desc:'Mit Brokkoli, Spinat, Champignon, Knoblauch in Tomaten- oder Sahnesoße', price:12.50, badge:'Vegetarisch' },
 
   // PIZZA
@@ -696,7 +845,7 @@ const MENU = [
   { id:'p43', cat:'pizza', nr:'43', name:'Pizza Roma', desc:'Thunfisch und Zwiebeln auf Tomatensoße und Käse — Ø 30 cm', price:11.00 },
   { id:'p48', cat:'pizza', nr:'48', name:'Calzone', desc:'Gefüllt mit Tomatensoße, Käse, Geflügelschinken, Champignon und Thunfisch — Ø 26 cm', price:11.00 },
   { id:'p49', cat:'pizza', nr:'49', name:'Drehspieß Pizza', desc:'Fleisch vom Drehspieß mit Zwiebeln auf Tomatensoße und Käse — Ø 30 cm', price:11.00, variants:[{l:'Hähnchen',p:11.00},{l:'Kalb',p:12.00}] },
-  { id:'p53', cat:'pizza', nr:'53 ★', name:'Snack House Pizza', desc:'Selbst marinierte Putenbruststücke, Brokkoli, Mais, Paprika, Oliven, Hollandaise oder Knoblauchpaste — Ø 30 cm', price:12.50, badge:'Hausspezialität' },
+  { id:'p53', cat:'pizza', nr:'53 ★', name:'Snack House Pizza', desc:'Selbst marinierte Putenbruststücke, Brokkoli, Mais, Paprika, Oliven, Hollandaise oder Knoblauchpaste — Ø 30 cm', price:12.50, badge:'Hausspezialität', popular:true, allergens:['A','G'], additives:[] },
   { id:'p54', cat:'pizza', nr:'54', name:'Eifelpizza', desc:'Scampi, Thunfisch, Salami, Schinken, Champignon, Spinat, Paprika, Artischocke, Ei — Ø 30 cm', price:12.50 },
   { id:'p57', cat:'pizza', nr:'57', name:'Pizzablech 40×60 cm', desc:'Margherita (33 €) oder 3 Zutaten nach Wahl (40 €) — ideal fürs Catering', price:33.00, badge:'Catering' },
 
@@ -707,7 +856,7 @@ const MENU = [
   { id:'sa74', cat:'salate', nr:'74', name:'Fitness Salat', desc:'Grünsalat, Tomaten, Gurken, Hähnchenstreifen, Mais und Käse', price:11.00 },
 
   // VEGETARISCH
-  { id:'v75', cat:'vegetarisch', nr:'75', name:'Falafel Rolle', desc:'Frittierte Falafel im arabischen Brot mit Hummus, Petersilie, Tomaten, Salat, Sesamsoße', price:7.00, badge:'Vegan' },
+  { id:'v75', cat:'vegetarisch', nr:'75', name:'Falafel Rolle', desc:'Frittierte Falafel im arabischen Brot mit Hummus, Petersilie, Tomaten, Salat, Sesamsoße', price:7.00, badge:'Vegan', popular:true, allergens:['A','N'], additives:[] },
   { id:'v76', cat:'vegetarisch', nr:'76', name:'Falafel Teller', desc:'5 Falafel mit Brot, Hummus, Petersilie, Tomaten, Salat, Peperoni, eingelegten Gurken, Sesamsoße', price:12.00, badge:'Vegan' },
 
   // FINGERFOOD
@@ -732,6 +881,7 @@ const MENU = [
 ];
 
 const CATS = [
+  { id:'beliebt',     label:'Beliebt',                  photo:'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&h=220&q=85', icon:'★' },
   { id:'drehspiess',  label:'Drehspieß & Shawarma',    photo:'https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=800&h=220&q=85', icon:'🥙' },
   { id:'ueberbacken', label:'Überbacken',               photo:'https://images.unsplash.com/photo-1759409117421-1a64af35f118?auto=format&fit=crop&w=800&h=220&q=85', icon:'🫕' },
   { id:'burger',      label:'Burger',                   photo:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&h=220&q=85', icon:'🍔' },
@@ -745,8 +895,87 @@ const CATS = [
 ];
 
 // ── KONFIGURATION ─────────────────────────────────────────────────────────
-const DELIVERY_FEE         = 2.50;
-const MIN_ORDER_DELIVERY   = 15.00;
+let DELIVERY_FEE         = 2.50;
+let MIN_ORDER_DELIVERY   = 15.00;
+const POPULAR_IDS = ['d9','s24','n31','p53','v75','b14'];
+
+// ── SCHÜLERANGEBOTE STATE ──────────────────────────────────────────────────
+let studentOffers = {};       // { itemId: { is_student_offer, student_price, ... } }
+let studentConfig = {};       // Öffentliche Konfiguration
+let studentEligible = false;  // Ist der eingeloggte Kunde berechtigt?
+let studentEligibleReason = '';
+let studentSystemEnabled = false;
+
+async function loadStudentOffersData() {
+  try {
+    const [cfgR, prodR] = await Promise.all([
+      fetch('/api/student-offers/config'),
+      fetch('/api/student-offers/products'),
+    ]);
+    if (cfgR.ok) studentConfig = await cfgR.json();
+    if (prodR.ok) studentOffers = await prodR.json();
+    studentSystemEnabled = !!studentConfig.enabled;
+  } catch (e) {
+    // Schülerangebote nicht verfügbar – kein Fehler
+  }
+}
+
+async function checkStudentEligibility() {
+  if (!studentSystemEnabled) return;
+  try {
+    const delType = orderType === 'delivery' ? 'lieferung' : 'abholung';
+    const r = await fetch(`/api/customer/student-eligibility?delivery_type=${delType}`, {credentials:'include'});
+    if (r.ok) {
+      const d = await r.json();
+      studentEligible = !!d.eligible;
+      studentEligibleReason = d.reason || '';
+    }
+  } catch (e) { /* ignorieren */ }
+}
+
+function getStudentInfo(itemId) {
+  return studentOffers[itemId] || null;
+}
+
+function studentBadgeHtml(itemId) {
+  if (!studentSystemEnabled) return '';
+  const si = getStudentInfo(itemId);
+  if (!si || !si.is_student_offer) return '';
+  const sp = si.student_price;
+  if (sp == null) return '';
+  return `<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#F59E0B;margin-left:4px;" title="Nur mit gültigem Schülernachweis">🎓 ${parseFloat(sp).toFixed(2).replace('.',',')} €</span>`;
+}
+
+function updateStudentHint() {
+  const box = document.getElementById('student-hint-box');
+  const txt = document.getElementById('student-hint-text');
+  const sub = document.getElementById('student-hint-sub');
+  const confirmWrap = document.getElementById('student-confirm-wrap');
+  if (!box || !txt || !sub) return;
+
+  if (!studentSystemEnabled) { box.style.display = 'none'; return; }
+
+  // Prüfe ob Schülerartikel im Warenkorb
+  const hasStudentItems = Object.values(cart).some(e => getStudentInfo(e.item.id)?.is_student_offer);
+  if (!hasStudentItems) { box.style.display = 'none'; return; }
+
+  box.style.display = '';
+
+  if (studentEligible && studentEligibleReason === 'verified') {
+    txt.textContent = '✓ Schülerstatus bestätigt';
+    sub.textContent = 'Dein Schülerrabatt ist aktiv.';
+    if (confirmWrap) confirmWrap.style.display = 'none';
+  } else if (studentEligible && ['pending_check', 'pending_first_order', 'recheck_pending'].includes(studentEligibleReason)) {
+    txt.textContent = 'Schülernachweis bei Abholung erforderlich';
+    sub.textContent = 'Zeige bitte beim ersten Mal deinen Schülerausweis vor. Ohne Nachweis kann der reguläre Preis berechnet werden.';
+    if (confirmWrap) confirmWrap.style.display = 'flex';
+  } else {
+    txt.textContent = '🎓 Schülerangebot im Warenkorb';
+    sub.textContent = 'Mit gültigem Schülernachweis erhältst du vergünstigte Preise. Bitte melde dich an oder erstelle ein Kundenkonto.';
+    if (confirmWrap) confirmWrap.style.display = 'none';
+  }
+}
+const ALLERGEN_LABELS = { A:'Gluten', B:'Krebstiere', C:'Ei', D:'Fisch', E:'Erdnuss', F:'Soja', G:'Milch', H:'Schalenfrüchte', L:'Lupine', M:'Weichtiere', N:'Sesam', O:'Senf', P:'Sellerie', R:'Sulfite' };
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 const cart = {};
@@ -754,30 +983,105 @@ let orderType   = 'pickup';
 let payMethod   = 'cash';
 let activePromo = null;
 let siteOnline  = true;
+let shopStatus  = null;
+let orderOptions = null;
 let waitPickup  = 20;
 let waitDelivery = 40;
 let menuOverrides = {};  // { itemId: { available, note } }
+let menuSearchQuery = '';
+let submitInFlight = false;
+let lastOrderNumber = '';
+let statusPollTimer = null;
 
-// ── SETTINGS vom Server laden ──────────────────────────────────────────────
+// ── SETTINGS + SHOP-STATUS vom Server laden ────────────────────────────────
 async function loadSiteSettings() {
   try {
-    const r = await fetch('/api/settings');
-    if (!r.ok) return;
-    const s = await r.json();
-    siteOnline    = s.online;
-    waitPickup    = s.wait_pickup   || 20;
-    waitDelivery  = s.wait_delivery || 40;
-    menuOverrides = s.overrides     || {};
+    const [rSet, rSt] = await Promise.all([
+      fetch('/api/settings'),
+      fetch('/api/shop-status'),
+    ]);
+    if (rSet.ok) {
+      const s = await rSet.json();
+      siteOnline    = s.online;
+      waitPickup    = s.wait_pickup   || 20;
+      waitDelivery  = s.wait_delivery || 40;
+      menuOverrides = s.overrides     || {};
+    }
+    if (rSt.ok) {
+      shopStatus = await rSt.json();
+      siteOnline = shopStatus.manual_online !== false;
+      waitPickup = shopStatus.wait_pickup || waitPickup;
+      waitDelivery = shopStatus.wait_delivery || waitDelivery;
+      if (shopStatus.fulfillment) {
+        DELIVERY_FEE = shopStatus.fulfillment.delivery_fee_eur ?? DELIVERY_FEE;
+        MIN_ORDER_DELIVERY = shopStatus.fulfillment.min_order_delivery_eur ?? MIN_ORDER_DELIVERY;
+      }
+      if (Array.isArray(shopStatus.popular_item_ids) && shopStatus.popular_item_ids.length) {
+        POPULAR_IDS.splice(0, POPULAR_IDS.length, ...shopStatus.popular_item_ids);
+      }
+    }
 
-    if (!siteOnline) {
-      showOfflineBanner(s.offline_msg || 'Wir sind gleich zurück!');
+    if (!siteOnline || (shopStatus && shopStatus.paused)) {
+      showOfflineBanner((shopStatus && (shopStatus.pause_reason || shopStatus.offline_msg)) || 'Wir sind gleich zurück!');
     } else {
       hideOfflineBanner();
     }
     renderWaitBadge();
-    renderMenu();  // Speisekarte neu zeichnen mit Overrides
+    renderMenu();
     checkStatus();
+    await refreshOrderOptions();
   } catch(e) {}
+}
+
+async function refreshOrderOptions() {
+  try {
+    const r = await fetch(`/api/order-options?type=${orderType}&subtotal=${encodeURIComponent(subtotalPrice())}`);
+    if (!r.ok) return;
+    orderOptions = await r.json();
+    applyOrderOptionsUI();
+  } catch (_) {}
+}
+
+function applyOrderOptionsUI() {
+  if (!orderOptions) return;
+  const hint = document.getElementById('order-type-hint');
+  if (hint) {
+    const w = orderOptions.wait_minutes;
+    if (orderType === 'delivery') {
+      hint.textContent = `Lieferung ~${w} Min. · ab ${fmtPrice(orderOptions.min_order_eur)} · +${fmtPrice(orderOptions.delivery_fee_eur)} Liefergebühr`;
+    } else {
+      hint.textContent = `Abholung ~${w} Min. · keine Liefergebühr`;
+    }
+  }
+  const sel = document.getElementById('f-time');
+  if (sel && Array.isArray(orderOptions.slots) && orderOptions.slots.length) {
+    const cur = sel.value;
+    sel.innerHTML = orderOptions.slots.map(s =>
+      `<option value="${s.id}">${s.label}</option>`
+    ).join('');
+    if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+  }
+  if (Array.isArray(orderOptions.payments)) {
+    orderOptions.payments.forEach(p => {
+      const el = document.getElementById('pay-' + p.id);
+      if (!el) return;
+      el.style.opacity = p.enabled ? '1' : '0.4';
+      el.style.pointerEvents = p.enabled ? '' : 'none';
+      el.title = p.enabled ? '' : (p.reason || 'Nicht verfügbar');
+      const hintEl = el.querySelector('div:last-child');
+      if (hintEl && !p.enabled && p.reason) hintEl.textContent = p.reason;
+    });
+    const curPay = orderOptions.payments.find(p => p.id === payMethod);
+    if (curPay && !curPay.enabled) {
+      const first = orderOptions.payments.find(p => p.enabled);
+      if (first) setPayment(first.id);
+    }
+  }
+}
+
+function onMenuSearch(q) {
+  menuSearchQuery = (q || '').trim().toLowerCase();
+  renderMenu();
 }
 
 function showOfflineBanner(msg) {
@@ -787,7 +1091,7 @@ function showOfflineBanner(msg) {
     el.id = 'offline-banner';
     el.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#080604;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;text-align:center;';
     el.innerHTML = `
-      <img src="https://files.catbox.moe/3uyamu.png" style="width:80px;opacity:.6;filter:grayscale(1);">
+      <img src="/img/logo.png" style="width:80px;opacity:.6;filter:grayscale(1);">
       <div style="font-family:\'Playfair Display\',serif;color:#C9A84C;font-size:22px;">Snack House Yassine</div>
       <div style="color:#555;font-size:14px;max-width:280px;" id="offline-msg-txt">${msg}</div>
       <div style="background:#1a1a1a;border:1px solid #2a2318;border-radius:10px;padding:12px 20px;color:#444;font-size:12px;">Wir sind gerade nicht verfügbar.<br>Bitte versuche es später erneut.</div>
@@ -829,33 +1133,31 @@ function renderWaitBadge() {
   }
 }
 
-function itemDisplay(item) {
-  const ov = menuOverrides[item.id] || {};
-  if (ov.available === false) return null;
-  return {
-    ...item,
-    name: ov.name || item.name,
-    desc: ov.desc || item.desc,
-    price: ov.price != null ? ov.price : item.price,
-    image_url: ov.image_url || null,
-    variants: item.variants ? item.variants.map(v => ({
-      ...v,
-      p: ov.price != null && item.variants.length === 1 ? ov.price : v.p,
-    })) : item.variants,
-  };
-}
-
 // ── RENDER MENU ────────────────────────────────────────────────────────────
 function renderMenu() {
   const root = document.getElementById('menu-root');
+  const empty = document.getElementById('menu-empty');
   let html = '';
+  let visibleCount = 0;
 
   CATS.forEach(cat => {
-    const items = MENU.map(itemDisplay).filter(Boolean).filter(m => m.cat === cat.id);
+    let items = MENU.map(itemDisplay).filter(Boolean);
+    if (cat.id === 'beliebt') {
+      items = items.filter(m => m.popular || POPULAR_IDS.includes(m.id));
+    } else {
+      items = items.filter(m => m.cat === cat.id);
+    }
+    if (menuSearchQuery) {
+      items = items.filter(m =>
+        (m.name || '').toLowerCase().includes(menuSearchQuery) ||
+        (m.desc || '').toLowerCase().includes(menuSearchQuery) ||
+        String(m.nr || '').toLowerCase().includes(menuSearchQuery)
+      );
+    }
     if (!items.length) return;
 
     html += `<div class="cat-section" id="sec-${cat.id}">
-      <div class="cat-banner-m" style="position:relative;height:110px;overflow:hidden;margin-top:8px;">
+      <div class="cat-banner-m">
         <img src="${cat.photo}" alt="${cat.label}" loading="lazy" width="800" height="110"
              style="width:100%;height:100%;object-fit:cover;object-position:center;">
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(14,11,8,0.92) 0%,rgba(14,11,8,0.45) 55%,rgba(14,11,8,0.15) 100%);"></div>
@@ -865,34 +1167,43 @@ function renderMenu() {
       </div>`;
 
     items.forEach(item => {
+      visibleCount++;
       const cartEntry = cart[item.id];
       const qty = cartEntry ? cartEntry.qty : 0;
       const hasVar = item.variants && item.variants.length > 1;
+      const soldOut = item.available === false;
+      const allergenTxt = Array.isArray(item.allergens) && item.allergens.length
+        ? item.allergens.map(a => ALLERGEN_LABELS[a] || a).join(', ')
+        : '';
       const thumb = item.image_url
-        ? `<img src="${item.image_url}" alt="" loading="lazy" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;">`
+        ? `<img src="${item.image_url}" alt="" loading="lazy" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;${soldOut?'opacity:.4;':''}">`
         : '';
 
-      html += `<div class="menu-row" id="row-${item.id}" style="padding:14px 16px;display:flex;align-items:center;gap:12px;">
+      html += `<div class="menu-row" id="row-${item.id}" style="padding:14px 16px;display:flex;align-items:center;gap:12px;${soldOut?'opacity:.55;':''}">
         ${thumb}
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px;">
             <span style="font-size:10px;color:#555;font-weight:600;">${item.nr}</span>
             <span class="item-title" style="font-size:15px;font-weight:600;color:#fff;">${item.name}</span>
             ${item.badge ? `<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);color:#C9A84C;">${item.badge}</span>` : ''}
+            ${soldOut ? `<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:#3f1212;border:1px solid #ef444466;color:#fca5a5;">Ausverkauft</span>` : ''}
+            ${studentBadgeHtml(item.id)}
           </div>
           <p class="item-desc-m" style="font-size:12px;color:#666;line-height:1.5;margin-bottom:6px;">${item.desc}</p>
-          ${hasVar ? `<div style="display:flex;gap:6px;flex-wrap:wrap;" id="var-${item.id}">
+          ${allergenTxt ? `<p style="font-size:11px;color:#555;margin:0 0 6px;">Allergene: ${allergenTxt}</p>` : ''}
+          ${hasVar && !soldOut ? `<div style="display:flex;gap:6px;flex-wrap:wrap;" id="var-${item.id}">
             ${item.variants.map((v,i) => `<button class="var-chip" onclick="selectVariant('${item.id}',${i})" id="vbtn-${item.id}-${i}"
               style="padding:3px 10px;border-radius:99px;border:1px solid #2a2a2a;font-size:11px;font-weight:500;cursor:pointer;background:${i===0?'#C9A84C':'transparent'};color:${i===0?'#000':'#666'};transition:all .15s;">${v.l} ${fmtPrice(v.p)}</button>`).join('')}
           </div>` : ''}
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
           <span style="font-size:16px;font-weight:700;color:#C9A84C;" id="price-${item.id}">${hasVar ? 'ab ' : ''}${fmtPrice(item.price)}</span>
+          ${soldOut ? `<span style="font-size:12px;color:#888;">—</span>` : `
           <div style="display:flex;align-items:center;gap:8px;">
-            <button class="qty-btn ${qty===0?'zero':''}" onclick="changeQty('${item.id}',-1)" id="minus-${item.id}" ${qty===0?'disabled':''}>−</button>
+            <button class="qty-btn ${qty===0?'zero':''}" onclick="changeQty('${item.id}',-1)" id="minus-${item.id}" ${qty===0?'disabled':''} aria-label="Weniger">−</button>
             <span id="qty-${item.id}" style="min-width:20px;text-align:center;font-size:15px;font-weight:700;color:${qty>0?'#C9A84C':'#333'};">${qty||'+'}</span>
-            <button class="qty-btn" onclick="changeQty('${item.id}',1)" id="plus-${item.id}">+</button>
-          </div>
+            <button class="qty-btn" onclick="changeQty('${item.id}',1)" id="plus-${item.id}" aria-label="Hinzufügen">+</button>
+          </div>`}
         </div>
       </div>`;
     });
@@ -901,6 +1212,26 @@ function renderMenu() {
   });
 
   root.innerHTML = html;
+  if (empty) empty.style.display = (menuSearchQuery && visibleCount === 0) ? 'block' : 'none';
+}
+
+function itemDisplay(item) {
+  const ov = menuOverrides[item.id] || {};
+  if (ov.available === false || ov.available === 0) {
+    return { ...item, available: false, note: ov.note || '' };
+  }
+  return {
+    ...item,
+    available: true,
+    name: ov.name || item.name,
+    desc: ov.desc || item.desc,
+    price: ov.price != null ? ov.price : item.price,
+    image_url: ov.image_url || null,
+    variants: item.variants ? item.variants.map(v => ({
+      ...v,
+      p: ov.price != null && item.variants.length === 1 ? ov.price : v.p,
+    })) : item.variants,
+  };
 }
 
 // ── VARIANT SELECTION ──────────────────────────────────────────────────────
@@ -935,7 +1266,7 @@ function changeQty(itemId, delta) {
   if (cart[itemId] && cart[itemId].isFree) return; // Gratis-Artikel nicht manuell änderbar
   const base = MENU.find(m => m.id === itemId);
   const item = base ? itemDisplay(base) : null;
-  if (!item) return;
+  if (!item || item.available === false) return;
 
   const current = cart[itemId] ? cart[itemId].qty : 0;
   const next    = Math.max(0, current + delta);
@@ -975,6 +1306,148 @@ function subtotalPrice() { return Object.values(cart).reduce((s,e)=>s+(e.price*e
 function isDelivery()    { return orderType === 'delivery'; }
 function deliveryFee()   { return isDelivery() ? DELIVERY_FEE : 0; }
 function totalPrice()    { return subtotalPrice() + deliveryFee(); }
+
+// ── WARENKORB-GETRÄNK-UPSELL (Live; E-Mail-Upsell bleibt separat) ───────────
+const CART_UPSELL_DISMISS_KEY = 'shy_cart_upsell_dismiss';
+let _lastCartUpsellShownKey = '';
+
+function cartHasDrink() {
+  return Object.values(cart).some(e => {
+    if (!e) return false;
+    const cat = (e.item && e.item.cat) || '';
+    const name = ((e.item && e.item.name) || '').toLowerCase();
+    if (cat === 'getraenke') return true;
+    return /ayran|cola|fanta|sprite|mezzo|red bull|wasser|getr[aä]nk|softdrink/.test(name);
+  });
+}
+
+function cartHasFood() {
+  return Object.values(cart).some(e => {
+    if (!e || e.isFree) return false;
+    const cat = (e.item && e.item.cat) || '';
+    return cat && cat !== 'getraenke';
+  });
+}
+
+function cartIsDrehspiessLike() {
+  return Object.values(cart).some(e => {
+    if (!e || e.isFree) return false;
+    const cat = (e.item && e.item.cat) || '';
+    const name = ((e.item && e.item.name) || '').toLowerCase();
+    return cat === 'drehspiess' || /shawarma|drehspie[sß]|d[öo]ner/.test(name);
+  });
+}
+
+function pickCartUpsell() {
+  try {
+    if (sessionStorage.getItem(CART_UPSELL_DISMISS_KEY) === '1') return null;
+  } catch (_) {}
+  if (!cartHasFood() || cartHasDrink()) return null;
+  const ayran = MENU.find(m => m.id === 'g3');
+  const colaItem = MENU.find(m => m.id === 'g1');
+  if (!ayran || !colaItem) return null;
+  const colaVar = (colaItem.variants || []).find(v => /cola\s*0[,.]?33/i.test(v.l))
+    || (colaItem.variants || [])[0]
+    || null;
+  if (!colaVar) return null;
+  const ayranOpt = { id: 'g3', label: 'Ayran', price: ayran.price, variantLabel: null };
+  const colaOpt = { id: 'g1', label: colaVar.l, price: colaVar.p, variantLabel: colaVar.l };
+  if (cartIsDrehspiessLike()) {
+    return { headline: 'Dazu noch ein Ayran?', primary: ayranOpt, secondary: colaOpt };
+  }
+  return { headline: 'Etwas zu trinken?', primary: colaOpt, secondary: ayranOpt };
+}
+
+function dismissCartUpsell() {
+  try { sessionStorage.setItem(CART_UPSELL_DISMISS_KEY, '1'); } catch (_) {}
+  _lastCartUpsellShownKey = '';
+  updateCartUI();
+  try {
+    if (document.getElementById('view-checkout') && document.getElementById('view-checkout').style.display !== 'none') {
+      buildCheckoutSummary();
+    }
+  } catch (_) {}
+}
+
+function acceptCartUpsell(itemId, variantLabel) {
+  const base = MENU.find(m => m.id === itemId);
+  if (!base) return;
+  const item = itemDisplay(base);
+  if (!item || item.available === false) return;
+  let variant = null;
+  if (item.variants && item.variants.length) {
+    let idx = 0;
+    if (variantLabel) {
+      const found = item.variants.findIndex(v => v.l === variantLabel);
+      if (found >= 0) idx = found;
+    }
+    item._selectedVariant = idx;
+    variant = item.variants[idx];
+  }
+  const current = cart[itemId] ? cart[itemId].qty : 0;
+  cart[itemId] = {
+    item,
+    qty: current + 1,
+    variant,
+    price: variant ? variant.p : item.price,
+  };
+  trackEvent('upsell_accepted', {
+    item_id: itemId,
+    value: variant ? variant.p : item.price,
+  });
+  const qtyEl = document.getElementById(`qty-${itemId}`);
+  const minusEl = document.getElementById(`minus-${itemId}`);
+  const next = cart[itemId].qty;
+  if (qtyEl) {
+    qtyEl.textContent = next > 0 ? next : '+';
+    qtyEl.style.color = next > 0 ? '#C9A84C' : '#333';
+  }
+  if (minusEl) {
+    minusEl.disabled = next === 0;
+    minusEl.className = `qty-btn ${next === 0 ? 'zero' : ''}`;
+  }
+  applyPromoToCart();
+  updateCartUI();
+  try {
+    if (document.getElementById('view-checkout') && document.getElementById('view-checkout').style.display !== 'none') {
+      buildCheckoutSummary();
+    }
+  } catch (_) {}
+}
+
+function renderCartUpsellHtml() {
+  const u = pickCartUpsell();
+  if (!u) {
+    _lastCartUpsellShownKey = '';
+    return '';
+  }
+  const shownKey = `${u.headline}|${u.primary.id}|${u.secondary.id}`;
+  if (_lastCartUpsellShownKey !== shownKey) {
+    _lastCartUpsellShownKey = shownKey;
+    trackEvent('upsell_shown', { item_id: u.primary.id, value: u.primary.price });
+  }
+  const esc = (s) => String(s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  const btn = (opt, isPrimary) => {
+    const vl = opt.variantLabel ? `'${esc(opt.variantLabel)}'` : 'null';
+    return `<button type="button" onclick="acceptCartUpsell('${esc(opt.id)}', ${vl})"
+      style="flex:1;min-width:120px;padding:10px 12px;border-radius:10px;border:1px solid ${isPrimary ? '#C9A84C' : '#2a2318'};
+      background:${isPrimary ? 'linear-gradient(135deg,#C9A84C,#e8c76a)' : '#15120d'};color:${isPrimary ? '#000' : '#C9A84C'};
+      font-size:13px;font-weight:700;cursor:pointer;">
+      ${opt.label} · ${fmtPrice(opt.price)}
+    </button>`;
+  };
+  return `
+    <div style="margin:14px 0 4px;padding:14px;border-radius:12px;border:1px solid #2a2318;background:#14110c;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px;">
+        <p style="margin:0;font-size:14px;font-weight:700;color:#fff;">${u.headline}</p>
+        <button type="button" onclick="dismissCartUpsell()" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;white-space:nowrap;padding:0;">Nein danke</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${btn(u.primary, true)}
+        ${btn(u.secondary, false)}
+      </div>
+    </div>`;
+}
 
 function fmtPrice(p) { return p.toFixed(2).replace('.',',') + ' €'; }
 
@@ -1045,7 +1518,7 @@ function renderCartItems() {
       </div>
       <span style="font-size:14px;font-weight:700;min-width:60px;text-align:right;">${fmtPrice(e.price * e.qty)}</span>
     </div>
-  `).join('');
+  `).join('') + renderCartUpsellHtml();
 
   const sub  = subtotalPrice();
   const fee  = deliveryFee();
@@ -1104,29 +1577,145 @@ function showView(name) {
   document.getElementById('view-checkout').style.display = name==='checkout' ? 'block' : 'none';
   document.getElementById('view-success').style.display  = name==='success'  ? 'block' : 'none';
 
-  if (name === 'checkout') buildCheckoutSummary();
+  if (name === 'checkout') { buildCheckoutSummary(); loadStampHint(); updateStudentHint(); refreshOrderOptions(); refreshCheckoutAccountUI(); }
+}
+
+// ── STEMPEL-HINT (eingeloggte Kunden) ─────────────────────────────────────────
+let _stampPreview = null;
+let _selectedCoupon = null;
+
+async function loadStampHint() {
+  const box = document.getElementById('stamp-hint-box');
+  if (!box) return;
+  const subtotal = totalPrice();
+  const deliveryType = (typeof orderType !== 'undefined' && orderType === 'delivery') ? 'lieferung' : 'abholung';
+  try {
+    const r = await fetch(`/api/customer/stamp-preview?subtotal=${subtotal.toFixed(2)}&delivery_type=${deliveryType}`, {
+      credentials: 'include',
+    });
+    if (!r.ok) { box.style.display = 'none'; return; }
+    const data = await r.json();
+    _stampPreview = data;
+    box.style.display = 'block';
+    const txt = document.getElementById('stamp-hint-text');
+    const sub = document.getElementById('stamp-hint-sub');
+    if (data.will_earn) {
+      txt.textContent = '✦ Mit dieser Bestellung erhältst du einen Stempel.';
+      sub.textContent = `${data.progress + 1} von ${data.needed} Stempeln gesammelt.`;
+    } else if (data.missing_for_stamp > 0) {
+      txt.textContent = `Dir fehlen noch ${data.missing_for_stamp.toFixed(2)} € Warenwert bis zum nächsten Stempel.`;
+      sub.textContent = `Mindestbestellwert für Stempel: ${data.min_value.toFixed(2)} €`;
+    } else {
+      txt.textContent = 'Deine Stempelkarte ist aktiv.';
+      sub.textContent = `${data.progress} von ${data.needed} Stempeln gesammelt.`;
+    }
+    // Gutscheine befüllen
+    const coupons = data.coupons || [];
+    const couponSec = document.getElementById('stamp-coupon-section');
+    const couponSel = document.getElementById('stamp-coupon-select');
+    if (coupons.length > 0) {
+      couponSec.style.display = 'block';
+      couponSel.innerHTML = '<option value="">– Kein Gutschein –</option>';
+      coupons.forEach(c => {
+        const label = c.type === 'fixed'
+          ? `${c.code} (${parseFloat(c.value).toFixed(2)} € Rabatt)`
+          : `${c.code} (${c.value}% Rabatt)`;
+        couponSel.innerHTML += `<option value="${c.code}">${label}</option>`;
+      });
+      couponSel.onchange = () => { validateCoupon(couponSel.value, subtotal); };
+    } else {
+      couponSec.style.display = 'none';
+    }
+  } catch { box.style.display = 'none'; }
+}
+
+async function validateCoupon(code, subtotal) {
+  const info = document.getElementById('stamp-coupon-info');
+  if (!code) { _selectedCoupon = null; if (info) info.style.display = 'none'; return; }
+  try {
+    const r = await fetch('/api/customer/coupon/validate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ code, subtotal }),
+    });
+    const data = await r.json();
+    if (r.ok && data.ok) {
+      _selectedCoupon = data;
+      if (info) {
+        info.style.display = 'block';
+        info.textContent = `✔ Gutschein gültig: ${data.discount.toFixed(2)} € Rabatt werden angewendet.`;
+      }
+    } else {
+      _selectedCoupon = null;
+      if (info) { info.style.display = 'block'; info.style.color = '#ef4444'; info.textContent = data.error || 'Ungültiger Gutschein'; }
+    }
+  } catch { _selectedCoupon = null; }
 }
 
 // ── CHECKOUT HELPERS ───────────────────────────────────────────────────────
 function setOrderType(t) {
   orderType = t;
-  document.getElementById('opt-pickup').classList.toggle('active',   t==='pickup');
-  document.getElementById('opt-delivery').classList.toggle('active', t==='delivery');
-  document.getElementById('addr-field').style.display = t==='delivery' ? 'block' : 'none';
+  document.getElementById('opt-pickup')?.classList.toggle('active',   t==='pickup');
+  document.getElementById('opt-delivery')?.classList.toggle('active', t==='delivery');
+  document.getElementById('top-opt-pickup')?.classList.toggle('active',   t==='pickup');
+  document.getElementById('top-opt-delivery')?.classList.toggle('active', t==='delivery');
+  const addr = document.getElementById('addr-field');
+  if (addr) addr.style.display = t==='delivery' ? 'block' : 'none';
   renderWaitBadge();
   buildCheckoutSummary();
-  // Cart-Bar-Total aktualisieren
   const total = totalPrice();
   const count = totalItems();
   if (count > 0) document.getElementById('bar-total').textContent = fmtPrice(total);
+  refreshOrderOptions();
+  if (t === 'delivery') {
+    ['f-plz','f-city','f-street'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el._zoneBound) {
+        el.addEventListener('change', checkZoneLive);
+        el._zoneBound = true;
+      }
+    });
+  }
+}
+
+async function checkZoneLive() {
+  const hint = document.getElementById('zone-hint');
+  if (orderType !== 'delivery') return;
+  const plz = document.getElementById('f-plz')?.value.trim() || '';
+  const city = document.getElementById('f-city')?.value.trim() || '';
+  const street = document.getElementById('f-street')?.value.trim() || '';
+  if (!plz && !city) return;
+  try {
+    const r = await fetch('/api/delivery-check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plz, city, street }),
+    });
+    const z = await r.json();
+    if (hint) {
+      hint.style.color = z.ok ? '#86efac' : '#fca5a5';
+      hint.textContent = z.ok
+        ? (z.message || 'Lieferung möglich') + (z.fee_eur != null ? ` · Gebühr ${fmtPrice(z.fee_eur)}` : '')
+        : (z.message || 'Außerhalb Liefergebiet');
+    }
+    if (z.ok && z.fee_eur != null) {
+      DELIVERY_FEE = z.fee_eur;
+      if (z.min_order_eur != null) MIN_ORDER_DELIVERY = z.min_order_eur;
+      buildCheckoutSummary();
+      updateCartUI();
+    }
+  } catch (_) {}
 }
 
 function setPayment(p) {
   payMethod = p;
   ['cash','card','stripe'].forEach(k => {
-    document.getElementById('pay-'+k).classList.toggle('sel', k===p);
+    const el = document.getElementById('pay-'+k);
+    if (el) el.classList.toggle('sel', k===p);
   });
-  document.getElementById('stripe-hint').style.display = p==='stripe' ? 'block' : 'none';
+  const hint = document.getElementById('stripe-hint');
+  if (hint) hint.style.display = p==='stripe' ? 'block' : 'none';
 }
 
 function buildCheckoutSummary() {
@@ -1144,6 +1733,9 @@ function buildCheckoutSummary() {
       <span>Liefergebühr</span>
       <span style="color:#C9A84C;">${fmtPrice(fee)}</span>
     </div>` : '');
+
+  const upsellEl = document.getElementById('co-upsell');
+  if (upsellEl) upsellEl.innerHTML = renderCartUpsellHtml();
 
   document.getElementById('co-total').textContent = fmtPrice(sub + fee);
 }
@@ -1164,27 +1756,47 @@ async function submitToBackend(orderPayload) {
   const r = await fetch(`${API_BASE}/order`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify(orderPayload),
   });
-  if (!r.ok) throw new Error('Backend-Fehler ' + r.status);
-  return await r.json();
+  let body = null;
+  try { body = await r.json(); } catch (_) {}
+  if (!r.ok) {
+    const msg = (body && body.error) || ('Backend-Fehler ' + r.status);
+    throw new Error(msg);
+  }
+  return body;
 }
 
 // ── SUBMIT ORDER ───────────────────────────────────────────────────────────
 async function submitOrder() {
+  if (submitInFlight) return;
   const name  = document.getElementById('f-name').value.trim();
   const phone = document.getElementById('f-phone').value.trim();
-  const addr  = document.getElementById('f-addr').value.trim();
   const email = document.getElementById('f-email').value.trim();
   const note  = document.getElementById('f-note').value.trim();
   const time  = document.getElementById('f-time').value;
+  const street = document.getElementById('f-street')?.value.trim() || '';
+  const house = document.getElementById('f-house')?.value.trim() || '';
+  const plz = document.getElementById('f-plz')?.value.trim() || '';
+  const city = document.getElementById('f-city')?.value.trim() || '';
+  const floor = document.getElementById('f-floor')?.value.trim() || '';
+  const doorbell = document.getElementById('f-doorbell')?.value.trim() || '';
+  let addr = '';
+  if (orderType === 'delivery') {
+    if (!street || !house || !plz || !city) {
+      alert('Bitte Straße, Hausnummer, PLZ und Ort angeben.');
+      return;
+    }
+    addr = `${street} ${house}, ${plz} ${city}`;
+    if (floor) addr += `, Etage ${floor}`;
+    if (doorbell) addr += `, Klingel: ${doorbell}`;
+    const hidden = document.getElementById('f-addr');
+    if (hidden) hidden.value = addr;
+  }
 
   if (!name || !phone) {
     alert('Bitte Name und Telefonnummer ausfüllen.');
-    return;
-  }
-  if (orderType === 'delivery' && !addr) {
-    alert('Bitte Lieferadresse angeben.');
     return;
   }
   if (totalItems() === 0) {
@@ -1196,7 +1808,10 @@ async function submitOrder() {
     return;
   }
 
-  // Disable button & show spinner
+  // Checkout-Event tracken
+  trackEvent('checkout_started', { value: subtotalPrice() + deliveryFee(), items_count: Object.keys(cart).length });
+
+  submitInFlight = true;
   const btn   = document.getElementById('submit-btn');
   const icon  = document.getElementById('submit-icon');
   const label = document.getElementById('submit-label');
@@ -1206,33 +1821,33 @@ async function submitOrder() {
 
   const orderNumber   = generateOrderNumber();
   const orderTypeLabel = orderType === 'pickup' ? 'Abholung' : 'Lieferung';
-  const paymentLabel   = { cash:'Barzahlung', card:'EC-/Kreditkarte', stripe:'Online (Stripe)' }[payMethod];
-  const timeLabel      = { asap:'So schnell wie möglich', '30':'ca. 30 Min.', '45':'ca. 45 Min.', '60':'ca. 60 Min.' }[time];
-
-  const items = Object.values(cart).map(e =>
-    `${e.qty}\u00d7 ${e.item.name}${e.variant ? ` (${e.variant.l})` : ''} = ${fmtPrice(e.price * e.qty)}`
-  ).join('\n');
+  const paymentLabel   = { cash:'Barzahlung', card:'Karte am Lesegerät', stripe:'Online (Stripe)' }[payMethod];
+  const timeOpt = orderOptions && orderOptions.slots && orderOptions.slots.find(s => s.id === time);
+  const timeLabel = timeOpt ? timeOpt.label : (time === 'asap' ? 'So schnell wie möglich' : time);
 
   const sub   = subtotalPrice();
   const fee   = deliveryFee();
   const grand = sub + fee;
+  let couponDiscount = 0;
+  if (_selectedCoupon && _selectedCoupon.discount) {
+    couponDiscount = parseFloat(_selectedCoupon.discount) || 0;
+  }
+  const payTotal = Math.max(0, grand - couponDiscount);
 
   const payload = {
     name, phone, orderNumber,
     orderType:    orderTypeLabel,
-    address:      addr || '\u2013',
+    address:      addr || '–',
     time:         timeLabel,
     payment:      paymentLabel,
-    items,
     subtotal:     fmtPrice(sub),
     deliveryFee:  fee > 0 ? fmtPrice(fee) : null,
-    total:        fmtPrice(grand),
-    note:         note || '\u2013',
-    timestamp:    new Date().toLocaleString('de-DE'),
+    total:        fmtPrice(payTotal),
+    note:         note || '–',
     isDelivery:   orderType === 'delivery',
+    email,
   };
 
-  // ─── Backend API (GHL-Sync sicher serverseitig) ────────────────────────────
   try {
     const nameParts = name.trim().split(/\s+/);
     await submitToBackend({
@@ -1241,25 +1856,34 @@ async function submitOrder() {
       phone,
       email:        email || '',
       address:      addr || '',
+      street, houseNumber: house, plz, city, floor, doorbell,
       deliveryType: orderType === 'pickup' ? 'abholung' : 'lieferung',
       payMethod,
       items: Object.values(cart).map(e => ({
-        name:  e.item.name + (e.isFree ? ' [GRATIS 🎁]' : (e.variant ? ` (${e.variant.l})` : '')),
+        id:    e.item.id,
+        name:  e.item.name + (e.isFree ? ' [GRATIS]' : (e.variant ? ` (${e.variant.l})` : '')),
         price: e.isFree ? 0 : e.price,
         qty:   e.qty,
         free:  e.isFree || false,
+        variant: e.variant ? e.variant.l : '',
       })),
       promoApplied: activePromo ? (activePromo.title || activePromo.description || '') : '',
-      total:       parseFloat(grand.toFixed(2)),
+      couponCode:   (_selectedCoupon && _selectedCoupon.code) ? _selectedCoupon.code : '',
+      total:       parseFloat(payTotal.toFixed(2)),
       wunschzeit:  timeLabel,
       notes:       note || '',
       orderNumber,
     });
   } catch(e) {
-    console.warn('API sync error (non-blocking):', e);
+    trackEvent('checkout_failed', { error: e.message });
+    alert(e.message || 'Bestellung fehlgeschlagen. Bitte erneut versuchen.');
+    submitInFlight = false;
+    btn.disabled = false;
+    icon.innerHTML = '<i class="fas fa-paper-plane"></i>';
+    label.textContent = 'Bestellung absenden';
+    return;
   }
 
-  // ─── Stripe Payment Redirect ────────────────────────────────────────────────
   if (payMethod === 'stripe' && STRIPE_LINK !== 'DEIN_STRIPE_PAYMENT_LINK_HIER') {
     sessionStorage.setItem('sh_pending_order', JSON.stringify(payload));
     window.location.href = STRIPE_LINK
@@ -1268,8 +1892,25 @@ async function submitOrder() {
     return;
   }
 
-  // ─── Erfolgsanzeige ────────────────────────────────────────────────────────
+  lastOrderNumber = orderNumber;
+  trackEvent('order_completed', {
+    order_number: orderNumber,
+    value: payTotal,
+    delivery_type: orderType,
+    pay_method: payMethod,
+  });
   showSuccess(payload);
+  // Prefill Konto-Registrierung
+  try {
+    const arE = document.getElementById('ar-email');
+    const arP = document.getElementById('ar-phone');
+    const arN = document.getElementById('ar-name');
+    if (arE) arE.value = email || '';
+    if (arP) arP.value = phone || '';
+    if (arN) arN.value = name || '';
+  } catch (_) {}
+  startStatusPoll(orderNumber);
+  submitInFlight = false;
 }
 
 function showSuccess(p) {
@@ -1283,7 +1924,7 @@ function showSuccess(p) {
     <i class="fas fa-clock" style="color:#C9A84C;font-size:18px;flex-shrink:0;"></i>
     <div>
       <div style="color:#C9A84C;font-weight:700;font-size:15px;">Ca. ${waitMin} Minuten</div>
-      <div style="color:#666;font-size:12px;">${p.isDelivery ? 'Lieferzeit' : 'Wartezeit bis zur Abholung'}</div>
+      <div style="color:#666;font-size:12px;">${p.isDelivery ? 'Lieferzeit' : 'Wartezeit bis zur Abholung'} · Annahme noch ausstehend</div>
     </div>
   </div>`;
 
@@ -1292,6 +1933,7 @@ function showSuccess(p) {
     row('Name', p.name) +
     row('Telefon', p.phone) +
     row('Bestellart', p.orderType) +
+    (p.isDelivery ? row('Adresse', p.address) : '') +
     row('Zeit', p.time) +
     row('Zahlung', p.payment) +
     (p.deliveryFee ? row('Zwischensumme', p.subtotal) + row('Liefergebühr', p.deliveryFee) : '') +
@@ -1300,22 +1942,178 @@ function showSuccess(p) {
       <span style="color:#C9A84C;font-weight:700;">${p.total}</span>
     </div>` +
     waitLine;
+  const stLabel = document.getElementById('success-status-label');
+  if (stLabel) stLabel.textContent = 'Annahme noch ausstehend';
+  const linkWrap = document.getElementById('success-status-link-wrap');
+  const linkEl = document.getElementById('success-status-link');
+  if (linkWrap && linkEl && p.orderNumber) {
+    const url = `${location.origin}/bestellen?status=${encodeURIComponent(p.orderNumber)}`;
+    linkEl.href = url;
+    linkEl.textContent = 'Live-Status jederzeit öffnen';
+    linkWrap.style.display = 'block';
+  }
+  renderStatusSteps({ awaiting_accept: true, steps: [
+    { id:'eingegangen', label:'Eingegangen', done:true, current:true },
+    { id:'angenommen', label:'Annahme ausstehend', done:false, current:false },
+    { id:'in_zubereitung', label:'Zubereitung', done:false, current:false },
+    { id:'ready', label:'Fertig / unterwegs', done:false, current:false },
+    { id:'done', label:'Abgeschlossen', done:false, current:false },
+  ]});
   showView('success');
   document.getElementById('cart-bar').classList.remove('show');
 }
 
+function renderStatusSteps(st) {
+  const el = document.getElementById('success-steps');
+  if (!el || !st || !st.steps) return;
+  el.innerHTML = st.steps.map(s => `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <span style="width:10px;height:10px;border-radius:50%;background:${s.current?'#C9A84C':(s.done?'#22c55e':'#333')};flex-shrink:0;"></span>
+      <span style="font-size:13px;color:${s.current?'#C9A84C':(s.done?'#ccc':'#555')};font-weight:${s.current?700:500};">${s.label}</span>
+    </div>`).join('');
+}
+
+function startStatusPoll(nr) {
+  if (statusPollTimer) clearInterval(statusPollTimer);
+  const tick = async () => {
+    try {
+      const r = await fetch(`/api/order-status/${encodeURIComponent(nr)}`);
+      if (!r.ok) return;
+      const data = await r.json();
+      const st = data.status || {};
+      const stLabel = document.getElementById('success-status-label');
+      if (stLabel) stLabel.textContent = st.awaiting_accept ? 'Annahme noch ausstehend' : (st.label || '');
+      renderStatusSteps(st);
+      if (st.code === 'fertig' || st.code === 'storniert') clearInterval(statusPollTimer);
+    } catch (_) {}
+  };
+  tick();
+  statusPollTimer = setInterval(tick, 12000);
+}
+
+function offerAccountSave() {
+  /* legacy no-op – ersetzt durch registerAfterOrder */
+}
+
+async function registerAfterOrder() {
+  const err = document.getElementById('ar-err');
+  const ok = document.getElementById('ar-ok');
+  if (err) err.style.display = 'none';
+  if (ok) ok.style.display = 'none';
+  const email = (document.getElementById('ar-email')?.value || '').trim();
+  const phone = (document.getElementById('ar-phone')?.value || '').trim();
+  const name = (document.getElementById('ar-name')?.value || '').trim();
+  const pw = document.getElementById('ar-pass')?.value || '';
+  const pw2 = document.getElementById('ar-pass2')?.value || '';
+  const marketing = !!document.getElementById('ar-marketing')?.checked;
+  if (!email || pw.length < 8) {
+    if (err) { err.textContent = 'E-Mail und Passwort (min. 8 Zeichen) nötig.'; err.style.display = 'block'; }
+    return;
+  }
+  if (pw !== pw2) {
+    if (err) { err.textContent = 'Passwörter stimmen nicht überein.'; err.style.display = 'block'; }
+    return;
+  }
+  try {
+    const r = await fetch('/api/customer/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        email, password: pw, password2: pw2,
+        display_name: name, phone,
+        marketing_consent: marketing,
+      }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      if (err) { err.textContent = d.error || 'Registrierung fehlgeschlagen'; err.style.display = 'block'; }
+      return;
+    }
+    if (ok) ok.style.display = 'block';
+    const form = document.getElementById('account-register-form');
+    if (form) {
+      ['ar-pass','ar-pass2'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    }
+    refreshCheckoutAccountUI();
+  } catch (_) {
+    if (err) { err.textContent = 'Verbindungsfehler'; err.style.display = 'block'; }
+  }
+}
+
+function showCheckoutLogin() {
+  const f = document.getElementById('checkout-login-form');
+  const c = document.getElementById('checkout-login-cta');
+  if (f) f.style.display = 'block';
+  if (c) c.style.display = 'none';
+}
+
+async function checkoutInlineLogin() {
+  const err = document.getElementById('co-login-err');
+  if (err) err.style.display = 'none';
+  const email = (document.getElementById('co-login-email')?.value || '').trim();
+  const password = document.getElementById('co-login-pass')?.value || '';
+  try {
+    const r = await fetch('/api/customer/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      if (err) { err.textContent = d.error || 'Login fehlgeschlagen'; err.style.display = 'block'; }
+      return;
+    }
+    await refreshCheckoutAccountUI();
+    loadStampHint();
+    updateStudentHint();
+  } catch (_) {
+    if (err) { err.textContent = 'Verbindungsfehler'; err.style.display = 'block'; }
+  }
+}
+
+async function refreshCheckoutAccountUI() {
+  const logged = document.getElementById('checkout-logged-in');
+  const form = document.getElementById('checkout-login-form');
+  const cta = document.getElementById('checkout-login-cta');
+  const offer = document.getElementById('account-offer');
+  try {
+    const r = await fetch('/api/customer/me', { credentials: 'include' });
+    if (r.ok) {
+      const d = await r.json();
+      const name = (d.customer && (d.customer.display_name || d.customer.email)) || 'eingeloggt';
+      if (logged) { logged.style.display = 'block'; logged.textContent = '✓ Eingeloggt als ' + name; }
+      if (form) form.style.display = 'none';
+      if (cta) cta.style.display = 'none';
+      if (offer) offer.style.display = 'none';
+      return true;
+    }
+  } catch (_) {}
+  if (logged) logged.style.display = 'none';
+  if (cta) cta.style.display = 'flex';
+  if (offer) offer.style.display = 'block';
+  return false;
+}
+
 function resetOrder() {
+  if (statusPollTimer) clearInterval(statusPollTimer);
   Object.keys(cart).forEach(k => delete cart[k]);
   renderMenu();
   closeCart();
   document.getElementById('f-name').value  = '';
   document.getElementById('f-phone').value = '';
   document.getElementById('f-email').value = '';
-  document.getElementById('f-addr').value  = '';
-  document.getElementById('f-note').value  = '';
+  ['f-addr','f-street','f-house','f-plz','f-floor','f-doorbell','f-note'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const city = document.getElementById('f-city');
+  if (city) city.value = 'Mechernich';
   setOrderType('pickup');
   setPayment('cash');
   updateCartUI();
+  submitInFlight = false;
 }
 
 // ── AKTIONS-SYSTEM ────────────────────────────────────────────────────────
@@ -1335,8 +2133,21 @@ async function loadPromo() {
 
 function showPromoBanner(promo) {
   const banner = document.getElementById('promo-banner');
-  document.getElementById('promo-title').textContent = promo.title || '🎁 Sonderaktion aktiv!';
-  document.getElementById('promo-desc').textContent  = promo.description || '';
+  const title = promo.title || 'Sonderaktion aktiv!';
+  let desc = (promo.description || '').trim();
+  if (!desc) {
+    const free = promo.free_item_name || promo.free_item_variant || '';
+    const trig = promo.trigger_value || '';
+    if (free && trig) {
+      desc = promo.trigger_type === 'category'
+        ? `Bei ${trig}: ${free} gratis`
+        : `Bei „${trig}“: ${free} gratis`;
+    } else if (free) {
+      desc = `${free} gratis zur Aktion`;
+    }
+  }
+  document.getElementById('promo-title').textContent = title;
+  document.getElementById('promo-desc').textContent  = desc;
   banner.style.display = 'block';
 
   if (promo.valid_until) {
@@ -1473,51 +2284,184 @@ function observeCategories() {
   });
 }
 
-// ── OPEN/CLOSED STATUS ────────────────────────────────────────────────────
+// ── OPEN/CLOSED STATUS (SoT: /api/shop-status) ────────────────────────────
 function checkStatus() {
-  const now  = new Date();
-  const day  = now.getDay();   // 0=Sun, 3=Wed, 6=Sat
-  const h    = now.getHours();
-  const m    = now.getMinutes();
-  const mins = h * 60 + m;
-  const withinHours = day !== 3 && mins >= 11*60 && mins < 21*60;
-  const open = (typeof siteOnline === 'undefined' || siteOnline !== false) && withinHours;
+  let open;
+  let label;
+  let hoursTxt;
+  const day = new Date().getDay();
 
-  const dot   = document.getElementById('status-dot');
-  const text  = document.getElementById('status-text');
-  const hours = document.getElementById('status-hours');
+  if (shopStatus) {
+    open = !!shopStatus.store_open;
+    label = shopStatus.label || (open ? 'Geöffnet' : 'Geschlossen');
+    hoursTxt = open
+      ? ('· bis ' + ((shopStatus.hours_today && shopStatus.hours_today[0] && shopStatus.hours_today[0][1]) || '21:00'))
+      : ('· ' + (
+          shopStatus.label === 'Bestellung geschlossen'
+            ? 'heute keine Bestellung mehr'
+            : (shopStatus.next_open_label || shopStatus.hours_today_label || 'Mo–Di, Do–So 11–21')
+        ));
+    const nextEl = document.getElementById('next-open-hint');
+    if (nextEl) {
+      if (!open && shopStatus.next_open_label) {
+        nextEl.style.display = 'block';
+        nextEl.textContent = shopStatus.next_open_label;
+      } else {
+        nextEl.style.display = 'none';
+      }
+    }
+  } else {
+    const now  = new Date();
+    const h    = now.getHours();
+    const m    = now.getMinutes();
+    const mins = h * 60 + m;
+    const withinHours = day !== 3 && mins >= 11*60 && mins < 21*60;
+    open = (typeof siteOnline === 'undefined' || siteOnline !== false) && withinHours;
+    label = open ? 'Geöffnet' : (day === 3 ? 'Ruhetag (Mi)' : 'Geschlossen');
+    hoursTxt = open ? '· bis 21:00' : '· Mo–Di, Do–So 11–21';
+  }
+
   const pill  = document.getElementById('status-pill');
-  const dotV  = document.getElementById('status-dot-vis');
   const labV  = document.getElementById('status-label-vis');
   const hrsV  = document.getElementById('status-hours-vis');
 
-  const label = open
-    ? 'Geöffnet'
-    : (day === 3 ? 'Ruhetag (Mi)' : 'Geschlossen');
-  const hoursTxt = open
-    ? '· bis 21:00'
-    : '· Mo–Di, Do–So 11–21';
-
-  if (dot)   { dot.style.background = open ? '#22c55e' : '#ef4444'; }
-  if (text)  { text.style.color = open ? '#22c55e' : '#ef4444'; text.textContent = label; }
-  if (hours) { hours.textContent = hoursTxt; }
-  if (pill)  {
-    pill.className = 'status-pill ' + (open ? 'open' : 'closed');
-  }
+  if (pill)  pill.className = 'status-pill ' + (open ? 'open' : 'closed');
   if (labV) labV.textContent = label;
   if (hrsV) hrsV.textContent = hoursTxt;
 }
+
+// ── KONTO-HEADER AUTH-STATE ──────────────────────────────────────────────
+(function () {
+  var link = document.getElementById('konto-hdr-link');
+  if (!link) return;
+  fetch('/api/customer/me', { credentials: 'include' })
+    .then(function (r) {
+      if (!r.ok) return;
+      return r.json().then(function (d) {
+        var name = (d && d.customer && d.customer.display_name) || '';
+        link.style.color = '#C9A84C'; // Gold = eingeloggt
+        link.title = name ? ('Mein Konto (' + name.split(' ')[0] + ')') : 'Mein Konto';
+        link.setAttribute('aria-label', name ? ('Konto von ' + name.split(' ')[0]) : 'Mein Kundenkonto');
+      });
+    })
+    .catch(function () { /* kein Fehler anzeigen */ });
+})();
+
+// ── ANALYTICS TRACKING ─────────────────────────────────────────────────────
+const _trackSessionId = 'sess_' + Math.random().toString(36).slice(2);
+function trackEvent(eventType, extra) {
+  try {
+    fetch(`${API_BASE.replace('/api','')}/api/track`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        event: eventType,
+        session_id: _trackSessionId,
+        delivery_type: orderType,
+        ...(extra || {}),
+      }),
+    }).catch(() => {});
+  } catch (_) {}
+}
+
+// Cart-View tracken wenn Warenkorb geöffnet wird
+document.addEventListener('DOMContentLoaded', () => {
+  trackEvent('menu_opened');
+  // Warenkorb-Button Tracking
+  const cartBtn = document.getElementById('cart-toggle') || document.getElementById('fab-cart');
+  if (cartBtn) {
+    cartBtn.addEventListener('click', () => trackEvent('cart_viewed'));
+  }
+});
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 loadSiteSettings();   // Online/Offline + Wartezeit + Menu-Overrides
 renderMenu();
 checkStatus();
 loadPromo();
+// Schülerangebote laden (ohne Fehler wenn nicht aktiv)
+loadStudentOffersData().then(() => {
+  checkStudentEligibility();
+  renderMenu(); // re-render mit Schüler-Badges
+});
 setInterval(checkStatus, 60000);
 setInterval(loadPromo, 60000);
 setInterval(loadSiteSettings, 90000);  // Settings alle 90s prüfen
 setTimeout(observeCategories, 100);
 setTimeout(updateTabFades, 150);
+
+// Reorder-Warenkorb wiederherstellen (Objekt-Cart, nicht Array)
+if (window.location.search.includes('reorder=1')) {
+  try {
+    const rc = localStorage.getItem('reorder_cart');
+    if (rc) {
+      const items = JSON.parse(rc);
+      (items || []).forEach(it => {
+        const id = it.id || it.item_id;
+        if (!id) return;
+        const menuItem = MENU.find(m => m.id === id);
+        if (!menuItem) return;
+        const qty = Math.max(1, parseInt(it.qty || it.quantity || 1, 10) || 1);
+        const varLabel = (it.variant || '').toString();
+        let variant = null;
+        if (menuItem.variants && menuItem.variants.length) {
+          variant = menuItem.variants.find(v => v.l === varLabel) || menuItem.variants[0];
+        }
+        if (cart[id]) {
+          cart[id].qty += qty;
+        } else {
+          cart[id] = {
+            item: menuItem,
+            qty,
+            variant,
+            price: variant ? variant.p : (typeof it.price === 'number' ? it.price : menuItem.price),
+          };
+        }
+      });
+      localStorage.removeItem('reorder_cart');
+      try { renderMenu(); } catch (_) {}
+      try { updateCartUI(); } catch (_) {}
+      try { openCart(); } catch (_) {}
+      trackEvent('reorder_started', { source_order: localStorage.getItem('reorder_source_order') });
+      localStorage.removeItem('reorder_source_order');
+    }
+  } catch (_) {}
+}
+
+// Live-Status Deep-Link aus Mail: /bestellen?status=SH-…
+(function openStatusFromQuery() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const nr = (params.get('status') || '').trim();
+    if (!nr) return;
+    lastOrderNumber = nr;
+    showView('success');
+    const stLabel = document.getElementById('success-status-label');
+    if (stLabel) stLabel.textContent = 'Status wird geladen…';
+    const info = document.getElementById('success-info');
+    if (info) {
+      info.innerHTML = `<div style="display:flex;justify-content:space-between;border-bottom:1px solid #222;padding-bottom:8px;margin-bottom:8px;">
+        <span style="color:#666;">Bestellnummer</span>
+        <span style="color:#C9A84C;font-weight:700;">${nr}</span>
+      </div>`;
+    }
+    const linkWrap = document.getElementById('success-status-link-wrap');
+    const linkEl = document.getElementById('success-status-link');
+    if (linkWrap && linkEl) {
+      linkEl.href = `${location.origin}/bestellen?status=${encodeURIComponent(nr)}`;
+      linkEl.textContent = 'Diesen Status-Link speichern';
+      linkWrap.style.display = 'block';
+    }
+    const hint = document.getElementById('success-status-hint');
+    if (hint) hint.textContent = 'Live-Status deiner Bestellung. Aktualisiert sich automatisch.';
+    startStatusPoll(nr);
+    // Menü/Cart ausblenden wenn nur Status
+    try {
+      document.getElementById('cart-bar')?.classList.remove('show');
+    } catch (_) {}
+  } catch (_) {}
+})();
 </script>
 
 <!-- ══ SEITEN-FOOTER ══════════════════════════════════════════════════════════ -->
@@ -1544,8 +2488,8 @@ setTimeout(updateTabFades, 150);
       <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Tel.: 02443 – 3088966 · E-Mail: <a href="mailto:info@snackhouse-mechernich.de" style="color:#C9A84C;">info@snackhouse-mechernich.de</a></p>
       <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">Umsatzsteuer</h3>
       <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen (Kleinunternehmerregelung).</p>
-      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">EU-Streitschlichtung</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;">Die EU-Kommission stellt eine OS-Plattform bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener" style="color:#C9A84C;">ec.europa.eu/consumers/odr</a>. Wir nehmen nicht an Schlichtungsverfahren teil.</p>
+      <!-- [P7] EU-OS-Plattformhinweis: RECHTLICH PRÜFEN – ec.europa.eu/consumers/odr wurde eingestellt. Vor Go-Live juristisch klären ob Verlinkung noch vorgeschrieben ist. -->
+      <!-- EU-OS-Hinweis vorerst entfernt – Fundstelle: order.html modal-impressum. Bitte rechtlich prüfen! -->
     </div>
 
     <div id="modal-datenschutz" style="display:none;">

@@ -108,9 +108,11 @@ _phase_a_mod._main = _sys.modules[__name__]
 app.register_blueprint(_phase_a_bp)
 
 # Design System showcase / AppShell prototype — gated to local|staging|test (404 in production)
-from design_system import design_system_bp as _design_system_bp
-
-app.register_blueprint(_design_system_bp)
+try:
+    from design_system import design_system_bp as _design_system_bp
+    app.register_blueprint(_design_system_bp)
+except ImportError:
+    pass
 
 GHL_TOKEN       = os.getenv("GHL_TOKEN", "")
 GHL_LOC_ID      = os.getenv("GHL_LOC_ID", "")
@@ -596,12 +598,15 @@ def require_agency_admin(f):
 
 
 # Werkzeuge API (platform_registry.yaml) — auth-gated, no business-logic change
-from platform_tools import platform_tools_bp as _platform_tools_bp
+try:
+    from platform_tools import platform_tools_bp as _platform_tools_bp
 
-app.register_blueprint(_platform_tools_bp)
-app.view_functions["platform_tools.agency_tools_list"] = require_agency_admin(
-    app.view_functions["platform_tools.agency_tools_list"]
-)
+    app.register_blueprint(_platform_tools_bp)
+    app.view_functions["platform_tools.agency_tools_list"] = require_agency_admin(
+        app.view_functions["platform_tools.agency_tools_list"]
+    )
+except ImportError:
+    pass
 
 # ── E-Mail ────────────────────────────────────────────────────────────────────
 

@@ -22,6 +22,74 @@ STATUS_FLOW = [
 
 STATUS_MAP = {db: (guest, label) for db, guest, label in STATUS_FLOW}
 
+# Operative Statuswerte (Admin-API)
+ORDER_STATUSES = frozenset(db for db, _g, _l in STATUS_FLOW)
+
+# Erlaubte Übergänge. neu → zubereitung ist absichtlich verboten (P0 Annahme-Flow).
+ALLOWED_TRANSITIONS: dict[str, frozenset[str]] = {
+    "neu": frozenset({"angenommen", "storniert"}),
+    "angenommen": frozenset({"zubereitung", "storniert"}),
+    "zubereitung": frozenset({"unterwegs", "abholbereit", "fertig", "storniert"}),
+    "unterwegs": frozenset({"fertig", "storniert"}),
+    "abholbereit": frozenset({"fertig", "storniert"}),
+    "fertig": frozenset(),
+    "storniert": frozenset(),
+}
+
+ACCEPT_NOTIFY_TEMPLATE = "order_accepted"
+PENDING_NOTIFY_TEMPLATE = "customer_order_received"
+
+
+def can_transition(current: str | None, new_status: str | None) -> bool:
+    """True wenn current → new_status erlaubt ist (inkl. Idempotenz gleicher Status)."""
+    cur = (current or "neu").strip().lower()
+    nxt = (new_status or "").strip().lower()
+    if not nxt or nxt not in ORDER_STATUSES:
+        return False
+    if cur == nxt:
+        return True
+    return nxt in ALLOWED_TRANSITIONS.get(cur, frozenset())
+
+
+def transition_error(current: str | None, new_status: str | None) -> str | None:
+    """Fehlermeldung oder None wenn Übergang ok."""
+    cur = (current or "neu").strip().lower()
+    nxt = (new_status or "").strip().lower()
+    if not nxt:
+        return "Status fehlt"
+    if nxt not in ORDER_STATUSES:
+        return "Ungültiger Status"
+    if cur == nxt:
+        return None
+    if not can_transition(cur, nxt):
+        return f"Übergang {cur} → {nxt} nicht erlaubt"
+    return None
+
+
+def pending_customer_sms(first_name: str, shop_name: str, order_number: str, shop_phone: str) -> str:
+    name = (first_name or "").strip() or "Hallo"
+    return (
+        f"Hallo {name}!\n"
+        f"Deine Bestellung bei {shop_name} ist eingegangen.\n"
+        f"Bestellnr: {order_number}\n"
+        f"Wir prüfen sie gerade. Du erhältst eine weitere Nachricht, "
+        f"sobald wir deine Bestellung angenommen haben.\n"
+        f"Fragen? {shop_phone}"
+    )
+
+
+def accepted_customer_sms(first_name: str, shop_name: str, order_number: str, status_link: str = "") -> str:
+    name = (first_name or "").strip() or "Hallo"
+    base = (
+        f"Hallo {name}!\n"
+        f"Deine Bestellung wurde von {shop_name} angenommen.\n"
+        f"Bestellnr: {order_number}"
+    )
+    link = (status_link or "").strip()
+    if link:
+        return f"{base}\nStatus: {link}"
+    return base
+
 
 def public_status(db_status: str | None) -> dict[str, Any]:
     raw = (db_status or "neu").strip().lower()

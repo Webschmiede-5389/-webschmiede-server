@@ -174,6 +174,7 @@
     .order-card { background: #111; border: 1px solid #2a2318; border-radius: 14px; padding: 18px; margin-bottom: 12px; transition: all .2s; position: relative; overflow: hidden; }
     .order-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; border-radius:4px 0 0 4px; }
     .order-card.neu::before { background:#C9A84C; animation: pulse-gold 2s infinite; }
+    .order-card.angenommen::before { background:#e8c76a; }
     .order-card.zubereitung::before { background:#f59e0b; }
     .order-card.unterwegs::before, .order-card.abholbereit::before { background:#3b82f6; }
     .order-card.fertig::before { background:#22c55e; }
@@ -187,6 +188,7 @@
     .order-phone { font-size:13px; color:#666; }
     .status-label { display:inline-block; padding:4px 12px; border-radius:99px; font-size:11px; font-weight:700; }
     .sl-neu { background:rgba(201,168,76,.12); color:#C9A84C; border:1px solid rgba(201,168,76,.25); }
+    .sl-angenommen { background:rgba(232,199,106,.12); color:#e8c76a; border:1px solid rgba(232,199,106,.25); }
     .sl-zubereitung { background:rgba(245,158,11,.12); color:#f59e0b; border:1px solid rgba(245,158,11,.25); }
     .sl-unterwegs, .sl-abholbereit { background:rgba(59,130,246,.12); color:#3b82f6; border:1px solid rgba(59,130,246,.25); }
     .sl-fertig { background:rgba(34,197,94,.12); color:#22c55e; border:1px solid rgba(34,197,94,.25); }
@@ -362,6 +364,7 @@
       transition: border-color .2s;
     }
     .ops-card.neu        { border-top: 4px solid #ef4444; }
+    .ops-card.angenommen { border-top: 4px solid #C9A84C; }
     .ops-card.zubereitung{ border-top: 4px solid #f59e0b; }
     .ops-card.abholbereit{ border-top: 4px solid #22c55e; }
     .ops-card.unterwegs  { border-top: 4px solid #3b82f6; }
@@ -718,6 +721,7 @@
     <div class="filter-bar">
       <button class="f-pill active" onclick="filterOrders('alle',this)">Alle</button>
       <button class="f-pill" onclick="filterOrders('neu',this)"><i class="fas fa-bell"></i> Neue</button>
+      <button class="f-pill" onclick="filterOrders('angenommen',this)"><i class="fas fa-check"></i> Angenommen</button>
       <button class="f-pill" onclick="filterOrders('zubereitung',this)"><i class="fas fa-fire"></i> Zubereitung</button>
       <button class="f-pill" onclick="filterOrders('unterwegs',this)"><i class="fas fa-motorcycle"></i> Unterwegs</button>
       <button class="f-pill" onclick="filterOrders('abholbereit',this)"><i class="fas fa-check-circle"></i> Abholbereit</button>
@@ -2137,7 +2141,7 @@ function updateStats() {
     const d = new Date(o.created_at + 'Z').toLocaleDateString('de-DE');
     return d === today && o.status !== 'storniert';
   });
-  const active = allOrders.filter(o => ['neu','zubereitung','unterwegs','abholbereit'].includes(o.status));
+  const active = allOrders.filter(o => ['neu','angenommen','zubereitung','unterwegs','abholbereit'].includes(o.status));
   const revenue = todayOrders.reduce((s,o) => s + o.total, 0);
   const liefCount = todayOrders.filter(o => o.delivery_type === 'lieferung').length;
 
@@ -2171,7 +2175,7 @@ function renderOrders() {
   el.innerHTML = filtered.map(renderCard).join('');
 }
 
-const STATUS_LABELS   = { neu:'Neue Bestellung', zubereitung:'In Zubereitung', unterwegs:'Unterwegs', abholbereit:'Abholbereit', fertig:'Fertig', storniert:'Storniert' };
+const STATUS_LABELS   = { neu:'Neue Bestellung', angenommen:'Angenommen', zubereitung:'In Zubereitung', unterwegs:'Unterwegs', abholbereit:'Abholbereit', fertig:'Fertig', storniert:'Storniert' };
 const DELIVERY_LABELS = { lieferung:'Lieferung', abholung:'Abholung' };
 const PAY_LABELS      = { cash:'Bar', card:'EC-Karte', stripe:'Online' };
 
@@ -2189,9 +2193,12 @@ function renderCard(o) {
 
   let btns = '';
   if (o.status === 'neu') {
+    btns = `<button class="btn-action btn-cook"   onclick="setStatus('${o.order_number}','angenommen')"><i class="fas fa-check"></i> Annehmen</button>
+            <button class="btn-action btn-cancel"  onclick="setStatus('${o.order_number}','storniert')">Ablehnen</button>`;
+  } else if (o.status === 'angenommen') {
     btns = `<button class="btn-action btn-cook"   onclick="setStatus('${o.order_number}','zubereitung')"><i class="fas fa-fire"></i> Zubereitung</button>
             <button class="btn-action btn-cancel"  onclick="setStatus('${o.order_number}','storniert')">Stornieren</button>`;
-  } else   if (o.status === 'zubereitung') {
+  } else if (o.status === 'zubereitung') {
     btns = o.delivery_type === 'lieferung'
       ? `<button class="btn-action btn-road"  onclick="setStatus('${o.order_number}','unterwegs')"><i class="fas fa-motorcycle"></i> Unterwegs</button>`
       : `<button class="btn-action btn-ready" onclick="setStatus('${o.order_number}','abholbereit')"><i class="fas fa-check"></i> Abholbereit</button>`;
@@ -2304,7 +2311,8 @@ async function setStatus(orderNumber, newStatus) {
 // ══════════════════════════════════════════════════════════════════════════
 
 const OPS_STATUS_PRIMARY = {
-  neu:         { label:'Annehmen',     icon:'fa-check',         next:'zubereitung', cls:'btn-accept' },
+  neu:         { label:'Annehmen',     icon:'fa-check',         next:'angenommen',  cls:'btn-accept' },
+  angenommen:  { label:'Zubereitung',  icon:'fa-fire',          next:'zubereitung', cls:'btn-cook' },
   zubereitung: { label:'Fertig',       icon:'fa-check-double',  next:null,          cls:'btn-ready'  },
   abholbereit: { label:'Abgeholt',     icon:'fa-hand-holding',  next:'fertig',      cls:'btn-picked' },
   unterwegs:   { label:'Zugestellt',   icon:'fa-motorcycle',    next:'fertig',      cls:'btn-done'   },
@@ -2398,7 +2406,7 @@ function renderOpsCard(o) {
   const phoneClean = (o.phone||'').replace(/\s/g,'');
   let secBtns = '';
   // Verspätung (nicht für fertige Bestellungen)
-  if (['neu','zubereitung','abholbereit','unterwegs'].includes(o.status)) {
+  if (['neu','angenommen','zubereitung','abholbereit','unterwegs'].includes(o.status)) {
     secBtns += `<button class="ops-sec-btn sec-delay" onclick="openDelayModal('${o.order_number}','${o.order_number}')">
       <i class="fas fa-clock"></i> Verspätung
     </button>`;
@@ -2406,6 +2414,11 @@ function renderOpsCard(o) {
   if (o.status === 'neu') {
     secBtns += `<button class="ops-sec-btn sec-cancel" onclick="setStatus('${o.order_number}','storniert')">
       <i class="fas fa-times"></i> Ablehnen
+    </button>`;
+  }
+  if (o.status === 'angenommen') {
+    secBtns += `<button class="ops-sec-btn sec-cancel" onclick="setStatus('${o.order_number}','storniert')">
+      <i class="fas fa-times"></i> Stornieren
     </button>`;
   }
   if (showPhone && phoneClean) {
@@ -2501,13 +2514,15 @@ function renderOpsView() {
 
   if (isLandscapeTablet) {
     const neu          = active.filter(o => o.status === 'neu');
+    const angenommen   = active.filter(o => o.status === 'angenommen');
     const zubereitung  = active.filter(o => o.status === 'zubereitung');
     const bereit       = active.filter(o => ['abholbereit','unterwegs'].includes(o.status));
+    const intake       = [...neu, ...angenommen];
     container.innerHTML = dueBanner + `
       <div class="ops-columns">
         <div class="ops-column">
-          <div class="ops-column-header">📥 Neu (${neu.length})</div>
-          <div class="ops-grid">${neu.map(renderOpsCard).join('') || '<div style="padding:12px;color:#444;font-size:12px;">Keine</div>'}</div>
+          <div class="ops-column-header">📥 Neu / Angenommen (${intake.length})</div>
+          <div class="ops-grid">${intake.map(renderOpsCard).join('') || '<div style="padding:12px;color:#444;font-size:12px;">Keine</div>'}</div>
         </div>
         <div class="ops-column">
           <div class="ops-column-header">🔥 In Zubereitung (${zubereitung.length})</div>

@@ -29,7 +29,7 @@ from typing import Any
 
 _DONE_STATUSES = frozenset({"fertig", "storniert", "abgelehnt"})
 _READY_STATUSES = frozenset({"abholbereit", "unterwegs"})
-_ACTIVE_STATUSES = frozenset({"neu", "zubereitung"})
+_ACTIVE_STATUSES = frozenset({"neu", "angenommen", "zubereitung"})
 
 # Standardvorlaufzeit in Minuten bis zur Fertigstellung (Fallback, wenn kein wait_pickup bekannt)
 DEFAULT_PREP_MINUTES = 20

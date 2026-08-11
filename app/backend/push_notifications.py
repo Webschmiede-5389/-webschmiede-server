@@ -158,7 +158,7 @@ def notify_order_created(db, order: dict) -> None:
         db,
         order["order_number"],
         title=f"{SHOP_NAME}",
-        body=f"Hallo {name}! Bestellung {order['order_number']} ist eingegangen.",
+        body=f"Hallo {name}! Bestellung {order['order_number']} ist eingegangen und wird geprüft.",
         tag=f"order-{order['order_number']}-neu",
     )
 
@@ -166,6 +166,7 @@ def notify_order_created(db, order: dict) -> None:
 def notify_status(db, order: dict, new_status: str) -> None:
     name = order.get("first_name") or "du"
     msgs = {
+        "angenommen": (f"{SHOP_NAME}", f"Hallo {name}! Deine Bestellung wurde angenommen."),
         "zubereitung": (f"{SHOP_NAME}", f"Hey {name}! Deine Bestellung wird gerade zubereitet."),
         "unterwegs": (f"{SHOP_NAME}", "Auf dem Weg! Ca. 15–25 Minuten."),
         "abholbereit": (f"{SHOP_NAME}", "Abholbereit! Deine Bestellung wartet auf dich."),

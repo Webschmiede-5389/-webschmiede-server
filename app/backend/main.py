@@ -35,6 +35,7 @@ import jobs as jobs_svc
 import integrations as integrations_svc
 import shop_status as shop_status_svc
 import order_portal as order_portal_svc
+import shop_mail as shop_mail_svc
 import agency_metrics as agency_metrics_svc
 import agency_ops as agency_ops_svc
 import messaging as messaging_svc
@@ -611,6 +612,7 @@ except ImportError:
 # ── E-Mail ────────────────────────────────────────────────────────────────────
 
 def send_confirmation_email(order):
+    """Pending-Eingangsmail: Bestellung angekommen, noch nicht angenommen."""
     if not SMTP_HOST or not SMTP_USER:
         return
     try:
@@ -628,8 +630,13 @@ def send_confirmation_email(order):
             <h1 style="color:#C9A84C;font-size:22px;margin:0">Snack House Yassine</h1>
             <p style="color:#888;margin:4px 0 0">Dr.-Felix-Gerhardus-Str. 7 · 53894 Mechernich</p>
           </div>
-          <div style="background:#1a1a1a;border-radius:8px;padding:20px;margin-bottom:20px;">
-            <h2 style="color:#22c55e;margin:0 0 4px;font-size:16px">✓ Bestellung eingegangen!</h2>
+          <div style="background:#1a1a1a;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #2a2318;">
+            <h2 style="color:#C9A84C;margin:0 0 8px;font-size:16px">Bestellung eingegangen</h2>
+            <p style="color:#aaa;margin:0 0 10px;font-size:14px;line-height:1.5">
+              Deine Bestellung ist bei Snack House Yassine eingegangen.
+              Wir prüfen sie gerade. Du erhältst eine weitere Nachricht,
+              sobald wir deine Bestellung angenommen haben.
+            </p>
             <p style="color:#888;margin:0;font-size:13px">Bestellnummer: <strong style="color:#C9A84C">{order["order_number"]}</strong></p>
           </div>
           <table style="width:100%;border-collapse:collapse;margin-bottom:16px">
@@ -644,7 +651,7 @@ def send_confirmation_email(order):
             <p style="margin:0 0 4px"><strong style="color:#fff">Wunschzeit:</strong> {order["wunschzeit"] or "So schnell wie möglich"}</p>
             <p style="margin:0"><strong style="color:#fff">Zahlung:</strong> {pay_label}</p>
           </div>
-          {f'<div style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:13px;color:#C9A84C;">🎉 Aktion angewendet: {order["promo_applied"]}</div>' if order.get("promo_applied") else ''}
+          {f'<div style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:13px;color:#C9A84C;">Aktion angewendet: {order["promo_applied"]}</div>' if order.get("promo_applied") else ''}
           <p style="color:#555;font-size:11px;text-align:center;margin-top:24px">
             Fragen? Tel: 02443-3088966 · Mittwoch Ruhetag
           </p>
@@ -652,7 +659,7 @@ def send_confirmation_email(order):
         """
 
         msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"✓ Bestellung {order['order_number']} – Snack House Yassine"
+        msg["Subject"] = f"Bestellung {order['order_number']} eingegangen – Snack House Yassine"
         msg["From"]    = SMTP_FROM
         msg["To"]      = order["email"]
         msg.attach(MIMEText(html, "html"))
@@ -663,6 +670,80 @@ def send_confirmation_email(order):
             s.sendmail(SMTP_FROM, order["email"], msg.as_string())
     except Exception as e:
         app.logger.warning(f"E-Mail Fehler: {e}")
+
+
+def _already_sent_order_template(db, order_number: str, template: str) -> bool:
+    row = db.execute(
+        """SELECT 1 FROM message_log
+           WHERE order_number=? AND template=? AND status='sent'
+           LIMIT 1""",
+        (order_number, template),
+    ).fetchone()
+    return row is not None
+
+
+def send_accepted_notification(db, order: dict) -> bool:
+    """Einmalige Annahme-Benachrichtigung (E-Mail + SMS). True wenn ausgelöst (nicht Retry)."""
+    order_number = order.get("order_number") or ""
+    tpl = order_portal_svc.ACCEPT_NOTIFY_TEMPLATE
+    if not order_number or _already_sent_order_template(db, order_number, tpl):
+        return False
+
+    status_link = ""
+    try:
+        status_link = shop_mail_svc.status_url(order_number)
+    except Exception:
+        status_link = ""
+
+    sms_body = order_portal_svc.accepted_customer_sms(
+        order.get("first_name") or "",
+        SHOP_NAME,
+        order_number,
+        status_link=status_link,
+    )
+    contact_key = order.get("phone") or order.get("email") or order_number
+
+    # Claim zuerst → Retry/Doppelklick sendet nicht erneut
+    log_message(db, contact_key, "notify", tpl, sms_body[:500], "sent", order_number)
+    db.commit()
+
+    if order.get("phone"):
+        send_sms(db, order["phone"], sms_body, f"{tpl}_sms", order_number)
+
+    if SMTP_HOST and SMTP_USER and order.get("email"):
+        try:
+            cta = ""
+            try:
+                cta = shop_mail_svc.status_cta_html(order_number)
+            except Exception:
+                cta = ""
+            html = f"""
+            <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;background:#0e0b08;color:#fff;padding:32px;border-radius:12px;">
+              <h1 style="color:#C9A84C;font-size:20px;margin:0 0 20px">Snack House Yassine</h1>
+              <div style="background:#1a1a1a;border-radius:8px;padding:20px;border:1px solid #2a2318;">
+                <h2 style="color:#C9A84C;margin:0 0 8px;font-size:16px">Bestellung angenommen</h2>
+                <p style="color:#aaa;margin:0;line-height:1.5">
+                  Deine Bestellung wurde von Snack House Yassine angenommen.
+                </p>
+                <p style="color:#666;font-size:12px;margin:12px 0 0">Bestellung: {order_number}</p>
+              </div>
+              {cta}
+            </div>
+            """
+            msg = MIMEMultipart("alternative")
+            msg["Subject"] = f"Bestellung {order_number} angenommen – Snack House Yassine"
+            msg["From"] = SMTP_FROM
+            msg["To"] = order["email"]
+            msg.attach(MIMEText(html, "html"))
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as s:
+                s.starttls()
+                s.login(SMTP_USER, SMTP_PASS)
+                s.sendmail(SMTP_FROM, order["email"], msg.as_string())
+        except Exception as e:
+            app.logger.warning(f"Annahme-E-Mail Fehler: {e}")
+
+    return True
+
 
 def send_status_email(order, new_status):
     if not SMTP_HOST or not SMTP_USER or not order["email"]:
@@ -1092,14 +1173,15 @@ def automate_order_created(db, order: dict, is_new: bool):
         ), "owner_new_order", order["order_number"])
 
     if order.get("phone"):
-        neu = " Willkommen!" if is_new else ""
-        send_sms(db, order["phone"], (
-            f"Hallo {order['first_name']}!{neu}\n"
-            f"Deine Bestellung bei {SHOP_NAME} ist eingegangen.\n"
-            f"Bestellnr: {order['order_number']}\n"
-            f"Wir melden uns kurz.\n"
-            f"Fragen? {SHOP_PHONE}"
-        ), "customer_order_received", order["order_number"])
+        send_sms(
+            db,
+            order["phone"],
+            order_portal_svc.pending_customer_sms(
+                order["first_name"], SHOP_NAME, order["order_number"], SHOP_PHONE
+            ),
+            order_portal_svc.PENDING_NOTIFY_TEMPLATE,
+            order["order_number"],
+        )
 
     # Welcome-Email fuer Erstkunden (Email als primaerer Kanal)
     if is_new and order.get("email"):
@@ -2606,12 +2688,22 @@ def admin_orders():
 @require_admin
 def update_status(order_number):
     data     = request.get_json(force=True)
-    new_status = data.get("status","")
-    allowed  = ["neu","zubereitung","unterwegs","abholbereit","fertig","storniert"]
-    if new_status not in allowed:
-        return jsonify({"error": "Ungültiger Status"}), 400
+    new_status = (data.get("status") or "").strip().lower()
 
     db = get_db()
+    row = db.execute("SELECT * FROM orders WHERE order_number=?", (order_number,)).fetchone()
+    if not row:
+        return jsonify({"error": "Bestellung nicht gefunden"}), 404
+
+    current = (row["status"] or "neu").strip().lower()
+    terr = order_portal_svc.transition_error(current, new_status)
+    if terr:
+        return jsonify({"error": terr}), 400
+
+    # Idempotent: gleicher Status → keine erneute Notification
+    if current == new_status:
+        return jsonify({"success": True, "status": new_status, "unchanged": True})
+
     if new_status == "fertig":
         db.execute(
             "UPDATE orders SET status=?, completed_at=COALESCE(completed_at, datetime('now')) WHERE order_number=?",
@@ -2626,22 +2718,32 @@ def update_status(order_number):
         order = dict(row)
         order["items"] = json.loads(order["items"] or "[]")
         cid = order.get("customer_account_id")
-        if order.get("email"):
-            send_status_email(order, new_status)
-        automate_status_changed(db, order, new_status)
-        # Analytics + Alerts
-        if new_status == "storniert":
-            ae_svc.track_order_cancelled(db, order, customer_id=cid)
-        if new_status == "zubereitung":
-            db.execute("UPDATE orders SET production_started_at=COALESCE(production_started_at, datetime('now')) WHERE order_number=?", (order_number,))
-            db.commit()
+
+        if new_status == "angenommen":
+            send_accepted_notification(db, order)
+            try:
+                push_svc.notify_status(db, order, new_status)
+            except Exception as e:
+                app.logger.warning(f"push status: {e}")
             oa_svc.resolve_by_order(db, order_number, "unconfirmed_order")
-        if new_status in ("fertig", "abholbereit"):
-            # Pünktlichkeit bestimmen: War die Fertigstellung rechtzeitig?
-            wz = order.get("wunschzeit") or ""
-            on_time = True  # Default: als pünktlich werten
-            ae_svc.track_order_ready(db, order, on_time=on_time)
-            oa_svc.resolve_by_order(db, order_number)
+            db.commit()
+        else:
+            if order.get("email"):
+                send_status_email(order, new_status)
+            automate_status_changed(db, order, new_status)
+            # Analytics + Alerts
+            if new_status == "storniert":
+                ae_svc.track_order_cancelled(db, order, customer_id=cid)
+            if new_status == "zubereitung":
+                db.execute("UPDATE orders SET production_started_at=COALESCE(production_started_at, datetime('now')) WHERE order_number=?", (order_number,))
+                db.commit()
+                oa_svc.resolve_by_order(db, order_number, "unconfirmed_order")
+            if new_status in ("fertig", "abholbereit"):
+                # Pünktlichkeit bestimmen: War die Fertigstellung rechtzeitig?
+                wz = order.get("wunschzeit") or ""
+                on_time = True  # Default: als pünktlich werten
+                ae_svc.track_order_ready(db, order, on_time=on_time)
+                oa_svc.resolve_by_order(db, order_number)
 
     return jsonify({"success": True, "status": new_status})
 

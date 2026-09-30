@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /konto
+Disallow: /konto.html
+Disallow: /api/
+
+Sitemap: https://snackhouse-yassine.de/sitemap.xml

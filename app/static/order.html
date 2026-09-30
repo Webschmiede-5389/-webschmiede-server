@@ -139,6 +139,9 @@
 
     /* ── Category anchor offsets ── */
     .cat-section { scroll-margin-top: 120px; }
+    .cat-banner-m {
+      position: relative; height: 110px; overflow: hidden; margin-top: 8px;
+    }
 
     /* ── Spinner ── */
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -152,19 +155,38 @@
       border-radius: 99px;
     }
 
+    .item-badge, .ai-info-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      appearance: none; -webkit-appearance: none; margin: 0;
+      font-family: inherit; font-size: 10px; font-weight: 400; line-height: 1.5;
+      padding: 2px 7px; border-radius: 99px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.25);
+      color: #C9A84C; box-sizing: border-box; flex-shrink: 0;
+    }
+    .item-badge { cursor: default; }
+    .ai-info-btn { cursor: pointer; }
+    .pi-code-row { margin: 0 0 4px; font-size: 14px; color: #cbb892; line-height: 1.45; }
+    .pi-code-row strong { color: #C9A84C; font-weight: 800; }
+    .pi-h { font-size: 13px; color: #fff; margin: 12px 0 8px; font-weight: 700; }
+    .pi-h:first-child { margin-top: 0; }
+    .legend-sheet { max-width: 560px; margin: 0 auto; background: #13110d; border: 1px solid #2a2318; border-radius: 16px; padding: 24px; position: relative; }
+    .legend-list { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 18px; }
+
     /*
       Handy: Speisekarte so frueh wie moeglich.
       Ampel + Zeiten eine Zeile, Chef/Banner weg, grosse Touch-Flaechen.
       Desktop unveraendert.
     */
     @media (max-width: 767px) {
-      html, body { overflow-x: hidden; max-width: 100vw; }
+      /* overflow-x:hidden auf html/body killt position:sticky → clip statt hidden */
+      html, body { overflow-x: clip; max-width: 100vw; }
       body {
         padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
         touch-action: pan-y;
         -webkit-text-size-adjust: 100%;
       }
-      button, a, .cat-tab, .qty-btn, .var-chip { touch-action: manipulation; }
+      button, a, .cat-tab, .qty-btn, .var-chip, .ai-info-btn { touch-action: manipulation; }
 
       .order-hdr-inner {
         padding: 6px 10px !important;
@@ -178,24 +200,43 @@
       }
       .order-back i { font-size: 15px !important; color: #C9A84C; }
       .order-logo {
-        width: 40px !important; height: 40px !important;
-        max-width: 40px !important;
+        width: 56px !important; height: 56px !important;
+        max-width: 56px !important;
       }
       .order-brand-name {
         display: block !important;
-        font-size: 15px !important;
+        font-size: 17px !important;
         white-space: nowrap !important;
         overflow: hidden;
         text-overflow: ellipsis;
-        line-height: 1.1 !important;
+        line-height: 1.15 !important;
         text-align: left;
-        max-width: 52vw;
+        max-width: 48vw;
       }
       .order-brand-wrap {
-        gap: 8px !important;
+        gap: 10px !important;
         justify-content: flex-start !important;
       }
       #hdr-cart-btn { min-width: 44px; min-height: 44px; }
+
+      /* Sticky-Stack: kein Überdecken von Header/Tabs */
+      #promo-banner {
+        position: relative !important;
+        top: auto !important;
+        z-index: 20 !important;
+      }
+      #cookie-banner-order {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        z-index: 25 !important;
+        box-shadow: none !important;
+      }
+      #tab-bar {
+        top: 68px !important;
+      }
+      .cat-section { scroll-margin-top: 130px; }
 
       /* Ampel + Abholung/Lieferung in EINER kompakten Leiste */
       .order-actions {
@@ -204,8 +245,11 @@
         gap: 6px !important;
       }
       .status-pill {
-        flex: 1 1 auto; min-height: 36px; justify-content: center;
-        font-size: 12px; padding: 6px 10px;
+        flex: 1 1 auto; min-height: 40px; justify-content: center;
+        font-size: 13px; padding: 8px 12px; gap: 8px;
+      }
+      .status-pill .status-dot {
+        width: 10px !important; height: 10px !important;
       }
       .status-hours-txt { font-size: 11px; }
       #timing-strip {
@@ -223,9 +267,31 @@
       #ts-pickup, #ts-delivery { font-size: 12px !important; gap: 4px !important; }
       #ts-pickup-min, #ts-delivery-min { font-size: 11px !important; padding: 1px 6px !important; }
 
-      .chef-outer,
-      .menu-divider,
-      .cat-banner-m { display: none !important; }
+      /* Chef: Foto oben, voller Willkommenstext darunter. Strip aus. */
+      .chef-strip-compact { display: none !important; }
+      .chef-card-full {
+        display: flex !important;
+        flex-direction: column;
+        flex-wrap: nowrap !important;
+        min-height: 0 !important;
+      }
+      .chef-photo {
+        flex: none !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 2 / 3;
+      }
+      .chef-photo img {
+        object-fit: contain !important;
+        object-position: center center !important;
+      }
+      .chef-photo > div { display: none; }
+      .chef-copy { padding: 16px 14px !important; }
+      .menu-divider { display: none !important; }
+      /* Kategorie-Banner auf Mobile: sichtbar mit Foto */
+      .cat-banner-m { height: 80px; }
 
       #tab-bar {
         top: 52px !important;
@@ -281,6 +347,10 @@
         font-size: 12px !important;
         min-height: 36px;
       }
+      .item-badge, .ai-info-btn { font-size: 10px; padding: 2px 7px; line-height: 1.5; }
+      .legend-list { grid-template-columns: 1fr; }
+      #allergen-legend-overlay { padding: 16px 12px 24px; }
+      .legend-sheet { padding: 20px 16px; max-height: 88dvh; overflow-y: auto; }
 
       .cart-bar {
         padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0));
@@ -322,13 +392,49 @@
     .status-pill.open { border-color: #22c55e44; background: #0d1f0d; }
     .status-pill.open .status-dot { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
     .status-pill.open .status-label { color: #86efac; }
-    .status-pill.closed { border-color: #ef444444; background: #1f0d0d; }
-    .status-pill.closed .status-dot { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
-    .status-pill.closed .status-label { color: #fca5a5; }
-    .status-hours-txt { color: #666; font-weight: 500; font-size: 12px; }
+    .status-pill.closed { border-color: rgba(201,168,76,.15); background: #131210; }
+    .status-pill.closed .status-dot { background: #c0392b; box-shadow: none; }
+    .status-pill.closed .status-label { color: #c8b090; }
+    .status-hours-txt { color: #6a5a48; font-weight: 500; font-size: 12px; }
+
+    /* Chef Strip – Compact Mobile Version */
+    .chef-strip-compact {
+      display: none; /* desktop: kein Strip */
+      align-items: center; gap: 12px;
+      background: #13110d; border: 1px solid #2a2318;
+      border-radius: 12px; padding: 10px 14px;
+      margin: 10px 16px 0; overflow: hidden;
+    }
+    .chef-strip-compact img {
+      width: 44px; height: 44px; border-radius: 50%;
+      object-fit: cover; object-position: center top;
+      border: 1.5px solid rgba(201,168,76,.4); flex-shrink: 0;
+    }
+    .chef-strip-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .chef-strip-text strong {
+      font-size: 13px; font-weight: 700; color: #e8dcc8;
+      font-family: 'Playfair Display', serif; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .chef-strip-text span { font-size: 11px; color: #7a6a50; line-height: 1.4; }
   </style>
 </head>
 <body>
+
+<div id="cookie-banner-order" style="background:#0e0b08;border-bottom:1px solid #2a2318;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+  <p style="font-size:11px;color:#7a6a4f;margin:0;flex:1;min-width:180px;line-height:1.4;">
+    Schriften von Bunny Fonts (EU-Server), Icons via CDN. <strong style="color:#a89060;">Keine Tracking-Cookies.</strong>
+    <button type="button" onclick="openLegal('datenschutz')" style="background:none;border:none;color:#C9A84C;cursor:pointer;font-size:11px;padding:0;text-decoration:underline;">Datenschutz</button>
+  </p>
+  <button type="button" onclick="document.getElementById('cookie-banner-order').style.display='none';localStorage.setItem('cookie-ok-order','1')"
+          style="background:#C9A84C;color:#000;border:none;border-radius:99px;padding:8px 16px;font-weight:700;font-size:12px;cursor:pointer;flex-shrink:0;white-space:nowrap;">OK</button>
+</div>
+<script>
+if (localStorage.getItem('cookie-ok-order')) {
+  var _cb = document.getElementById('cookie-banner-order');
+  if (_cb) _cb.style.display = 'none';
+}
+</script>
 
 <!-- ══════════════════════════════════════════════════
      HEADER
@@ -340,17 +446,28 @@
     </a>
 
     <div class="order-brand-wrap" style="flex:1;display:flex;align-items:center;justify-content:center;gap:12px;min-width:0;">
-      <img class="order-logo" src="https://files.catbox.moe/3uyamu.png" alt="Snack House Yassine Logo" width="112" height="112"
+      <img class="order-logo" src="/img/logo.png" alt="Snack House Yassine Logo" width="112" height="112"
            style="width:112px;height:112px;max-width:112px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(201,168,76,.5));">
       <span class="order-brand-name" style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:44px;font-weight:700;">Snack House Yassine</span>
     </div>
 
-    <button id="hdr-cart-btn" onclick="openCart()" title="Warenkorb" style="position:relative;background:none;border:none;color:#666;font-size:21px;cursor:pointer;flex-shrink:0;display:none;">
-      <i class="fas fa-shopping-bag"></i>
-      <span id="hdr-badge" class="badge" style="position:absolute;top:-4px;right:-7px;font-size:10px;min-width:18px;height:18px;display:none;">0</span>
-    </button>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;min-width:0;">
+      <a href="/konto?from=order" onclick="saveOrderReturnState()" title="Mein Konto" aria-label="Mein Konto" id="konto-hdr-link" style="color:#666;text-decoration:none;min-width:44px;min-height:44px;max-width:min(52vw,220px);display:inline-flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 4px;box-sizing:border-box;">
+        <span id="konto-hdr-chip" style="display:none;font-size:12px;font-weight:700;color:#C9A84C;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;"></span>
+        <i class="fas fa-user" style="font-size:17px;flex-shrink:0;"></i>
+      </a>
+      <button id="hdr-cart-btn" onclick="openCart()" title="Warenkorb" style="position:relative;background:none;border:none;color:#666;font-size:21px;cursor:pointer;flex-shrink:0;display:none;">
+        <i class="fas fa-shopping-bag"></i>
+        <span id="hdr-badge" class="badge" style="position:absolute;top:-4px;right:-7px;font-size:10px;min-width:18px;height:18px;display:none;">0</span>
+      </button>
+    </div>
   </div>
 </header>
+
+<div id="offline-banner" role="status" style="display:none;background:#1a1208;border-bottom:1px solid #C9A84C55;padding:14px 16px;text-align:center;z-index:30;">
+  <div id="offline-msg-txt" style="color:#e8c76a;font-size:14px;font-weight:600;max-width:640px;margin:0 auto 10px;line-height:1.45;"></div>
+  <a href="/konto?from=order" style="display:inline-block;padding:10px 16px;border-radius:10px;border:1px solid #C9A84C;color:#C9A84C;text-decoration:none;font-size:13px;font-weight:700;min-height:44px;line-height:24px;">Zum Konto</a>
+</div>
 
 <!-- Status pill hidden, logic runs in background for cart open/closed state -->
 <div style="display:none;" aria-hidden="true">
@@ -366,6 +483,7 @@
     <span class="status-label" id="status-label-vis">Geschlossen</span>
     <span class="status-hours-txt" id="status-hours-vis"></span>
   </div>
+  <div id="next-open-hint" style="font-size:12px;color:#888;display:none;"></div>
 </div>
 
 <!-- ══════════════════════════════════════════════════
@@ -392,12 +510,12 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════
-     AKTIONS-BANNER (dynamisch via API)
+     AKTIONS-BANNER (oben, sticky) – dynamisch via API
 ══════════════════════════════════════════════════ -->
-<div id="promo-banner" style="display:none;max-width:680px;margin:12px auto 0;padding:0 16px;">
-  <div style="background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.05));border:1.5px solid rgba(201,168,76,0.4);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
-    <span style="font-size:24px;flex-shrink:0;">🎉</span>
-    <div style="flex:1;">
+<div id="promo-banner" style="display:none;position:sticky;top:0;z-index:90;background:#0e0b08;border-bottom:1px solid rgba(201,168,76,0.35);padding:10px 16px;">
+  <div style="max-width:680px;margin:0 auto;background:linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.05));border:1.5px solid rgba(201,168,76,0.45);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;">
+    <span style="font-size:22px;flex-shrink:0;" aria-hidden="true">🎉</span>
+    <div style="flex:1;min-width:0;">
       <div id="promo-title" style="font-weight:700;color:#C9A84C;font-size:14px;margin-bottom:2px;"></div>
       <div id="promo-desc"  style="font-size:12px;color:#a89060;line-height:1.4;"></div>
     </div>
@@ -406,50 +524,69 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════
-     BOSS WELCOME
+     HASSAN BEGRÜSSUNG – oben sichtbar für alle Besucher
 ══════════════════════════════════════════════════ -->
-<div class="chef-outer" style="max-width:680px;margin:0 auto;padding:14px 16px 4px;">
-  <div class="chef-card" style="background:#13110d;border:1px solid #2a2318;border-radius:16px;overflow:hidden;display:flex;flex-wrap:wrap;min-height:320px;">
+<div style="max-width:680px;margin:0 auto;">
 
-    <!-- LINKE SEITE: Portrait -->
-    <div class="chef-photo" style="flex:0 0 42%;min-width:160px;position:relative;overflow:hidden;min-height:280px;">
-      <img src="https://files.catbox.moe/6t9u96.jpg"
+  <!-- Desktop: Vollständige Chef-Karte -->
+  <div class="chef-card-full" style="margin:14px 16px 0;background:#13110d;border:1px solid #2a2318;border-radius:16px;overflow:hidden;display:flex;flex-wrap:wrap;min-height:260px;">
+    <div class="chef-photo" style="flex:0 0 38%;min-width:150px;position:relative;overflow:hidden;min-height:200px;">
+      <img class="chef-photo-img" src="/img/hassan.jpg"
            alt="Hassan – Inhaber Snack House"
            style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;position:absolute;inset:0;">
-      <!-- goldene Linie als Trenner -->
       <div style="position:absolute;top:0;right:0;width:1px;height:100%;background:linear-gradient(to bottom,transparent,#C9A84C55,transparent);"></div>
     </div>
-
-    <!-- RECHTE SEITE: Text -->
-    <div class="chef-text" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 22px;">
-      <!-- Kleines goldenes Ornament -->
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-        <div style="height:1px;width:24px;background:#C9A84C;opacity:.5;"></div>
+    <div class="chef-copy" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:22px 20px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div style="height:1px;width:20px;background:#C9A84C;opacity:.5;"></div>
         <span style="font-size:10px;color:#C9A84C;letter-spacing:.15em;font-weight:600;text-transform:uppercase;opacity:.7;">Der Chef</span>
       </div>
-
-      <p class="chef-quote" style="font-family:'Playfair Display',serif;font-size:20px;color:#e8dcc8;font-weight:700;margin:0 0 14px;line-height:1.25;">
+      <p style="font-family:'Playfair Display',serif;font-size:19px;color:#e8dcc8;font-weight:700;margin:0 0 12px;line-height:1.25;">
         Frisch. Ehrlich.<br>Mit Herz.
       </p>
-
-      <p class="chef-body" style="font-size:13px;line-height:1.7;color:#a8967e;margin:0 0 18px;">
+      <p style="font-size:13px;line-height:1.65;color:#a8967e;margin:0 0 14px;">
         Hey ihr Lieben, ich bin Hassan und ich koche seit Jahren mit vollem Herz für euch.
-        Jedes Gericht — so wie ich es für meine eigene Familie machen würde.
+        Jedes Gericht – so wie ich es für meine eigene Familie machen würde.
       </p>
-
-      <p style="font-size:12px;line-height:1.6;color:#C9A84C;font-weight:600;margin:0 0 20px;">
-        Viel Spaß beim Bestellen, und danke für euer Vertrauen!
-      </p>
-
+      <p style="font-size:12px;color:#C9A84C;font-weight:600;margin:0 0 16px;">Danke für euer Vertrauen!</p>
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:32px;height:1px;background:#C9A84C;opacity:.4;"></div>
+        <div style="width:28px;height:1px;background:#C9A84C;opacity:.4;"></div>
         <span style="font-size:11px;color:#6a5a40;font-style:italic;">Hassan Yassine · Inhaber &amp; Koch</span>
       </div>
     </div>
-
   </div>
+
+  <!-- Mobile: Kompakter Begrüßungs-Strip -->
+  <div class="chef-strip-compact">
+    <img src="/img/hassan.jpg" alt="Hassan – Inhaber">
+    <div class="chef-strip-text">
+      <strong>Hassan kocht für euch</strong>
+      <span>Frisch, ehrlich, mit Herz – wie für die Familie</span>
+    </div>
+    <div style="flex-shrink:0;margin-left:auto;font-size:10px;color:#C9A84C;letter-spacing:.1em;font-weight:600;text-transform:uppercase;opacity:.7;">Der Chef</div>
+  </div>
+
 </div>
 
+<!-- Bestellart direkt am Einstieg -->
+<div id="order-type-top" style="max-width:680px;margin:0 auto;padding:12px 16px 0;">
+  <label style="display:block;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Wie möchtest du bestellen?</label>
+  <div class="toggle-pill">
+    <button type="button" class="toggle-opt active" id="top-opt-pickup" onclick="setOrderType('pickup')"><i class="fas fa-store" style="margin-right:6px;"></i>Selbst abholen</button>
+    <button type="button" class="toggle-opt" id="top-opt-delivery" onclick="setOrderType('delivery')"><i class="fas fa-motorcycle" style="margin-right:6px;"></i>Liefern lassen</button>
+  </div>
+  <p id="order-type-hint" style="font-size:12px;color:#666;margin-top:8px;"></p>
+</div>
+
+<!-- Produktsuche -->
+<div style="max-width:680px;margin:0 auto;padding:12px 16px 0;">
+  <label for="menu-search" class="sr-only" style="position:absolute;left:-9999px;">Produkte suchen</label>
+  <div style="position:relative;">
+    <i class="fas fa-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#555;font-size:13px;"></i>
+    <input id="menu-search" class="inp" type="search" placeholder="Gericht suchen…" autocomplete="off"
+           style="padding-left:40px;" oninput="onMenuSearch(this.value)">
+  </div>
+</div>
 
 <!-- ══ GOLDENE TRENNLINIE ══════════════════════════════════════════════════ -->
 <div class="menu-divider" style="max-width:680px;margin:20px auto 0;padding:0 16px;">
@@ -461,12 +598,13 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════
-     CATEGORY TABS – alle sichtbar, 2 Reihen
+     CATEGORY TABS
 ══════════════════════════════════════════════════ -->
 <div id="tab-bar" style="position:sticky;top:57px;z-index:30;background:#0e0b08;border-bottom:1px solid #2a2318;padding:10px 16px 12px;">
   <div style="max-width:680px;margin:0 auto;">
     <div id="tab-strip" style="display:flex;flex-wrap:wrap;gap:7px;">
-      <button class="cat-tab active" data-cat="drehspiess"  onclick="jumpTo('drehspiess',this)">Drehspieß</button>
+      <button class="cat-tab active" data-cat="beliebt"     onclick="jumpTo('beliebt',this)">Beliebt</button>
+      <button class="cat-tab"        data-cat="drehspiess"  onclick="jumpTo('drehspiess',this)">Drehspieß</button>
       <button class="cat-tab"        data-cat="ueberbacken" onclick="jumpTo('ueberbacken',this)">Überbacken</button>
       <button class="cat-tab"        data-cat="burger"      onclick="jumpTo('burger',this)">Burger</button>
       <button class="cat-tab"        data-cat="schnitzel"   onclick="jumpTo('schnitzel',this)">Schnitzel</button>
@@ -483,7 +621,11 @@
 <!-- ══════════════════════════════════════════════════
      MENU
 ══════════════════════════════════════════════════ -->
-<div id="menu-root" style="max-width:680px;margin:0 auto 120px;padding-top:24px;padding-bottom:32px;"></div>
+<div id="menu-root" style="max-width:680px;margin:0 auto 24px;padding-top:24px;padding-bottom:8px;"></div>
+<div id="menu-empty" style="display:none;max-width:680px;margin:0 auto;padding:24px 16px;text-align:center;color:#666;font-size:14px;">Keine Treffer. Anderen Suchbegriff versuchen.</div>
+
+
+<div style="height:100px;"></div>
 
 <!-- ══════════════════════════════════════════════════
      CART BAR (sticky bottom)
@@ -527,6 +669,64 @@
         <h2 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;">Deine Angaben</h2>
       </div>
 
+      <!-- Schülerangebots-Hinweis im Checkout -->
+      <div id="student-hint-box" style="display:none;background:#13110a;border:1px solid #F59E0B44;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <i class="fas fa-graduation-cap" style="color:#F59E0B;font-size:18px;flex-shrink:0;margin-top:1px;"></i>
+          <div style="flex:1;">
+            <div id="student-hint-text" style="color:#e8e2d8;font-size:14px;font-weight:600;"></div>
+            <div id="student-hint-sub" style="color:#888;font-size:12px;margin-top:2px;"></div>
+          </div>
+        </div>
+        <label id="student-confirm-wrap" style="display:none;margin-top:12px;padding-top:10px;border-top:1px solid #2a2318;align-items:flex-start;gap:8px;cursor:pointer;">
+          <input type="checkbox" id="student-confirm-cb" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:#F59E0B;">
+          <span style="color:#e8e2d8;font-size:13px;">Ich bestätige, dass ich bei der Abholung meinen Schülerausweis vorzeige. Andernfalls kann der reguläre Preis berechnet werden.</span>
+        </label>
+      </div>
+
+      <!-- Mit Konto bestellen (optional) -->
+      <div id="checkout-account-box" style="background:#13110d;border:1px solid #2a2318;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+        <div id="checkout-guest-primary">
+          <div id="checkout-account-title" style="font-size:14px;font-weight:800;color:#fff;margin-bottom:6px;">Als Gast bestellen</div>
+          <p id="checkout-account-sub" style="font-size:12px;color:#888;line-height:1.5;margin:0 0 12px;">Ohne Konto fortfahren – Formular unten ausfüllen.</p>
+        </div>
+        <div id="checkout-logged-in" style="display:none;font-size:13px;color:#86efac;line-height:1.45;"></div>
+        <div id="checkout-login-form" style="display:none;">
+          <input class="inp" id="co-login-email" type="email" placeholder="E-Mail" style="margin-bottom:8px;" autocomplete="username">
+          <input class="inp" id="co-login-pass" type="password" placeholder="Passwort" style="margin-bottom:8px;" autocomplete="current-password">
+          <button type="button" onclick="checkoutInlineLogin()" style="width:100%;background:#C9A84C;color:#000;border:none;border-radius:10px;padding:12px;min-height:44px;font-weight:700;font-size:13px;cursor:pointer;">Einloggen</button>
+          <p id="co-login-err" style="display:none;color:#f87171;font-size:12px;margin-top:8px;"></p>
+        </div>
+        <div id="checkout-login-cta" style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" onclick="showCheckoutLogin()" style="background:transparent;border:1px solid #555;color:#aaa;border-radius:99px;padding:10px 14px;min-height:44px;font-size:12px;font-weight:700;cursor:pointer;">Einloggen</button>
+          <a href="/konto?from=order" onclick="saveOrderReturnState()" style="background:transparent;border:1px solid #444;color:#888;border-radius:99px;padding:10px 14px;min-height:44px;font-size:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;">Konto anlegen</a>
+        </div>
+      </div>
+
+      <div id="checkout-prefill-hint" style="display:none;font-size:12px;color:#9a8b6e;margin:-6px 0 14px;padding:8px 12px;background:#13110a;border:1px solid #2a2318;border-radius:10px;">Aus deinem Konto übernommen</div>
+
+      <!-- Stempel-Hint für eingeloggte Kunden -->
+      <div id="stamp-hint-box" style="display:none;background:#13110a;border:1px solid #C9A84C44;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-stamp" style="color:#C9A84C;font-size:18px;"></i>
+          <div>
+            <div id="stamp-hint-text" style="color:#e8e2d8;font-size:14px;font-weight:600;"></div>
+            <div id="stamp-hint-sub" style="color:#888;font-size:12px;margin-top:2px;"></div>
+            <div id="stamp-hint-rule" style="color:#666;font-size:11px;margin-top:6px;line-height:1.45;"></div>
+          </div>
+        </div>
+        <div id="stamp-coupon-section" style="display:none;margin-top:12px;padding-top:10px;border-top:1px solid #2a2318;">
+          <div style="color:#C9A84C;font-size:13px;font-weight:700;margin-bottom:8px;">Deine Belohnung ist bereit</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+            <button type="button" id="stamp-pick-fries" onclick="pickRewardKind('fries')" style="flex:1;min-width:140px;background:#1a1510;border:1.5px solid #C9A84C66;border-radius:10px;padding:10px 12px;color:#e8e2d8;font-size:13px;font-weight:700;cursor:pointer;">Kleine Pommes gratis</button>
+            <button type="button" id="stamp-pick-drink" onclick="pickRewardKind('drink')" style="flex:1;min-width:140px;background:#1a1510;border:1.5px solid #2a2318;border-radius:10px;padding:10px 12px;color:#e8e2d8;font-size:13px;font-weight:700;cursor:pointer;">Gratis Getränk</button>
+          </div>
+          <select id="stamp-coupon-select" style="display:none;"></select>
+          <select id="stamp-drink-select" style="display:none;width:100%;background:#1a1510;border:1.5px solid #2a2318;border-radius:10px;padding:9px 12px;color:#e8e2d8;font-size:13px;outline:none;"></select>
+          <div id="stamp-coupon-info" style="color:#22c55e;font-size:12px;margin-top:6px;display:none;"></div>
+        </div>
+      </div>
+
       <!-- Liefern / Abholen -->
       <div style="margin-bottom:20px;">
         <label style="display:block;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Bestellart</label>
@@ -547,12 +747,27 @@
           <input class="inp" id="f-phone" type="tel" placeholder="+49 170 000 0000" autocomplete="tel">
         </div>
         <div>
-          <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">E-Mail <span style="color:#444">(für Bestellbestätigung)</span></label>
+          <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">E-Mail *</label>
           <input class="inp" id="f-email" type="email" placeholder="max@beispiel.de" autocomplete="email">
+          <p style="font-size:11px;color:#555;margin-top:4px;">Für Bestätigung und Status. Kein Newsletter.</p>
         </div>
         <div id="addr-field" style="display:none;">
           <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Lieferadresse *</label>
-          <input class="inp" id="f-addr" type="text" placeholder="Straße, Hausnr., Mechernich">
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:10px;">
+            <input class="inp" id="f-street" type="text" placeholder="Straße" autocomplete="address-line1">
+            <input class="inp" id="f-house" type="text" placeholder="Nr." autocomplete="address-line2">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-bottom:10px;">
+            <input class="inp" id="f-plz" type="text" inputmode="numeric" placeholder="PLZ" autocomplete="postal-code" maxlength="5">
+            <input class="inp" id="f-city" type="text" placeholder="Ort" autocomplete="address-level2" value="Mechernich">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+            <input class="inp" id="f-floor" type="text" placeholder="Etage (optional)">
+            <input class="inp" id="f-doorbell" type="text" placeholder="Klingel (optional)">
+          </div>
+          <p id="zone-hint" style="font-size:12px;color:#888;min-height:18px;"></p>
+          <p id="delivery-save-hint" style="display:none;font-size:12px;color:#9a8b6e;line-height:1.45;margin:8px 0 0;">Deine Lieferadresse wird nach erfolgreicher Bestellung fürs nächste Mal gespeichert.</p>
+          <input type="hidden" id="f-addr" value="">
         </div>
         <div>
           <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Anmerkungen (optional)</label>
@@ -560,40 +775,31 @@
         </div>
       </div>
 
-      <!-- Wunschzeit -->
+      <!-- Wunschzeit / Vorbestellung -->
       <div style="margin-bottom:20px;">
-        <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Gewünschte Zeit</label>
+        <label style="display:block;font-size:12px;color:#666;margin-bottom:6px;">Wann soll es fertig sein?</label>
         <select class="inp" id="f-time">
           <option value="asap">So schnell wie möglich (~25 Min.)</option>
-          <option value="30">In ca. 30 Minuten</option>
-          <option value="45">In ca. 45 Minuten</option>
-          <option value="60">In ca. 60 Minuten</option>
         </select>
+        <p style="font-size:11px;color:#555;margin-top:6px;line-height:1.4;">Wunschzeit für die Küche. Keine Garantie für eine bestimmte Fertig- oder Lieferzeit.</p>
       </div>
 
       <!-- Zahlung -->
       <div style="margin-bottom:24px;">
         <label style="display:block;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Zahlungsart</label>
-        <div style="display:flex;gap:10px;">
-          <div class="pay-opt sel" id="pay-cash" onclick="setPayment('cash')">
-            <i class="fas fa-money-bill-wave" style="font-size:20px;color:#C9A84C;margin-bottom:6px;display:block;"></i>
-            <div style="font-size:13px;font-weight:600;color:#fff;">Bar</div>
-            <div style="font-size:11px;color:#555;margin-top:2px;">bei Abholung</div>
-          </div>
-          <div class="pay-opt" id="pay-card" onclick="setPayment('card')">
-            <i class="fas fa-credit-card" style="font-size:20px;color:#C9A84C;margin-bottom:6px;display:block;"></i>
-            <div style="font-size:13px;font-weight:600;color:#fff;">Karte</div>
-            <div style="font-size:11px;color:#555;margin-top:2px;">EC / Kreditkarte</div>
-          </div>
-          <div class="pay-opt" id="pay-stripe" onclick="setPayment('stripe')">
+        <div id="pay-options" style="display:flex;gap:10px;">
+          <div class="pay-opt sel" id="pay-stripe" onclick="setPayment('stripe')">
             <i class="fas fa-lock" style="font-size:20px;color:#C9A84C;margin-bottom:6px;display:block;"></i>
-            <div style="font-size:13px;font-weight:600;color:#fff;">Online</div>
-            <div style="font-size:11px;color:#555;margin-top:2px;">Stripe · sicher</div>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Online bezahlen</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">sicher im Browser</div>
           </div>
         </div>
-        <p id="stripe-hint" style="display:none;font-size:12px;color:#888;margin-top:8px;padding:10px;background:#1a1a1a;border-radius:8px;border:1px solid #2a2a2a;">
+        <p id="stripe-hint" style="font-size:12px;color:#888;margin-top:8px;padding:10px;background:#1a1a1a;border-radius:8px;border:1px solid #2a2a2a;">
           <i class="fas fa-info-circle" style="color:#C9A84C;margin-right:6px;"></i>
           Du wirst zur sicheren Stripe-Zahlungsseite weitergeleitet. Kein Account erforderlich.
+        </p>
+        <p id="pay-unavailable" style="display:none;font-size:13px;color:#fca5a5;margin-top:8px;padding:10px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(248,113,113,.35);">
+          Onlinezahlung ist gerade nicht verfügbar. Bestellen ist aktuell nicht möglich.
         </p>
       </div>
 
@@ -604,6 +810,7 @@
           <button onclick="showView('cart')" style="background:none;border:none;color:#C9A84C;font-size:12px;cursor:pointer;text-decoration:underline;">Ändern</button>
         </div>
         <div id="co-summary" style="font-size:13px;color:#ccc;line-height:1.8;"></div>
+        <div id="co-upsell"></div>
         <div style="border-top:1px solid #2a2a2a;margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;">
           <span style="font-weight:600;">Gesamt</span>
           <span id="co-total" style="font-weight:800;color:#C9A84C;font-size:16px;"></span>
@@ -613,28 +820,70 @@
       <!-- Submit -->
       <button id="submit-btn" onclick="submitOrder()" style="width:100%;padding:16px;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
         <span id="submit-icon"><i class="fas fa-paper-plane"></i></span>
-        <span id="submit-label">Bestellung absenden</span>
+        <span id="submit-label">Zahlungspflichtig bestellen</span>
       </button>
-      <p style="text-align:center;font-size:11px;color:#444;margin-top:10px;">
-        Mit Absenden akzeptierst du unsere
-        <button type="button" onclick="openLegal('datenschutz')" style="background:none;border:none;color:#888;cursor:pointer;font-size:11px;padding:0;text-decoration:underline;">Datenschutzerklärung</button>
-        und
-        <button type="button" onclick="openLegal('agb')" style="background:none;border:none;color:#888;cursor:pointer;font-size:11px;padding:0;text-decoration:underline;">AGB</button>.
+      <div id="co-allergen-hint" style="margin-top:12px;padding:12px 14px;background:#13110d;border:1px solid #2a2318;border-radius:12px;font-size:12px;color:#9a8b6e;line-height:1.55;">
+        <div style="font-weight:700;color:#C9A84C;margin-bottom:4px;">Allergene &amp; Zusatzstoffe</div>
+        <div id="co-allergen-hint-text">Angaben findest du bei den Gerichten. Fehlende Angaben bedeuten nicht „allergenfrei“.</div>
+        <button type="button" onclick="openAllergenLegend()" style="margin-top:8px;background:none;border:none;color:#C9A84C;font-size:12px;cursor:pointer;text-decoration:underline;padding:0;">Legende öffnen</button>
+      </div>
+      <p style="text-align:center;font-size:11px;color:#666;margin-top:12px;line-height:1.5;">
+        Mit „Zahlungspflichtig bestellen“ zahlst du online. Nach bestätigter Zahlung ist die Bestellung eingegangen.
+        <br>
+        <button type="button" onclick="openLegal('datenschutz')" style="background:none;border:none;color:#888;cursor:pointer;font-size:11px;padding:0;text-decoration:underline;">Datenschutz</button>
+        ·
+        <a href="/datenschutz" target="_blank" rel="noopener" style="color:#888;font-size:11px;">/datenschutz</a>
+        ·
+        <button type="button" onclick="openLegal('agb')" style="background:none;border:none;color:#888;cursor:pointer;font-size:11px;padding:0;text-decoration:underline;">Bestellbedingungen</button>
+        ·
+        <a href="/agb" target="_blank" rel="noopener" style="color:#888;font-size:11px;">/agb</a>
       </p>
     </div>
 
-    <!-- Success view -->
-    <div id="view-success" style="display:none;padding:40px 24px;text-align:center;">
+    <!-- Success / Status view -->
+    <div id="view-success" style="display:none;padding:28px 16px;text-align:center;max-width:100%;overflow-x:hidden;box-sizing:border-box;">
       <div style="width:72px;height:72px;border-radius:50%;background:rgba(34,197,94,0.12);border:2px solid #22c55e;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-        <i class="fas fa-check" style="font-size:28px;color:#22c55e;"></i>
+        <i class="fas fa-check" style="font-size:28px;color:#22c55e;" aria-hidden="true"></i>
       </div>
-      <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:10px;">Bestellung eingegangen!</h2>
-      <p style="color:#888;font-size:14px;line-height:1.7;margin-bottom:24px;">
-        Wir haben deine Bestellung erhalten und melden uns kurz per SMS oder WhatsApp zur Bestätigung.
+      <h2 id="success-hero" style="font-family:'Playfair Display',serif;font-size:clamp(18px,5vw,22px);font-weight:700;margin-bottom:8px;word-break:break-word;">Bestellung ist eingegangen</h2>
+      <p id="success-order-heading" style="color:#C9A84C;font-size:15px;font-weight:800;letter-spacing:.02em;margin:0 0 10px;word-break:break-all;"></p>
+      <p id="success-status-label" style="color:#f5f0e8;font-size:14px;font-weight:600;margin-bottom:6px;" role="status" aria-live="polite"></p>
+      <p style="color:#888;font-size:13px;line-height:1.6;margin-bottom:16px;">
+        Wir melden uns kurz. Bei Fragen: <a id="success-phone" href="tel:+4924433088966" style="color:#C9A84C;">02443 3088966</a>
       </p>
-      <div id="success-info" style="background:#1a1a1a;border-radius:14px;padding:16px;text-align:left;font-size:13px;line-height:2;color:#ccc;margin-bottom:24px;"></div>
-      <button onclick="resetOrder()" style="background:#C9A84C;color:#000;border:none;border-radius:99px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;">
-        Neue Bestellung aufgeben
+      <div id="success-steps" style="text-align:left;margin-bottom:16px;" aria-label="Bestellstatus"></div>
+      <p id="success-status-hint" style="font-size:12px;color:#666;line-height:1.5;margin:0 0 16px;">
+        Seite offen lassen – oder den Link in der Bestätigungs-Mail nutzen, um den Status später wieder zu sehen.
+      </p>
+      <div id="success-self-cancel" style="display:none;margin:0 0 16px;text-align:left;">
+        <p style="font-size:12px;color:#888;line-height:1.5;margin:0 0 10px;">Nur möglich, solange die Bestellung noch nicht angenommen wurde.</p>
+        <button type="button" id="btn-self-cancel" style="width:100%;background:transparent;color:#f5f0e8;border:1px solid #7a1f2b;border-radius:10px;padding:12px 16px;font-weight:700;font-size:14px;cursor:pointer;min-height:44px;">Bestellung stornieren</button>
+        <p id="self-cancel-err" style="display:none;color:#f87171;font-size:12px;line-height:1.5;margin:10px 0 0;"></p>
+      </div>
+      <p id="success-status-link-wrap" style="display:none;font-size:12px;margin:0 0 16px;">
+        <a id="success-status-link" href="#" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#e8c76a);color:#000;font-weight:800;font-size:14px;padding:14px 22px;border-radius:10px;text-decoration:none;min-height:44px;line-height:1.2;">Bestellstatus öffnen</a>
+      </p>
+      <div id="success-info" style="background:#1a1a1a;border:1px solid #2a2318;border-radius:14px;padding:16px;text-align:left;font-size:13px;line-height:1.7;color:#ccc;margin-bottom:20px;"></div>
+      <div id="account-offer" style="background:#13110d;border:1px solid #2a2318;border-radius:14px;padding:14px;text-align:left;margin-bottom:20px;">
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">Optional: Konto anlegen</div>
+        <p style="font-size:12px;color:#888;line-height:1.5;margin-bottom:10px;">Dann siehst du Bestellhistorie und Stempelstand. Gast-Bestellung bleibt möglich.</p>
+        <div id="account-register-form">
+          <input class="inp" id="ar-email" type="email" placeholder="E-Mail" style="margin-bottom:8px;" autocomplete="email">
+          <input class="inp" id="ar-phone" type="tel" placeholder="Telefon" style="margin-bottom:8px;" autocomplete="tel">
+          <input class="inp" id="ar-name" type="text" placeholder="Name" style="margin-bottom:8px;" autocomplete="name">
+          <input class="inp" id="ar-pass" type="password" placeholder="Passwort (min. 8 Zeichen)" style="margin-bottom:8px;" autocomplete="new-password">
+          <input class="inp" id="ar-pass2" type="password" placeholder="Passwort wiederholen" style="margin-bottom:8px;" autocomplete="new-password">
+          <label style="display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;cursor:pointer;">
+            <input type="checkbox" id="ar-marketing" style="margin-top:2px;accent-color:#C9A84C;">
+            <span style="font-size:12px;color:#888;">Ich möchte Infos zu Aktionen per E-Mail (jederzeit abbestellbar).</span>
+          </label>
+          <button type="button" onclick="registerAfterOrder()" style="width:100%;background:#C9A84C;color:#000;border:none;border-radius:10px;padding:12px;font-weight:700;font-size:13px;cursor:pointer;min-height:44px;">Konto jetzt anlegen</button>
+          <p id="ar-err" style="display:none;color:#f87171;font-size:12px;margin-top:8px;"></p>
+          <p id="ar-ok" style="display:none;color:#86efac;font-size:12px;margin-top:8px;">Konto ist da. Du bist eingeloggt.</p>
+        </div>
+      </div>
+      <button onclick="resetOrder()" style="background:#C9A84C;color:#000;border:none;border-radius:99px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;min-height:44px;">
+        Neue Bestellung
       </button>
     </div>
 
@@ -655,8 +904,8 @@ const MENU = [
   { id:'d5', cat:'drehspiess', nr:'5', name:'Lahmacun-Rolle Drehspieß', desc:'Fladenbrot mit Hackfleisch und Drehspießfleisch, Salat, Zaziki', price:9.00, variants:[{l:'Hähnchen',p:9.00},{l:'Kalb',p:10.00}] },
   { id:'d6', cat:'drehspiess', nr:'6', name:'Drehspieß Tasche Döner-Style', desc:'Gefüllte Tasche mit Drehspießfleisch, gemischtem Salat, Zaziki', price:8.00, variants:[{l:'Hähnchen',p:8.00},{l:'Kalb',p:9.00}] },
   { id:'d7', cat:'drehspiess', nr:'7', name:'Drehspieß Box', desc:'Mit Pommes, Knoblauchpaste oder Zaziki', price:7.00, variants:[{l:'Hähnchen',p:7.00},{l:'Kalb',p:8.00}] },
-  { id:'d8', cat:'drehspiess', nr:'8', name:'Drehspieß Teller', desc:'Orientalisch: Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste — oder Döner-Style', price:12.00, variants:[{l:'Hähnchen',p:12.00},{l:'Kalb',p:13.50}] },
-  { id:'d9', cat:'drehspiess', nr:'9 ★', name:'Arabischer Teller', desc:'Hähnchen-Shawarma-Rolle, Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste', price:14.00, badge:'Hausspezialität' },
+  { id:'d8', cat:'drehspiess', nr:'8', name:'Drehspieß Teller', desc:'Orientalisch: Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste — oder Döner-Style', price:12.00, variants:[{l:'Hähnchen Orient',p:12.00},{l:'Kalb Orient',p:13.50},{l:'Hähnchen Döner-Style',p:12.00},{l:'Kalb Döner-Style',p:13.50}] },
+  { id:'d9', cat:'drehspiess', nr:'9 ★', name:'Arabischer Teller', desc:'Hähnchen-Shawarma-Rolle, Coleslaw, Pommes, eingelegtes Gemüse, Knoblauchpaste', price:14.00, badge:'Hausspezialität', popular:true },
 
   // ÜBERBACKEN
   { id:'u10', cat:'ueberbacken', nr:'10', name:'Drehspieß mit Hollandaise', desc:'Sauce Hollandaise und Käse überbacken. Mit Pommes/Reis und Salat/Coleslaw', price:13.00, variants:[{l:'Hähnchen',p:13.00},{l:'Kalb',p:14.00}] },
@@ -665,7 +914,7 @@ const MENU = [
   { id:'u13', cat:'ueberbacken', nr:'13', name:'Drehspieß Tomaten-/Sahnesoße', desc:'Mit Tomaten- oder Sahnesoße und Käse überbacken', price:11.50, variants:[{l:'Hähnchen',p:11.50},{l:'Kalb',p:12.50}] },
 
   // BURGER
-  { id:'b14', cat:'burger', nr:'14', name:'Crispy Chicken Burger', desc:'Crispy Chicken, Blattsalat, Käse, Tomate, Coleslaw, Süß-Sauer- und Hamburgersoße', price:6.00 },
+  { id:'b14', cat:'burger', nr:'14', name:'Crispy Chicken Burger', desc:'Crispy Chicken, Blattsalat, Käse, Tomate, Coleslaw, Süß-Sauer- und Hamburgersoße', price:6.00, popular:true },
   { id:'b15', cat:'burger', nr:'15', name:'Hamburger', desc:'Rindfleisch-Patty, Salat, Tomaten, Gurken, Röstzwiebeln, Soßen', price:5.00 },
   { id:'b16', cat:'burger', nr:'16', name:'Cheeseburger', desc:'Rindfleisch-Patty, Käse, Salat, Tomaten, Gurken, Röstzwiebeln, Soßen', price:5.50 },
   { id:'b17', cat:'burger', nr:'17', name:'Chicken Burger', desc:'Chicken-Patty, Salat, Tomaten, Gurken, Soßen', price:5.50 },
@@ -677,7 +926,7 @@ const MENU = [
   { id:'s21', cat:'schnitzel', nr:'21', name:'Jägerschnitzel', desc:'Hähnchenbrust mit Jägersoße', price:14.00 },
   { id:'s22', cat:'schnitzel', nr:'22', name:'Schnitzel Paprika Art', desc:'Hähnchenbrust mit Paprikasoße', price:14.00 },
   { id:'s23', cat:'schnitzel', nr:'23', name:'Champignon-Rahmschnitzel', desc:'Hähnchenbrust mit Champignon-Rahmsauce', price:14.00 },
-  { id:'s24', cat:'schnitzel', nr:'24 ★', name:'Schnitzel Yassine', desc:'Hähnchenbrust mit gebratenen Zwiebeln und Champignons. Tipp: +2 € Hollandaise!', price:14.00, badge:'Empfehlung' },
+  { id:'s24', cat:'schnitzel', nr:'24 ★', name:'Schnitzel Yassine', desc:'Hähnchenbrust mit gebratenen Zwiebeln und Champignons. Tipp: +2 € Hollandaise!', price:14.00, badge:'Empfehlung', popular:true },
   { id:'s25', cat:'schnitzel', nr:'25', name:'Hawaii Schnitzel', desc:'Hähnchenbrust mit Ananas und Käse', price:14.00 },
 
   // NUDELN
@@ -686,32 +935,32 @@ const MENU = [
   { id:'n28', cat:'nudeln', nr:'28', name:'Bolognese', desc:'Mit Tomatenfleischsoße', price:12.00 },
   { id:'n29', cat:'nudeln', nr:'29', name:'Drehspieß Pasta', desc:'Mit Hähnchen-Drehspieß, Champignon in Tomaten- oder Sahnesoße', price:12.50 },
   { id:'n30', cat:'nudeln', nr:'30', name:'Quattro Formaggi', desc:'Vier Käsesorten mit cremiger Sahnesoße', price:12.50 },
-  { id:'n31', cat:'nudeln', nr:'31', name:'Scampi Pasta', desc:'Scampi mit Spinat und Knoblauch in Tomaten-Sahnesoße — oder mit Sahnesoße und Parmesan', price:13.00 },
+  { id:'n31', cat:'nudeln', nr:'31', name:'Scampi Pasta', desc:'Scampi — Zubereitung wählen', price:13.00, popular:true, variants:[{l:'Spinat-Tomaten-Sahne',p:13.00},{l:'Parmesan-Sahne',p:13.00}] },
   { id:'n32', cat:'nudeln', nr:'32 🌿', name:'Vegetarische Pasta', desc:'Mit Brokkoli, Spinat, Champignon, Knoblauch in Tomaten- oder Sahnesoße', price:12.50, badge:'Vegetarisch' },
 
   // PIZZA
   { id:'p33', cat:'pizza', nr:'33', name:'Margherita', desc:'Tomatensoße, Käse, Oregano — Ø 30 cm', price:8.00, badge:'Vegetarisch' },
-  { id:'p34', cat:'pizza', nr:'34–37', name:'Thunfisch / Salami / Schinken / Champignon', desc:'Je eine Zutat auf Tomatensoße und Käse — Ø 30 cm', price:10.00 },
-  { id:'p38', cat:'pizza', nr:'38–41', name:'Spinat / Hawaii / Diavolo / Sucuk', desc:'Spinat 10 € | Hawaii: Schinken + Ananas | Diavolo: scharf/mild | Sucuk: Knoblauchwurst — Ø 30 cm', price:10.00 },
+  { id:'p34', cat:'pizza', nr:'34–37', name:'Thunfisch / Salami / Schinken / Champignon', desc:'Eine Belags-Variante wählen — Ø 30 cm', price:10.00, variants:[{l:'Thunfisch',p:10.00},{l:'Salami',p:10.00},{l:'Schinken',p:10.00},{l:'Champignon',p:10.00}] },
+  { id:'p38', cat:'pizza', nr:'38–41', name:'Spinat / Hawaii / Diavolo / Sucuk', desc:'Eine Belags-Variante wählen — Ø 30 cm', price:10.00, variants:[{l:'Spinat',p:10.00},{l:'Hawaii',p:10.00},{l:'Diavolo',p:10.00},{l:'Sucuk',p:10.00}] },
   { id:'p43', cat:'pizza', nr:'43', name:'Pizza Roma', desc:'Thunfisch und Zwiebeln auf Tomatensoße und Käse — Ø 30 cm', price:11.00 },
   { id:'p48', cat:'pizza', nr:'48', name:'Calzone', desc:'Gefüllt mit Tomatensoße, Käse, Geflügelschinken, Champignon und Thunfisch — Ø 26 cm', price:11.00 },
   { id:'p49', cat:'pizza', nr:'49', name:'Drehspieß Pizza', desc:'Fleisch vom Drehspieß mit Zwiebeln auf Tomatensoße und Käse — Ø 30 cm', price:11.00, variants:[{l:'Hähnchen',p:11.00},{l:'Kalb',p:12.00}] },
-  { id:'p53', cat:'pizza', nr:'53 ★', name:'Snack House Pizza', desc:'Selbst marinierte Putenbruststücke, Brokkoli, Mais, Paprika, Oliven, Hollandaise oder Knoblauchpaste — Ø 30 cm', price:12.50, badge:'Hausspezialität' },
+  { id:'p53', cat:'pizza', nr:'53 ★', name:'Snack House Pizza', desc:'Putenbrust, Brokkoli, Mais, Paprika, Oliven — Sauce wählen — Ø 30 cm', price:12.50, badge:'Hausspezialität', popular:true, variants:[{l:'mit Hollandaise',p:12.50},{l:'mit Knoblauchpaste',p:12.50}] },
   { id:'p54', cat:'pizza', nr:'54', name:'Eifelpizza', desc:'Scampi, Thunfisch, Salami, Schinken, Champignon, Spinat, Paprika, Artischocke, Ei — Ø 30 cm', price:12.50 },
   { id:'p57', cat:'pizza', nr:'57', name:'Pizzablech 40×60 cm', desc:'Margherita (33 €) oder 3 Zutaten nach Wahl (40 €) — ideal fürs Catering', price:33.00, badge:'Catering' },
 
   // SALATE
   { id:'sa68', cat:'salate', nr:'68', name:'Tabouleh', desc:'Tomaten, Gurken, Petersilie, Minze, Lauchzwiebel, Burghul, Granatapfelsirup — hausgemacht', price:8.00, badge:'Vegetarisch' },
   { id:'sa69', cat:'salate', nr:'69 ★', name:'Snack House Salat', desc:'Grünsalat, Tomaten, Gurken, Thunfisch, Geflügelschinken, Käse, Bohnen, Ei', price:11.00, badge:'Empfehlung' },
-  { id:'sa71', cat:'salate', nr:'71–73', name:'Bauernsalat / Gemischter / Coleslaw', desc:'Bauernsalat 6 € | Gemischter 7 € | Coleslaw hausgemacht 8 €', price:6.00 },
+  { id:'sa71', cat:'salate', nr:'71–73', name:'Bauernsalat / Gemischter / Coleslaw', desc:'Variante wählen. Dressing nach Wahl — bei Unverträglichkeit nachfragen.', price:6.00, variants:[{l:'Bauernsalat',p:6.00},{l:'Gemischter Salat',p:7.00},{l:'Coleslaw',p:8.00}] },
   { id:'sa74', cat:'salate', nr:'74', name:'Fitness Salat', desc:'Grünsalat, Tomaten, Gurken, Hähnchenstreifen, Mais und Käse', price:11.00 },
 
   // VEGETARISCH
-  { id:'v75', cat:'vegetarisch', nr:'75', name:'Falafel Rolle', desc:'Frittierte Falafel im arabischen Brot mit Hummus, Petersilie, Tomaten, Salat, Sesamsoße', price:7.00, badge:'Vegan' },
+  { id:'v75', cat:'vegetarisch', nr:'75', name:'Falafel Rolle', desc:'Frittierte Falafel im arabischen Brot mit Hummus, Petersilie, Tomaten, Salat, Sesamsoße', price:7.00, badge:'Vegan', popular:true },
   { id:'v76', cat:'vegetarisch', nr:'76', name:'Falafel Teller', desc:'5 Falafel mit Brot, Hummus, Petersilie, Tomaten, Salat, Peperoni, eingelegten Gurken, Sesamsoße', price:12.00, badge:'Vegan' },
 
   // FINGERFOOD
-  { id:'f77', cat:'fingerfood', nr:'77–78', name:'Chicken Nuggets', desc:'Knusprige Hähnchenstreifen, mit Soße nach Wahl',  price:5.50,
+  { id:'f77', cat:'fingerfood', nr:'77–78', name:'Chicken Nuggets', desc:'Knusprige Hähnchenstreifen. Soße bitte unter „Soße nach Wahl“ hinzufügen – Allergene stehen dort.', price:5.50,
     variants:[{l:'6 Stück + 1 Soße',p:5.50},{l:'9 Stück + 2 Soßen',p:7.50}] },
   { id:'f79', cat:'fingerfood', nr:'79–80', name:'Crispy Chicken', desc:'Marinierte Hähnchenteile, knusprig frittiert', price:8.50,
     variants:[{l:'5 Stück + Knoblauch',p:8.50},{l:'Teller mit Pommes & Coleslaw',p:14.00}] },
@@ -732,6 +981,7 @@ const MENU = [
 ];
 
 const CATS = [
+  { id:'beliebt',     label:'Beliebt',                  photo:'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&h=220&q=85', icon:'★' },
   { id:'drehspiess',  label:'Drehspieß & Shawarma',    photo:'https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=800&h=220&q=85', icon:'🥙' },
   { id:'ueberbacken', label:'Überbacken',               photo:'https://images.unsplash.com/photo-1759409117421-1a64af35f118?auto=format&fit=crop&w=800&h=220&q=85', icon:'🫕' },
   { id:'burger',      label:'Burger',                   photo:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&h=220&q=85', icon:'🍔' },
@@ -745,61 +995,439 @@ const CATS = [
 ];
 
 // ── KONFIGURATION ─────────────────────────────────────────────────────────
-const DELIVERY_FEE         = 2.50;
-const MIN_ORDER_DELIVERY   = 15.00;
+// Liefergebühr/Mindestwert kommen aus delivery_zones (API) – kein 2,50-Pauschal-Fallback.
+let DELIVERY_FEE         = 0;
+let MIN_ORDER_DELIVERY   = 15.00;
+let deliveryZoneOk       = false;
+let deliveryZonesCfg     = [];
+const POPULAR_IDS = ['d9','s24','n31','p53','v75','b14'];
+
+// ── SCHÜLERANGEBOTE STATE ──────────────────────────────────────────────────
+let studentOffers = {};       // { itemId: { is_student_offer, student_price, ... } }
+let studentConfig = {};       // Öffentliche Konfiguration
+let studentEligible = false;  // Ist der eingeloggte Kunde berechtigt?
+let studentEligibleReason = '';
+let studentSystemEnabled = false;
+
+async function loadStudentOffersData() {
+  try {
+    const [cfgR, prodR] = await Promise.all([
+      fetch('/api/student-offers/config'),
+      fetch('/api/student-offers/products'),
+    ]);
+    if (cfgR.ok) studentConfig = await cfgR.json();
+    if (prodR.ok) studentOffers = await prodR.json();
+    studentSystemEnabled = !!studentConfig.enabled;
+  } catch (e) {
+    // Schülerangebote nicht verfügbar – kein Fehler
+  }
+}
+
+async function checkStudentEligibility() {
+  if (!studentSystemEnabled) return;
+  try {
+    const delType = orderType === 'delivery' ? 'lieferung' : 'abholung';
+    const r = await fetch(`/api/customer/student-eligibility?delivery_type=${delType}`, {credentials:'include'});
+    if (r.ok) {
+      const d = await r.json();
+      studentEligible = !!d.eligible;
+      studentEligibleReason = d.reason || '';
+    }
+  } catch (e) { /* ignorieren */ }
+}
+
+function getStudentInfo(itemId) {
+  return studentOffers[itemId] || null;
+}
+
+function studentBadgeHtml(itemId) {
+  if (!studentSystemEnabled) return '';
+  const si = getStudentInfo(itemId);
+  if (!si || !si.is_student_offer) return '';
+  const sp = si.student_price;
+  if (sp == null) return '';
+  return `<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#F59E0B;margin-left:4px;" title="Nur mit gültigem Schülernachweis">🎓 ${parseFloat(sp).toFixed(2).replace('.',',')} €</span>`;
+}
+
+function updateStudentHint() {
+  const box = document.getElementById('student-hint-box');
+  const txt = document.getElementById('student-hint-text');
+  const sub = document.getElementById('student-hint-sub');
+  const confirmWrap = document.getElementById('student-confirm-wrap');
+  if (!box || !txt || !sub) return;
+
+  if (!studentSystemEnabled) { box.style.display = 'none'; return; }
+
+  // Prüfe ob Schülerartikel im Warenkorb
+  const hasStudentItems = Object.values(cart).some(e => getStudentInfo(e.item.id)?.is_student_offer);
+  if (!hasStudentItems) { box.style.display = 'none'; return; }
+
+  box.style.display = '';
+
+  if (studentEligible && studentEligibleReason === 'verified') {
+    txt.textContent = '✓ Schülerstatus bestätigt';
+    sub.textContent = 'Dein Schülerrabatt ist aktiv.';
+    if (confirmWrap) confirmWrap.style.display = 'none';
+  } else if (studentEligible && ['pending_check', 'pending_first_order', 'recheck_pending'].includes(studentEligibleReason)) {
+    txt.textContent = 'Schülernachweis bei Abholung erforderlich';
+    sub.textContent = 'Zeige bitte beim ersten Mal deinen Schülerausweis vor. Ohne Nachweis kann der reguläre Preis berechnet werden.';
+    if (confirmWrap) confirmWrap.style.display = 'flex';
+  } else {
+    txt.textContent = '🎓 Schülerangebot im Warenkorb';
+    sub.textContent = 'Mit gültigem Schülernachweis erhältst du vergünstigte Preise. Bitte melde dich an oder erstelle ein Kundenkonto.';
+    if (confirmWrap) confirmWrap.style.display = 'none';
+  }
+}
+// Product-info SoT (server). MENU hardcode removed — never invent from names.
+// Legacy hardcode-legend removed — single SoT via /api/product-info (+ allergen_matrix.json).
+let productInfoCatalog = null;
+let productInfoCheckoutHint = '';
+
+function variantSlugClient(label) {
+  const s = String(label || '').trim().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+  return s || 'default';
+}
+
+function resolveProductInfo(productId, variantLabel) {
+  const empty = { allergen_text:'', additive_text:'', show_allergen_line:false, show_additive_line:false, allergen_free:false, allergen_status:'MISSING', additive_status:'MISSING', incomplete:true, incomplete_hint:'Produktinformationen noch nicht vollständig hinterlegt', allergens:[], additives:[] };
+  if (!productInfoCatalog || !productInfoCatalog.products) return empty;
+  const p = productInfoCatalog.products[productId];
+  if (!p) return empty;
+  const label = (variantLabel || '').trim();
+  if (label && p.variants) {
+    const vid = variantSlugClient(label);
+    if (p.variants[vid]) return p.variants[vid];
+    const hit = Object.values(p.variants).find(v => (v.variant_name || '') === label);
+    if (hit) return hit;
+    // unknown named variant → fail-safe MISSING (no sibling invent)
+    return empty;
+  }
+  return p;
+}
+
+function codeLabelRowsHtml(items) {
+  const list = items || [];
+  if (!list.length) return '';
+  return list.map(function (a) {
+    const code = (a && a.code) || '';
+    const label = (a && a.label) || '';
+    if (!code && !label) return '';
+    return '<div class="pi-code-row"><strong>' + escapeHtmlLite(code) + '</strong> · ' + escapeHtmlLite(label) + '</div>';
+  }).join('');
+}
+
+function allergenBlockHtml(productId, variantLabel, opts) {
+  if (!(opts && opts.withInfoBtn)) return '';
+  // MISSING → no "Keine Allergene". Codes nur im Popup.
+  return '<button type="button" id="ai-' + productId + '" class="ai-info-btn" onclick="openProductInfo(\'' + productId + '\')" aria-label="Allergene und Zusatzstoffe">Allergene</button>';
+}
+
+function escapeHtmlLite(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function updateRowAllergenDisplay(itemId) {
+  const item = MENU.find(m => m.id === itemId);
+  if (!item) return;
+  const idx = item._selectedVariant !== undefined ? item._selectedVariant : 0;
+  const vLabel = item.variants && item.variants[idx] ? item.variants[idx].l : '';
+  const el = document.getElementById('ai-' + itemId);
+  if (!el) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = allergenBlockHtml(itemId, vLabel, { withInfoBtn: true });
+  if (tmp.firstChild) el.replaceWith(tmp.firstChild);
+  else el.innerHTML = '';
+}
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 const cart = {};
 let orderType   = 'pickup';
-let payMethod   = 'cash';
+let payMethod   = 'stripe';
 let activePromo = null;
 let siteOnline  = true;
+let shopStatus  = null;
+let orderOptions = null;
 let waitPickup  = 20;
 let waitDelivery = 40;
 let menuOverrides = {};  // { itemId: { available, note } }
+let menuSearchQuery = '';
+let submitInFlight = false;
+let lastOrderNumber = '';
+/** Batch 1: Attempt-Nummer + hochentropisches Token in sessionStorage. */
+const ATTEMPT_NR_KEY = 'sh_checkout_attempt_nr';
+const ATTEMPT_TOK_KEY = 'sh_checkout_attempt_token';
+const CLIENT_SUBMIT_TIMEOUT_MS = 10000;
+let checkoutAttemptOrderNumber = '';
+let checkoutAttemptToken = '';
+let navigatingToStripe = false;
 
-// ── SETTINGS vom Server laden ──────────────────────────────────────────────
+function generateCheckoutAttemptToken() {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  let bin = '';
+  bytes.forEach((b) => { bin += String.fromCharCode(b); });
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function loadCheckoutAttempt() {
+  try {
+    const nr = sessionStorage.getItem(ATTEMPT_NR_KEY) || '';
+    const tok = sessionStorage.getItem(ATTEMPT_TOK_KEY) || '';
+    if (nr && tok) {
+      checkoutAttemptOrderNumber = nr;
+      checkoutAttemptToken = tok;
+      return { nr, tok };
+    }
+  } catch (_) {}
+  return null;
+}
+
+function persistCheckoutAttempt(nr, tok) {
+  checkoutAttemptOrderNumber = nr;
+  checkoutAttemptToken = tok;
+  try {
+    sessionStorage.setItem(ATTEMPT_NR_KEY, nr);
+    sessionStorage.setItem(ATTEMPT_TOK_KEY, tok);
+  } catch (_) {}
+}
+
+function ensureCheckoutAttempt() {
+  const existing = loadCheckoutAttempt();
+  if (existing) return existing;
+  const nr = generateOrderNumber();
+  const tok = generateCheckoutAttemptToken();
+  persistCheckoutAttempt(nr, tok);
+  return { nr, tok };
+}
+
+function clearCheckoutAttempt() {
+  checkoutAttemptOrderNumber = '';
+  checkoutAttemptToken = '';
+  try {
+    sessionStorage.removeItem(ATTEMPT_NR_KEY);
+    sessionStorage.removeItem(ATTEMPT_TOK_KEY);
+  } catch (_) {}
+}
+
+function ensureCheckoutOrderNumber() {
+  return ensureCheckoutAttempt().nr;
+}
+
+function clearCheckoutOrderNumber() {
+  clearCheckoutAttempt();
+}
+let statusPollTimer = null;
+
+// ── SETTINGS + SHOP-STATUS vom Server laden ────────────────────────────────
 async function loadSiteSettings() {
   try {
-    const r = await fetch('/api/settings');
-    if (!r.ok) return;
-    const s = await r.json();
-    siteOnline    = s.online;
-    waitPickup    = s.wait_pickup   || 20;
-    waitDelivery  = s.wait_delivery || 40;
-    menuOverrides = s.overrides     || {};
+    const previewTok = new URLSearchParams(location.search).get('content_preview')
+      || new URLSearchParams(location.search).get('preview')
+      || '';
+    const settingsUrl = previewTok
+      ? ('/api/settings?preview=' + encodeURIComponent(previewTok))
+      : '/api/settings';
+    const [rSet, rSt, rPi] = await Promise.all([
+      fetch(settingsUrl),
+      fetch('/api/shop-status'),
+      fetch('/api/product-info'),
+    ]);
+    if (rSet.ok) {
+      const s = await rSet.json();
+      siteOnline    = s.online;
+      waitPickup    = s.wait_pickup   || 20;
+      waitDelivery  = s.wait_delivery || 40;
+      menuOverrides = s.overrides     || {};
+      if (s.preview_mode || s.content_draft) {
+        let ban = document.getElementById('content-preview-banner');
+        if (!ban) {
+          ban = document.createElement('div');
+          ban.id = 'content-preview-banner';
+          ban.style.cssText = 'position:sticky;top:0;z-index:9999;background:#1a1408;border-bottom:2px solid #f59e0b;color:#fbbf24;padding:10px 14px;font-size:13px;font-weight:700;text-align:center;';
+          ban.innerHTML = 'ENTWURF – NOCH NICHT LIVE<br><span style="font-weight:500;font-size:12px;color:#d6d3d1;">Diese Änderungen sind noch nicht veröffentlicht.</span>';
+          document.body.prepend(ban);
+        }
+      }
+    }
+    if (rSt.ok) {
+      shopStatus = await rSt.json();
+      siteOnline = shopStatus.manual_online !== false;
+      waitPickup = shopStatus.wait_pickup || waitPickup;
+      waitDelivery = shopStatus.wait_delivery || waitDelivery;
+      if (shopStatus.fulfillment) {
+        MIN_ORDER_DELIVERY = shopStatus.fulfillment.min_order_delivery_eur ?? MIN_ORDER_DELIVERY;
+      }
+      deliveryZonesCfg = Array.isArray(shopStatus.delivery_zones) ? shopStatus.delivery_zones : [];
+      // Keine pauschale Gebühr aus fulfillment – Zone entscheidet nach Adresse.
+      DELIVERY_FEE = 0;
+      deliveryZoneOk = false;
+      if (Array.isArray(shopStatus.popular_item_ids) && shopStatus.popular_item_ids.length) {
+        POPULAR_IDS.splice(0, POPULAR_IDS.length, ...shopStatus.popular_item_ids);
+      }
+    }
+    if (rPi && rPi.ok) {
+      productInfoCatalog = await rPi.json();
+      productInfoCheckoutHint = (productInfoCatalog && productInfoCatalog.checkout_hint) || '';
+    }
 
-    if (!siteOnline) {
-      showOfflineBanner(s.offline_msg || 'Wir sind gleich zurück!');
+    if (shopStatus && shopStatus.accept_orders === false) {
+      showOfflineBanner(orderingClosedMessage());
+      lockCheckout(true);
     } else {
       hideOfflineBanner();
+      lockCheckout(false);
     }
     renderWaitBadge();
-    renderMenu();  // Speisekarte neu zeichnen mit Overrides
+    renderMenu();
     checkStatus();
+    await refreshOrderOptions();
   } catch(e) {}
 }
 
-function showOfflineBanner(msg) {
-  let el = document.getElementById('offline-banner');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'offline-banner';
-    el.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#080604;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;text-align:center;';
-    el.innerHTML = `
-      <img src="https://files.catbox.moe/3uyamu.png" style="width:80px;opacity:.6;filter:grayscale(1);">
-      <div style="font-family:\'Playfair Display\',serif;color:#C9A84C;font-size:22px;">Snack House Yassine</div>
-      <div style="color:#555;font-size:14px;max-width:280px;" id="offline-msg-txt">${msg}</div>
-      <div style="background:#1a1a1a;border:1px solid #2a2318;border-radius:10px;padding:12px 20px;color:#444;font-size:12px;">Wir sind gerade nicht verfügbar.<br>Bitte versuche es später erneut.</div>
-    `;
-    document.body.appendChild(el);
-  } else {
-    document.getElementById('offline-msg-txt').textContent = msg;
+async function refreshOrderOptions() {
+  try {
+    const r = await fetch(`/api/order-options?type=${orderType}&subtotal=${encodeURIComponent(subtotalPrice())}`);
+    if (!r.ok) return;
+    orderOptions = await r.json();
+    applyOrderOptionsUI();
+  } catch (_) {}
+}
+
+function fulfillmentKindFromLabel(label) {
+  const t = String(label || '').trim();
+  if (/^Abholung\b/i.test(t) || /\bWartezeit\b/i.test(t)) return 'pickup';
+  if (/^Lieferung\b/i.test(t) || /\bLieferzeit\b/i.test(t)) return 'delivery';
+  return '';
+}
+
+function activeFulfillment() {
+  const type = orderType === 'delivery' ? 'delivery' : 'pickup';
+  const sel = document.getElementById('f-time');
+  const slotId = (sel && sel.value) ? sel.value : 'asap';
+  let label = '';
+  if (orderOptions && Array.isArray(orderOptions.slots)) {
+    const found = orderOptions.slots.find(s => s.id === slotId);
+    if (found && found.label) label = found.label;
   }
+  if (!label && sel && sel.selectedIndex >= 0 && sel.options[sel.selectedIndex]) {
+    label = sel.options[sel.selectedIndex].text;
+  }
+  if (!label && slotId === 'asap') label = 'So schnell wie möglich';
+  return { orderType: type, slotId, label };
+}
+
+function fulfillmentMatchesOrderType(f) {
+  const kind = fulfillmentKindFromLabel(f && f.label);
+  if (!kind) return true;
+  return kind === ((f && f.orderType) === 'delivery' ? 'delivery' : 'pickup');
+}
+
+function applyOrderOptionsUI() {
+  if (!orderOptions) return;
+  const hint = document.getElementById('order-type-hint');
+  if (hint) {
+    const w = orderOptions.wait_minutes;
+    if (orderType === 'delivery') {
+      const minPart = (orderOptions.min_order_eur != null)
+        ? ` · ab ${fmtPrice(orderOptions.min_order_eur)}`
+        : '';
+      const feePart = (orderOptions.delivery_fee_eur != null)
+        ? ` · +${fmtPrice(orderOptions.delivery_fee_eur)} Liefergebühr`
+        : ' · Liefergebühr nach Adresse';
+      hint.textContent = `Lieferung ~${w} Min.${minPart}${feePart}`;
+    } else {
+      hint.textContent = `Abholung ~${w} Min. · keine Liefergebühr`;
+    }
+  }
+  const sel = document.getElementById('f-time');
+  if (sel && Array.isArray(orderOptions.slots) && orderOptions.slots.length) {
+    const cur = sel.value;
+    const type = orderType === 'delivery' ? 'delivery' : 'pickup';
+    const curSlot = orderOptions.slots.find(s => s.id === cur);
+    const curKind = fulfillmentKindFromLabel(curSlot && curSlot.label);
+    sel.innerHTML = orderOptions.slots.map(s =>
+      `<option value="${s.id}">${s.label}</option>`
+    ).join('');
+    const keepClock = !!(cur && cur !== 'asap' && curSlot && (!curKind || curKind === type)
+      && [...sel.options].some(o => o.value === cur));
+    if (keepClock) sel.value = cur;
+    else if ([...sel.options].some(o => o.value === 'asap')) sel.value = 'asap';
+  }
+  if (Array.isArray(orderOptions.payments)) {
+    const unavail = document.getElementById('pay-unavailable');
+    const stripeEl = document.getElementById('pay-stripe');
+    const hint = document.getElementById('stripe-hint');
+    const btn = document.getElementById('submit-btn');
+    orderOptions.payments.forEach(p => {
+      const el = document.getElementById('pay-' + p.id);
+      if (!el) return;
+      if (p.id === 'cash' || p.id === 'card') {
+        el.remove();
+        return;
+      }
+      el.style.display = p.enabled ? '' : 'none';
+      el.style.pointerEvents = p.enabled ? '' : 'none';
+    });
+    const stripePay = orderOptions.payments.find(p => p.id === 'stripe');
+    const stripeOn = !!(stripePay && stripePay.enabled);
+    if (unavail) unavail.style.display = stripeOn ? 'none' : 'block';
+    if (hint) hint.style.display = stripeOn ? 'block' : 'none';
+    if (stripeEl) stripeEl.style.display = stripeOn ? '' : 'none';
+    if (btn) {
+      btn.disabled = !stripeOn || submitInFlight;
+      btn.style.opacity = stripeOn ? '1' : '0.45';
+    }
+    if (stripeOn) setPayment('stripe');
+    else payMethod = '';
+  }
+  try { buildCheckoutSummary(); } catch (_) {}
+}
+
+function onMenuSearch(q) {
+  menuSearchQuery = (q || '').trim().toLowerCase();
+  renderMenu();
+}
+
+function orderingClosedMessage() {
+  const reasons = (shopStatus && shopStatus.reasons) || [];
+  if (!siteOnline || reasons.includes('online_ordering_disabled') || reasons.includes('manual_pause')) {
+    return 'Online-Bestellen ist gerade aus. Du kannst dich trotzdem einloggen.';
+  }
+  if (reasons.includes('outside_hours')) {
+    if (shopStatus && shopStatus.label === 'Ruhetag') {
+      return 'Heute Ruhetag. Bestellen geht wieder, wenn wir öffnen.';
+    }
+    return (shopStatus && (shopStatus.offline_msg || shopStatus.next_open_label)) || 'Heute geschlossen.';
+  }
+  if (reasons.includes('past_last_order')) {
+    return 'Heute keine Bestellung mehr. Konto bleibt erreichbar.';
+  }
+  return (shopStatus && (shopStatus.offline_msg || shopStatus.pause_reason)) || 'Online-Bestellen gerade nicht möglich.';
+}
+
+function lockCheckout(off) {
+  const btn = document.getElementById('submit-btn');
+  if (!btn) return;
+  btn.disabled = !!off;
+  btn.style.opacity = off ? '0.55' : '';
+  btn.style.cursor = off ? 'not-allowed' : 'pointer';
+  const label = document.getElementById('submit-label');
+  if (label && !submitInFlight) {
+    label.textContent = off ? 'Bestellen gerade nicht möglich' : submitButtonLabel();
+  }
+}
+
+function showOfflineBanner(msg) {
+  const el = document.getElementById('offline-banner');
+  const txt = document.getElementById('offline-msg-txt');
+  if (txt) txt.textContent = msg || 'Online-Bestellen gerade nicht möglich.';
+  if (el) el.style.display = 'block';
 }
 function hideOfflineBanner() {
   const el = document.getElementById('offline-banner');
-  if (el) el.remove();
+  if (el) el.style.display = 'none';
 }
 
 function renderWaitBadge() {
@@ -829,33 +1457,31 @@ function renderWaitBadge() {
   }
 }
 
-function itemDisplay(item) {
-  const ov = menuOverrides[item.id] || {};
-  if (ov.available === false) return null;
-  return {
-    ...item,
-    name: ov.name || item.name,
-    desc: ov.desc || item.desc,
-    price: ov.price != null ? ov.price : item.price,
-    image_url: ov.image_url || null,
-    variants: item.variants ? item.variants.map(v => ({
-      ...v,
-      p: ov.price != null && item.variants.length === 1 ? ov.price : v.p,
-    })) : item.variants,
-  };
-}
-
 // ── RENDER MENU ────────────────────────────────────────────────────────────
 function renderMenu() {
   const root = document.getElementById('menu-root');
+  const empty = document.getElementById('menu-empty');
   let html = '';
+  let visibleCount = 0;
 
   CATS.forEach(cat => {
-    const items = MENU.map(itemDisplay).filter(Boolean).filter(m => m.cat === cat.id);
+    let items = MENU.map(itemDisplay).filter(Boolean);
+    if (cat.id === 'beliebt') {
+      items = items.filter(m => m.popular || POPULAR_IDS.includes(m.id));
+    } else {
+      items = items.filter(m => m.cat === cat.id);
+    }
+    if (menuSearchQuery) {
+      items = items.filter(m =>
+        (m.name || '').toLowerCase().includes(menuSearchQuery) ||
+        (m.desc || '').toLowerCase().includes(menuSearchQuery) ||
+        String(m.nr || '').toLowerCase().includes(menuSearchQuery)
+      );
+    }
     if (!items.length) return;
 
     html += `<div class="cat-section" id="sec-${cat.id}">
-      <div class="cat-banner-m" style="position:relative;height:110px;overflow:hidden;margin-top:8px;">
+      <div class="cat-banner-m">
         <img src="${cat.photo}" alt="${cat.label}" loading="lazy" width="800" height="110"
              style="width:100%;height:100%;object-fit:cover;object-position:center;">
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(14,11,8,0.92) 0%,rgba(14,11,8,0.45) 55%,rgba(14,11,8,0.15) 100%);"></div>
@@ -865,34 +1491,43 @@ function renderMenu() {
       </div>`;
 
     items.forEach(item => {
+      visibleCount++;
       const cartEntry = cart[item.id];
       const qty = cartEntry ? cartEntry.qty : 0;
       const hasVar = item.variants && item.variants.length > 1;
+      const soldOut = item.available === false;
+      const varIdx = item._selectedVariant !== undefined ? item._selectedVariant : 0;
+      const vLabel = item.variants && item.variants[varIdx] ? item.variants[varIdx].l : '';
+      const allergenHtml = allergenBlockHtml(item.id, vLabel, { withInfoBtn: true });
       const thumb = item.image_url
-        ? `<img src="${item.image_url}" alt="" loading="lazy" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;">`
+        ? `<img src="${item.image_url}" alt="" loading="lazy" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;${soldOut?'opacity:.4;':''}">`
         : '';
 
-      html += `<div class="menu-row" id="row-${item.id}" style="padding:14px 16px;display:flex;align-items:center;gap:12px;">
+      html += `<div class="menu-row" id="row-${item.id}" style="padding:14px 16px;display:flex;align-items:center;gap:12px;${soldOut?'opacity:.55;':''}">
         ${thumb}
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px;">
             <span style="font-size:10px;color:#555;font-weight:600;">${item.nr}</span>
             <span class="item-title" style="font-size:15px;font-weight:600;color:#fff;">${item.name}</span>
-            ${item.badge ? `<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);color:#C9A84C;">${item.badge}</span>` : ''}
+            ${item.badge ? `<span class="item-badge">${item.badge}</span>` : ''}
+            ${soldOut ? `<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:#3f1212;border:1px solid #ef444466;color:#fca5a5;">Ausverkauft</span>` : ''}
+            ${studentBadgeHtml(item.id)}
+            ${allergenHtml}
           </div>
           <p class="item-desc-m" style="font-size:12px;color:#666;line-height:1.5;margin-bottom:6px;">${item.desc}</p>
-          ${hasVar ? `<div style="display:flex;gap:6px;flex-wrap:wrap;" id="var-${item.id}">
+          ${hasVar && !soldOut ? `<div style="display:flex;gap:6px;flex-wrap:wrap;" id="var-${item.id}">
             ${item.variants.map((v,i) => `<button class="var-chip" onclick="selectVariant('${item.id}',${i})" id="vbtn-${item.id}-${i}"
               style="padding:3px 10px;border-radius:99px;border:1px solid #2a2a2a;font-size:11px;font-weight:500;cursor:pointer;background:${i===0?'#C9A84C':'transparent'};color:${i===0?'#000':'#666'};transition:all .15s;">${v.l} ${fmtPrice(v.p)}</button>`).join('')}
           </div>` : ''}
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
           <span style="font-size:16px;font-weight:700;color:#C9A84C;" id="price-${item.id}">${hasVar ? 'ab ' : ''}${fmtPrice(item.price)}</span>
+          ${soldOut ? `<span style="font-size:12px;color:#888;">—</span>` : `
           <div style="display:flex;align-items:center;gap:8px;">
-            <button class="qty-btn ${qty===0?'zero':''}" onclick="changeQty('${item.id}',-1)" id="minus-${item.id}" ${qty===0?'disabled':''}>−</button>
+            <button class="qty-btn ${qty===0?'zero':''}" onclick="changeQty('${item.id}',-1)" id="minus-${item.id}" ${qty===0?'disabled':''} aria-label="Weniger">−</button>
             <span id="qty-${item.id}" style="min-width:20px;text-align:center;font-size:15px;font-weight:700;color:${qty>0?'#C9A84C':'#333'};">${qty||'+'}</span>
-            <button class="qty-btn" onclick="changeQty('${item.id}',1)" id="plus-${item.id}">+</button>
-          </div>
+            <button class="qty-btn" onclick="changeQty('${item.id}',1)" id="plus-${item.id}" aria-label="Hinzufügen">+</button>
+          </div>`}
         </div>
       </div>`;
     });
@@ -901,6 +1536,26 @@ function renderMenu() {
   });
 
   root.innerHTML = html;
+  if (empty) empty.style.display = (menuSearchQuery && visibleCount === 0) ? 'block' : 'none';
+}
+
+function itemDisplay(item) {
+  const ov = menuOverrides[item.id] || {};
+  if (ov.available === false || ov.available === 0) {
+    return { ...item, available: false, note: ov.note || '' };
+  }
+  return {
+    ...item,
+    available: true,
+    name: ov.name || item.name,
+    desc: ov.desc || item.desc,
+    price: ov.price != null ? ov.price : item.price,
+    image_url: ov.image_url || null,
+    variants: item.variants ? item.variants.map(v => ({
+      ...v,
+      p: ov.price != null && item.variants.length === 1 ? ov.price : v.p,
+    })) : item.variants,
+  };
 }
 
 // ── VARIANT SELECTION ──────────────────────────────────────────────────────
@@ -928,6 +1583,7 @@ function selectVariant(itemId, idx) {
   }
 
   item._selectedVariant = idx;
+  updateRowAllergenDisplay(itemId);
 }
 
 // ── QTY ────────────────────────────────────────────────────────────────────
@@ -935,7 +1591,7 @@ function changeQty(itemId, delta) {
   if (cart[itemId] && cart[itemId].isFree) return; // Gratis-Artikel nicht manuell änderbar
   const base = MENU.find(m => m.id === itemId);
   const item = base ? itemDisplay(base) : null;
-  if (!item) return;
+  if (!item || item.available === false) return;
 
   const current = cart[itemId] ? cart[itemId].qty : 0;
   const next    = Math.max(0, current + delta);
@@ -973,8 +1629,186 @@ function changeQty(itemId, delta) {
 function totalItems()    { return Object.values(cart).reduce((s,e)=>s+e.qty,0); }
 function subtotalPrice() { return Object.values(cart).reduce((s,e)=>s+(e.price*e.qty),0); }
 function isDelivery()    { return orderType === 'delivery'; }
-function deliveryFee()   { return isDelivery() ? DELIVERY_FEE : 0; }
+function deliveryFee()   {
+  if (!isDelivery()) return 0;
+  if (!deliveryZoneOk) return 0;
+  return Number(DELIVERY_FEE) || 0;
+}
 function totalPrice()    { return subtotalPrice() + deliveryFee(); }
+
+// ── WARENKORB-GETRÄNK-UPSELL (Live; E-Mail-Upsell bleibt separat) ───────────
+const CART_UPSELL_DISMISS_KEY = 'shy_cart_upsell_dismiss';
+let _lastCartUpsellShownKey = '';
+
+function cartHasDrink() {
+  return Object.values(cart).some(e => {
+    if (!e) return false;
+    const cat = (e.item && e.item.cat) || '';
+    const name = ((e.item && e.item.name) || '').toLowerCase();
+    if (cat === 'getraenke') return true;
+    return /ayran|cola|fanta|sprite|mezzo|red bull|wasser|getr[aä]nk|softdrink/.test(name);
+  });
+}
+
+function cartHasFood() {
+  return Object.values(cart).some(e => {
+    if (!e || e.isFree) return false;
+    const cat = (e.item && e.item.cat) || '';
+    return cat && cat !== 'getraenke';
+  });
+}
+
+function cartIsDrehspiessLike() {
+  return Object.values(cart).some(e => {
+    if (!e || e.isFree) return false;
+    const cat = (e.item && e.item.cat) || '';
+    const name = ((e.item && e.item.name) || '').toLowerCase();
+    return cat === 'drehspiess' || /shawarma|drehspie[sß]|d[öo]ner/.test(name);
+  });
+}
+
+function drinkUpsellOptions() {
+  const colaItem = MENU.find(m => m.id === 'g1');
+  const ayran = MENU.find(m => m.id === 'g3');
+  const opts = [];
+  const wants = [
+    { re: /cola\s*0[,.]?33/i, label: 'Cola' },
+    { re: /fanta\s*0[,.]?33/i, label: 'Fanta' },
+    { re: /sprite\s*0[,.]?33/i, label: 'Sprite' },
+  ];
+  (colaItem && colaItem.variants ? colaItem.variants : []).forEach((v) => {
+    const hit = wants.find(w => w.re.test(v.l));
+    if (!hit) return;
+    if (opts.some(o => o.label === hit.label)) return;
+    opts.push({ id: 'g1', label: hit.label, price: v.p, variantLabel: v.l });
+  });
+  if (ayran) opts.push({ id: 'g3', label: 'Ayran', price: ayran.price, variantLabel: null });
+  return opts;
+}
+
+function pickCartUpsell() {
+  try {
+    if (sessionStorage.getItem(CART_UPSELL_DISMISS_KEY) === '1') return null;
+  } catch (_) {}
+  if (!cartHasFood() || cartHasDrink()) return null;
+  const options = drinkUpsellOptions();
+  if (options.length < 2) return null;
+  if (cartIsDrehspiessLike()) {
+    const ayranFirst = options.filter(o => o.id === 'g3').concat(options.filter(o => o.id !== 'g3'));
+    return { headline: 'Dazu noch etwas zu trinken?', options: ayranFirst };
+  }
+  return { headline: 'Etwas zu trinken?', options };
+}
+
+function dismissCartUpsell() {
+  try { sessionStorage.setItem(CART_UPSELL_DISMISS_KEY, '1'); } catch (_) {}
+  _lastCartUpsellShownKey = '';
+  updateCartUI();
+  try {
+    if (document.getElementById('view-checkout') && document.getElementById('view-checkout').style.display !== 'none') {
+      buildCheckoutSummary();
+    }
+  } catch (_) {}
+}
+
+function acceptCartUpsell(itemId, variantLabel) {
+  const base = MENU.find(m => m.id === itemId);
+  if (!base) return;
+  const item = itemDisplay(base);
+  if (!item || item.available === false) return;
+  let variant = null;
+  if (item.variants && item.variants.length) {
+    let idx = 0;
+    if (variantLabel) {
+      const found = item.variants.findIndex(v => v.l === variantLabel);
+      if (found >= 0) idx = found;
+    }
+    item._selectedVariant = idx;
+    variant = item.variants[idx];
+  }
+  const current = cart[itemId] ? cart[itemId].qty : 0;
+  cart[itemId] = {
+    item,
+    qty: current + 1,
+    variant,
+    price: variant ? variant.p : item.price,
+  };
+  trackEvent('upsell_accepted', {
+    item_id: itemId,
+    value: variant ? variant.p : item.price,
+  });
+  const qtyEl = document.getElementById(`qty-${itemId}`);
+  const minusEl = document.getElementById(`minus-${itemId}`);
+  const next = cart[itemId].qty;
+  if (qtyEl) {
+    qtyEl.textContent = next > 0 ? next : '+';
+    qtyEl.style.color = next > 0 ? '#C9A84C' : '#333';
+  }
+  if (minusEl) {
+    minusEl.disabled = next === 0;
+    minusEl.className = `qty-btn ${next === 0 ? 'zero' : ''}`;
+  }
+  applyPromoToCart();
+  updateCartUI();
+  try {
+    if (document.getElementById('view-checkout') && document.getElementById('view-checkout').style.display !== 'none') {
+      buildCheckoutSummary();
+    }
+  } catch (_) {}
+}
+
+function renderCartUpsellHtml() {
+  const u = pickCartUpsell();
+  if (!u) {
+    _lastCartUpsellShownKey = '';
+    return '';
+  }
+  const shownKey = `${u.headline}|${(u.options || []).map(o => o.label).join(',')}`;
+  if (_lastCartUpsellShownKey !== shownKey) {
+    _lastCartUpsellShownKey = shownKey;
+    const first = (u.options || [])[0] || {};
+    trackEvent('upsell_shown', { item_id: first.id, value: first.price });
+  }
+  const esc = (s) => String(s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  const btn = (opt, isPrimary) => {
+    const vl = opt.variantLabel ? `'${esc(opt.variantLabel)}'` : 'null';
+    return `<button type="button" onclick="acceptCartUpsell('${esc(opt.id)}', ${vl})"
+      style="flex:1;min-width:88px;padding:10px 12px;border-radius:10px;border:1px solid ${isPrimary ? '#C9A84C' : '#2a2318'};
+      background:${isPrimary ? 'linear-gradient(135deg,#C9A84C,#e8c76a)' : '#15120d'};color:${isPrimary ? '#000' : '#C9A84C'};
+      font-size:13px;font-weight:700;cursor:pointer;">
+      ${opt.label} · ${fmtPrice(opt.price)}
+    </button>`;
+  };
+  const options = u.options || [];
+  return `
+    <div style="margin:14px 0 4px;padding:14px;border-radius:12px;border:1px solid #2a2318;background:#14110c;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px;">
+        <p style="margin:0;font-size:14px;font-weight:700;color:#fff;">${u.headline}</p>
+        <button type="button" onclick="dismissCartUpsell()" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;white-space:nowrap;padding:0;">Nein danke</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${options.map((opt, i) => btn(opt, i === 0)).join('')}
+      </div>
+    </div>`;
+}
+
+function cartLineName(e) {
+  const name = (e && e.item && e.item.name) || '';
+  const variant = (e && e.variant && (e.variant.l || e.variant)) || '';
+  if (!variant) return name;
+  const n = String(name);
+  const v = String(variant);
+  if (n.includes('/') || n.toLowerCase().includes(v.toLowerCase())) return v;
+  return n;
+}
+
+function cartLineLabel(e) {
+  const title = cartLineName(e);
+  const variant = (e && e.variant && (e.variant.l || e.variant)) || '';
+  if (variant && title === String(variant)) return title;
+  if (variant) return `${title} (${variant})`;
+  return title;
+}
 
 function fmtPrice(p) { return p.toFixed(2).replace('.',',') + ' €'; }
 
@@ -1003,6 +1837,7 @@ function updateCartUI() {
 
   // Cart modal items
   renderCartItems();
+  scheduleLaunchDiscountPreview();
 }
 
 function renderCartItems() {
@@ -1035,7 +1870,7 @@ function renderCartItems() {
   ` : `
     <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #1c1c1c;">
       <div style="flex:1;min-width:0;">
-        <p style="font-size:14px;font-weight:600;color:#fff;">${e.item.name}${e.variant ? ` <span style="font-size:11px;color:#888;">(${e.variant.l})</span>` : ''}</p>
+        <p style="font-size:14px;font-weight:600;color:#fff;">${cartLineLabel(e)}</p>
         <p style="font-size:13px;color:#C9A84C;margin-top:2px;">${fmtPrice(e.price)}</p>
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
@@ -1045,11 +1880,11 @@ function renderCartItems() {
       </div>
       <span style="font-size:14px;font-weight:700;min-width:60px;text-align:right;">${fmtPrice(e.price * e.qty)}</span>
     </div>
-  `).join('');
+  `).join('') + renderCartUpsellHtml();
 
   const sub  = subtotalPrice();
   const fee  = deliveryFee();
-  const belowMin = isDelivery() && sub < MIN_ORDER_DELIVERY;
+  const belowMin = isDelivery() && deliveryZoneOk && sub < MIN_ORDER_DELIVERY;
 
   footer.innerHTML = `
     <div style="margin-bottom:14px;">
@@ -1059,8 +1894,8 @@ function renderCartItems() {
       </div>
       ${isDelivery() ? `
       <div style="display:flex;justify-content:space-between;font-size:13px;color:#888;margin-bottom:6px;">
-        <span>Liefergebühr</span>
-        <span>${fmtPrice(DELIVERY_FEE)}</span>
+        <span>Liefergebühr${deliveryZoneOk ? '' : ' (Ort wählen)'}</span>
+        <span>${deliveryZoneOk ? fmtPrice(fee) : '—'}</span>
       </div>` : ''}
       <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #2a2a2a;padding-top:10px;">
         <span style="font-size:15px;font-weight:700;">Gesamt</span>
@@ -1072,13 +1907,18 @@ function renderCartItems() {
     <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:10px 14px;font-size:12px;color:#f87171;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
       <i class="fas fa-exclamation-triangle" style="flex-shrink:0;"></i>
       Mindestbestellwert für Lieferung: <strong>${fmtPrice(MIN_ORDER_DELIVERY)}</strong>. Noch <strong>${fmtPrice(MIN_ORDER_DELIVERY - sub)}</strong> fehlen.
-    </div>` : `
+    </div>` : ''}
+    ${isDelivery() && !deliveryZoneOk ? `
+    <div style="background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:10px 14px;font-size:12px;color:#C9A84C;margin-bottom:12px;">
+      Lieferadresse mit Ort angeben – Gebühr und Mindestwert richten sich nach der Zone.
+    </div>` : ''}
+    ${!belowMin ? `
     <div style="background:#1a1a1a;border-radius:10px;padding:10px 14px;font-size:12px;color:#666;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
       <i class="fas fa-info-circle" style="color:#C9A84C;flex-shrink:0;"></i>
       ${isDelivery()
         ? `Lieferung ab ${fmtPrice(MIN_ORDER_DELIVERY)} Bestellwert · Liefergebühr ${fmtPrice(DELIVERY_FEE)}`
         : `Mindestbestellwert Lieferung ${fmtPrice(MIN_ORDER_DELIVERY)} · Liefergebühr ${fmtPrice(DELIVERY_FEE)}`}
-    </div>`}
+    </div>` : ''}
 
     <button onclick="showView('checkout')" ${belowMin ? 'disabled' : ''}
       style="width:100%;padding:15px;background:${belowMin ? '#2a2a2a' : 'linear-gradient(135deg,#C9A84C,#e8c76a)'};color:${belowMin ? '#555' : '#000'};border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:${belowMin ? 'not-allowed' : 'pointer'};">
@@ -1104,53 +1944,350 @@ function showView(name) {
   document.getElementById('view-checkout').style.display = name==='checkout' ? 'block' : 'none';
   document.getElementById('view-success').style.display  = name==='success'  ? 'block' : 'none';
 
-  if (name === 'checkout') buildCheckoutSummary();
+  if (name === 'checkout') {
+    buildCheckoutSummary();
+    loadStampHint();
+    updateStudentHint();
+    refreshOrderOptions();
+    // Prefill muss nach Paint und nach Session-Cookie greifen (auch Reload)
+    void refreshCheckoutAccountUI({ force: false }).then(function () {
+      setTimeout(function () { refreshCheckoutAccountUI({ force: false }); }, 300);
+    });
+  }
+}
+
+// ── STEMPEL-HINT (eingeloggte Kunden) ─────────────────────────────────────────
+let _stampPreview = null;
+let _selectedCoupon = null;
+let _selectedLoyaltyReward = null;
+let _rewardKind = '';
+let _launchDiscountPreview = { shown:false, eligible:false, amount:0, label:'', percent:5 };
+let _launchDiscountTimer = null;
+
+function checkoutItemPayload() {
+  return Object.values(cart).map(e => ({
+    id: e.item.id,
+    name: cartLineLabel(e) + (e.isFree ? ' [GRATIS]' : ''),
+    price: e.isFree ? 0 : e.price,
+    qty: e.qty,
+    free: e.isFree || false,
+    variant: e.variant ? e.variant.l : '',
+  }));
+}
+
+function currentLaunchDiscountAmount() {
+  return (_launchDiscountPreview && _launchDiscountPreview.eligible)
+    ? Number(_launchDiscountPreview.amount || 0)
+    : 0;
+}
+
+async function refreshLaunchDiscountPreview({ force=false } = {}) {
+  const phone = document.getElementById('f-phone')?.value.trim() || '';
+  const email = document.getElementById('f-email')?.value.trim() || '';
+  if (totalItems() === 0 || _selectedLoyaltyReward || (!phone && !email)) {
+    _launchDiscountPreview = { shown:false, eligible:false, amount:0, label:'', percent:5 };
+    try { buildCheckoutSummary(); } catch (_) {}
+    return _launchDiscountPreview;
+  }
+  try {
+    const r = await fetch(`${API_BASE}/launch-discount/preview`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        phone,
+        email,
+        items: checkoutItemPayload(),
+        couponCode: (_selectedLoyaltyReward && _selectedLoyaltyReward.code) ? _selectedLoyaltyReward.code : '',
+        loyaltyReward: _selectedLoyaltyReward || null,
+      }),
+    });
+    const data = await r.json().catch(() => ({}));
+    if (r.ok && data && data.eligible && Number(data.amount || 0) > 0) {
+      _launchDiscountPreview = {
+        shown: true,
+        eligible: true,
+        amount: Number(data.amount || 0),
+        label: data.label || 'Launch-Rabatt 5 %',
+        percent: Number(data.percent || 5),
+      };
+    } else {
+      _launchDiscountPreview = { shown:false, eligible:false, amount:0, label:'', percent:5, reason:data.reason||'' };
+    }
+  } catch (_) {
+    if (force) throw new Error('Launch-Rabatt konnte nicht geprüft werden. Bitte kurz neu versuchen.');
+    _launchDiscountPreview = { shown:false, eligible:false, amount:0, label:'', percent:5 };
+  }
+  try { buildCheckoutSummary(); } catch (_) {}
+  return _launchDiscountPreview;
+}
+
+function scheduleLaunchDiscountPreview() {
+  clearTimeout(_launchDiscountTimer);
+  _launchDiscountTimer = setTimeout(() => {
+    refreshLaunchDiscountPreview().catch(() => {});
+  }, 250);
+}
+
+async function loadStampHint() {
+  const box = document.getElementById('stamp-hint-box');
+  if (!box) return;
+  const subtotal = totalPrice();
+  const deliveryType = (typeof orderType !== 'undefined' && orderType === 'delivery') ? 'lieferung' : 'abholung';
+  try {
+    const r = await fetch(`/api/customer/stamp-preview?subtotal=${subtotal.toFixed(2)}&delivery_type=${deliveryType}`, {
+      credentials: 'include',
+    });
+    if (!r.ok) { box.style.display = 'none'; return; }
+    const data = await r.json();
+    _stampPreview = data;
+    box.style.display = 'block';
+    const txt = document.getElementById('stamp-hint-text');
+    const sub = document.getElementById('stamp-hint-sub');
+    const rule = document.getElementById('stamp-hint-rule');
+    const needed = data.needed || 10;
+    const prog = data.progress || 0;
+    const remaining = Math.max(0, (data.remaining != null ? data.remaining : (needed - prog)));
+    const fertigNote = 'Stempel erst nach Status fertig – nicht schon beim Absenden.';
+    if (rule) {
+      const base = (data.rule_text || '').trim();
+      rule.textContent = base
+        ? (base.includes('Absenden') || base.toLowerCase().includes('fertig') ? base : `${base} ${fertigNote}`)
+        : fertigNote;
+    }
+    if (data.email_verified === false) {
+      txt.textContent = 'E-Mail noch nicht bestätigt';
+      sub.textContent = 'Bestätige deine E-Mail-Adresse, damit qualifizierte Bestellungen Stempel sammeln können.';
+    } else if (data.reward_ready) {
+      txt.textContent = 'Prämie verfügbar';
+      sub.textContent = `${prog} von ${needed} Stempeln · Deine Gratis-Belohnung ist bereit.`;
+    } else if (data.will_earn) {
+      txt.textContent = `${prog} von ${needed} Stempeln`;
+      sub.textContent = `Noch ${remaining} bis zur Prämie. Nach Abschluss dieser Bestellung (fertig) wird der Stempel gutgeschrieben – nicht schon beim Absenden.`;
+    } else if (data.missing_for_stamp > 0) {
+      txt.textContent = `${prog} von ${needed} Stempeln`;
+      sub.textContent = `Dir fehlen noch ${data.missing_for_stamp.toFixed(2)} € Warenwert bis zum nächsten Stempel (Mindestwert ${Number(data.min_value || 0).toFixed(2)} €). ${fertigNote}`;
+    } else {
+      txt.textContent = `${prog} von ${needed} Stempeln`;
+      sub.textContent = (data.status_text || `Noch ${remaining} bis zu deiner Prämie.`) + ' ' + fertigNote;
+    }
+    const coupons = (data.coupons || []).filter(c => c.type === 'product_choice');
+    const couponSec = document.getElementById('stamp-coupon-section');
+    const couponSel = document.getElementById('stamp-coupon-select');
+    if (coupons.length > 0 && data.reward_ready && data.email_verified !== false) {
+      couponSec.style.display = 'block';
+      couponSel.innerHTML = '';
+      coupons.forEach(c => {
+        couponSel.innerHTML += `<option value="${c.code}">${c.code}</option>`;
+      });
+      if (!_selectedLoyaltyReward) pickRewardKind('fries');
+    } else {
+      couponSec.style.display = 'none';
+      _selectedLoyaltyReward = null;
+      _selectedCoupon = null;
+    }
+  } catch { box.style.display = 'none'; }
+}
+
+function pickRewardKind(kind) {
+  _rewardKind = kind;
+  const friesBtn = document.getElementById('stamp-pick-fries');
+  const drinkBtn = document.getElementById('stamp-pick-drink');
+  const drinkSel = document.getElementById('stamp-drink-select');
+  const info = document.getElementById('stamp-coupon-info');
+  const code = document.getElementById('stamp-coupon-select')?.value || '';
+  const choices = (_stampPreview && _stampPreview.reward_choices) || [];
+  if (friesBtn) friesBtn.style.borderColor = kind === 'fries' ? '#C9A84C' : '#2a2318';
+  if (drinkBtn) drinkBtn.style.borderColor = kind === 'drink' ? '#C9A84C' : '#2a2318';
+  if (kind === 'fries') {
+    if (drinkSel) drinkSel.style.display = 'none';
+    const fries = choices.find(c => c.kind === 'fries') || { id: 'f85', variant: 'Pommes klein', label: 'Kleine Pommes' };
+    _selectedLoyaltyReward = { code, product_id: fries.id, variant: fries.variant || 'Pommes klein' };
+    _selectedCoupon = { code, type: 'product_choice', discount: 0 };
+    if (info) { info.style.display = 'block'; info.style.color = '#22c55e'; info.textContent = 'Kleine Pommes werden als Gratis-Belohnung hinzugefügt.'; }
+    scheduleLaunchDiscountPreview();
+    try { buildCheckoutSummary(); } catch (_) {}
+  } else {
+    const drinks = choices.filter(c => c.kind === 'drink');
+    if (drinkSel) {
+      drinkSel.style.display = 'block';
+      drinkSel.innerHTML = drinks.map(d =>
+        `<option value="${d.id}||${d.variant || ''}">${d.label || d.variant || d.id}</option>`
+      ).join('');
+      drinkSel.onchange = () => {
+        const [id, variant] = (drinkSel.value || '').split('||');
+        _selectedLoyaltyReward = { code, product_id: id, variant: variant || '' };
+        _selectedCoupon = { code, type: 'product_choice', discount: 0 };
+        if (info) { info.style.display = 'block'; info.style.color = '#22c55e'; info.textContent = 'Gewähltes Getränk wird als Gratis-Belohnung hinzugefügt.'; }
+        scheduleLaunchDiscountPreview();
+        try { buildCheckoutSummary(); } catch (_) {}
+      };
+      drinkSel.onchange();
+    }
+  }
+}
+
+async function validateCoupon(code, subtotal) {
+  // Legacy money-coupon path unused for product_choice rewards
+  const info = document.getElementById('stamp-coupon-info');
+  if (!code) { _selectedCoupon = null; _selectedLoyaltyReward = null; if (info) info.style.display = 'none'; return; }
 }
 
 // ── CHECKOUT HELPERS ───────────────────────────────────────────────────────
-function setOrderType(t) {
+async function setOrderType(t) {
   orderType = t;
-  document.getElementById('opt-pickup').classList.toggle('active',   t==='pickup');
-  document.getElementById('opt-delivery').classList.toggle('active', t==='delivery');
-  document.getElementById('addr-field').style.display = t==='delivery' ? 'block' : 'none';
+  document.getElementById('opt-pickup')?.classList.toggle('active',   t==='pickup');
+  document.getElementById('opt-delivery')?.classList.toggle('active', t==='delivery');
+  document.getElementById('top-opt-pickup')?.classList.toggle('active',   t==='pickup');
+  document.getElementById('top-opt-delivery')?.classList.toggle('active', t==='delivery');
+  const addr = document.getElementById('addr-field');
+  if (addr) addr.style.display = t==='delivery' ? 'block' : 'none';
+  const timeSel = document.getElementById('f-time');
+  if (timeSel && [...timeSel.options].some(o => o.value === 'asap')) timeSel.value = 'asap';
   renderWaitBadge();
-  buildCheckoutSummary();
-  // Cart-Bar-Total aktualisieren
   const total = totalPrice();
   const count = totalItems();
   if (count > 0) document.getElementById('bar-total').textContent = fmtPrice(total);
+  await refreshOrderOptions();
+  if (t === 'delivery') {
+    ['f-plz','f-city','f-street'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el._zoneBound) {
+        el.addEventListener('change', checkZoneLive);
+        el._zoneBound = true;
+      }
+    });
+    // last_delivery nur in leere / Konto-Felder – Cart/Zeit/Notiz unberührt
+    try { void refreshCheckoutAccountUI({ force: false }); } catch (_) {}
+  } else {
+    updateCheckoutPrefillHint();
+    updateDeliverySaveHint();
+  }
+}
+
+async function checkZoneLive() {
+  const hint = document.getElementById('zone-hint');
+  if (orderType !== 'delivery') {
+    deliveryZoneOk = true;
+    return;
+  }
+  const plz = document.getElementById('f-plz')?.value.trim() || '';
+  const city = document.getElementById('f-city')?.value.trim() || '';
+  const street = document.getElementById('f-street')?.value.trim() || '';
+  if (!city) {
+    deliveryZoneOk = false;
+    DELIVERY_FEE = 0;
+    if (hint) {
+      hint.style.color = '#888';
+      hint.textContent = 'Ort angeben – dann prüfen wir Liefergebiet und Gebühr.';
+    }
+    buildCheckoutSummary();
+    updateCartUI();
+    return;
+  }
+  try {
+    const r = await fetch('/api/delivery-check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plz, city, street }),
+    });
+    const z = await r.json();
+    if (hint) {
+      hint.style.color = z.ok ? '#86efac' : '#fca5a5';
+      hint.textContent = z.ok
+        ? (z.message || 'Lieferung möglich') + (z.fee_eur != null ? ` · Gebühr ${fmtPrice(z.fee_eur)}` : '')
+          + (z.min_order_eur != null ? ` · ab ${fmtPrice(z.min_order_eur)}` : '')
+        : (z.message || 'Außerhalb Liefergebiet');
+    }
+    if (z.ok && z.fee_eur != null) {
+      deliveryZoneOk = true;
+      DELIVERY_FEE = z.fee_eur;
+      if (z.min_order_eur != null) MIN_ORDER_DELIVERY = z.min_order_eur;
+    } else {
+      deliveryZoneOk = false;
+      DELIVERY_FEE = 0;
+    }
+    buildCheckoutSummary();
+    updateCartUI();
+  } catch (_) {
+    deliveryZoneOk = false;
+    DELIVERY_FEE = 0;
+    if (hint) {
+      hint.style.color = '#fca5a5';
+      hint.textContent = 'Liefergebiet konnte gerade nicht geprüft werden.';
+    }
+  }
+}
+
+function submitButtonLabel() {
+  return 'Zahlungspflichtig bestellen';
 }
 
 function setPayment(p) {
-  payMethod = p;
-  ['cash','card','stripe'].forEach(k => {
-    document.getElementById('pay-'+k).classList.toggle('sel', k===p);
-  });
-  document.getElementById('stripe-hint').style.display = p==='stripe' ? 'block' : 'none';
+  if (p !== 'stripe') return;
+  payMethod = 'stripe';
+  const el = document.getElementById('pay-stripe');
+  if (el) el.classList.add('sel');
+  const hint = document.getElementById('stripe-hint');
+  if (hint) hint.style.display = 'block';
+  const label = document.getElementById('submit-label');
+  if (label && !submitInFlight) label.textContent = submitButtonLabel();
+  try { buildCheckoutSummary(); } catch (_) {}
 }
 
 function buildCheckoutSummary() {
   const entries = Object.values(cart);
   const sub = subtotalPrice();
   const fee = deliveryFee();
+  const launchDiscount = currentLaunchDiscountAmount();
+  const payLabel = { cash:'Barzahlung', card:'Karte vor Ort (Lesegerät)', stripe:'Online bezahlen' }[payMethod] || payMethod;
+  const ful = activeFulfillment();
+  const typeLabel = ful.orderType === 'delivery' ? 'Lieferung' : 'Abholung';
+  const timeLabel = ful.label || '—';
 
   document.getElementById('co-summary').innerHTML = entries.map(e =>
     `<div style="display:flex;justify-content:space-between;">
-      <span>${e.qty}× ${e.item.name}${e.variant ? ` (${e.variant.l})` : ''}</span>
+      <span>${e.qty}× ${cartLineLabel(e)}</span>
       <span style="color:#C9A84C;margin-left:12px;">${fmtPrice(e.price * e.qty)}</span>
     </div>`
-  ).join('') + (fee > 0 ? `
+  ).join('') + `
+    <div style="margin-top:10px;padding-top:8px;border-top:1px solid #2a2a2a;color:#888;font-size:12px;line-height:1.7;">
+      <div style="display:flex;justify-content:space-between;"><span>Art</span><span style="color:#ccc;">${typeLabel}</span></div>
+      <div style="display:flex;justify-content:space-between;"><span>Wunschzeit</span><span style="color:#ccc;text-align:right;max-width:60%;">${timeLabel}</span></div>
+      <div style="display:flex;justify-content:space-between;"><span>Zahlungsart</span><span style="color:#ccc;">${payLabel}</span></div>
+    </div>` + (fee > 0 ? `
     <div style="display:flex;justify-content:space-between;color:#888;margin-top:4px;padding-top:6px;border-top:1px solid #2a2a2a;">
       <span>Liefergebühr</span>
       <span style="color:#C9A84C;">${fmtPrice(fee)}</span>
     </div>` : '');
+  if (launchDiscount > 0) {
+    document.getElementById('co-summary').innerHTML += `
+    <div style="display:flex;justify-content:space-between;color:#22c55e;margin-top:4px;padding-top:6px;border-top:1px solid #2a2a2a;font-weight:700;">
+      <span>${(_launchDiscountPreview && _launchDiscountPreview.label) || 'Launch-Rabatt'}</span>
+      <span>−${fmtPrice(launchDiscount)}</span>
+    </div>
+    <div style="font-size:11px;color:#7ddf9b;margin-top:4px;line-height:1.45;">Wird serverseitig geprüft. Gilt nur für die erste qualifizierte Direktbestellung und nicht zusammen mit Treue-Prämien.</div>`;
+  } else if (_selectedLoyaltyReward) {
+    document.getElementById('co-summary').innerHTML += `
+    <div style="font-size:11px;color:#888;margin-top:8px;line-height:1.45;">Treue-Prämie gewählt. Der 5-%-Launch-Rabatt wird damit nicht kombiniert.</div>`;
+  }
 
-  document.getElementById('co-total').textContent = fmtPrice(sub + fee);
+  const upsellEl = document.getElementById('co-upsell');
+  if (upsellEl) upsellEl.innerHTML = renderCartUpsellHtml();
+
+  document.getElementById('co-total').textContent = fmtPrice(Math.max(0, sub + fee - launchDiscount));
+
+  const hintText = document.getElementById('co-allergen-hint-text');
+  if (hintText) {
+    hintText.textContent = productInfoCheckoutHint ||
+      'Angaben findest du bei den Gerichten und unter „Allergene & Zusatzstoffe“. Fehlende Angaben bedeuten nicht „allergenfrei“.';
+  }
+  const label = document.getElementById('submit-label');
+  if (label && !submitInFlight) label.textContent = submitButtonLabel();
 }
 
-// ── API CONFIG (Backend – kein Token im Browser) ────────────────────────────
-const API_BASE    = '/api';
-const STRIPE_LINK = 'DEIN_STRIPE_PAYMENT_LINK_HIER';
+// ── API CONFIG (Backend – kein Token / kein Secret Key im Browser) ─────────
+const API_BASE = '/api';
 
 function generateOrderNumber() {
   const now = new Date();
@@ -1160,116 +2297,292 @@ function generateOrderNumber() {
   return `SH-${d}-${t}-${r}`;
 }
 
-async function submitToBackend(orderPayload) {
+async function submitToBackend(orderPayload, { signal } = {}) {
   const r = await fetch(`${API_BASE}/order`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify(orderPayload),
+    signal,
   });
-  if (!r.ok) throw new Error('Backend-Fehler ' + r.status);
-  return await r.json();
+  let body = null;
+  try { body = await r.json(); } catch (_) {}
+  if (!r.ok) {
+    const err = new Error((body && body.error) || ('Backend-Fehler ' + r.status));
+    err.status = r.status;
+    err.body = body;
+    throw err;
+  }
+  return body;
+}
+
+async function retryStripeCheckout(orderNumber, token) {
+  const r = await fetch(`${API_BASE}/shop/stripe/checkout/${encodeURIComponent(orderNumber)}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Checkout-Attempt-Token': token || '',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ checkoutAttemptToken: token || '' }),
+  });
+  let body = null;
+  try { body = await r.json(); } catch (_) {}
+  if (!r.ok) {
+    const err = new Error((body && body.error) || 'Zahlung konnte nicht fortgesetzt werden.');
+    err.status = r.status;
+    err.body = body;
+    throw err;
+  }
+  return body;
 }
 
 // ── SUBMIT ORDER ───────────────────────────────────────────────────────────
 async function submitOrder() {
+  if (submitInFlight) return;
+  if (shopStatus && shopStatus.accept_orders === false) {
+    alert(orderingClosedMessage());
+    return;
+  }
   const name  = document.getElementById('f-name').value.trim();
   const phone = document.getElementById('f-phone').value.trim();
-  const addr  = document.getElementById('f-addr').value.trim();
   const email = document.getElementById('f-email').value.trim();
   const note  = document.getElementById('f-note').value.trim();
-  const time  = document.getElementById('f-time').value;
+  const ful = activeFulfillment();
+  if (!fulfillmentMatchesOrderType(ful)) {
+    alert('Bitte Wunschzeit neu wählen. Die angezeigte Zeit passt nicht zur Bestellart.');
+    return;
+  }
+  const time  = ful.slotId;
+  const street = document.getElementById('f-street')?.value.trim() || '';
+  const house = document.getElementById('f-house')?.value.trim() || '';
+  const plz = document.getElementById('f-plz')?.value.trim() || '';
+  const city = document.getElementById('f-city')?.value.trim() || '';
+  const floor = document.getElementById('f-floor')?.value.trim() || '';
+  const doorbell = document.getElementById('f-doorbell')?.value.trim() || '';
+  let addr = '';
+  if (orderType === 'delivery') {
+    if (!street || !house || !plz || !city) {
+      alert('Bitte Straße, Hausnummer, PLZ und Ort angeben.');
+      return;
+    }
+    if (!deliveryZoneOk) {
+      await checkZoneLive();
+      if (!deliveryZoneOk) {
+        alert('Diese Adresse liegt außerhalb unseres Liefergebiets oder konnte nicht geprüft werden.');
+        return;
+      }
+    }
+    addr = `${street} ${house}, ${plz} ${city}`;
+    if (floor) addr += `, Etage ${floor}`;
+    if (doorbell) addr += `, Klingel: ${doorbell}`;
+    const hidden = document.getElementById('f-addr');
+    if (hidden) hidden.value = addr;
+  }
 
   if (!name || !phone) {
     alert('Bitte Name und Telefonnummer ausfüllen.');
     return;
   }
-  if (orderType === 'delivery' && !addr) {
-    alert('Bitte Lieferadresse angeben.');
+  if (!email) {
+    alert('Bitte E-Mail-Adresse ausfüllen. Du bekommst damit die Bestätigung.');
     return;
   }
   if (totalItems() === 0) {
     alert('Dein Warenkorb ist leer.');
     return;
   }
+  if (payMethod !== 'stripe') {
+    alert('Onlinebestellungen werden nur online bezahlt.');
+    return;
+  }
+  const stripePay = orderOptions && Array.isArray(orderOptions.payments)
+    ? orderOptions.payments.find(p => p.id === 'stripe')
+    : null;
+  if (orderOptions && stripePay && !stripePay.enabled) {
+    alert((stripePay.reason) || 'Onlinezahlung ist gerade nicht verfügbar.');
+    return;
+  }
   if (orderType === 'delivery' && subtotalPrice() < MIN_ORDER_DELIVERY) {
     alert(`Mindestbestellwert für Lieferung: ${fmtPrice(MIN_ORDER_DELIVERY)}. Bitte noch Artikel hinzufügen.`);
     return;
   }
+  try {
+    await refreshLaunchDiscountPreview({ force:true });
+  } catch (e) {
+    alert(e.message || 'Launch-Rabatt konnte nicht geprüft werden. Bitte kurz neu versuchen.');
+    return;
+  }
 
-  // Disable button & show spinner
+  // Checkout-Event tracken
+  trackEvent('checkout_started', { value: subtotalPrice() + deliveryFee(), items_count: Object.keys(cart).length });
+
+  submitInFlight = true;
+  navigatingToStripe = false;
   const btn   = document.getElementById('submit-btn');
   const icon  = document.getElementById('submit-icon');
   const label = document.getElementById('submit-label');
   btn.disabled = true;
   icon.innerHTML  = '<i class="fas fa-circle-notch spinner"></i>';
-  label.textContent = 'Wird gesendet…';
+  label.textContent = 'Bestellung wird übertragen …';
 
-  const orderNumber   = generateOrderNumber();
+  const attempt = ensureCheckoutAttempt();
+  const orderNumber = attempt.nr;
+  const attemptToken = attempt.tok;
   const orderTypeLabel = orderType === 'pickup' ? 'Abholung' : 'Lieferung';
-  const paymentLabel   = { cash:'Barzahlung', card:'EC-/Kreditkarte', stripe:'Online (Stripe)' }[payMethod];
-  const timeLabel      = { asap:'So schnell wie möglich', '30':'ca. 30 Min.', '45':'ca. 45 Min.', '60':'ca. 60 Min.' }[time];
-
-  const items = Object.values(cart).map(e =>
-    `${e.qty}\u00d7 ${e.item.name}${e.variant ? ` (${e.variant.l})` : ''} = ${fmtPrice(e.price * e.qty)}`
-  ).join('\n');
+  const paymentLabel   = { cash:'Barzahlung', card:'Karte am Lesegerät', stripe:'Online (Stripe)' }[payMethod];
+  const timeLabel = ful.label || (time === 'asap' ? 'So schnell wie möglich' : time);
 
   const sub   = subtotalPrice();
   const fee   = deliveryFee();
   const grand = sub + fee;
+  let couponDiscount = currentLaunchDiscountAmount();
+  // Produkt-Belohnung = 0 € Zeile, kein Geld-Rabatt
+  const payTotal = Math.max(0, grand - couponDiscount);
 
   const payload = {
     name, phone, orderNumber,
     orderType:    orderTypeLabel,
-    address:      addr || '\u2013',
+    address:      addr || '–',
     time:         timeLabel,
     payment:      paymentLabel,
-    items,
     subtotal:     fmtPrice(sub),
     deliveryFee:  fee > 0 ? fmtPrice(fee) : null,
-    total:        fmtPrice(grand),
-    note:         note || '\u2013',
-    timestamp:    new Date().toLocaleString('de-DE'),
+    total:        fmtPrice(payTotal),
+    note:         note || '–',
     isDelivery:   orderType === 'delivery',
+    email,
   };
 
-  // ─── Backend API (GHL-Sync sicher serverseitig) ────────────────────────────
+  const ac = new AbortController();
+  const clientTimeoutMs = Number(window.CLIENT_SUBMIT_TIMEOUT_MS) > 0
+    ? Number(window.CLIENT_SUBMIT_TIMEOUT_MS)
+    : CLIENT_SUBMIT_TIMEOUT_MS;
+  const kill = setTimeout(() => ac.abort(), clientTimeoutMs);
+  let apiRes = null;
   try {
     const nameParts = name.trim().split(/\s+/);
-    await submitToBackend({
+    apiRes = await submitToBackend({
       firstName:    nameParts[0],
       lastName:     nameParts.slice(1).join(' ') || '',
       phone,
       email:        email || '',
       address:      addr || '',
+      street, houseNumber: house, plz, city, floor, doorbell,
       deliveryType: orderType === 'pickup' ? 'abholung' : 'lieferung',
       payMethod,
-      items: Object.values(cart).map(e => ({
-        name:  e.item.name + (e.isFree ? ' [GRATIS 🎁]' : (e.variant ? ` (${e.variant.l})` : '')),
-        price: e.isFree ? 0 : e.price,
-        qty:   e.qty,
-        free:  e.isFree || false,
-      })),
+      items: checkoutItemPayload(),
       promoApplied: activePromo ? (activePromo.title || activePromo.description || '') : '',
-      total:       parseFloat(grand.toFixed(2)),
+      couponCode:   (_selectedLoyaltyReward && _selectedLoyaltyReward.code) ? _selectedLoyaltyReward.code : '',
+      loyaltyReward: _selectedLoyaltyReward || null,
+      launchDiscount: _launchDiscountPreview || { shown:false, amount:0 },
+      total:       parseFloat(payTotal.toFixed(2)),
       wunschzeit:  timeLabel,
       notes:       note || '',
       orderNumber,
-    });
+      checkoutAttemptToken: attemptToken,
+    }, { signal: ac.signal });
+
+    // Online: serverseitige Checkout Session – Redirect zu Stripe
+    if (payMethod === 'stripe') {
+      label.textContent = 'Onlinezahlung wird vorbereitet …';
+      persistCheckoutAttempt(orderNumber, attemptToken);
+      let url = apiRes && apiRes.checkoutUrl;
+      if (!url) {
+        try {
+          const retried = await retryStripeCheckout(orderNumber, attemptToken);
+          url = retried && retried.checkoutUrl;
+          if (retried && retried.statusToken) {
+            apiRes = Object.assign({}, apiRes || {}, retried);
+          }
+        } catch (retryErr) {
+          throw Object.assign(retryErr, {
+            body: Object.assign({ orderCreated: true, statusToken: attemptToken }, (retryErr && retryErr.body) || {}, (apiRes || {})),
+            status: (retryErr && retryErr.status) || 200,
+          });
+        }
+      }
+      if (!url) {
+        throw Object.assign(new Error((apiRes && apiRes.error) || 'Online-Zahlung konnte nicht gestartet werden.'), {
+          body: Object.assign({ orderCreated: true }, apiRes || {}),
+          status: 200,
+        });
+      }
+      const stTok = (apiRes && apiRes.statusToken) || attemptToken;
+      if (stTok) {
+        try { sessionStorage.setItem('sh_status_token_' + orderNumber, stTok); } catch (_) {}
+      }
+      persistCheckoutAttempt(orderNumber, attemptToken);
+      sessionStorage.setItem('sh_pending_order', JSON.stringify({ ...payload, statusToken: stTok }));
+      label.textContent = 'Weiterleitung zur Zahlung …';
+      navigatingToStripe = true;
+      window.location.href = url;
+      return;
+    }
   } catch(e) {
-    console.warn('API sync error (non-blocking):', e);
-  }
-
-  // ─── Stripe Payment Redirect ────────────────────────────────────────────────
-  if (payMethod === 'stripe' && STRIPE_LINK !== 'DEIN_STRIPE_PAYMENT_LINK_HIER') {
-    sessionStorage.setItem('sh_pending_order', JSON.stringify(payload));
-    window.location.href = STRIPE_LINK
-      + '?client_reference_id=' + encodeURIComponent(orderNumber)
-      + '&prefilled_custom_fields[order]=' + encodeURIComponent(orderNumber);
+    const body = e && e.body;
+    if (body && (body.code === 'CHECKOUT_TOKEN_REQUIRED' || body.code === 'CHECKOUT_TOKEN_COLLISION')) {
+      clearCheckoutAttempt();
+      ensureCheckoutAttempt();
+      alert(body.error || 'Bitte Seite neu laden und Bestellung erneut absenden.');
+    } else if (body && body.orderCreated) {
+      persistCheckoutAttempt(orderNumber, (body.statusToken || attemptToken));
+      alert('Die Bestellung ist angekommen, die Onlinezahlung konnte noch nicht gestartet werden. Du kannst es gleich nochmal versuchen.');
+    } else if (e && e.name === 'AbortError') {
+      persistCheckoutAttempt(orderNumber, attemptToken);
+      alert('Das hat zu lange gedauert. Die Bestellung kann trotzdem schon existieren. Bitte denselben Versuch erneut senden.');
+    } else {
+      trackEvent('checkout_failed', { error: e.message });
+      persistCheckoutAttempt(orderNumber, attemptToken);
+      alert(e.message || 'Bestellung fehlgeschlagen. Bitte erneut versuchen.');
+    }
     return;
+  } finally {
+    clearTimeout(kill);
+    if (!navigatingToStripe) {
+      submitInFlight = false;
+      btn.disabled = false;
+      icon.innerHTML = '<i class="fas fa-paper-plane"></i>';
+      label.textContent = submitButtonLabel();
+    }
   }
 
-  // ─── Erfolgsanzeige ────────────────────────────────────────────────────────
+  lastOrderNumber = orderNumber;
+  const statusToken = (apiRes && apiRes.statusToken) || attemptToken;
+  if (statusToken) {
+    try { sessionStorage.setItem('sh_status_token_' + orderNumber, statusToken); } catch (_) {}
+  }
+  trackEvent('order_completed', {
+    order_number: orderNumber,
+    value: payTotal,
+    delivery_type: orderType,
+    pay_method: payMethod,
+  });
+  payload.statusToken = statusToken;
+  persistCheckoutAttempt(orderNumber, attemptToken);
   showSuccess(payload);
+  try {
+    const arE = document.getElementById('ar-email');
+    const arP = document.getElementById('ar-phone');
+    const arN = document.getElementById('ar-name');
+    if (arE) arE.value = email || '';
+    if (arP) arP.value = phone || '';
+    if (arN) arN.value = name || '';
+  } catch (_) {}
+  startStatusPoll(statusToken || '');
+  submitInFlight = false;
+}
+
+function _isAsapTimeLabel(t) {
+  const w = String(t || '').trim().toLowerCase();
+  if (!w) return true;
+  return /so schnell|asap|sofort|schnellstmöglich|baldmöglich/.test(w);
+}
+
+function _extractHhmmFromTimeLabel(t) {
+  const m = String(t || '').match(/(\d{1,2}):(\d{2})/);
+  if (!m) return '';
+  return `${m[1].padStart(2, '0')}:${m[2]}`;
 }
 
 function showSuccess(p) {
@@ -1278,21 +2591,45 @@ function showSuccess(p) {
       <span style="color:#666;">${label}</span>
       <span${gold?' style="color:#C9A84C;font-weight:700;"':''}>${val}</span>
     </div>`;
-  const waitMin  = p.isDelivery ? waitDelivery : waitPickup;
-  const waitLine = `<div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px 16px;margin:12px 0;display:flex;align-items:center;gap:10px;font-size:13px;">
+  const asap = _isAsapTimeLabel(p.time);
+  const hhmm = _extractHhmmFromTimeLabel(p.time);
+  let timeRowLabel = 'Zeit';
+  let timeRowVal = p.time || '–';
+  let waitLine = '';
+
+  if (asap) {
+    timeRowLabel = 'Zeit';
+    timeRowVal = 'So schnell wie möglich';
+    const waitMin = p.isDelivery ? waitDelivery : waitPickup;
+    waitLine = `<div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px 16px;margin:12px 0;display:flex;align-items:center;gap:10px;font-size:13px;">
     <i class="fas fa-clock" style="color:#C9A84C;font-size:18px;flex-shrink:0;"></i>
     <div>
       <div style="color:#C9A84C;font-weight:700;font-size:15px;">Ca. ${waitMin} Minuten</div>
       <div style="color:#666;font-size:12px;">${p.isDelivery ? 'Lieferzeit' : 'Wartezeit bis zur Abholung'}</div>
     </div>
   </div>`;
+  } else {
+    timeRowLabel = p.isDelivery
+      ? 'Vorbestellung · gewünschte Lieferzeit'
+      : 'Vorbestellung · gewünschte Abholzeit';
+    timeRowVal = hhmm ? `${hhmm} Uhr` : (p.time || '–');
+    const kindLine = p.isDelivery
+      ? `Gewünschte Lieferzeit: ${timeRowVal}`
+      : `Gewünschte Abholzeit: ${timeRowVal}`;
+    waitLine = `<div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:13px;text-align:left;">
+    <div style="color:#C9A84C;font-weight:800;font-size:15px;letter-spacing:.04em;margin-bottom:6px;">VORBESTELLUNG</div>
+    <div style="color:#f5f0e8;font-weight:700;font-size:15px;margin-bottom:8px;">${kindLine}</div>
+    <div style="color:#888;font-size:12px;line-height:1.45;">Die Uhrzeit ist deine Wunschzeit. Falls sich die voraussichtliche Zeit ändert, zeigen wir dir das im Bestellstatus.</div>
+  </div>`;
+  }
 
   document.getElementById('success-info').innerHTML =
     row('Bestellnummer', p.orderNumber || '–', true) +
     row('Name', p.name) +
     row('Telefon', p.phone) +
     row('Bestellart', p.orderType) +
-    row('Zeit', p.time) +
+    (p.isDelivery ? row('Adresse', p.address) : '') +
+    row(timeRowLabel, timeRowVal) +
     row('Zahlung', p.payment) +
     (p.deliveryFee ? row('Zwischensumme', p.subtotal) + row('Liefergebühr', p.deliveryFee) : '') +
     `<div style="display:flex;justify-content:space-between;border-top:1px solid #222;padding-top:8px;margin-top:4px;">
@@ -1300,22 +2637,490 @@ function showSuccess(p) {
       <span style="color:#C9A84C;font-weight:700;">${p.total}</span>
     </div>` +
     waitLine;
+  const stLabel = document.getElementById('success-status-label');
+  if (stLabel) stLabel.textContent = '';
+  const hero = document.getElementById('success-hero') || document.querySelector('#view-success h2');
+  if (hero) hero.textContent = 'Bestellung ist eingegangen';
+  const heading = document.getElementById('success-order-heading');
+  if (heading && p.orderNumber) heading.textContent = 'BESTELLUNG ' + p.orderNumber;
+  const linkWrap = document.getElementById('success-status-link-wrap');
+  const linkEl = document.getElementById('success-status-link');
+  const tok = (p.statusToken || '').trim();
+  if (linkWrap && linkEl && tok) {
+    const url = `${location.origin}/bestellen?status=${encodeURIComponent(tok)}`;
+    linkEl.href = url;
+    linkEl.textContent = 'Bestellstatus ansehen';
+    linkWrap.style.display = 'block';
+  }
+  const readyLabel = p.isDelivery ? 'Unterwegs' : 'Abholbereit';
+  const readyId = p.isDelivery ? 'unterwegs' : 'abholbereit';
+  renderStatusSteps({ awaiting_accept: true, steps: [
+    { id:'eingegangen', label:'Bestellung eingegangen', done:true, current:true, marker:'current' },
+    { id:'angenommen', label:'Bestellung angenommen', done:false, current:false, marker:'upcoming' },
+    { id:'in_zubereitung', label:'Wird zubereitet', done:false, current:false, marker:'upcoming' },
+    { id:readyId, label:readyLabel, done:false, current:false, marker:'upcoming' },
+    { id:'done', label:'Abgeschlossen', done:false, current:false, marker:'upcoming' },
+  ]});
   showView('success');
+  try { document.getElementById('cart-modal').classList.add('open'); } catch (_) {}
   document.getElementById('cart-bar').classList.remove('show');
 }
 
+function renderStatusSteps(st) {
+  const el = document.getElementById('success-steps');
+  if (!el || !st || !st.steps) return;
+  el.innerHTML = st.steps.map(s => {
+    const marker = s.marker || (s.current ? 'current' : (s.done ? 'done' : 'upcoming'));
+    let glyph = '○';
+    let color = '#555';
+    let weight = 500;
+    if (marker === 'done' || (s.done && !s.current)) { glyph = '✓'; color = '#86efac'; }
+    if (marker === 'current' || s.current) { glyph = '●'; color = '#C9A84C'; weight = 700; }
+    if (marker === 'x') { glyph = '✕'; color = '#f87171'; weight = 700; }
+    return `
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+      <span aria-hidden="true" style="width:18px;flex-shrink:0;font-size:14px;line-height:1.4;color:${color};font-weight:700;">${glyph}</span>
+      <span style="font-size:14px;line-height:1.4;color:${color};font-weight:${weight};">${s.label}</span>
+    </div>`;
+  }).join('');
+}
+
+function shopTelHref(phone) {
+  const d = String(phone || '').replace(/[^\d+]/g, '');
+  return d ? ('tel:' + d) : 'tel:+4924433088966';
+}
+
+function applyShopPhone(phone) {
+  const el = document.getElementById('success-phone');
+  if (!el) return;
+  const raw = String(phone || '').trim();
+  if (!raw) return;
+  el.textContent = raw;
+  el.setAttribute('href', shopTelHref(raw));
+}
+
+function renderSelfCancel(data, tok) {
+  const wrap = document.getElementById('success-self-cancel');
+  const btn = document.getElementById('btn-self-cancel');
+  const err = document.getElementById('self-cancel-err');
+  if (!wrap || !btn) return;
+  const allow = !!(data && data.canSelfCancel === true);
+  wrap.style.display = allow ? 'block' : 'none';
+  if (err) err.style.display = 'none';
+  if (!allow) return;
+  btn.disabled = false;
+  btn.onclick = async () => {
+    if (!confirm('Bestellung wirklich stornieren? Das kann nicht rückgängig gemacht werden.')) return;
+    if (err) err.style.display = 'none';
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/order-status/' + encodeURIComponent(tok) + '/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const body = await r.json().catch(() => ({}));
+      if (r.ok && body.ok) {
+        wrap.style.display = 'none';
+        const h2 = document.getElementById('success-hero') || document.querySelector('#view-success h2');
+        if (h2) h2.textContent = 'Bestellung storniert';
+        startStatusPoll(tok);
+        return;
+      }
+      const phone = body.shopPhone || (data && data.shopPhone) || '02443 3088966';
+      applyShopPhone(phone);
+      if (err) {
+        if (r.status === 409) {
+          err.textContent = body.message
+            || ('Die Bestellung wurde inzwischen bezahlt oder angenommen. Bitte ruf uns an, wenn du sie stornieren möchtest. ' + phone);
+        } else {
+          err.textContent = body.message || body.error || 'Stornieren gerade nicht möglich.';
+        }
+        err.style.display = 'block';
+      }
+    } catch (_) {
+      if (err) {
+        err.textContent = 'Verbindung fehlgeschlagen. Bitte später erneut versuchen.';
+        err.style.display = 'block';
+      }
+    }
+    btn.disabled = false;
+  };
+}
+
+function startStatusPoll(token) {
+  if (statusPollTimer) clearInterval(statusPollTimer);
+  const tok = (token || '').trim();
+  if (!tok || tok.toUpperCase().startsWith('SH-')) return;
+  let ticks = 0;
+  const maxTicks = 20;
+  const tick = async () => {
+    ticks += 1;
+    try {
+      const r = await fetch(`/api/order-status/${encodeURIComponent(tok)}`);
+      if (!r.ok) return;
+      const data = await r.json();
+      applyShopPhone(data.shopPhone);
+      renderSelfCancel(data, tok);
+      const st = data.status || {};
+      const ps = String(data.paymentStatus || '').toLowerCase();
+      const code = String((st && st.code) || '').toLowerCase();
+      try {
+        const att = loadCheckoutAttempt();
+        if (att && data.orderNumber && data.orderNumber === att.nr) {
+          if (ps === 'paid' || code === 'storniert' || code === 'fertig') {
+            clearCheckoutAttempt();
+          }
+        }
+      } catch (_) {}
+      const stLabel = document.getElementById('success-status-label');
+      if (stLabel) {
+        if (code === 'storniert' || code === 'fertig') {
+          stLabel.textContent = st.label || '';
+        } else if (code === 'zubereitung' || code === 'abholbereit' || code === 'unterwegs') {
+          stLabel.textContent = st.label || '';
+        } else {
+          stLabel.textContent = '';
+        }
+      }
+      const h2 = document.getElementById('success-hero') || document.querySelector('#view-success h2');
+      if (h2) {
+        if (code === 'storniert') h2.textContent = 'Bestellung storniert';
+        else if (code === 'fertig') h2.textContent = 'Bestellung abgeschlossen';
+        else h2.textContent = 'Bestellung ist eingegangen';
+      }
+      const heading = document.getElementById('success-order-heading');
+      if (heading && data.orderNumber) {
+        heading.textContent = 'BESTELLUNG ' + data.orderNumber;
+      }
+      if (ps === 'paid' || code === 'storniert' || code === 'fertig') {
+        renderStatusSteps(st);
+      }
+      try {
+        const info = document.getElementById('success-info');
+        if (info && ps !== 'paid' && code !== 'storniert' && code !== 'fertig') {
+          info.textContent = 'Zahlung wird bestätigt.';
+        } else if (info && data.orderNumber) {
+          const bits = [];
+          const row = (k, v) =>
+            `<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px;">
+              <span style="color:#888;">${k}</span>
+              <span style="color:#f5f0e8;font-weight:600;text-align:right;word-break:break-word;">${v}</span>
+            </div>`;
+          bits.push(row('Bestellung', data.orderNumber));
+          if (data.paymentLabel) bits.push(row('Zahlung', data.paymentLabel));
+          const rs = String(data.refundStatus || '').toLowerCase();
+          const refunded = ps === 'refunded' || rs === 'succeeded';
+          const refundPending = rs === 'pending';
+          if (refunded) {
+            bits.push(`<div style="margin:10px 0;padding:10px 12px;border:1px solid rgba(134,239,172,.35);border-radius:10px;background:rgba(34,197,94,.08);color:#bbf7d0;font-size:13px;line-height:1.5;text-align:left;">
+              Rückzahlung wurde veranlasst. Je nach Bank kann die Gutschrift einige Tage dauern.
+            </div>`);
+          } else if (refundPending) {
+            bits.push(`<div style="margin:10px 0;padding:10px 12px;border:1px solid rgba(251,191,36,.35);border-radius:10px;background:rgba(251,191,36,.08);color:#fde68a;font-size:13px;line-height:1.5;text-align:left;">
+              Rückzahlung wird bearbeitet.
+            </div>`);
+          } else if (data.paymentRefundRequired) {
+            bits.push(`<div style="margin:10px 0;padding:10px 12px;border:1px solid rgba(248,113,113,.35);border-radius:10px;background:rgba(248,113,113,.08);color:#fecaca;font-size:13px;line-height:1.5;text-align:left;">
+              Rückzahlung ist erforderlich und wird bearbeitet.
+            </div>`);
+          }
+          const art = data.deliveryTypeLabel || (data.deliveryType === 'lieferung' ? 'LIEFERUNG' : 'ABHOLUNG');
+          bits.push(row('Bestellart', art));
+          const tl = data.requestedTimeLabel || 'Gewünschte Zeit';
+          const tv = data.requestedTimeValue || data.wunschzeit || '';
+          if (tv) bits.push(row(tl, tv));
+          if (data.expectedReadyLabel) {
+            bits.push(row('Voraussichtlich fertig', data.expectedReadyLabel));
+          }
+          if (data.isDelayed) {
+            bits.push(`<p style="margin:8px 0 0;font-size:12px;color:#fbbf24;">Es gibt eine Verzögerung – wir aktualisieren den Status hier.</p>`);
+          }
+          info.innerHTML = bits.join('');
+        }
+      } catch (_) {}
+      if (code === 'fertig' || ticks >= maxTicks) {
+        clearInterval(statusPollTimer);
+      } else {
+        const rs = String(data.refundStatus || '').toLowerCase();
+        const refundOpen = !!data.paymentRefundRequired || rs === 'pending';
+        const refunded = ps === 'refunded' || rs === 'succeeded';
+        if (refunded || (code === 'storniert' && !refundOpen) || (ps === 'paid' && code !== 'storniert')) {
+          clearInterval(statusPollTimer);
+        }
+      }
+    } catch (_) {}
+  };
+  tick();
+  statusPollTimer = setInterval(tick, 12000);
+}
+
+function offerAccountSave() {
+  /* legacy no-op – ersetzt durch registerAfterOrder */
+}
+
+async function registerAfterOrder() {
+  const err = document.getElementById('ar-err');
+  const ok = document.getElementById('ar-ok');
+  if (err) err.style.display = 'none';
+  if (ok) ok.style.display = 'none';
+  const email = (document.getElementById('ar-email')?.value || '').trim();
+  const phone = (document.getElementById('ar-phone')?.value || '').trim();
+  const name = (document.getElementById('ar-name')?.value || '').trim();
+  const pw = document.getElementById('ar-pass')?.value || '';
+  const pw2 = document.getElementById('ar-pass2')?.value || '';
+  const marketing = !!document.getElementById('ar-marketing')?.checked;
+  if (!email || pw.length < 8) {
+    if (err) { err.textContent = 'E-Mail und Passwort (min. 8 Zeichen) nötig.'; err.style.display = 'block'; }
+    return;
+  }
+  if (pw !== pw2) {
+    if (err) { err.textContent = 'Passwörter stimmen nicht überein.'; err.style.display = 'block'; }
+    return;
+  }
+  try {
+    const r = await fetch('/api/customer/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        email, password: pw, password2: pw2,
+        display_name: name, phone,
+        marketing_consent: marketing,
+      }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      if (err) { err.textContent = d.error || 'Registrierung fehlgeschlagen'; err.style.display = 'block'; }
+      return;
+    }
+    if (ok) {
+      ok.style.display = 'block';
+      if (d && d.needs_verification) {
+        ok.textContent = 'Konto angelegt. Bitte bestätige deine E-Mail (Link in der Mail). Bestellen geht weiter.';
+      }
+    }
+    const form = document.getElementById('account-register-form');
+    if (form) {
+      ['ar-pass','ar-pass2'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    }
+    await refreshCheckoutAccountUI({ force: true });
+    loadStampHint();
+    updateStudentHint();
+  } catch (_) {
+    if (err) { err.textContent = 'Verbindungsfehler'; err.style.display = 'block'; }
+  }
+}
+
+function showCheckoutLogin() {
+  const f = document.getElementById('checkout-login-form');
+  const c = document.getElementById('checkout-login-cta');
+  if (f) f.style.display = 'block';
+  if (c) c.style.display = 'none';
+}
+
+async function checkoutInlineLogin() {
+  const err = document.getElementById('co-login-err');
+  if (err) err.style.display = 'none';
+  const email = (document.getElementById('co-login-email')?.value || '').trim();
+  const password = document.getElementById('co-login-pass')?.value || '';
+  try {
+    const r = await fetch('/api/customer/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      if (err) { err.textContent = d.error || 'Login fehlgeschlagen'; err.style.display = 'block'; }
+      return;
+    }
+    // force: Account-Daten übernehmen – Cart/Zeit/Notiz/Bestellart bleiben im Speicher
+    await refreshCheckoutAccountUI({ force: true });
+    loadStampHint();
+    updateStudentHint();
+  } catch (_) {
+    if (err) { err.textContent = 'Verbindungsfehler'; err.style.display = 'block'; }
+  }
+}
+
+const _CHECKOUT_PREFILL_IDS = ['f-name','f-phone','f-email','f-street','f-house','f-plz','f-city','f-floor','f-doorbell','f-addr'];
+
+function bindCheckoutPrefillEditGuards() {
+  _CHECKOUT_PREFILL_IDS.forEach(function (id) {
+    const el = document.getElementById(id);
+    if (!el || el._prefillGuard) return;
+    el.addEventListener('input', function () {
+      if (el.dataset.accountPrefill === '1') {
+        el.dataset.accountPrefill = '0';
+        delete el.dataset.accountPrefillVal;
+      }
+      updateCheckoutPrefillHint();
+    });
+    el._prefillGuard = true;
+  });
+}
+
+function updateCheckoutPrefillHint() {
+  const hint = document.getElementById('checkout-prefill-hint');
+  if (!hint) return;
+  const any = _CHECKOUT_PREFILL_IDS.some(function (id) {
+    const el = document.getElementById(id);
+    return el && el.dataset.accountPrefill === '1' && String(el.value || '').trim();
+  });
+  hint.style.display = any ? 'block' : 'none';
+}
+
+function applyCheckoutAccountVal(id, val, force) {
+  const el = document.getElementById(id);
+  if (!el || val == null || val === '') return false;
+  const empty = !String(el.value || '').trim();
+  // Manuell geändert nach Prefill → Markierung fallenlassen
+  if (el.dataset.accountPrefill === '1' && el.dataset.accountPrefillVal != null
+      && String(el.value) !== String(el.dataset.accountPrefillVal)) {
+    el.dataset.accountPrefill = '0';
+    delete el.dataset.accountPrefillVal;
+  }
+  const stillMarked = el.dataset.accountPrefill === '1';
+  if (!(force || empty || stillMarked)) return false;
+  el.value = val;
+  el.dataset.accountPrefill = '1';
+  el.dataset.accountPrefillVal = String(val);
+  return true;
+}
+
+function applyLastDeliveryToCheckout(ld, force) {
+  if (!ld) return false;
+  let applied = false;
+  if (ld.street) applied = applyCheckoutAccountVal('f-street', ld.street, force) || applied;
+  if (ld.house) applied = applyCheckoutAccountVal('f-house', ld.house, force) || applied;
+  if (ld.plz) applied = applyCheckoutAccountVal('f-plz', ld.plz, force) || applied;
+  const cityEl = document.getElementById('f-city');
+  if (ld.city && cityEl) {
+    const cityEmpty = !String(cityEl.value || '').trim();
+    const cityDefault = cityEl.value.trim() === 'Mechernich';
+    const cityMarked = cityEl.dataset.accountPrefill === '1';
+    if (cityMarked && cityEl.dataset.accountPrefillVal != null
+        && String(cityEl.value) !== String(cityEl.dataset.accountPrefillVal)) {
+      cityEl.dataset.accountPrefill = '0';
+      delete cityEl.dataset.accountPrefillVal;
+    }
+    if (force || cityEmpty || cityDefault || cityEl.dataset.accountPrefill === '1') {
+      cityEl.value = ld.city;
+      cityEl.dataset.accountPrefill = '1';
+      cityEl.dataset.accountPrefillVal = String(ld.city);
+      applied = true;
+    }
+  }
+  if (ld.floor) applied = applyCheckoutAccountVal('f-floor', ld.floor, force) || applied;
+  if (ld.doorbell) applied = applyCheckoutAccountVal('f-doorbell', ld.doorbell, force) || applied;
+  if (ld.address_full) applied = applyCheckoutAccountVal('f-addr', ld.address_full, force) || applied;
+  return applied;
+}
+
+async function refreshCheckoutAccountUI(opts) {
+  const force = !!(opts && opts.force);
+  bindCheckoutPrefillEditGuards();
+  const logged = document.getElementById('checkout-logged-in');
+  const form = document.getElementById('checkout-login-form');
+  const cta = document.getElementById('checkout-login-cta');
+  const offer = document.getElementById('account-offer');
+  const title = document.getElementById('checkout-account-title');
+  const sub = document.getElementById('checkout-account-sub');
+  const guestPrimary = document.getElementById('checkout-guest-primary');
+  try {
+    const r = await fetch('/api/customer/me', { credentials: 'include' });
+    if (r.ok) {
+      const d = await r.json();
+      const c = d.customer || {};
+      const name = c.display_name || c.email || 'eingeloggt';
+      const first = String(name).trim().split(/\s+/)[0] || name;
+      window._checkoutMemberLoggedIn = true;
+      if (guestPrimary) guestPrimary.style.display = 'none';
+      if (logged) {
+        logged.style.display = 'block';
+        logged.innerHTML = 'Eingeloggt als ' + first
+          + ' · <a href="/konto?from=order" onclick="saveOrderReturnState()" style="color:#C9A84C;text-decoration:none;font-weight:700;">Konto ansehen</a>';
+      }
+      if (form) form.style.display = 'none';
+      if (cta) cta.style.display = 'none';
+      if (offer) offer.style.display = 'none';
+      if (title) title.textContent = 'Mit deinem Konto';
+      if (sub) sub.textContent = 'Daten aus dem Konto können unten vorausgefüllt sein. Du kannst sie für diese Bestellung ändern.';
+      applyCheckoutAccountVal('f-name', c.display_name || '', force);
+      applyCheckoutAccountVal('f-phone', c.phone || '', force);
+      applyCheckoutAccountVal('f-email', c.email || '', force);
+      const ld = d.saved_delivery || d.last_delivery;
+      if (ld && (ld.address_full || ld.street || ld.plz)) {
+        if (typeof orderType !== 'undefined' && orderType === 'delivery') {
+          applyLastDeliveryToCheckout(ld, force);
+        } else {
+          applyLastDeliveryToCheckout(ld, false);
+        }
+      }
+      updateCheckoutPrefillHint();
+      updateDeliverySaveHint(true);
+      if (typeof orderType !== 'undefined' && orderType === 'delivery') {
+        try { void checkZoneLive(); } catch (_) {}
+      }
+      return true;
+    }
+  } catch (_) {}
+  window._checkoutMemberLoggedIn = false;
+  if (guestPrimary) guestPrimary.style.display = 'block';
+  if (logged) { logged.style.display = 'none'; logged.textContent = ''; }
+  if (cta) cta.style.display = 'flex';
+  if (offer) offer.style.display = 'block';
+  if (title) title.textContent = 'Als Gast bestellen';
+  if (sub) sub.textContent = 'Ohne Konto fortfahren – Formular unten ausfüllen.';
+  updateCheckoutPrefillHint();
+  updateDeliverySaveHint(false);
+  return false;
+}
+
+function updateDeliverySaveHint(isMember) {
+  const hint = document.getElementById('delivery-save-hint');
+  if (!hint) return;
+  const member = typeof isMember === 'boolean' ? isMember : !!window._checkoutMemberLoggedIn;
+  const addr = document.getElementById('addr-field');
+  const deliveryUi = !!(addr && getComputedStyle(addr).display !== 'none');
+  const deliveryFlag = (typeof orderType !== 'undefined' && orderType === 'delivery');
+  const show = member && (deliveryFlag || deliveryUi);
+  hint.style.display = show ? 'block' : 'none';
+}
+
 function resetOrder() {
+  if (statusPollTimer) clearInterval(statusPollTimer);
+  clearCheckoutOrderNumber();
+  ensureCheckoutAttempt();
   Object.keys(cart).forEach(k => delete cart[k]);
   renderMenu();
   closeCart();
   document.getElementById('f-name').value  = '';
   document.getElementById('f-phone').value = '';
   document.getElementById('f-email').value = '';
-  document.getElementById('f-addr').value  = '';
-  document.getElementById('f-note').value  = '';
+  ['f-addr','f-street','f-house','f-plz','f-floor','f-doorbell','f-note'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.value = '';
+      delete el.dataset.accountPrefill;
+      delete el.dataset.accountPrefillVal;
+    }
+  });
+  ['f-name','f-phone','f-email','f-city'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      delete el.dataset.accountPrefill;
+      delete el.dataset.accountPrefillVal;
+    }
+  });
+  const city = document.getElementById('f-city');
+  if (city) city.value = 'Mechernich';
   setOrderType('pickup');
-  setPayment('cash');
+  setPayment('stripe');
   updateCartUI();
+  updateCheckoutPrefillHint();
+  submitInFlight = false;
 }
 
 // ── AKTIONS-SYSTEM ────────────────────────────────────────────────────────
@@ -1335,8 +3140,21 @@ async function loadPromo() {
 
 function showPromoBanner(promo) {
   const banner = document.getElementById('promo-banner');
-  document.getElementById('promo-title').textContent = promo.title || '🎁 Sonderaktion aktiv!';
-  document.getElementById('promo-desc').textContent  = promo.description || '';
+  const title = promo.title || 'Sonderaktion aktiv!';
+  let desc = (promo.description || '').trim();
+  if (!desc) {
+    const free = promo.free_item_name || promo.free_item_variant || '';
+    const trig = promo.trigger_value || '';
+    if (free && trig) {
+      desc = promo.trigger_type === 'category'
+        ? `Bei ${trig}: ${free} gratis`
+        : `Bei „${trig}“: ${free} gratis`;
+    } else if (free) {
+      desc = `${free} gratis zur Aktion`;
+    }
+  }
+  document.getElementById('promo-title').textContent = title;
+  document.getElementById('promo-desc').textContent  = desc;
   banner.style.display = 'block';
 
   if (promo.valid_until) {
@@ -1473,62 +3291,446 @@ function observeCategories() {
   });
 }
 
-// ── OPEN/CLOSED STATUS ────────────────────────────────────────────────────
+// ── OPEN/CLOSED STATUS (SoT: /api/shop-status) ────────────────────────────
 function checkStatus() {
-  const now  = new Date();
-  const day  = now.getDay();   // 0=Sun, 3=Wed, 6=Sat
-  const h    = now.getHours();
-  const m    = now.getMinutes();
-  const mins = h * 60 + m;
-  const withinHours = day !== 3 && mins >= 11*60 && mins < 21*60;
-  const open = (typeof siteOnline === 'undefined' || siteOnline !== false) && withinHours;
+  let open;
+  let label;
+  let hoursTxt;
+  const day = new Date().getDay();
 
-  const dot   = document.getElementById('status-dot');
-  const text  = document.getElementById('status-text');
-  const hours = document.getElementById('status-hours');
+  if (shopStatus) {
+    open = !!shopStatus.store_open;
+    label = shopStatus.label || (open ? 'Geöffnet' : 'Geschlossen');
+    hoursTxt = open
+      ? ('· bis ' + ((shopStatus.hours_today && shopStatus.hours_today[0] && shopStatus.hours_today[0][1]) || '21:00'))
+      : ('· ' + (
+          shopStatus.label === 'Bestellung geschlossen'
+            ? 'heute keine Bestellung mehr'
+            : (shopStatus.next_open_label || shopStatus.hours_today_label || 'Mo–Di, Do–So 11–21')
+        ));
+    const nextEl = document.getElementById('next-open-hint');
+    if (nextEl) {
+      if (!open && shopStatus.next_open_label) {
+        nextEl.style.display = 'block';
+        nextEl.textContent = shopStatus.next_open_label;
+      } else {
+        nextEl.style.display = 'none';
+      }
+    }
+  } else {
+    const now  = new Date();
+    const h    = now.getHours();
+    const m    = now.getMinutes();
+    const mins = h * 60 + m;
+    const withinHours = day !== 3 && mins >= 11*60 && mins < 21*60;
+    open = (typeof siteOnline === 'undefined' || siteOnline !== false) && withinHours;
+    label = open ? 'Geöffnet' : (day === 3 ? 'Ruhetag (Mi)' : 'Geschlossen');
+    hoursTxt = open ? '· bis 21:00' : '· Mo–Di, Do–So 11–21';
+  }
+
   const pill  = document.getElementById('status-pill');
-  const dotV  = document.getElementById('status-dot-vis');
   const labV  = document.getElementById('status-label-vis');
   const hrsV  = document.getElementById('status-hours-vis');
 
-  const label = open
-    ? 'Geöffnet'
-    : (day === 3 ? 'Ruhetag (Mi)' : 'Geschlossen');
-  const hoursTxt = open
-    ? '· bis 21:00'
-    : '· Mo–Di, Do–So 11–21';
-
-  if (dot)   { dot.style.background = open ? '#22c55e' : '#ef4444'; }
-  if (text)  { text.style.color = open ? '#22c55e' : '#ef4444'; text.textContent = label; }
-  if (hours) { hours.textContent = hoursTxt; }
-  if (pill)  {
-    pill.className = 'status-pill ' + (open ? 'open' : 'closed');
-  }
+  if (pill)  pill.className = 'status-pill ' + (open ? 'open' : 'closed');
   if (labV) labV.textContent = label;
   if (hrsV) hrsV.textContent = hoursTxt;
 }
+
+// ── KONTO-HEADER AUTH-STATE ──────────────────────────────────────────────
+(function () {
+  var link = document.getElementById('konto-hdr-link');
+  var chip = document.getElementById('konto-hdr-chip');
+  if (!link) return;
+  function firstName(display) {
+    var raw = String(display || '').trim();
+    if (!raw) return '';
+    var first = raw.split(/\s+/)[0];
+    if (first.length > 12) first = first.slice(0, 11) + '…';
+    return first;
+  }
+  fetch('/api/customer/me', { credentials: 'include' })
+    .then(function (r) {
+      if (!r.ok) return;
+      return r.json().then(function (d) {
+        var name = (d && d.customer && d.customer.display_name) || '';
+        var first = firstName(name);
+        var si = (d && d.stamp_info) || {};
+        var prog = Number(si.progress);
+        var needed = Number(si.needed);
+        var stampOk = Number.isFinite(prog) && Number.isFinite(needed) && needed > 0;
+        var label = first || 'Konto';
+        if (first && stampOk) label = first + ' · ' + prog + '/' + needed;
+        link.style.color = '#C9A84C';
+        link.title = first ? ('Mein Konto (' + first + ')') : 'Mein Konto';
+        link.setAttribute('aria-label', first ? ('Konto von ' + first) : 'Mein Kundenkonto');
+        if (chip) {
+          chip.style.display = 'inline';
+          chip.textContent = label;
+        }
+      });
+    })
+    .catch(function () { /* kein Fehler anzeigen – kein Gast-Fake */ });
+})();
+
+// ── ANALYTICS TRACKING ─────────────────────────────────────────────────────
+const _trackSessionId = 'sess_' + Math.random().toString(36).slice(2);
+function trackEvent(eventType, extra) {
+  try {
+    fetch(`${API_BASE.replace('/api','')}/api/track`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        event: eventType,
+        session_id: _trackSessionId,
+        delivery_type: orderType,
+        ...(extra || {}),
+      }),
+    }).catch(() => {});
+  } catch (_) {}
+}
+
+// Cart-View tracken wenn Warenkorb geöffnet wird
+document.addEventListener('DOMContentLoaded', () => {
+  trackEvent('menu_opened');
+  ['f-phone','f-email'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el._launchDiscountBound) {
+      el._launchDiscountBound = true;
+      el.addEventListener('input', scheduleLaunchDiscountPreview);
+      el.addEventListener('change', scheduleLaunchDiscountPreview);
+    }
+  });
+  try { loadCheckoutAttempt(); } catch (_) {}
+  const timeSelInit = document.getElementById('f-time');
+  if (timeSelInit && !timeSelInit._fulfillmentBound) {
+    timeSelInit._fulfillmentBound = true;
+    timeSelInit.addEventListener('change', () => {
+      try { buildCheckoutSummary(); } catch (_) {}
+    });
+  }
+  // Prefill vorbereiten, falls Session schon da (Reload / Stripe-Return)
+  try { void refreshCheckoutAccountUI({ force: false }); } catch (_) {}
+  // Warenkorb-Button Tracking
+  const cartBtn = document.getElementById('cart-toggle') || document.getElementById('fab-cart');
+  if (cartBtn) {
+    cartBtn.addEventListener('click', () => trackEvent('cart_viewed'));
+  }
+  // Stripe-Return: ?pay=success ist kein Zahlungsbeweis.
+  try {
+    const q = new URLSearchParams(window.location.search);
+    const pay = q.get('pay');
+    const nr = q.get('nr') || '';
+    let tok = (q.get('status') || '').trim();
+    const att = loadCheckoutAttempt();
+    if (!tok && att && att.nr === nr) tok = att.tok || '';
+    if (!tok && nr) {
+      try { tok = sessionStorage.getItem('sh_status_token_' + nr) || ''; } catch (_) {}
+    }
+    if (pay === 'success' && nr) {
+      const info = document.getElementById('success-info');
+      const hero = document.getElementById('success-hero') || document.querySelector('#view-success h2');
+      const urlTok = (q.get('status') || '').trim();
+      let useTok = '';
+      if (att && att.nr === nr && att.tok) {
+        if (!urlTok || urlTok === att.tok) useTok = att.tok;
+      }
+      showView('success');
+      if (hero) hero.textContent = 'Bestellung ist eingegangen';
+      if (!useTok) {
+        if (info) info.textContent = 'Bestellung konnte nicht zugeordnet werden.';
+      } else if (info) {
+        info.textContent = 'Zahlung wird bestätigt.';
+        lastOrderNumber = nr;
+        startStatusPoll(useTok);
+      }
+    } else if (pay === 'cancel') {
+      const att = loadCheckoutAttempt();
+      const tokRetry = (att && att.tok) || tok;
+      const nrRetry = (att && att.nr) || nr;
+      if (nrRetry && tokRetry) {
+        if (confirm('Zahlung abgebrochen. Bestellung ist noch nicht bezahlt. Jetzt erneut online zahlen?')) {
+          retryStripeCheckout(nrRetry, tokRetry).then((body) => {
+            if (body && body.checkoutUrl) {
+              navigatingToStripe = true;
+              window.location.href = body.checkoutUrl;
+            } else {
+              alert('Zahlung konnte nicht fortgesetzt werden.');
+            }
+          }).catch((e) => alert(e.message || 'Zahlung konnte nicht fortgesetzt werden.'));
+        }
+      } else {
+        alert('Zahlung abgebrochen. Deine Bestellung ist noch nicht bezahlt.');
+      }
+    }
+  } catch (_) {}
+});
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 loadSiteSettings();   // Online/Offline + Wartezeit + Menu-Overrides
 renderMenu();
 checkStatus();
 loadPromo();
+// Schülerangebote laden (ohne Fehler wenn nicht aktiv)
+loadStudentOffersData().then(() => {
+  checkStudentEligibility();
+  renderMenu(); // re-render mit Schüler-Badges
+});
 setInterval(checkStatus, 60000);
 setInterval(loadPromo, 60000);
 setInterval(loadSiteSettings, 90000);  // Settings alle 90s prüfen
 setTimeout(observeCategories, 100);
 setTimeout(updateTabFades, 150);
+
+// Reorder-Warenkorb wiederherstellen – immer aktuelle Speisekarte/Preise
+if (window.location.search.includes('reorder=1')) {
+  try {
+    const rc = localStorage.getItem('reorder_cart');
+    if (rc) {
+      const items = JSON.parse(rc);
+      const skipped = [];
+      (items || []).forEach(it => {
+        const id = it.id || it.item_id;
+        if (!id) return;
+        const menuItem = MENU.find(m => m.id === id);
+        if (!menuItem || menuItem.available === false) {
+          skipped.push((it.name || id) + '');
+          return;
+        }
+        // Sold-out Overrides aus Settings
+        try {
+          if (window._menuOverrides && window._menuOverrides[id] && window._menuOverrides[id].available === false) {
+            skipped.push(menuItem.name || id);
+            return;
+          }
+        } catch (_) {}
+        const qty = Math.max(1, parseInt(it.qty || it.quantity || 1, 10) || 1);
+        const varLabel = (it.variant || '').toString();
+        let variant = null;
+        if (menuItem.variants && menuItem.variants.length) {
+          variant = menuItem.variants.find(v => v.l === varLabel) || null;
+          if (!variant) {
+            skipped.push((menuItem.name || id) + (varLabel ? ` (${varLabel})` : ''));
+            return;
+          }
+        }
+        // Preis IMMER aktuell – niemals alten Order-Preis übernehmen
+        const price = variant ? Number(variant.p) : Number(menuItem.price);
+        if (cart[id]) {
+          cart[id].qty += qty;
+        } else {
+          cart[id] = { item: menuItem, qty, variant, price };
+        }
+      });
+      localStorage.removeItem('reorder_cart');
+      try { renderMenu(); } catch (_) {}
+      try { updateCartUI(); } catch (_) {}
+      try { openCart(); } catch (_) {}
+      if (skipped.length) {
+        setTimeout(() => {
+          alert('Einige Artikel sind aktuell nicht mehr verfügbar:\n• ' + skipped.slice(0, 8).join('\n• ') + (skipped.length > 8 ? '\n…' : ''));
+        }, 400);
+      }
+      trackEvent('reorder_started', { source_order: localStorage.getItem('reorder_source_order') });
+      localStorage.removeItem('reorder_source_order');
+    }
+  } catch (_) {}
+}
+
+// ── ORDER RETURN STATE (Konto-Navigation aus dem Bestellportal) ─────────────
+const ORDER_RETURN_KEY = 'sh_order_return_state';
+const ORDER_RETURN_MAX_AGE_MS = 30 * 60 * 1000;
+
+function saveOrderReturnState() {
+  try {
+    const items = Object.keys(cart).map(id => ({
+      id, qty: cart[id].qty, variant: cart[id].variant ? cart[id].variant.l : null
+    }));
+    const viewCheckoutEl = document.getElementById('view-checkout');
+    const activeView = (viewCheckoutEl && viewCheckoutEl.style.display === 'block') ? 'checkout' : 'cart';
+
+    // Nur selbst geänderte Felder sichern – reine Account-Prefill-Werte kommen nach
+    // Rückkehr ganz normal wieder frisch aus dem Konto (refreshCheckoutAccountUI).
+    const checkoutFields = {};
+    _CHECKOUT_PREFILL_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const val = String(el.value || '').trim();
+      if (val && el.dataset.accountPrefill !== '1') checkoutFields[id] = el.value;
+    });
+    const noteEl = document.getElementById('f-note');
+    if (noteEl && String(noteEl.value || '').trim()) checkoutFields['f-note'] = noteEl.value;
+
+    const hasRelevantState = items.length > 0
+      || activeView === 'checkout'
+      || (typeof orderType !== 'undefined' && orderType === 'delivery')
+      || !!_selectedCoupon
+      || !!_selectedLoyaltyReward;
+    if (!hasRelevantState) return; // kein unnötiger Save auf normalen Shop-Pfaden ohne Kontext
+
+    const state = {
+      v: 1,
+      ts: Date.now(),
+      items,
+      orderType: (typeof orderType !== 'undefined') ? orderType : 'pickup',
+      payMethod: (typeof payMethod !== 'undefined') ? payMethod : 'stripe',
+      preorderTime: document.getElementById('f-time') ? document.getElementById('f-time').value : null,
+      coupon: _selectedCoupon || null,
+      loyaltyReward: _selectedLoyaltyReward || null,
+      rewardKind: (typeof _rewardKind !== 'undefined') ? _rewardKind : '',
+      view: activeView,
+      checkoutFields
+    };
+    sessionStorage.setItem(ORDER_RETURN_KEY, JSON.stringify(state));
+  } catch (_) { /* Save ist best-effort, darf Navigation nie blockieren */ }
+}
+
+// Rückkehr vom Konto (?from=order) – Bestellzustand wiederherstellen, one-shot
+(async function restoreOrderReturnState() {
+  let state = null;
+  try {
+    const raw = sessionStorage.getItem(ORDER_RETURN_KEY);
+    sessionStorage.removeItem(ORDER_RETURN_KEY); // sofort konsumiert – kein doppeltes/späteres Restore
+    if (!raw) return;
+    state = JSON.parse(raw);
+  } catch (_) { return; }
+  if (!state || state.v !== 1 || !state.ts || (Date.now() - state.ts) > ORDER_RETURN_MAX_AGE_MS) return;
+
+  try {
+    const skipped = [];
+    (state.items || []).forEach(it => {
+      if (!it || !it.id) return;
+      const menuItem = MENU.find(m => m.id === it.id);
+      if (!menuItem || menuItem.available === false) { skipped.push((menuItem && menuItem.name) || it.id); return; }
+      try {
+        if (window._menuOverrides && window._menuOverrides[it.id] && window._menuOverrides[it.id].available === false) {
+          skipped.push(menuItem.name || it.id);
+          return;
+        }
+      } catch (_) {}
+      let variant = null;
+      if (menuItem.variants && menuItem.variants.length) {
+        variant = menuItem.variants.find(v => v.l === it.variant) || null;
+        if (!variant) { skipped.push(menuItem.name + (it.variant ? ` (${it.variant})` : '')); return; }
+      }
+      const price = variant ? Number(variant.p) : Number(menuItem.price);
+      const qty = Math.max(1, parseInt(it.qty, 10) || 1);
+      cart[it.id] = { item: menuItem, qty, variant, price };
+    });
+    try { renderMenu(); } catch (_) {}
+    try { updateCartUI(); } catch (_) {}
+
+    if (state.orderType) { try { await setOrderType(state.orderType); } catch (_) {} }
+    if (state.payMethod) { try { setPayment(state.payMethod); } catch (_) {} }
+    const timeSel = document.getElementById('f-time');
+    if (timeSel && state.preorderTime) {
+      const slot = (orderOptions && Array.isArray(orderOptions.slots))
+        ? orderOptions.slots.find(s => s.id === state.preorderTime)
+        : null;
+      const kind = fulfillmentKindFromLabel(slot && slot.label);
+      const type = orderType === 'delivery' ? 'delivery' : 'pickup';
+      if ((!kind || kind === type) && [...timeSel.options].some(o => o.value === state.preorderTime)) {
+        timeSel.value = state.preorderTime;
+      }
+    }
+    try { buildCheckoutSummary(); } catch (_) {}
+    if (state.coupon) _selectedCoupon = state.coupon;
+    if (state.loyaltyReward) _selectedLoyaltyReward = state.loyaltyReward;
+    if (state.rewardKind) _rewardKind = state.rewardKind;
+
+    // Manuelle Checkout-Werte VOR dem Öffnen setzen: applyCheckoutAccountVal() überschreibt
+    // nur leere/noch-prefill-markierte Felder – echte manuelle Eingaben bleiben so erhalten.
+    Object.keys(state.checkoutFields || {}).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = state.checkoutFields[id];
+    });
+
+    const hasCart = Object.keys(cart).length > 0;
+    if (hasCart || state.view === 'checkout') {
+      openCart();
+      if (state.view === 'checkout') {
+        showView('checkout');
+        if (state.rewardKind) {
+          setTimeout(() => { try { pickRewardKind(state.rewardKind); } catch (_) {} }, 350);
+        }
+      }
+    }
+    if (skipped.length) {
+      setTimeout(() => {
+        alert('Einige Artikel aus deinem Warenkorb sind aktuell nicht mehr verfügbar:\n• ' + skipped.slice(0, 8).join('\n• ') + (skipped.length > 8 ? '\n…' : ''));
+      }, 400);
+    }
+  } catch (_) { /* graceful fallback – normaler Bestellflow läuft unverändert weiter */ }
+})();
+
+// Live-Status Deep-Link aus Mail: /bestellen?status=<status_token>
+(function openStatusFromQuery() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('pay')) return; // Stripe-Return separat
+    const tok = (params.get('status') || '').trim();
+    if (!tok || tok.toUpperCase().startsWith('SH-')) return;
+    lastOrderNumber = '';
+    showView('success');
+    try { document.getElementById('cart-modal').classList.add('open'); } catch (_) {}
+    const stLabel = document.getElementById('success-status-label');
+    if (stLabel) stLabel.textContent = 'Status wird geladen…';
+    const info = document.getElementById('success-info');
+    if (info) {
+      info.innerHTML = `<div style="color:#666;font-size:13px;">Status wird geladen…</div>`;
+    }
+    const linkWrap = document.getElementById('success-status-link-wrap');
+    const linkEl = document.getElementById('success-status-link');
+    if (linkWrap && linkEl) {
+      linkEl.href = `${location.origin}/bestellen?status=${encodeURIComponent(tok)}`;
+      linkEl.textContent = 'Diesen Status-Link speichern';
+      linkWrap.style.display = 'block';
+    }
+    const hint = document.getElementById('success-status-hint');
+    if (hint) hint.textContent = 'Live-Status deiner Bestellung. Aktualisiert sich automatisch.';
+    startStatusPoll(tok);
+    try {
+      document.getElementById('cart-bar')?.classList.remove('show');
+    } catch (_) {}
+  } catch (_) {}
+})();
 </script>
 
 <!-- ══ SEITEN-FOOTER ══════════════════════════════════════════════════════════ -->
-<footer style="margin-top:40px;padding:20px 16px;border-top:1px solid #1e1a14;text-align:center;">
+<footer style="margin-top:40px;padding:20px 16px 28px;border-top:1px solid #1e1a14;text-align:center;">
   <p style="font-size:11px;color:#4a4030;margin-bottom:8px;">&copy; 2026 Snack House Yassine &middot; Dr.-Felix-Gerhardus-Straße 7 &middot; 53894 Mechernich</p>
-  <div style="display:flex;justify-content:center;gap:20px;">
-    <button onclick="openLegal('impressum')" style="background:none;border:none;color:#7a6a4f;font-size:11px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">Impressum</button>
-    <button onclick="openLegal('datenschutz')" style="background:none;border:none;color:#7a6a4f;font-size:11px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">Datenschutz</button>
-    <button onclick="openLegal('agb')" style="background:none;border:none;color:#7a6a4f;font-size:11px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">AGB</button>
+  <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+    <a href="/impressum" style="color:#7a6a4f;font-size:11px;text-decoration:underline;text-underline-offset:2px;">Impressum</a>
+    <a href="/datenschutz" style="color:#7a6a4f;font-size:11px;text-decoration:underline;text-underline-offset:2px;">Datenschutz</a>
+    <a href="/agb" style="color:#7a6a4f;font-size:11px;text-decoration:underline;text-underline-offset:2px;">Bestellbedingungen</a>
+    <button onclick="openAllergenLegend()" style="background:none;border:none;color:#7a6a4f;font-size:11px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">Allergene &amp; Zusatzstoffe</button>
+    <a href="/konto?from=order" style="color:#7a6a4f;font-size:11px;text-decoration:underline;text-underline-offset:2px;">Konto</a>
   </div>
+  <p style="font-size:11px;color:#444;margin-top:12px;line-height:1.45;">Deine Daten werden ausschließlich zur Bestellabwicklung verwendet und nicht an Dritte weitergegeben.</p>
 </footer>
+
+<!-- Product info + allergen legend modals -->
+<div id="product-info-overlay" onclick="closeProductInfo()" style="display:none;position:fixed;inset:0;z-index:210;background:rgba(0,0,0,0.9);backdrop-filter:blur(4px);overflow-y:auto;padding:40px 16px;">
+  <div onclick="event.stopPropagation()" style="max-width:520px;margin:0 auto;background:#13110d;border:1px solid #2a2318;border-radius:16px;padding:24px;position:relative;">
+    <button onclick="closeProductInfo()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:#666;font-size:24px;cursor:pointer;line-height:1;">&times;</button>
+    <h2 id="pi-title" style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin:0 0 8px;padding-right:28px;"></h2>
+    <p id="pi-variant" style="font-size:12px;color:#888;margin:0 0 14px;"></p>
+    <div id="pi-body" style="font-size:14px;color:#cbb892;line-height:1.6;"></div>
+    <button type="button" onclick="openAllergenLegend()" style="margin-top:16px;background:none;border:1px solid #2a2318;color:#C9A84C;border-radius:10px;padding:8px 12px;font-size:12px;cursor:pointer;">Legende öffnen</button>
+  </div>
+</div>
+<div id="allergen-legend-overlay" onclick="closeAllergenLegend()" style="display:none;position:fixed;inset:0;z-index:220;background:rgba(0,0,0,0.9);backdrop-filter:blur(4px);overflow-y:auto;padding:40px 16px;">
+  <div class="legend-sheet" onclick="event.stopPropagation()">
+    <button onclick="closeAllergenLegend()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:#666;font-size:24px;cursor:pointer;line-height:1;">&times;</button>
+    <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin:0 0 12px;padding-right:28px;">Allergene &amp; Zusatzstoffe</h2>
+    <p style="font-size:12px;color:#888;line-height:1.55;margin:0 0 16px;">Nur bestätigte Bedeutungen. Fehlende Produktangaben bedeuten nicht „allergenfrei“.</p>
+    <h3 style="font-size:13px;color:#fff;margin:0 0 8px;">Allergene</h3>
+    <div id="legend-allergens" class="legend-list" style="font-size:13px;color:#cbb892;line-height:1.55;margin-bottom:16px;"></div>
+    <h3 style="font-size:13px;color:#fff;margin:0 0 8px;">Zusatzstoffe</h3>
+    <div id="legend-additives" class="legend-list" style="font-size:13px;color:#cbb892;line-height:1.55;"></div>
+  </div>
+</div>
 
 <!-- ══ LEGAL MODALS ══════════════════════════════════════════════════════════ -->
 <div id="legal-overlay" onclick="closeLegal()" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.9);backdrop-filter:blur(4px);overflow-y:auto;padding:40px 16px;">
@@ -1537,77 +3739,116 @@ setTimeout(updateTabFades, 150);
 
     <div id="modal-impressum" style="display:none;">
       <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:16px;">Impressum</h2>
-      <p style="color:#888;font-size:11px;margin-bottom:16px;">Angaben gemäß § 5 TMG</p>
+      <p style="color:#888;font-size:11px;margin-bottom:16px;">Angaben gemäß § 5 DDG</p>
       <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">Betreiber</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Snack House Yassine · Hassan Yassine<br>Dr.-Felix-Gerhardus-Straße 7 · 53894 Mechernich</p>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Snack House Yassine · Inhaber Hassan Yassine<br>Dr.-Felix-Gerhardus-Straße 7 · 53894 Mechernich</p>
       <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">Kontakt</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Tel.: 02443 – 3088966 · E-Mail: <a href="mailto:info@snackhouse-mechernich.de" style="color:#C9A84C;">info@snackhouse-mechernich.de</a></p>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Tel.: 02443 – 3088966 · E-Mail: <a href="mailto:kontakt@snackhouse-yassine.de" style="color:#C9A84C;">kontakt@snackhouse-yassine.de</a><br>Web: snackhouse-yassine.de</p>
       <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">Umsatzsteuer</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">Gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen (Kleinunternehmerregelung).</p>
-      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:0 0 4px;">EU-Streitschlichtung</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;">Die EU-Kommission stellt eine OS-Plattform bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener" style="color:#C9A84C;">ec.europa.eu/consumers/odr</a>. Wir nehmen nicht an Schlichtungsverfahren teil.</p>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">USt-IdNr.: DE370109608 · Portalpreise sind Endpreise für Verbraucher.</p>
+      <a href="/impressum" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#C9A84C;font-size:13px;">Vollständiges Impressum →</a>
     </div>
 
     <div id="modal-datenschutz" style="display:none;">
-      <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:16px;">Datenschutzerklärung</h2>
-      <p style="color:#888;font-size:12px;margin-bottom:16px;">Kurzfassung · gemäß DSGVO &amp; TTDSG</p>
+      <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:16px;">Datenschutz (Kurz)</h2>
+      <p style="color:#888;font-size:12px;margin-bottom:16px;">Transaktional ≠ Marketing</p>
       <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">
         <strong style="color:#fff;">Verantwortlicher:</strong> Hassan Yassine · Snack House Yassine · Dr.-Felix-Gerhardus-Str. 7 · 53894 Mechernich<br>
-        E-Mail: <a href="mailto:info@snackhouse-mechernich.de" style="color:#C9A84C;">info@snackhouse-mechernich.de</a>
+        E-Mail: <a href="mailto:kontakt@snackhouse-yassine.de" style="color:#C9A84C;">kontakt@snackhouse-yassine.de</a>
       </p>
       <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">
-        Bei einer Bestellung verarbeiten wir Name, Telefon, E-Mail (optional), Lieferadresse und Bestellinhalt zur Auftragsabwicklung.
-        Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO. Speicherdauer: 10 Jahre (steuerrechtlich).
-      </p>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:12px;">
-        <strong style="color:#22c55e;">Kein Tracking:</strong> Keine Tracking-Cookies, kein Google Analytics.
-        Schriften via Bunny Fonts (EU). Icons via Cloudflare CDN.
-      </p>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:16px;">
-        Du hast Rechte auf Auskunft, Berichtigung, Löschung und Widerspruch (Art. 15–21 DSGVO).
-        Beschwerde bei: LDI NRW · <a href="https://www.ldi.nrw.de" target="_blank" rel="noopener" style="color:#C9A84C;">ldi.nrw.de</a>
+        Bestellung: Name, Telefon, E-Mail, Lieferadresse (bei Lieferung), Bestelldaten, Status-Token, Zahlungsart.
+        Marketing-Follow-ups sind aus. Kein Google Analytics / Meta Pixel.
       </p>
       <a href="/datenschutz" target="_blank" rel="noopener" style="display:inline-block;background:#C9A84C;color:#000;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
-        Vollständige Datenschutzerklärung lesen →
+        Vollständige Datenschutzerklärung →
       </a>
-      <p style="color:#555;font-size:11px;margin-top:14px;">Stand: Juli 2026</p>
+      <p style="color:#555;font-size:11px;margin-top:14px;">Stand: August 2026</p>
     </div>
 
     <div id="modal-agb" style="display:none;">
-      <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:16px;">AGB – Online-Bestelldienst</h2>
+      <h2 style="font-family:'Playfair Display',serif;color:#C9A84C;font-size:20px;margin-bottom:16px;">Bestellbedingungen</h2>
       <p style="color:#888;font-size:11px;margin-bottom:16px;">Snack House Yassine · Hassan Yassine</p>
-      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 1 Vertragsschluss</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Mit dem Absenden einer Bestellung geben Sie ein verbindliches Angebot ab. Der Vertrag kommt durch unsere Bestätigung (Telefon, SMS oder App) zustande.</p>
-      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 2 Preise &amp; Zahlung</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Alle Preise sind Endpreise. Als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen. Zahlungsarten: Barzahlung, EC/Kreditkarte ab 15,00 €, Online via Stripe.</p>
-      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 3 Lieferung</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Lieferzeiten sind Richtwerte. Bei hohem Aufkommen kann es zu Verzögerungen kommen. Kein Rechtsanspruch auf bestimmte Lieferzeit.</p>
-      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 4 Kein Widerrufsrecht</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Für schnell verderbliche Lebensmittel besteht gemäß § 312g Abs. 2 Nr. 9 BGB kein Widerrufsrecht.</p>
-      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 5 Allergene</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Informationen zu Allergenen auf Anfrage unter 02443 – 3088966. Bei Unverträglichkeiten bitte vor Bestellung anrufen.</p>
-      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">§ 6 Geltendes Recht</h3>
-      <p style="color:#bba87a;font-size:13px;line-height:1.7;">Deutsches Recht. Gerichtsstand für Kaufleute: Mechernich.</p>
-      <p style="color:#555;font-size:11px;margin-top:14px;">Stand: Juli 2026</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">Vertragsschluss</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">„Zahlungspflichtig bestellen“ führt zur Onlinezahlung. Der Aufruf der Rückkehrseite allein ist kein Zahlungsbeweis und keine Annahme. Maßgeblich ist der serverseitig bestätigte Zahlungseingang. Danach ist die Bestellung eingegangen.</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">Preise &amp; Zahlung</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Endpreise. Das Onlineportal akzeptiert nur Stripe. Kartendaten speichern wir nicht.</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">Lieferung</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Maßgeblich sind Liefergebühr und Mindestbestellwert im Checkout. Wunschzeit ist keine Garantie.</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">Paid + abgelehnt</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Rückzahlung erforderlich. Nicht „bereits erstattet“, bis die Rückzahlung bestätigt verarbeitet wurde.</p>
+      <h3 style="color:#fff;font-size:13px;font-weight:700;margin:12px 0 4px;">Allergene</h3>
+      <p style="color:#bba87a;font-size:13px;line-height:1.7;margin-bottom:8px;">Angaben im Bestellportal. Fehlend ≠ allergenfrei. Hotline: 02443 – 3088966.</p>
+      <a href="/agb" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;background:#C9A84C;color:#000;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">Vollständige Bestellbedingungen →</a>
+      <p style="color:#555;font-size:11px;margin-top:14px;">Stand: August 2026</p>
     </div>
 
   </div>
 </div>
 
-<!-- ══ COOKIE BANNER ══════════════════════════════════════════════════════════ -->
-<div id="cookie-banner-order" style="position:fixed;top:0;left:0;right:0;z-index:200;background:#0e0b08;border-bottom:1px solid #2a2318;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.5);">
-  <p style="font-size:11px;color:#7a6a4f;margin:0;flex:1;min-width:180px;">
-    Schriften von Bunny Fonts (EU-Server), Icons via CDN. <strong style="color:#a89060;">Keine Tracking-Cookies.</strong>
-    <button onclick="openLegal('datenschutz')" style="background:none;border:none;color:#C9A84C;cursor:pointer;font-size:11px;padding:0;text-decoration:underline;">Datenschutz</button>
-  </p>
-  <button onclick="document.getElementById('cookie-banner-order').style.display='none';localStorage.setItem('cookie-ok-order','1')"
-          style="background:#C9A84C;color:#000;border:none;padding:7px 16px;border-radius:99px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">
-    OK
-  </button>
-</div>
+<!-- Cookie-Banner steht am Seitenanfang (kein fixed Overlay). -->
 
 <script>
-if (localStorage.getItem('cookie-ok-order')) document.getElementById('cookie-banner-order').style.display = 'none';
+if (localStorage.getItem('cookie-ok-order')) {
+  var _cbEnd = document.getElementById('cookie-banner-order');
+  if (_cbEnd) _cbEnd.style.display = 'none';
+}
+
+function openProductInfo(productId) {
+  const item = MENU.find(m => m.id === productId);
+  const idx = item && item._selectedVariant !== undefined ? item._selectedVariant : 0;
+  const vLabel = item && item.variants && item.variants[idx] ? item.variants[idx].l : '';
+  const info = resolveProductInfo(productId, vLabel);
+  const title = document.getElementById('pi-title');
+  const varEl = document.getElementById('pi-variant');
+  const body = document.getElementById('pi-body');
+  if (title) title.textContent = item ? item.name : productId;
+  if (varEl) varEl.textContent = vLabel ? ('Variante: ' + vLabel) : '';
+  const allergenRows = codeLabelRowsHtml(info.allergens);
+  const additiveRows = codeLabelRowsHtml(info.additives);
+  const parts = [];
+  if (allergenRows) parts.push('<div class="pi-h">Allergene</div>' + allergenRows);
+  if (additiveRows) parts.push('<div class="pi-h">Zusatzstoffe</div>' + additiveRows);
+  if (info.incomplete || !parts.length) {
+    const hint = info.incomplete_hint || 'Produktinformationen noch nicht vollständig hinterlegt';
+    parts.push('<p style="margin:12px 0 0;color:#888;">' + escapeHtmlLite(hint) + ' Das heißt nicht „allergenfrei“. Bei Unverträglichkeit bitte anrufen: 02443 3088966.</p>');
+  }
+  if (body) body.innerHTML = parts.join('');
+  const ov = document.getElementById('product-info-overlay');
+  if (ov) ov.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function closeProductInfo() {
+  const ov = document.getElementById('product-info-overlay');
+  if (ov) ov.style.display = 'none';
+  document.body.style.overflow = '';
+}
+function openAllergenLegend() {
+  const aBox = document.getElementById('legend-allergens');
+  const dBox = document.getElementById('legend-additives');
+  const legend = (productInfoCatalog && productInfoCatalog.legend) || {};
+  const allergens = legend.allergens || [];
+  const additives = legend.additives || [];
+  if (aBox) {
+    aBox.innerHTML = allergens.length
+      ? allergens.map(a => `<div><strong style="color:#C9A84C;">${escapeHtmlLite(a.code)}</strong> · ${escapeHtmlLite(a.label)}${a.description ? ' <span style="color:#888;">(' + escapeHtmlLite(a.description) + ')</span>' : ''}</div>`).join('')
+      : '<div style="color:#888;">Noch keine bestätigte Allergen-Legende geladen.</div>';
+  }
+  if (dBox) {
+    dBox.innerHTML = additives.length
+      ? additives.map(a => `<div><strong style="color:#C9A84C;">${escapeHtmlLite(a.code)}</strong> · ${escapeHtmlLite(a.label)}${a.description ? ' <span style="color:#888;">(' + escapeHtmlLite(a.description) + ')</span>' : ''}</div>`).join('')
+      : '<div style="color:#888;">Noch keine bestätigte Zusatzstoff-Legende geladen.</div>';
+  }
+  const ov = document.getElementById('allergen-legend-overlay');
+  if (ov) ov.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function closeAllergenLegend() {
+  const ov = document.getElementById('allergen-legend-overlay');
+  if (ov) ov.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
 function openLegal(section) {
   ['impressum','datenschutz','agb'].forEach(id => {
     document.getElementById('modal-' + id).style.display = id === section ? 'block' : 'none';
@@ -1619,16 +3860,14 @@ function closeLegal() {
   document.getElementById('legal-overlay').style.display = 'none';
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeLegal();
+    closeProductInfo();
+    closeAllergenLegend();
+  }
+});
 </script>
-
-<!-- DSGVO-Footer -->
-<footer style="text-align:center;padding:18px 16px 28px;font-size:11px;color:#444;border-top:1px solid #1c1c1c;margin-top:40px;">
-  Snack House Yassine · Dr.-Felix-Gerhardus-Str. 7 · 53894 Mechernich ·
-  <a href="/impressum" style="color:#555;text-decoration:underline;">Impressum</a> ·
-  <a href="/datenschutz" style="color:#555;text-decoration:underline;">Datenschutz</a>
-  <br>Deine Daten werden ausschließlich zur Bestellabwicklung verwendet und nicht an Dritte weitergegeben.
-</footer>
 
 </body>
 </html>

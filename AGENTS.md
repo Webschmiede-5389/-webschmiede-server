@@ -91,3 +91,18 @@ Full playbook for future projects: personal skill **`webschmiede-os`**
  - FlyRuwe-style hub: one webschmiede.de, many industry spokes
  - **Trend Scout:** weekly DE-fit reports → niche recommendations (`docs/agency/trend-scout.md`)
  - **Social Pipeline (German Golf Guide):** n8n + Meta API — copy, design, schedule IG/FB; own comments only; no auto-engagement on third-party profiles — see vision doc
+
+
+## Webschmiede-Standard: fester Umfang und sichtbare Abnahme
+
+**Verbindlich ab 05.10.2026 für jeden Auftrag und jedes Projekt.**
+
+Jeder Auftrag braucht vor Implementierung einen festen Umfang und einen vollständigen, sichtbaren Abnahmelauf. Festhalten: Nutzer/Ziel, Must-have, Out-of-Scope, sichtbarer Einstieg, Ablauf bis zum fachlichen Ergebnis, relevante Fehler-/Abbruchpfade und prüfbare Abschlusskriterien. Bei Aufgaben ohne UI ist der Nachweis das tatsächlich nutzbare Ergebnis im passenden Medium; keine künstliche Oberfläche bauen.
+
+Den Umfang nicht still auf Foundation, Labels, APIs oder einen kleineren Slice reduzieren. Zusammenhängende autorisierte Arbeit bis zu den vereinbarten Kriterien ausführen; interne Schritte brauchen keine wiederholte Freigabe. Echte Blocker und Umfangsänderungen ausdrücklich benennen. Kein PASS bei fehlender Kernfunktion oder fehlendem gefordertem Nachweis.
+
+Bei UI-Aufträgen auf der tatsächlich geöffneten URL prüfen: Port, Projektprozess, Arbeitsverzeichnis, Branch/Commit und lokale Änderungen dokumentieren. Ein anderer QA-Port beweist nicht den Nutzerstand. Sichtbare Navigation bis zum fachlichen Ergebnis testen, einschließlich passender Rollen, Geräte und Fehlerpfade. Eine Erfolgsmeldung ohne verarbeitetes Ergebnis ist kein Nachweis. Bestehende Daten erhalten und keine fremden Prozesse pauschal beenden.
+
+Implementierung, ausgeführte Tests, vollständige Browserabnahme, externes Review, echter Nutzertest und Demo-/Live-Freigaben getrennt berichten. Screenshots/Aufnahmen und Dokumentation dem geprüften Stand zuordnen. Synthetischer PASS ersetzt keinen echten Nutzer.
+
+Dieser Standard gilt auch für neue Projektvorlagen: in die projektspezifischen AGENTS-/Cursor-Regeln übernehmen und im Auftrag konkretisieren. Vorhandene Freigabegrenzen bleiben erhalten; die Regel autorisiert keinen Merge, Deploy, Versand oder Live-Zugriff. Offene Human-/Review-Abnahme blockiert nicht automatisch weitere reversible, bereits autorisierte Arbeit.

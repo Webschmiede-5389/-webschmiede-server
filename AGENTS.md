@@ -106,3 +106,24 @@ Bei UI-Aufträgen auf der tatsächlich geöffneten URL prüfen: Port, Projektpro
 Implementierung, ausgeführte Tests, vollständige Browserabnahme, externes Review, echter Nutzertest und Demo-/Live-Freigaben getrennt berichten. Screenshots/Aufnahmen und Dokumentation dem geprüften Stand zuordnen. Synthetischer PASS ersetzt keinen echten Nutzer.
 
 Dieser Standard gilt auch für neue Projektvorlagen: in die projektspezifischen AGENTS-/Cursor-Regeln übernehmen und im Auftrag konkretisieren. Vorhandene Freigabegrenzen bleiben erhalten; die Regel autorisiert keinen Merge, Deploy, Versand oder Live-Zugriff. Offene Human-/Review-Abnahme blockiert nicht automatisch weitere reversible, bereits autorisierte Arbeit.
+
+## Zwei getrennte Abnahmen: technische Funktion und selbstständige Bedienbarkeit
+
+**Verbindliche Ergänzung vom 05.10.2026.** Ein technisch durchgeklickter Ablauf und ein selbstständig gefundener Ablauf sind unterschiedliche Nachweise. Bei UI-/Workflow-Aufträgen vor Implementierung für beide prüfbare Kriterien festlegen.
+
+1. **Technische Abnahme:** Automatisierte Tests und vollständiger Browserlauf prüfen das fachliche Ergebnis sowie relevante Zustände, Fehler, Rechte, Persistenz und Deduplizierung auf dem identifizierten Build. Ein grüner Testlauf oder Agent-Browser-PASS bestätigt keine selbstständige Bedienbarkeit.
+2. **Bedienbarkeitsprüfung vorab:** Einstieg, verständliche Begriffe, eindeutige Objekte, sichtbarer Zustand, nächste mögliche Aktion, Rückweg und Fehlervermeidung prüfen. Auch falsche Einstiege, gleichnamige Instanzen und Aktionen ohne erfüllte Voraussetzungen untersuchen. Bestehendes und Neues klar unterscheiden. Keine unzulässigen Aktionen scheinbar ausführbar anbieten; Sperrgründe erklären und serverseitig durchsetzen.
+3. **Aufgabenbasierter echter Nutzertest:** Tatsächliche oder wahrscheinliche Nutzer erhalten Rolle, Situation und Ziel, aber keine Buttonnamen, Klickfolge, Direkt-URL zum Detail oder sonstige Lösungshinweise. Normale Hilfen innerhalb des Produkts dürfen genutzt werden. Beobachter lassen zunächst selbstständig arbeiten. Bei notwendiger Hilfe darf unterstützt werden; danach den Abschluss ausdrücklich als „mit Hilfe“ dokumentieren.
+4. **Nachweis je Aufgabe:** „selbstständig geschafft / mit Hilfe geschafft / nicht geschafft“, benötigte Zeit, Fehlaktionen, Zögerstellen, Hilfe und fachliches Ergebnis festhalten. Akzeptanzkriterien und gegebenenfalls Zeitgrenzen vor dem Test aufgabenbezogen bestimmen, nicht nachträglich passend machen. Kleine Testrunden finden Probleme, beweisen aber keine allgemeine Erfolgsquote.
+5. **Korrektur und erneute Abnahme:** Beobachtete Schwierigkeiten sind Produktbefunde, nicht automatisch Bedienfehler. Relevante Probleme innerhalb des vereinbarten Umfangs beheben, geeignete Regressionstests ergänzen und die Aufgabe erneut prüfen; für Erstnutzbarkeit möglichst mit einer Person ohne vorherige Klickanleitung. Keine endlose Ausweitung auf neue Module.
+6. **Ehrlicher Status:** TECHNICAL_PASS, AGENT_BROWSER_PASS und HUMAN_USABILITY_PASS getrennt ausweisen. Fehlender Nutzertest bedeutet HUMAN_USABILITY_OPEN, Hilfe bedeutet ASSISTED, eine gescheiterte Kernaufgabe bedeutet FAIL für diese Aufgabe. Kein vollständiger UX-PASS bei offener oder gescheiterter verpflichtender Kernaufgabe. KI-Prüfung ergänzt echte Nutzerprüfung und ersetzt sie nicht. Offene Abnahme verhindert nicht automatisch weitere autorisierte reversible Arbeit; bestehende Merge-/Deploy-/Live-Grenzen bleiben bestehen.
+
+**Vorlagenpflicht:** Jeder UI-/Workflow-Auftrag enthält getrennt den technischen Prüfablauf und ein neutrales Nutzerszenario ohne Lösungsweg. In Agentenregeln und neue Projektvorlagen übernehmen. Wiederholtes Erklären einer verwirrenden Oberfläche ersetzt keine Korrektur.
+
+Methodische Grundlagen:
+- GOV.UK, technische QA: https://www.gov.uk/service-manual/technology/quality-assurance-testing-your-service-regularly
+- GOV.UK, moderierte Nutzertests: https://www.gov.uk/service-manual/user-research/using-moderated-usability-testing
+- Nielsen Norman Group, neutrale Aufgaben: https://www.nngroup.com/articles/task-scenarios-usability-testing/
+- Nielsen Norman Group, Usability-Heuristiken: https://www.nngroup.com/articles/ten-usability-heuristics/
+- Playwright, sichtbares Nutzerverhalten: https://playwright.dev/docs/best-practices
+- Forschungsbefund zu Grenzen synthetischer Walkthroughs (Preprint; kein allgemeiner Wirksamkeitsbeweis): https://arxiv.org/abs/2512.03568

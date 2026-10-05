@@ -127,3 +127,24 @@ Methodische Grundlagen:
 - Nielsen Norman Group, Usability-Heuristiken: https://www.nngroup.com/articles/ten-usability-heuristics/
 - Playwright, sichtbares Nutzerverhalten: https://playwright.dev/docs/best-practices
 - Forschungsbefund zu Grenzen synthetischer Walkthroughs (Preprint; kein allgemeiner Wirksamkeitsbeweis): https://arxiv.org/abs/2512.03568
+
+## SELLABLE > PERFECT: begrenzter Umfang, belastbare Kernqualität, klarer Abschluss
+
+**Verbindliche Konkretisierung vom 05.10.2026.** Verkaufsfähigkeit bezieht sich auf den ausdrücklich vereinbarten Einsatz. Eine vorführbare Offline-Demo ist kein Nachweis für produktive Integrationen oder dauerhaften Betrieb.
+
+- Vor dem Build Kernaufgaben, Qualitäts-/Abnahmekriterien, Ausschlüsse und Aufwandgrenze festlegen. Technische Korrektheit, selbstständige Bedienbarkeit und Eignung für den vereinbarten Einsatz getrennt bewerten.
+- Zusatzwünsche, kosmetische Verbesserungen und Zukunftsarchitektur zurückstellen, wenn sie die vereinbarte Kernaufgabe nicht verbessern. Keine endlose Perfektionsschleife.
+- Bekannte Fehler, die die Kernaufgabe blockieren, irreführende Aktionen oder unbeabsichtigte folgenreiche Änderungen erzeugen, gehören zur Kernqualität und werden behoben. „SELLABLE > PERFECT“ rechtfertigt weder falsche Erfolgsanzeigen noch Sicherheits-/Datenfehler.
+- Unter Zeitdruck zuerst ausdrücklich den optionalen Umfang reduzieren, statt Kernqualität still zu senken. Einen fest beauftragten Pflichtumfang niemals eigenmächtig kürzen; notwendige Änderungen als Entscheidung mit Folgen sichtbar machen.
+- Automatisierte technische Tests, Browsernachweise und kurze aufgabenbasierte echte Nutzertests passend zum Risiko einsetzen. Keine eigene große QA-Plattform bauen, wenn bestehende Werkzeuge genügen. Kleine qualitative Nutzertestrunden finden Probleme; sie liefern keine statistische Garantie. Teilnehmerzahl und Rollen an Fragestellung und Risiko ausrichten.
+- Befunde priorisieren: Kernaufgabe blockiert oder fachliches Ergebnis falsch → beheben; verständliche Aufgabe mit kleiner kosmetischer Unschönheit → dokumentieren und zurückstellen. Relevante Schwierigkeiten bei der ersten Benutzung zählen als Befunde, auch wenn ein Agent den vorgesehenen Klickweg schafft.
+- Nach einem Fix die betroffenen Aufgaben und passende Regressionen erneut prüfen. Bereits bestandene Prüfungen nur bei neuen Änderungen, Fehlern oder begründeten offenen Risiken ausweiten oder wiederholen.
+- Nach erfüllten vereinbarten Kriterien den Auftrag schließen. Keine weiteren Features anhängen. Offene Review-/Human-/Live-Grenzen eindeutig ausweisen; Implementierungsabschluss nicht mit Produktionsfreigabe verwechseln.
+- Auftragsvorlagen enthalten: Ziel/Kernaufgaben, Ausschlüsse, Aufwandgrenze, technische Nachweise, neutrales Nutzerszenario, Priorisierung der Befunde und Stop-Kriterium. Neue Erkenntnisse außerhalb des Umfangs ins Parking Lot aufnehmen.
+
+Übertragene Praxis, keine allgemeine Fehlerfreiheitsgarantie:
+- Basecamp / Shape Up — Umfang und Zeitgrenzen: https://basecamp.com/shapeup/1.2-chapter-03
+- Basecamp / Shape Up — Abschlussentscheidung: https://basecamp.com/shapeup/3.5-chapter-14
+- GitLab — Qualitätsmaßstab: https://handbook.gitlab.com/handbook/product/product-principles/
+- GitLab — Nutzeraufgaben und Ergebnisse: https://handbook.gitlab.com/handbook/product/ux/jobs-to-be-done/jtbd-playbook/
+- GOV.UK — passende Nutzertestrunden: https://www.gov.uk/service-manual/user-research/plan-user-research-for-your-service

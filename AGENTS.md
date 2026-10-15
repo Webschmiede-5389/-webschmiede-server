@@ -1,5 +1,28 @@
 # Webschmiede Server – Agent Guide
 
+## GLOBAL WEBSCHMIEDE PRECHECK
+
+Vor Planung oder Änderung:
+1. Lies die projektspezifischen Dateien/Statusquellen dieses Repos.
+2. Lies zusätzlich die kanonischen Regeln aus `Webschmiede-5389/my-company-hub`:
+   - `core/SYSTEM-TASK.md`
+   - `core/SELLABLE-PERFECT.md`
+   - `core/AI-ENGINEERING-OS.md`
+   - `knowledge/CANONICAL-SOURCES.md`
+   - `core/OPERATOR-HANDOFF.md`
+   - `core/AUTOMATION-FIRST.md`
+   - bei neuem Repo/Projekt oder fehlender Bridge: `core/NEW-PROJECT-BOOTSTRAP.md`
+   - bei Projektstart/Phasenwechsel/Staging/Pilot/Production oder Vollständigkeitsfrage: `core/SYSTEM-COMPLETENESS-REVIEW.md`
+   - bei Domain/Auth/Hosting/Staging/Release: `core/DOMAIN-STAGING-RELEASE.md`
+   - bei Cursor-Regeln/Agentenverhalten/Rules/Hooks/Plugins/Skills/MCPs: `core/CURSOR-CONTROL-PLANE-AUDIT.md`
+   - bei SYSTEM-GATE: `core/CHAOS-RECOVERY.md`
+3. Löse `Webschmiede-5389/my-company-hub` auf einen exakten Commit-SHA auf und lies die kanonischen Regeln konsistent an diesem Stand. Melde `WEBSCHMIEDE_RULESET_SHA=<sha>`.
+4. Ermittle Repo, Branch, HEAD-SHA, Working Tree/Worktree und relevante Runtime.
+5. Bei fehlenden globalen Regeln: `STOP: GLOBAL_RULES_UNAVAILABLE`.
+6. Bei widersprüchlicher autoritativer Wahrheit oder Regelkonflikt: `STOP: SOURCE_OF_TRUTH_CONFLICT` bzw. `STOP: RULE_CONFLICT`.
+7. Keine Annahmen treffen und keine globale Regel lokal duplizieren oder abändern.
+
+
 This repo is the **agency infrastructure** for Webschmiede (Digital Craftsmanship). First live client: **Snack House Yassine (SHY001)**.
 
 ## Quick commands

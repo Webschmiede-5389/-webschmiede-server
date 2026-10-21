@@ -15,7 +15,10 @@ WEBROOT     = '/var/www/snackhouse-mechernich'
 FILES = [
     (r'backend\auth_users.py', f'{REMOTE_APP}/backend/auth_users.py'),
     (r'backend\main.py',        f'{REMOTE_APP}/backend/main.py'),
+    (r'backend\launch_discount.py', f'{REMOTE_APP}/backend/launch_discount.py'),
     (r'backend\order_validation.py', f'{REMOTE_APP}/backend/order_validation.py'),
+    (r'backend\order_portal.py', f'{REMOTE_APP}/backend/order_portal.py'),
+    (r'backend\shop_status.py', f'{REMOTE_APP}/backend/shop_status.py'),
     (r'backend\loyalty.py',        f'{REMOTE_APP}/backend/loyalty.py'),
     (r'backend\seminars.py',       f'{REMOTE_APP}/backend/seminars.py'),
     (r'static\order.html',      f'{REMOTE_APP}/static/order.html'),
@@ -126,11 +129,15 @@ FILES = [
     (r'static\transport-kalkulator-sw.js', f'{REMOTE_APP}/static/transport-kalkulator-sw.js'),
     (r'static\tourmeter-mark.svg', f'{REMOTE_APP}/static/tourmeter-mark.svg'),
     (r'static\index.html',      f'{REMOTE_APP}/static/index.html'),
+    (r'static\home-a.css',      f'{REMOTE_APP}/static/home-a.css'),
+    (r'static\home-chrome.js',  f'{REMOTE_APP}/static/home-chrome.js'),
     (r'static\manifest.webmanifest', f'{REMOTE_APP}/static/manifest.webmanifest'),
     (r'static\sw.js',           f'{REMOTE_APP}/static/sw.js'),
     (r'static\order-push-sw.js', f'{REMOTE_APP}/static/order-push-sw.js'),
     (r'static\datenschutz.html',f'{REMOTE_APP}/static/datenschutz.html'),
     (r'static\impressum.html',  f'{REMOTE_APP}/static/impressum.html'),
+    (r'static\agb.html',        f'{REMOTE_APP}/static/agb.html'),
+    (r'static\konto.html',      f'{REMOTE_APP}/static/konto.html'),
     (r'static\favicon.png',     f'{REMOTE_APP}/static/favicon.png'),
     (r'static\favicon-192.png', f'{REMOTE_APP}/static/favicon-192.png'),
     (r'static\apple-touch-icon.png', f'{REMOTE_APP}/static/apple-touch-icon.png'),
@@ -421,12 +428,32 @@ run(client, 'cp /root/app/static/transport-kalkulator.webmanifest /var/www/digit
 run(client, 'cp /root/app/static/transport-kalkulator-sw.js /var/www/digitalehandwerkskunst/transport-kalkulator-sw.js')
 run(client, 'cp /root/app/static/tourmeter-mark.svg /var/www/digitalehandwerkskunst/tourmeter-mark.svg')
 run(client, f'cp {REMOTE_APP}/static/index.html {WEBROOT}/index.html')
+run(client, f'cp {REMOTE_APP}/static/home-a.css {WEBROOT}/home-a.css')
+run(client, f'cp {REMOTE_APP}/static/home-chrome.js {WEBROOT}/home-chrome.js')
+run(client, f'cp {REMOTE_APP}/static/robots.txt {WEBROOT}/robots.txt')
+run(client, f'cp {REMOTE_APP}/static/sitemap.xml {WEBROOT}/sitemap.xml')
+run(client, f'cp {REMOTE_APP}/static/feedback.html {WEBROOT}/feedback.html')
 run(client, f'cp {REMOTE_APP}/static/manifest.webmanifest {WEBROOT}/manifest.webmanifest')
 run(client, f'cp {REMOTE_APP}/static/sw.js {WEBROOT}/sw.js')
 run(client, f'cp {REMOTE_APP}/static/order-push-sw.js {WEBROOT}/order-push-sw.js')
 run(client, f'mkdir -p {WEBROOT}/brand && cp -r {REMOTE_APP}/static/brand/* {WEBROOT}/brand/ 2>/dev/null || true')
+IMG_LOCAL = os.path.join(LOCAL_BASE, 'static', 'img')
+if os.path.isdir(IMG_LOCAL):
+    print('\nUpload static/img/...')
+    sftp = client.open_sftp()
+    run(client, f'mkdir -p {REMOTE_APP}/static/img {WEBROOT}/img')
+    for fname in os.listdir(IMG_LOCAL):
+        local = os.path.join(IMG_LOCAL, fname)
+        if os.path.isfile(local):
+            remote = f'{REMOTE_APP}/static/img/{fname}'
+            print(f'Upload: static/img/{fname}')
+            sftp.put(local, remote)
+            run(client, f'cp {remote} {WEBROOT}/img/{fname}')
+    sftp.close()
 run(client, f'cp {REMOTE_APP}/static/datenschutz.html {WEBROOT}/datenschutz.html')
 run(client, f'cp {REMOTE_APP}/static/impressum.html {WEBROOT}/impressum.html')
+run(client, f'cp {REMOTE_APP}/static/agb.html {WEBROOT}/agb.html')
+run(client, f'cp {REMOTE_APP}/static/konto.html {WEBROOT}/konto.html')
 run(client, f'cp {REMOTE_APP}/static/favicon.png {WEBROOT}/favicon.png')
 run(client, f'cp {REMOTE_APP}/static/favicon-192.png {WEBROOT}/favicon-192.png')
 run(client, f'cp {REMOTE_APP}/static/apple-touch-icon.png {WEBROOT}/apple-touch-icon.png')

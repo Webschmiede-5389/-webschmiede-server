@@ -1,0 +1,75 @@
+# Manueller Pull-Kanal-Test: versioniertes Artefakt auf dediziertem Branch (kein Deploy).
+name: Hetzner pull channel test
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_label:
+        description: Optional label for manifest
+        required: false
+        default: pull-preflight-v1
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hetzner-pull-channel-test
+  cancel-in-progress: false
+
+jobs:
+  publish-pull-test-artifact:
+    name: Publish pull-test branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build signed pull-test payload
+        env:
+          TEST_LABEL: ${{ github.event.inputs.test_label }}
+        run: |
+          set -euo pipefail
+          PAYLOAD_DIR="pull-test-payload"
+          rm -rf "${PAYLOAD_DIR}"
+          mkdir -p "${PAYLOAD_DIR}"
+          printf '%s\n' "${GITHUB_SHA}" > "${PAYLOAD_DIR}/commit_sha.txt"
+          printf '%s\n' "${GITHUB_RUN_ID}" > "${PAYLOAD_DIR}/run_id.txt"
+          printf '%s\n' "${TEST_LABEL}" > "${PAYLOAD_DIR}/channel_label.txt"
+          printf '%s\n' "${GITHUB_WORKFLOW_REF}" > "${PAYLOAD_DIR}/workflow_ref.txt"
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > "${PAYLOAD_DIR}/built_at_utc.txt"
+          python3 - <<'PY'
+          import json, os, pathlib
+          payload = pathlib.Path("pull-test-payload")
+          manifest = {
+              "channel": "hetzner-pull-test",
+              "commit_sha": os.environ["GITHUB_SHA"],
+              "run_id": os.environ["GITHUB_RUN_ID"],
+              "artifact_name": f"hetzner-pull-test-{os.environ['GITHUB_RUN_ID']}",
+              "test_label": os.environ["TEST_LABEL"],
+              "repository": os.environ["GITHUB_REPOSITORY"],
+          }
+          payload.joinpath("manifest.json").write_text(
+              json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
+          )
+          PY
+          (cd "${PAYLOAD_DIR}" && sha256sum commit_sha.txt run_id.txt channel_label.txt workflow_ref.txt built_at_utc.txt manifest.json > SHA256SUMS)
+
+      - name: Publish branch hetzner-pull-test/run-<run_id>
+        run: |
+          set -euo pipefail
+          BRANCH="hetzner-pull-test/run-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan "${BRANCH}"
+          git rm -rf . 2>/dev/null || true
+          git add pull-test-payload
+          git commit -m "hetzner pull test artifact run ${GITHUB_RUN_ID} @ ${GITHUB_SHA}"
+          git push --force origin "${BRANCH}"
+
+      - name: Summary
+        run: |
+          echo "Published branch: hetzner-pull-test/run-${GITHUB_RUN_ID}"
+          echo "Commit SHA: ${GITHUB_SHA}"
+          echo "Use RUN_ID=${GITHUB_RUN_ID} on WEB/AUTO pull script (manual one-shot)."

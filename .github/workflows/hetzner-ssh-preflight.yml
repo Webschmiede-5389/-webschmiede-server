@@ -1,0 +1,91 @@
+# Ungefährlicher Verbindungstest: SSH-Identität + eingeschränkter User, kein Deploy.
+name: Hetzner SSH preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/hetzner-ssh-preflight.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hetzner-ssh-preflight
+  cancel-in-progress: true
+
+jobs:
+  ssh-preflight:
+    name: SSH preflight (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: web
+            expected_hostname: web-01neu
+          - target: auto
+            expected_hostname: Auto-01neu
+    environment: hetzner-${{ matrix.target }}
+    steps:
+      - name: Validate required secrets
+        env:
+          SSH_USER: ${{ secrets.HETZNER_GHA_DEPLOY_SSH_USER }}
+          SSH_KEY: ${{ secrets.HETZNER_GHA_DEPLOY_SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.HETZNER_SSH_KNOWN_HOSTS }}
+          HOST: ${{ secrets.HETZNER_SSH_HOST }}
+        run: |
+          set -euo pipefail
+          for v in SSH_USER SSH_KEY KNOWN_HOSTS HOST; do
+            if [ -z "${!v:-}" ]; then
+              echo "Missing secret ${v} (environment=hetzner-${{ matrix.target }})"
+              exit 1
+            fi
+          done
+
+      - name: SSH identity check (no root, no writes)
+        env:
+          SSH_USER: ${{ secrets.HETZNER_GHA_DEPLOY_SSH_USER }}
+          SSH_KEY: ${{ secrets.HETZNER_GHA_DEPLOY_SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.HETZNER_SSH_KNOWN_HOSTS }}
+          HOST: ${{ secrets.HETZNER_SSH_HOST }}
+          EXPECTED_HOSTNAME: ${{ matrix.expected_hostname }}
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${KNOWN_HOSTS}" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          printf '%s\n' "${SSH_KEY}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+          REMOTE_SCRIPT=$(cat <<'EOS'
+          set -euo pipefail
+          echo "hostname=$(hostname -f)"
+          echo "uid=$(id -u)"
+          echo "user=$(whoami)"
+          if [ "$(id -u)" -eq 0 ]; then
+            echo "ERROR: root login not allowed for CI deploy user"
+            exit 2
+          fi
+          if [ -w / ]; then
+            echo "ERROR: filesystem root is writable"
+            exit 3
+          fi
+          echo "preflight_ok=1"
+          EOS
+          )
+
+          OUT="$(ssh -i ~/.ssh/deploy_key \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile=~/.ssh/known_hosts \
+            "${SSH_USER}@${HOST}" bash -s <<< "${REMOTE_SCRIPT}")"
+
+          echo "${OUT}"
+          echo "${OUT}" | grep -q "preflight_ok=1"
+          echo "${OUT}" | grep -q "hostname=${EXPECTED_HOSTNAME}" || {
+            echo "Hostname mismatch (expected ${EXPECTED_HOSTNAME})"
+            exit 4
+          }

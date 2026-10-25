@@ -1,0 +1,9 @@
+{
+  "channel": "hetzner-pull-test",
+  "integrity": "checksum-only",
+  "source_workflow_sha": "f369ef0a6e51c58b894801a80d1e77563f0414a8",
+  "run_id": "40211035135",
+  "artifact_name": "hetzner-pull-test-40211035135",
+  "test_label": "",
+  "repository": "Webschmiede-5389/-webschmiede-server"
+}

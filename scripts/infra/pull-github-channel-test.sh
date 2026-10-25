@@ -16,6 +16,16 @@ if [[ -z "${RUN_ID}" || -z "${EXPECTED_PUBLISH_COMMIT}" ]]; then
   exit 1
 fi
 
+# Reject path traversal and malformed pins before touching the filesystem.
+if [[ ! "${RUN_ID}" =~ ^[1-9][0-9]*$ ]]; then
+  echo "Invalid run ID: expected a positive decimal integer" >&2
+  exit 9
+fi
+if [[ ! "${EXPECTED_PUBLISH_COMMIT}" =~ ^[0-9a-fA-F]{40}$ ]]; then
+  echo "Invalid publish commit: expected a 40-character Git SHA-1" >&2
+  exit 10
+fi
+
 if [[ "$(id -u)" -eq 0 ]]; then
   echo "Refusing to run as root" >&2
   exit 2
@@ -31,13 +41,16 @@ if [[ "${NEGATIVE_MODE}" == "wrong_commit" ]]; then
 fi
 
 BRANCH="hetzner-pull-test/run-${RUN_ID}"
-WORKDIR="${BASE_DIR}/inbox/run-${RUN_ID}"
+# Use a new private directory each time; never delete a path derived from input.
+# Reject a symlinked inbox so test data cannot escape the configured test root.
+if [[ ! -d "${BASE_DIR}/inbox" || -L "${BASE_DIR}/inbox" ]]; then
+  echo "Missing or symlinked pull-test inbox" >&2
+  exit 11
+fi
+WORKDIR="$(mktemp -d "${BASE_DIR}/inbox/run-${RUN_ID}.XXXXXXXX")"
 REPO_DIR="${WORKDIR}/repo"
 ACTIVE_KNOWN_HOSTS="${KNOWN_HOSTS_PATH}"
-
-rm -rf "${WORKDIR}"
-mkdir -p "${WORKDIR}"
-chmod 700 "${BASE_DIR}" "${WORKDIR}" 2>/dev/null || true
+chmod 700 "${WORKDIR}"
 
 if [[ "${NEGATIVE_MODE}" == "bad_hostkey" ]]; then
   ACTIVE_KNOWN_HOSTS="${WORKDIR}/bad_known_hosts"

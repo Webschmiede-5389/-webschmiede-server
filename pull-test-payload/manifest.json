@@ -1,0 +1,8 @@
+{
+  "channel": "hetzner-pull-test",
+  "commit_sha": "08c9b8a4a5a91cb53513130ec9ac958a7f5227eb",
+  "run_id": "40210421270",
+  "artifact_name": "hetzner-pull-test-40210421270",
+  "test_label": "",
+  "repository": "Webschmiede-5389/-webschmiede-server"
+}

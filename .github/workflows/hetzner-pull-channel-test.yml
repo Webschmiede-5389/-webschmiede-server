@@ -1,0 +1,84 @@
+# Manueller Pull-Kanal-Test: unveränderlicher Publish-Branch pro RUN_ID (kein Deploy).
+name: Hetzner pull channel test
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_label:
+        description: Optional label for manifest
+        required: false
+        default: pull-preflight-v1
+permissions:
+  contents: write
+
+concurrency:
+  group: hetzner-pull-channel-test
+  cancel-in-progress: false
+
+jobs:
+  publish-pull-test-artifact:
+    name: Publish pull-test branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build pull-test payload (checksum-only)
+        env:
+          TEST_LABEL: ${{ github.event.inputs.test_label }}
+        run: |
+          set -euo pipefail
+          PAYLOAD_DIR="pull-test-payload"
+          rm -rf "${PAYLOAD_DIR}"
+          mkdir -p "${PAYLOAD_DIR}"
+          printf '%s\n' "${GITHUB_RUN_ID}" > "${PAYLOAD_DIR}/run_id.txt"
+          printf '%s\n' "${GITHUB_SHA}" > "${PAYLOAD_DIR}/source_workflow_sha.txt"
+          printf '%s\n' "${TEST_LABEL}" > "${PAYLOAD_DIR}/channel_label.txt"
+          printf '%s\n' "${GITHUB_WORKFLOW_REF}" > "${PAYLOAD_DIR}/workflow_ref.txt"
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > "${PAYLOAD_DIR}/built_at_utc.txt"
+
+      - name: Publish immutable branch hetzner-pull-test/run-<run_id>
+        env:
+          TEST_LABEL: ${{ github.event.inputs.test_label }}
+        run: |
+          set -euo pipefail
+          BRANCH="hetzner-pull-test/run-${GITHUB_RUN_ID}"
+          if git ls-remote --heads origin "${BRANCH}" | grep -q .; then
+            echo "ERROR: branch ${BRANCH} already exists — refuse overwrite"
+            exit 1
+          fi
+          python3 - <<'PY'
+          import json, os, pathlib
+          payload = pathlib.Path("pull-test-payload")
+          manifest = {
+              "channel": "hetzner-pull-test",
+              "integrity": "checksum-only",
+              "source_workflow_sha": os.environ["GITHUB_SHA"],
+              "run_id": os.environ["GITHUB_RUN_ID"],
+              "artifact_name": f"hetzner-pull-test-{os.environ['GITHUB_RUN_ID']}",
+              "test_label": os.environ["TEST_LABEL"],
+              "repository": os.environ["GITHUB_REPOSITORY"],
+          }
+          payload.joinpath("manifest.json").write_text(
+              json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
+          )
+          PY
+          (cd pull-test-payload && sha256sum run_id.txt source_workflow_sha.txt channel_label.txt workflow_ref.txt built_at_utc.txt manifest.json > CHECKSUMS.sha256)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan "${BRANCH}"
+          git rm -rf . 2>/dev/null || true
+          git add pull-test-payload
+          git commit -m "hetzner pull test artifact run ${GITHUB_RUN_ID}"
+          PUBLISH_COMMIT="$(git rev-parse HEAD)"
+          echo "PUBLISH_COMMIT=${PUBLISH_COMMIT}" >> "${GITHUB_ENV}"
+          git push origin "${BRANCH}"
+
+      - name: Summary
+        run: |
+          echo "Published branch: hetzner-pull-test/run-${GITHUB_RUN_ID}"
+          echo "Publish commit pin: ${PUBLISH_COMMIT}"
+          echo "Source workflow SHA: ${GITHUB_SHA}"
+          echo "Server: pull-github-channel-test.sh ${GITHUB_RUN_ID} ${PUBLISH_COMMIT}"

@@ -8,10 +8,6 @@ on:
         description: Optional label for manifest
         required: false
         default: pull-preflight-v1
-  push:
-    branches:
-      - infra/github-hetzner-pull-channel-test
-
 permissions:
   contents: write
 

@@ -1,0 +1,20 @@
+test_bounded_provider_failure (test_process_architect.PlanningTests.test_bounded_provider_failure) ... ok
+test_complete_and_persistence (test_process_architect.PlanningTests.test_complete_and_persistence) ... ok
+test_cross_tenant_source_denied (test_process_architect.PlanningTests.test_cross_tenant_source_denied) ... ok
+test_duplicate_and_conflict (test_process_architect.PlanningTests.test_duplicate_and_conflict) ... ok
+test_missing_answer_and_stale_answer (test_process_architect.PlanningTests.test_missing_answer_and_stale_answer) ... ok
+test_model_repair_feedback_fixture (test_process_architect.PlanningTests.test_model_repair_feedback_fixture) ... ok
+test_path_and_type_rejected (test_process_architect.PlanningTests.test_path_and_type_rejected) ... ok
+test_recovery_retains_attempts (test_process_architect.PlanningTests.test_recovery_retains_attempts) ... ok
+test_schema_citations (test_process_architect.PlanningTests.test_schema_citations) ... ok
+test_source_change_preserves_old_version (test_process_architect.PlanningTests.test_source_change_preserves_old_version) ... ok
+test_source_contradiction (test_process_architect.PlanningTests.test_source_contradiction) ... ok
+test_source_pin_blocks (test_process_architect.PlanningTests.test_source_pin_blocks) ... ok
+test_tenant_spoof (test_process_architect.PlanningTests.test_tenant_spoof) ... ok
+test_unconfigured_model_never_passes (test_process_architect.PlanningTests.test_unconfigured_model_never_passes) ... ok
+test_one_start_then_answer_and_restart (test_process_architect.WorkerAcceptance.test_one_start_then_answer_and_restart) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.431s
+
+OK

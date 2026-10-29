@@ -1,0 +1,40 @@
+[
+  {
+    "id": "PA-L01",
+    "project": "Webschmiede Agency / Stefan",
+    "use_case": "Unvollständiger Kundenauftrag",
+    "problem": "Nichtleerer, unbestimmter Wunsch erzeugt ok=true und pauschale MVP-in-2-Wochen-Empfehlung trotz fehlender Systeme, Budget und Abnahme.",
+    "impact": "Aufruf-Erfolg könnte als Ausführungsreife missverstanden werden; fehlende Kundenentscheidungen werden nicht als persistierte Rückfragen behandelt.",
+    "cause_status": "FACT",
+    "cause": "plan_project verwendet statische Bausteine und prüft nur leeren brief; keine persistente Informationslückenprüfung in dieser Funktion.",
+    "solution": "Pflichtfelder zuerst aus autorisierten Quellen auflösen; bei Lücken WAITING_INPUT; Antworten revisionsgesichert fortsetzen.",
+    "rejected": "ok=true als fachlichen Plan-PASS übernehmen; keine Änderung der Alt-API in diesem Slice.",
+    "source": "https://github.com/Webschmiede-5389/-webschmiede-server/blob/8a704d5507776ae8434e882105ffa0ac7c4ef818/app/backend/agency_stefan.py",
+    "date": "2026-10-30",
+    "version": "8a704d5507776ae8434e882105ffa0ac7c4ef818",
+    "test_evidence": "Lokaler Originalaufruf plan_project(\"Neuer Kundenprozess automatisieren\"): ok=true,budget=null,modules=[custom]. Regression im neuen Testpaket.",
+    "limits": "Kein produktiver Kundenvorfall behauptet. Es ist ein reproduzierter Codebefund.",
+    "transfer": "Jeder Planer mit fehlenden verpflichtenden Geschäftsangaben",
+    "status": "FACT",
+    "rule_status": "PROPOSED_IMPLEMENTATION"
+  },
+  {
+    "id": "PA-L02",
+    "project": "Webschmiede Cloud Factory",
+    "use_case": "Aktivierungsnachweis",
+    "problem": "Gespeicherte Vorlage oder erfolgreicher Publish-Job belegt keine funktionierende Runtime.",
+    "impact": "Falsche Aktivierungsmeldung möglich.",
+    "cause_status": "TRANSFER",
+    "cause": "Unterschiedliche Nachweisstufen müssen getrennt ausgewertet werden.",
+    "solution": "CODE, synthetischer Ablauf, Provider, Einbindung und Betrieb getrennt berichten.",
+    "rejected": "Templates mit active=false als laufende Planung darstellen.",
+    "source": "https://github.com/Webschmiede-5389/my-company-hub/blob/d551d1fcee92198a9ec1e71492d6f3e8f05592b7/knowledge/SOLO-OPERATOR-PLAYBOOK.md",
+    "date": "2026-10-30",
+    "version": "d551d1fcee92198a9ec1e71492d6f3e8f05592b7",
+    "test_evidence": "Original workflow-agency-brain.json enthält active=false; keine Live-Abfrage erfolgt.",
+    "limits": "Repositorywert ist kein Beleg für tatsächlichen n8n-Status.",
+    "transfer": "Alle Workflow-Exporte und Staging-Tests",
+    "status": "TRANSFER",
+    "rule_status": "EXISTING_RULE"
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "event_id": "evt-002",
+  "job_id": "pilot-missing",
+  "kind": "intake",
+  "data": {
+    "process": "customer-intake-v1",
+    "goal": "Bestehenden Kunden eindeutig zuordnen und einen vollständigen Ablage- und Übergabeplan erzeugen"
+  }
+}

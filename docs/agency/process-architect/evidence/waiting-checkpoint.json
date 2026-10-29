@@ -1,0 +1,31 @@
+{
+  "job": {
+    "tenant": "TEST_A",
+    "id": "pilot-missing",
+    "revision": 1,
+    "payload": "{\"goal\": \"Bestehenden Kunden eindeutig zuordnen und einen vollständigen Ablage- und Übergabeplan erzeugen\", \"process\": \"customer-intake-v1\"}",
+    "status": "WAITING_INPUT",
+    "attempts": 0,
+    "source_hash": "e2ea33d3bdb5d82481ad6813f3bfe6373d05e645fa82db30c9185552b8a03c66",
+    "detail": "{\"questions\": [{\"check\": \"Wert in autorisierter Quelle oder Antwort ergänzen\", \"field\": \"budget\", \"owner\": \"TEST-Operator\", \"status\": \"UNKNOWN\"}]}",
+    "next_at": 0.0
+  },
+  "log": [
+    {
+      "seq": 2,
+      "tenant": "TEST_A",
+      "job": "pilot-missing",
+      "state": "QUEUED",
+      "detail": "{\"event_id\": \"evt-002\", \"revision\": 1}",
+      "at": 1793317254.839259
+    },
+    {
+      "seq": 5,
+      "tenant": "TEST_A",
+      "job": "pilot-missing",
+      "state": "WAITING_INPUT",
+      "detail": "{\"questions\": [{\"check\": \"Wert in autorisierter Quelle oder Antwort ergänzen\", \"field\": \"budget\", \"owner\": \"TEST-Operator\", \"status\": \"UNKNOWN\"}]}",
+      "at": 1793317254.8470724
+    }
+  ]
+}

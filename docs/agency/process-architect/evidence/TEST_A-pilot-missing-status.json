@@ -1,0 +1,55 @@
+{
+  "job": {
+    "tenant": "TEST_A",
+    "id": "pilot-missing",
+    "revision": 2,
+    "payload": "{\"budget\": \"TEST: maximal 2 Stunden Planprüfung; keine Ausgaben\", \"goal\": \"Bestehenden Kunden eindeutig zuordnen und einen vollständigen Ablage- und Übergabeplan erzeugen\", \"process\": \"customer-intake-v1\"}",
+    "status": "PLAN_READY",
+    "attempts": 1,
+    "source_hash": "e2ea33d3bdb5d82481ad6813f3bfe6373d05e645fa82db30c9185552b8a03c66",
+    "detail": "{\"validation\": \"STRUCTURE_PASS\", \"version\": 1}",
+    "next_at": 0.0
+  },
+  "log": [
+    {
+      "seq": 2,
+      "tenant": "TEST_A",
+      "job": "pilot-missing",
+      "state": "QUEUED",
+      "detail": "{\"event_id\": \"evt-002\", \"revision\": 1}",
+      "at": 1793317254.839259
+    },
+    {
+      "seq": 5,
+      "tenant": "TEST_A",
+      "job": "pilot-missing",
+      "state": "WAITING_INPUT",
+      "detail": "{\"questions\": [{\"check\": \"Wert in autorisierter Quelle oder Antwort ergänzen\", \"field\": \"budget\", \"owner\": \"TEST-Operator\", \"status\": \"UNKNOWN\"}]}",
+      "at": 1793317254.8470724
+    },
+    {
+      "seq": 6,
+      "tenant": "TEST_A",
+      "job": "pilot-missing",
+      "state": "QUEUED",
+      "detail": "{\"event_id\": \"evt-003\", \"revision\": 2}",
+      "at": 1793317254.8842983
+    },
+    {
+      "seq": 7,
+      "tenant": "TEST_A",
+      "job": "pilot-missing",
+      "state": "CONTEXT_READY",
+      "detail": "{\"origins\": {\"acceptance\": \"pilot-facts\", \"budget\": \"intake\", \"goal\": \"intake\", \"owner\": \"pilot-facts\", \"process\": \"intake\", \"systems\": \"pilot-facts\"}, \"sources\": [\"intake-template\", \"lessons\", \"pilot-facts\", \"playbook\", \"rules\"]}",
+      "at": 1793317254.8883939
+    },
+    {
+      "seq": 8,
+      "tenant": "TEST_A",
+      "job": "pilot-missing",
+      "state": "PLAN_READY",
+      "detail": "{\"mode\": \"DETERMINISTIC_REFERENCE\", \"version\": 1}",
+      "at": 1793317254.8896477
+    }
+  ]
+}

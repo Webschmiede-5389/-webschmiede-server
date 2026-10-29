@@ -1,0 +1,10 @@
+{
+  "event_id": "evt-001",
+  "job_id": "pilot-complete",
+  "kind": "intake",
+  "data": {
+    "process": "customer-intake-v1",
+    "goal": "Bestehenden Kunden eindeutig zuordnen und einen vollständigen Ablage- und Übergabeplan erzeugen",
+    "budget": "TEST: maximal 2 Stunden Planprüfung; keine Ausgaben"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "facts": {
+    "owner": "TEST-Operator",
+    "systems": [
+      "Projektregister",
+      "Google Drive"
+    ],
+    "acceptance": [
+      "Ein vollständiger Plan ohne externe Änderungen"
+    ]
+  },
+  "classification": "SYNTHETIC"
+}

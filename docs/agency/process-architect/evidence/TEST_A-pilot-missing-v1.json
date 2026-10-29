@@ -1,0 +1,313 @@
+{
+  "acceptance": [
+    "Ein vollständiger Plan ohne externe Änderungen"
+  ],
+  "budget": "TEST: maximal 2 Stunden Planprüfung; keine Ausgaben",
+  "exclusions": [
+    "Keine Kundenordner anlegen oder migrieren",
+    "Keine Kundenkommunikation, Werbung, Deployment oder Zahlung",
+    "Keine allgemeine Branchenautomationsgarantie"
+  ],
+  "execution_authorized": false,
+  "goal": "Bestehenden Kunden eindeutig zuordnen und einen vollständigen Ablage- und Übergabeplan erzeugen",
+  "handoff": "Zielrepo Webschmiede-5389/-webschmiede-server. Vorhandene Agency-/n8n-Brücke nutzen. Erst authentifizierten Eingang und erlaubte Quellen für Testtenant anbinden; Pilot nur lesend ausführen; Register-Writeback separat freigeben. Nach Tests genau eine kontrollierte Aktivierungsentscheidung. Keine neuen Produktworktrees berühren.",
+  "input_origins": {
+    "acceptance": "pilot-facts",
+    "budget": "intake",
+    "goal": "intake",
+    "owner": "pilot-facts",
+    "process": "intake",
+    "systems": "pilot-facts"
+  },
+  "input_revision": 2,
+  "job_id": "pilot-missing",
+  "known_failures": [
+    {
+      "cause": "plan_project verwendet statische Bausteine und prüft nur leeren brief; keine persistente Informationslückenprüfung in dieser Funktion.",
+      "cause_status": "FACT",
+      "date": "2026-10-30",
+      "id": "PA-L01",
+      "impact": "Aufruf-Erfolg könnte als Ausführungsreife missverstanden werden; fehlende Kundenentscheidungen werden nicht als persistierte Rückfragen behandelt.",
+      "limits": "Kein produktiver Kundenvorfall behauptet. Es ist ein reproduzierter Codebefund.",
+      "problem": "Nichtleerer, unbestimmter Wunsch erzeugt ok=true und pauschale MVP-in-2-Wochen-Empfehlung trotz fehlender Systeme, Budget und Abnahme.",
+      "project": "Webschmiede Agency / Stefan",
+      "rejected": "ok=true als fachlichen Plan-PASS übernehmen; keine Änderung der Alt-API in diesem Slice.",
+      "rule_status": "PROPOSED_IMPLEMENTATION",
+      "solution": "Pflichtfelder zuerst aus autorisierten Quellen auflösen; bei Lücken WAITING_INPUT; Antworten revisionsgesichert fortsetzen.",
+      "source": "https://github.com/Webschmiede-5389/-webschmiede-server/blob/8a704d5507776ae8434e882105ffa0ac7c4ef818/app/backend/agency_stefan.py",
+      "status": "FACT",
+      "test_evidence": "Lokaler Originalaufruf plan_project(\"Neuer Kundenprozess automatisieren\"): ok=true,budget=null,modules=[custom]. Regression im neuen Testpaket.",
+      "transfer": "Jeder Planer mit fehlenden verpflichtenden Geschäftsangaben",
+      "use_case": "Unvollständiger Kundenauftrag",
+      "version": "8a704d5507776ae8434e882105ffa0ac7c4ef818"
+    },
+    {
+      "cause": "Unterschiedliche Nachweisstufen müssen getrennt ausgewertet werden.",
+      "cause_status": "TRANSFER",
+      "date": "2026-10-30",
+      "id": "PA-L02",
+      "impact": "Falsche Aktivierungsmeldung möglich.",
+      "limits": "Repositorywert ist kein Beleg für tatsächlichen n8n-Status.",
+      "problem": "Gespeicherte Vorlage oder erfolgreicher Publish-Job belegt keine funktionierende Runtime.",
+      "project": "Webschmiede Cloud Factory",
+      "rejected": "Templates mit active=false als laufende Planung darstellen.",
+      "rule_status": "EXISTING_RULE",
+      "solution": "CODE, synthetischer Ablauf, Provider, Einbindung und Betrieb getrennt berichten.",
+      "source": "https://github.com/Webschmiede-5389/my-company-hub/blob/d551d1fcee92198a9ec1e71492d6f3e8f05592b7/knowledge/SOLO-OPERATOR-PLAYBOOK.md",
+      "status": "TRANSFER",
+      "test_evidence": "Original workflow-agency-brain.json enthält active=false; keine Live-Abfrage erfolgt.",
+      "transfer": "Alle Workflow-Exporte und Staging-Tests",
+      "use_case": "Aktivierungsnachweis",
+      "version": "d551d1fcee92198a9ec1e71492d6f3e8f05592b7"
+    }
+  ],
+  "mode": "DETERMINISTIC_REFERENCE",
+  "owner": "TEST-Operator",
+  "provenance": [
+    {
+      "id": "intake-template",
+      "scope": "global",
+      "sha256": "496b1b61029e5663ae4cd1dd085b692345ebb4d481f3cc668e22c3afcc63ae93",
+      "url": "local:docs/agency/process-architect/intake-template.json",
+      "version": "v1"
+    },
+    {
+      "id": "lessons",
+      "scope": "global",
+      "sha256": "cb28e821c7ae5c71a2f52afe48464d32a78282b35a306c84174c6dd954ffd94d",
+      "url": "local:docs/agency/process-architect/lessons.json",
+      "version": "v1"
+    },
+    {
+      "id": "pilot-facts",
+      "scope": "TEST_A",
+      "sha256": "65646388ff921758ff459adca854dc81819f1b48ea349d6ad8cd5a1e7267e26e",
+      "url": "local:synthetic-pilot",
+      "version": "v1"
+    },
+    {
+      "id": "playbook",
+      "scope": "global",
+      "sha256": "a1af6f4783d8771ec0b4b307758e2953d313028a37075a6b2400546cc7b1b294",
+      "url": "https://github.com/Webschmiede-5389/my-company-hub/blob/d551d1fcee92198a9ec1e71492d6f3e8f05592b7/knowledge/SOLO-OPERATOR-PLAYBOOK.md",
+      "version": "d551d1fcee92198a9ec1e71492d6f3e8f05592b7"
+    },
+    {
+      "id": "rules",
+      "scope": "global",
+      "sha256": "7cd2ace869b19b29bef48b45b1c52774910bd91df69203622e70563ac690a4d5",
+      "url": "https://github.com/Webschmiede-5389/my-company-hub/blob/d551d1fcee92198a9ec1e71492d6f3e8f05592b7/core/SYSTEM-TASK.md",
+      "version": "d551d1fcee92198a9ec1e71492d6f3e8f05592b7"
+    }
+  ],
+  "scope": [
+    "Bestehender Kundenstart: Identität, Originale, Ablageplan, Abnahme und interne Übergabe"
+  ],
+  "source_ids": [
+    "rules",
+    "playbook",
+    "lessons",
+    "intake-template"
+  ],
+  "status": "PLAN_READY",
+  "steps": [
+    {
+      "audit": "Ereignis-ID, Kundenkennung, Quellen-ID/Version, Zustand und Prüfresultat; keine vollständigen Personendaten oder Secrets loggen.",
+      "deduplication": "tenant_id + project_id + event_id eindeutig; gleiche ID mit anderem Inhalt STOP; Planrevision monoton.",
+      "depends_on": [],
+      "failure": "Fehlende Identität, doppelte Registertreffer oder tenant-Mismatch: STOP ohne weitere Kundenquellen zu lesen.",
+      "id": "S1",
+      "inputs": {
+        "event_id": "vom Eingang",
+        "goal": "aus Auftrag",
+        "project_id": "aus Projektregister",
+        "tenant_id": "aus authentifiziertem Eingang"
+      },
+      "mapping": "event_id→Ereignisschlüssel; tenant_id+project_id→Planungsauftrag",
+      "output": "Gespeicherter Auftrag mit Version 1",
+      "owner": "Verantwortlicher aus Auftrag; technischer Betrieb Webschmiede",
+      "permissions": "Nur freigegebene Kundenkennung; Registerzeile, Drive-ID und Rechtsträger abgleichen. Leserechte vor Zugriff prüfen. Keine öffentliche Freigabe.",
+      "preconditions": "Operator hat Planung erlaubt; Tenant-Bindung serverseitig gesetzt",
+      "processing": "AUTOMATISCH: Eingang validieren; genau eine Registerzuordnung verlangen.",
+      "recovery": "Letzten bestätigten Zustand laden; bereits bestätigte Schritte anhand Version prüfen. Unklare Schreibwirkung erst rücklesen. Historische Pläne erhalten.",
+      "retry": "Lesefehler 429/5xx maximal 2 Wiederholungen nach 5s/30s; 401/403 sofort STOP. Kein blindes Wiederholen von Writes.",
+      "system": "Projektregister + Google Drive",
+      "test": "Identische Nachricht zweimal: ein Auftrag. Geänderte Nachricht unter gleicher ID: Konflikt; fremder Tenant: keine Ausgabe.",
+      "title": "Kundenauftrag identifizieren",
+      "trigger": "Freigegebener Auftrag eingegangen"
+    },
+    {
+      "audit": "Ereignis-ID, Kundenkennung, Quellen-ID/Version, Zustand und Prüfresultat; keine vollständigen Personendaten oder Secrets loggen.",
+      "deduplication": "tenant_id + project_id + event_id eindeutig; gleiche ID mit anderem Inhalt STOP; Planrevision monoton.",
+      "depends_on": [
+        "S1"
+      ],
+      "failure": "Kein Ordner, falscher Parent oder mehrere Kandidaten: WAITING_INPUT mit Zuständigem und Prüfweg.",
+      "id": "S2",
+      "inputs": {
+        "customer_folder_id": "verknüpfte Registerzeile",
+        "owner": "freigegebener Ansprechpartner",
+        "source_links": "Register-Originale"
+      },
+      "mapping": "Register.customer_folder_id→Drive.file.id; Drive.parents→erwarteter Kundenstamm; Originalrevision→Quellenstand",
+      "output": "Quellenliste mit IDs, Versionen und Berechtigungsbefund",
+      "owner": "Verantwortlicher aus Auftrag; technischer Betrieb Webschmiede",
+      "permissions": "Nur freigegebene Kundenkennung; Registerzeile, Drive-ID und Rechtsträger abgleichen. Leserechte vor Zugriff prüfen. Keine öffentliche Freigabe.",
+      "preconditions": "S1 eindeutig; Lesezugriff vorhanden",
+      "processing": "AUTOMATISCH NACH EINRICHTUNG: exakte Drive-ID und Elternordner rücklesen; vorhandene Briefings und Entscheidungen abrufen. Nicht nach ähnlichem Namen zuordnen.",
+      "recovery": "Letzten bestätigten Zustand laden; bereits bestätigte Schritte anhand Version prüfen. Unklare Schreibwirkung erst rücklesen. Historische Pläne erhalten.",
+      "retry": "Lesefehler 429/5xx maximal 2 Wiederholungen nach 5s/30s; 401/403 sofort STOP. Kein blindes Wiederholen von Writes.",
+      "system": "Projektregister + Google Drive",
+      "test": "Vorhandene korrekte ID wird wiederverwendet. Falscher Parent: kein Neuanlegen, keine Umbenennung.",
+      "title": "Bestand und Originale auflösen",
+      "trigger": "S1 erfolgreich"
+    },
+    {
+      "audit": "Ereignis-ID, Kundenkennung, Quellen-ID/Version, Zustand und Prüfresultat; keine vollständigen Personendaten oder Secrets loggen.",
+      "deduplication": "tenant_id + project_id + event_id eindeutig; gleiche ID mit anderem Inhalt STOP; Planrevision monoton.",
+      "depends_on": [
+        "S2"
+      ],
+      "failure": "Veraltete Antwort: REVISION_CONFLICT. Kein Neustart des Gesamtprojekts; keine ungeprüfte Budgetannahme.",
+      "id": "S3",
+      "inputs": {
+        "acceptance": "vereinbarter Auftrag",
+        "budget": "freigegebene Aufwandgrenze",
+        "goal": "Auftrag/Briefing",
+        "owner": "Register",
+        "systems": "Bestand"
+      },
+      "mapping": "Fehlendes Feld→{field,UNKNOWN,owner,check}; Antwort.expected_revision→aktueller Auftrag",
+      "output": "Vollständiges Briefing oder dauerhaftes WAITING_INPUT",
+      "owner": "Verantwortlicher aus Auftrag; technischer Betrieb Webschmiede",
+      "permissions": "Nur freigegebene Kundenkennung; Registerzeile, Drive-ID und Rechtsträger abgleichen. Leserechte vor Zugriff prüfen. Keine öffentliche Freigabe.",
+      "preconditions": "Relevante Quellen aus S2 verfügbar",
+      "processing": "AUTOMATISCH: Felder aus autorisierten Quellen ergänzen; Widerspruch nicht still priorisieren. MENSCHLICHE ENTSCHEIDUNG nur für ungelöste blockierende Angaben; eine gebündelte Rückfrage.",
+      "recovery": "Letzten bestätigten Zustand laden; bereits bestätigte Schritte anhand Version prüfen. Unklare Schreibwirkung erst rücklesen. Historische Pläne erhalten.",
+      "retry": "Lesefehler 429/5xx maximal 2 Wiederholungen nach 5s/30s; 401/403 sofort STOP. Kein blindes Wiederholen von Writes.",
+      "system": "Projektregister + Google Drive",
+      "test": "Ohne Budget keine Planfreigabe. Nach Antwort zur richtigen Revision automatisch weiter; veraltete Antwort unverändert ablehnen.",
+      "title": "Pflichtangaben und Widersprüche klären",
+      "trigger": "S2 erfolgreich"
+    },
+    {
+      "audit": "Ereignis-ID, Kundenkennung, Quellen-ID/Version, Zustand und Prüfresultat; keine vollständigen Personendaten oder Secrets loggen.",
+      "deduplication": "tenant_id + project_id + event_id eindeutig; gleiche ID mit anderem Inhalt STOP; Planrevision monoton.",
+      "depends_on": [
+        "S3"
+      ],
+      "failure": "Abweichender Name, Doppelung oder fehlender Pflichtordner: Entscheidung erforderlich; keine automatische Migration.",
+      "id": "S4",
+      "inputs": {
+        "expected_names": [
+          "01 · Kunde & Zusammenarbeit",
+          "02 · Recherche & Strategie",
+          "03 · Website & Landingpages",
+          "04 · Werbung & Creatives",
+          "05 · Präsentationen & Ergebnisse",
+          "06 · Freigaben & Übergabe"
+        ],
+        "folder_children": "Drive.list der geprüften Kunden-ID"
+      },
+      "mapping": "Ordnername→bestehende Drive-ID; genau sechs kanonische Stammordner→Strukturprüfung",
+      "output": "Ablageplan mit sechs Originalverweisen",
+      "owner": "Verantwortlicher aus Auftrag; technischer Betrieb Webschmiede",
+      "permissions": "Nur freigegebene Kundenkennung; Registerzeile, Drive-ID und Rechtsträger abgleichen. Leserechte vor Zugriff prüfen. Keine öffentliche Freigabe.",
+      "preconditions": "S3 vollständig; genau ein bestehender Kunde",
+      "processing": "AUTOMATISCH: sechs kanonische Unterordner prüfen und vorhandene IDs im Plan referenzieren. V1 plant ausschließlich; keinerlei Ordneranlage.",
+      "recovery": "Letzten bestätigten Zustand laden; bereits bestätigte Schritte anhand Version prüfen. Unklare Schreibwirkung erst rücklesen. Historische Pläne erhalten.",
+      "retry": "Lesefehler 429/5xx maximal 2 Wiederholungen nach 5s/30s; 401/403 sofort STOP. Kein blindes Wiederholen von Writes.",
+      "system": "Projektregister + Google Drive",
+      "test": "Sechs korrekte Ordner: null Neuanlagen; umbenannter Ordner 03: STOP für Änderung, Befund im Plan.",
+      "title": "Vorhandene Ablagestruktur abgleichen",
+      "trigger": "S3 erfolgreich"
+    },
+    {
+      "audit": "Ereignis-ID, Kundenkennung, Quellen-ID/Version, Zustand und Prüfresultat; keine vollständigen Personendaten oder Secrets loggen.",
+      "deduplication": "tenant_id + project_id + event_id eindeutig; gleiche ID mit anderem Inhalt STOP; Planrevision monoton.",
+      "depends_on": [
+        "S4"
+      ],
+      "failure": "Ungültiges KI-JSON oder unbelegte Quelle: begrenzte Korrektur, danach BLOCKED. Neue fachliche Anforderungen benötigen Entscheidung.",
+      "id": "S5",
+      "inputs": {
+        "briefing": "S3",
+        "folder_map": "S4",
+        "lessons": "sanitisierte belegte Erfahrungen",
+        "rules": "Hub am festgehaltenen SHA"
+      },
+      "mapping": "Briefing→01; Strategie→02; Website-Originale→03; Creatives→04; Ergebnisse→05; Freigaben→06",
+      "output": "Detaillierter versionierter Plan; UNKNOWN-Liste; Ausführungsauftrag",
+      "owner": "Verantwortlicher aus Auftrag; technischer Betrieb Webschmiede",
+      "permissions": "Nur freigegebene Kundenkennung; Registerzeile, Drive-ID und Rechtsträger abgleichen. Leserechte vor Zugriff prüfen. Keine öffentliche Freigabe.",
+      "preconditions": "Keine blockierenden Widersprüche",
+      "processing": "AUTOMATISCH: Originale den sechs bestehenden Bereichen zuordnen; pro Lieferung Ziel, Eingaben, Zustände, Fehlerpfade und Abnahme festhalten. KI nur für neue Interpretation, bestehende Regeln deterministisch anwenden.",
+      "recovery": "Letzten bestätigten Zustand laden; bereits bestätigte Schritte anhand Version prüfen. Unklare Schreibwirkung erst rücklesen. Historische Pläne erhalten.",
+      "retry": "Lesefehler 429/5xx maximal 2 Wiederholungen nach 5s/30s; 401/403 sofort STOP. Kein blindes Wiederholen von Writes.",
+      "system": "Projektregister + Google Drive",
+      "test": "Plan enthält alle Schritt-Felder, gültige Quellen und rückwärtsfreie Abhängigkeiten; alte ok=true-Antwort ohne Pflichtdaten wird nicht akzeptiert.",
+      "title": "Ablauf und Prüfungen erzeugen",
+      "trigger": "S4 erfolgreich"
+    },
+    {
+      "audit": "Ereignis-ID, Kundenkennung, Quellen-ID/Version, Zustand und Prüfresultat; keine vollständigen Personendaten oder Secrets loggen.",
+      "deduplication": "tenant_id + project_id + event_id eindeutig; gleiche ID mit anderem Inhalt STOP; Planrevision monoton.",
+      "depends_on": [
+        "S5"
+      ],
+      "failure": "Speicherfehler: kein Erfolg. Alte Freigabe nicht auf neue Version übertragen.",
+      "id": "S6",
+      "inputs": {
+        "acceptance": "S3",
+        "plan": "S5",
+        "source_manifest": "IDs/SHA/Datum"
+      },
+      "mapping": "Plan.version→unveränderlicher Plan; source_sha→Herkunft; findings→gezielte Korrektur",
+      "output": "Gespeicherter Plan mit maschinellem Prüfstatus; fachliche Freigaben separat",
+      "owner": "Verantwortlicher aus Auftrag; technischer Betrieb Webschmiede",
+      "permissions": "Nur freigegebene Kundenkennung; Registerzeile, Drive-ID und Rechtsträger abgleichen. Leserechte vor Zugriff prüfen. Keine öffentliche Freigabe.",
+      "preconditions": "Plan gegen ursprüngliches Kundenproblem abgeglichen",
+      "processing": "AUTOMATISCH: Struktur, Quellen, bekannte Fehler, Rechte, Retry/Dedupe und Abschlusskriterien prüfen. Planversion append-only speichern; aktuellen Status separat aktualisieren.",
+      "recovery": "Letzten bestätigten Zustand laden; bereits bestätigte Schritte anhand Version prüfen. Unklare Schreibwirkung erst rücklesen. Historische Pläne erhalten.",
+      "retry": "Lesefehler 429/5xx maximal 2 Wiederholungen nach 5s/30s; 401/403 sofort STOP. Kein blindes Wiederholen von Writes.",
+      "system": "Projektregister + Google Drive",
+      "test": "Nach Neustart gleiche Planversion vorhanden; Quellenänderung erzeugt neue Version oder sichtbaren Blocker; alte Bytes unverändert.",
+      "title": "Gegenprüfen und speichern",
+      "trigger": "S5 erfolgreich"
+    },
+    {
+      "audit": "Ereignis-ID, Kundenkennung, Quellen-ID/Version, Zustand und Prüfresultat; keine vollständigen Personendaten oder Secrets loggen.",
+      "deduplication": "tenant_id + project_id + event_id eindeutig; gleiche ID mit anderem Inhalt STOP; Planrevision monoton.",
+      "depends_on": [
+        "S6"
+      ],
+      "failure": "Fehlende Live-Verbindung: INTEGRATION_OPEN, keine Aktivierungsmeldung.",
+      "id": "S7",
+      "inputs": {
+        "blockers": "UNKNOWN-Liste",
+        "execution_rights": "separate Freigabe",
+        "plan_version": "S6"
+      },
+      "mapping": "Planlink+Version→bestehender Projekteintrag; offene Frage→zuständiger Operator",
+      "output": "Ausführungsbereiter Auftrag oder klarer einzelner Blocker mit Verantwortlichem",
+      "owner": "Verantwortlicher aus Auftrag; technischer Betrieb Webschmiede",
+      "permissions": "Nur freigegebene Kundenkennung; Registerzeile, Drive-ID und Rechtsträger abgleichen. Leserechte vor Zugriff prüfen. Keine öffentliche Freigabe.",
+      "preconditions": "Gespeicherter Plan rückgelesen; Zuständigkeiten benannt",
+      "processing": "AUTOMATISCH: vollständigen internen Auftrag bereitstellen. NACH FREIGABE: durch bestehende Integration Register aktualisieren. MENSCHLICH: Geschäftsentscheidung/Produktivfreigabe; kein automatischer Versand oder Deploy.",
+      "recovery": "Letzten bestätigten Zustand laden; bereits bestätigte Schritte anhand Version prüfen. Unklare Schreibwirkung erst rücklesen. Historische Pläne erhalten.",
+      "retry": "Lesefehler 429/5xx maximal 2 Wiederholungen nach 5s/30s; 401/403 sofort STOP. Kein blindes Wiederholen von Writes.",
+      "system": "Projektregister + Google Drive",
+      "test": "Ohne Live-Freigabe werden weder Nachrichten verschickt noch Ordner oder Produktivsysteme verändert.",
+      "title": "Übergabe und kontrollierte Fortsetzung",
+      "trigger": "S6 erfolgreich"
+    }
+  ],
+  "supported_goal": "Bestehenden Kunden eindeutig zuordnen und einen vollständigen Ablage- und Übergabeplan erzeugen",
+  "systems": [
+    "Projektregister",
+    "Google Drive"
+  ],
+  "tenant": "TEST_A",
+  "unknowns": [],
+  "version": 1
+}

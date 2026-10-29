@@ -1,0 +1,25 @@
+name: Process architect offline acceptance
+on:
+  pull_request:
+    paths:
+      - 'app/backend/process_architect.py'
+      - 'scripts/process_architect_*.py'
+      - 'tests/test_process_architect.py'
+      - 'docs/agency/process-architect/**'
+      - '.github/workflows/process-architect.yml'
+permissions:
+  contents: read
+jobs:
+  planning-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Offline planning and resume tests
+        run: python3 -m unittest discover -s tests -p 'test_process_architect.py' -v
+      - name: Complete worker acceptance
+        run: python3 scripts/process_architect_demo.py "$RUNNER_TEMP/process-architect-demo"
+      - name: Python syntax
+        run: python3 -m py_compile app/backend/process_architect.py scripts/process_architect_worker.py scripts/process_architect_model.py

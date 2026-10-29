@@ -1,0 +1,76 @@
+{
+  "source_root": ".",
+  "tenants": {
+    "TEST_A": {
+      "source_ids": [
+        "rules",
+        "playbook",
+        "lessons",
+        "intake-template",
+        "pilot-facts"
+      ],
+      "mandatory_source_ids": [
+        "rules",
+        "playbook",
+        "lessons",
+        "intake-template"
+      ]
+    },
+    "TEST_B": {
+      "source_ids": [
+        "rules",
+        "playbook",
+        "lessons",
+        "intake-template"
+      ],
+      "mandatory_source_ids": [
+        "rules",
+        "playbook",
+        "lessons",
+        "intake-template"
+      ]
+    }
+  },
+  "sources": {
+    "rules": {
+      "path": "source-system-task.md",
+      "scope": "global",
+      "classification": "sanitized",
+      "version": "d551d1fcee92198a9ec1e71492d6f3e8f05592b7",
+      "url": "https://github.com/Webschmiede-5389/my-company-hub/blob/d551d1fcee92198a9ec1e71492d6f3e8f05592b7/core/SYSTEM-TASK.md",
+      "sha256": "7cd2ace869b19b29bef48b45b1c52774910bd91df69203622e70563ac690a4d5"
+    },
+    "playbook": {
+      "path": "source-playbook.md",
+      "scope": "global",
+      "classification": "sanitized",
+      "version": "d551d1fcee92198a9ec1e71492d6f3e8f05592b7",
+      "url": "https://github.com/Webschmiede-5389/my-company-hub/blob/d551d1fcee92198a9ec1e71492d6f3e8f05592b7/knowledge/SOLO-OPERATOR-PLAYBOOK.md",
+      "sha256": "a1af6f4783d8771ec0b4b307758e2953d313028a37075a6b2400546cc7b1b294"
+    },
+    "lessons": {
+      "path": "lessons.json",
+      "scope": "global",
+      "classification": "sanitized",
+      "version": "v1",
+      "url": "local:docs/agency/process-architect/lessons.json",
+      "sha256": "cb28e821c7ae5c71a2f52afe48464d32a78282b35a306c84174c6dd954ffd94d"
+    },
+    "intake-template": {
+      "path": "intake-template.json",
+      "scope": "global",
+      "classification": "sanitized",
+      "version": "v1",
+      "url": "local:docs/agency/process-architect/intake-template.json",
+      "sha256": "496b1b61029e5663ae4cd1dd085b692345ebb4d481f3cc668e22c3afcc63ae93"
+    },
+    "pilot-facts": {
+      "path": "pilot-facts.json",
+      "scope": "TEST_A",
+      "classification": "synthetic",
+      "version": "v1",
+      "url": "local:synthetic-pilot",
+      "format": "facts"
+    }
+  }
+}

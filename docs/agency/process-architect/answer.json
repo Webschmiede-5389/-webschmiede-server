@@ -1,0 +1,9 @@
+{
+  "event_id": "evt-003",
+  "job_id": "pilot-missing",
+  "kind": "answer",
+  "expected_revision": 1,
+  "data": {
+    "budget": "TEST: maximal 2 Stunden Planprüfung; keine Ausgaben"
+  }
+}

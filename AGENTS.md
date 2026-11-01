@@ -36,6 +36,22 @@ python setup_crm_env.py          # CRM/SMS env on server
 python setup_n8n.py              # n8n automation hub on server
 ```
 
+## Cursor Cloud specific instructions
+
+Local Cloud Agent / VM without production deploy:
+
+```bash
+bash scripts/cloud-agent-install.sh   # venv + pip + agency-web npm (idempotent)
+bash scripts/cloud-agent-start.sh     # API :8000 + static :8080
+```
+
+- API health: `curl -s http://127.0.0.1:8000/api/health`
+- Order portal UI: `http://127.0.0.1:8080/order.html`; admin: `http://127.0.0.1:8080/admin.html`
+- Dev admin password in generated `app/backend/.env`: `dev-local-pass` (local only)
+- Admin API auth: `X-Admin-Token` after `POST /api/admin/login`
+- Do **not** run `python deploy.py` or publish `agency-web` unless Christian explicitly asks
+- Production secrets stay in `deploy.secrets.local` (gitignored); Cloud Agents use local `.env` stubs
+
 **GitHub:** Repo initialized locally. Push: see `docs/GITHUB.md`. Secrets in `deploy.secrets.local` (gitignored).
 
 ## n8n (Automation Hub)

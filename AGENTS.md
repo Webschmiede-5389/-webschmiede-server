@@ -71,7 +71,7 @@ python setup_n8n.py              # n8n automation hub on server
 1. **German** responses to the user unless they use another language.
 2. **No GHL** for new features – extend own CRM/SMS.
 3. **DSGVO:** Bunny Fonts, no tracking, document third parties in `datenschutz.html`.
-4. **Deploy:** Always run `deploy.py` after static/backend changes; verify `snack-api` active.
+4. **Deploy:** Static/backend changes do not authorize deployment. Run `deploy.py` only after explicit deployment approval and the release checks required by the GLOBAL WEBSCHMIEDE PRECHECK above; after an approved deployment, verify `snack-api` active.
 5. **Design:** Match existing dark/gold Snack House style; avoid generic AI aesthetics. Agency wordmark: only freigestelltes `/ci/webschmiede-logo.png` (see `docs/agency/ci/BRAND.md`).
 6. **Scope:** Minimal diffs; don't refactor unrelated code.
 7. **Ton:** Kunden-Texte und Mails menschlich, kein KI-Marketing — siehe `.cursor/rules/menschlicher-ton.mdc`.

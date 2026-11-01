@@ -1,0 +1,9 @@
+{
+  "channel": "hetzner-pull-test",
+  "integrity": "checksum-only",
+  "source_workflow_sha": "330f3ad627883cd6ff0a62094e1b54f9b1debbb3",
+  "run_id": "41296073253",
+  "artifact_name": "hetzner-pull-test-41296073253",
+  "test_label": "chatgpt-connection-test-20261101",
+  "repository": "Webschmiede-5389/-webschmiede-server"
+}

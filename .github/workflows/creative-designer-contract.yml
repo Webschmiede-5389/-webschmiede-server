@@ -1,0 +1,24 @@
+name: Creative Designer contract tests
+on:
+  pull_request:
+    paths:
+      - 'app/backend/creative_designer_*.py'
+      - 'tests/test_creative_designer_*.py'
+      - '.github/workflows/creative-designer-contract.yml'
+  workflow_dispatch:
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile and run isolated contract tests
+        env:
+          PYTHONPATH: app/backend
+        run: |
+          python -m compileall -q app/backend/creative_designer_contract.py app/backend/creative_designer_auth.py
+          python -m unittest discover -s tests -p 'test_creative_designer_*.py' -v

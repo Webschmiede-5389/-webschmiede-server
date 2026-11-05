@@ -198,7 +198,14 @@ def probe_via_ssh(role: str) -> dict[str, Any]:
 
     client = paramiko.SSHClient()
     try:
-        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # Fail closed: only server keys pre-approved in known_hosts are trusted.
+        # load_system_host_keys() reads the service account's ~/.ssh/known_hosts.
+        client.load_system_host_keys()
+        pinned_hosts = os.getenv("DUAL_SSH_KNOWN_HOSTS", "").strip()
+        if pinned_hosts:
+            # If explicitly configured, a missing/unreadable pin file is an error.
+            client.load_host_keys(pinned_hosts)
+        client.set_missing_host_key_policy(paramiko.RejectPolicy())
         client.connect(
             host,
             username=user,

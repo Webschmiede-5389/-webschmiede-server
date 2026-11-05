@@ -1,0 +1,27 @@
+name: Dual Status SSH Host Key Security
+
+on:
+  pull_request:
+    paths:
+      - 'app/backend/dual_infra.py'
+      - 'tests/test_dual_status_hostkey.py'
+      - '.github/workflows/dual-status-hostkey.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hostkey-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fail-closed host-key unit tests
+        run: python -B -m unittest discover -s tests -p 'test_dual_status_hostkey.py' -v
+      - name: Compile changed Python modules
+        run: |
+          python -B -c "import ast, pathlib; [ast.parse(pathlib.Path(p).read_text()) for p in ('app/backend/dual_infra.py','tests/test_dual_status_hostkey.py')]"

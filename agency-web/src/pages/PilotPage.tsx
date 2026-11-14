@@ -20,6 +20,25 @@ function Icon({ kind }: { kind: 'message'|'grid'|'check'|'clock'|'bolt' }) {
 function Book({ children = 'Lass uns sprechen', secondary = false }: { children?: React.ReactNode; secondary?: boolean }) {
   return <a className={`ws-button ${secondary ? 'ws-button-light' : ''}`} href={BOOKING.url} target="_blank" rel="noreferrer">{children}<Arrow diagonal /></a>;
 }
+function HeroFilm() {
+  const video = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => { if (media.matches) video.current?.pause(); else video.current?.play().catch(() => setPlaying(false)); };
+    sync(); media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
+  return <figure className="ws-film">
+    <video ref={video} muted loop playsInline preload="metadata" poster="/media/webschmiede-reel-poster.jpg" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onError={() => setFailed(true)} aria-label="Film: Webschmiede-Seitenentwurf auf Desktop und Mobilgerät">
+      <source src="/media/webschmiede-reel.mp4" type="video/mp4"/>
+    </video>
+    <figcaption><span><i/> AUS DER WEBSCHMIEDE<small>Website-Entwurf · Desktop & Mobil</small></span>{!failed && <button type="button" onClick={() => { if (playing) video.current?.pause(); else video.current?.play().catch(() => setPlaying(false)); }} aria-label={playing ? 'Film pausieren' : 'Film abspielen'}>{playing ? 'Ⅱ' : '▷'}<span>{playing ? 'Pause' : 'Abspielen'}</span></button>}</figcaption>
+    {failed && <span className="ws-film-error">Standbild · Film konnte nicht geladen werden</span>}
+  </figure>;
+}
+
 const faqs = [
   ['Was kostet die Zusammenarbeit?', 'Das hängt davon ab, was dein Betrieb braucht. Im ersten Gespräch grenzen wir den Umfang ein. Danach bekommst du ein Angebot, das Einrichtung, laufende Kosten und Betreuung nachvollziehbar trennt. Du entscheidest vor dem Start.'],
   ['Muss ich meine bestehende Website ersetzen?', 'Das klären wir zuerst. Wenn deine Website ihren Zweck erfüllt, kann eine Ergänzung sinnvoller sein. Zum Beispiel ein Buchungsweg oder ein Formular, das die richtigen Informationen abfragt.'],
@@ -54,24 +73,15 @@ export default function PilotPage() {
     </header>
 
     <main id="inhalt">
-      <section className="ws-hero ws-wrap">
+      <section className="ws-hero ws-wrap ws-hero-film">
         <div className="ws-hero-copy">
           <p className="ws-eyebrow"><span className="ws-dot"/> Digitale Handwerkskunst aus Mechernich</p>
-          <h1>Dein Betrieb <br/>läuft.<br/><span>Dein Büro auch.</span></h1>
-          <p className="ws-lead">Du machst gute Arbeit. Ich baue die Website und die Abläufe dahinter, damit Anfragen ankommen und nach Feierabend weniger liegen bleibt.</p>
+          <h1>Websites, die <br/>überzeugen.<br/><span>Abläufe, die <br/>Arbeit abnehmen.</span></h1>
+          <p className="ws-lead">Dein Handwerk verdient einen starken Auftritt. Ich gestalte deine Website und verbinde sie mit den Abläufen, die deinen Betrieb entlasten.</p>
           <div className="ws-actions"><Book/><a className="ws-text-link" href="#alltag">So kann das aussehen <Arrow/></a></div>
           <div className="ws-person-note"><img src="/christian-kummetat.jpg" width="44" height="44" alt=""/><span>Mit Christian. Direkt und persönlich.<small>15 Minuten, um deinen Betrieb kennenzulernen.</small></span></div>
         </div>
-        <div className="ws-workbench" aria-label="Illustration: Aus einer Kundenanfrage wird ein geordneter Ablauf">
-          <div className="ws-workbench-top"><span>DEIN BETRIEB. GUT VERBUNDEN.</span><span className="ws-cross">+</span></div>
-          <div className="ws-workbench-grid" aria-hidden="true"/>
-          <div className="ws-note ws-note-one"><Icon kind="message"/><span>„Kannst du<br/>mich zurückrufen?“</span><span className="ws-note-time">09:41</span></div>
-          <div className="ws-note ws-note-two"><Icon kind="clock"/><span>Termin anfragen</span><span className="ws-mini-dot"/></div>
-          <svg className="ws-connectors" viewBox="0 0 520 530" fill="none" aria-hidden="true"><path d="M114 153v78q0 20 20 20h122m120-75v55q0 20-20 20H256v70" stroke="#b4ada1" strokeWidth="1.5" strokeDasharray="4 5"/><path className="ws-draw-line" d="M256 321v64q0 22 22 22h64" stroke="#ff6600" strokeWidth="3"/></svg>
-          <div className="ws-engine"><span className="ws-engine-icon"><Icon kind="grid"/></span><div><small>ALLES AN SEINEM PLATZ</small><strong>Dein digitaler Ablauf</strong><span>Auf deinen Betrieb abgestimmt.</span></div><span className="ws-engine-plus">+</span></div>
-          <div className="ws-done"><span className="ws-check-circle"><Icon kind="check"/></span><div><small>NÄCHSTER SCHRITT</small><strong>Rückruf ist vorgemerkt.</strong><span>Der Kopf kann wieder bei der Arbeit sein.</span></div></div>
-          <div className="ws-workbench-bottom"><span>01 / VOM DURCHEINANDER ZUM ABLAUF</span><span>Beispielhafte Darstellung</span></div>
-        </div>
+        <HeroFilm/>
       </section>
 
       <div className="ws-industry-strip"><div className="ws-wrap"><span>Für Betriebe, die anpacken.</span><span>Handwerk</span><i>+</i><span>Gastronomie</span><i>+</i><span>Dienstleistung</span><i>+</i><span>Büro &amp; B2B</span></div></div>

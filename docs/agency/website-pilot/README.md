@@ -65,3 +65,15 @@ Geprüft mit Chrome im tatsächlichen laufenden Vite-Preview:
 Nicht geprüft: physische iOS/Android-Geräte, vollständiges WCAG-Audit, Lighthouse/Felddaten, echte Terminbuchung, Nachrichtenzustellung, Live-Backend, Formulare oder Conversion-Erfolg. Externe Kontaktwege wurden nicht testweise ausgelöst.
 
 Nächster Schritt: Christian beurteilt den privaten vollständigen Entwurf. Vor einer tatsächlichen Übernahme muss die aktuelle Produktionsquelle abgeglichen werden. Kein Neubau weiterer Skills oder Tools erforderlich.
+
+## Revision 2: Filmeinstieg (14.11.2026)
+
+Auftrag: Oakoffice als Kompositionsreferenz, Film im Einstieg; kein Production-Release. Gleicher isolierter Pilotbranch. WEBSCHMIEDE_RULESET_SHA=01089a98bfdff44bdc9ea346cb21696298418170.
+
+IST: abstrakte Anfrage-/Prozesskästen. SOLL: ruhige linke Textspalte, rechts großes Filmfeld, darüber zurückhaltende Navigation; mobil Text → Kontakt → Film. Headline erklärt Website plus Abläufe.
+
+Originaler 12-Sekunden-Film aus den Browserbildern des bisherigen Entwurfs (media-source), 1280×960, H.264, 24 fps, 786 KiB, ohne Ton. Keine übernommenen Oakoffice-Assets, keine behaupteten Kundenreferenzen und keine Aufnahme von Christian bei der Arbeit. Der Film ist eine animierte Bildschirmmontage, ausdrücklich als Website-Entwurf beschriftet. Für den ursprünglich vorgeschlagenen persönlichen Film fehlen reale Arbeitsaufnahmen.
+
+Browserprüfung: lokaler Vite-Prozess auf http://127.0.0.1:4173/pilot.html aus agency-web, dieser Branch mit Revision-2-Änderungen. Desktop 1348 px sowie Review-Frames 390/360 px: kein horizontaler Überlauf (375/345 px Inhaltsbreite). Film: readyState 4, 12 Sekunden, stumm; Pause/Abspielen auf Desktop, Pause mobil geprüft. Mobiles Menü geöffnet und mit Escape geschlossen. Gefundener Textumbruchfehler korrigiert und erneut visuell geprüft. Nachweise evidence/film-desktop.jpg und film-mobile.jpg. TypeScript und Vite-Build bestanden. Reduced Motion im Code berücksichtigt, nicht per Betriebssystem-Einstellung getestet. Keine physischen Geräte und keine erneute vollständige Seitenabnahme.
+
+Technischer Slice abgeschlossen; gestalterische Nutzerabnahme offen. Insbesondere ist die persönliche, räumliche Filmwirkung der Referenz mit dieser Bildschirmmontage noch nicht erreicht. Kein Conversion-Nachweis und keine Freigabe der Produktionsstraße.
